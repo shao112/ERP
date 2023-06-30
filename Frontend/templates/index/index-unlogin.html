@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="row" style="margin-top: 20vh;">
+        <div class="col-12 col-lg-6 mx-auto">
+            <div class="border py-5 px-4 rounded">
+                <div class="h3 text-center font-weight-bold">艾力克電機股份有限公司</div>
+                <div class="login-form" style="margin-top:1.75rem;">
+                    <form action="" method="post" class="w-75 mx-auto">
+                        <!-- <p>請輸入您的帳號和密碼<br>Please input your UserID and Password</p> -->
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">帳號</label>
+                            <input class="form-control" type="text" id="username" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">密碼</label>
+                            <input class="form-control" type="password" id="password" name="password">
+                        </div>
+                        <!-- 記住我的帳號，自動登入<br>Remember my account<br>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="auto-login" name="auto-login">
+                            <label class="form-check-label" for="auto-login">自動登入</label>
+                            </div> -->
+                        <input class="btn w-100" type="submit" value="登入">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

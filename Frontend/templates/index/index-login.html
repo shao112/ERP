@@ -1,0 +1,226 @@
+<div class="sidebar pl-3 collapse width show" id="sidebarCollapse">
+    <div class="sidebar-logo">
+        <a href="{% url 'logout' %}" class="btn">登出</a>
+        <img src="" alt="">
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link active" href="#"><i class="fa-solid fa-file-lines mr-2" style="color: #f4f4f3;"></i> 工程確認單</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa-solid fa-wrench mr-2" style="color: #f4f4f3;"></i> 派工單</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fa-solid fa-warehouse mr-2" style="color: #f4f4f3;"></i> 固定資產管理</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="personnelCollapse">
+                <i class="fa-solid fa-user-plus mr-2" style="color: #ffffff;"></i> 人事部
+            </a>
+            <div class="collapse" id="personnelCollapse">
+                <ul class="nav flex-column ml-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">部門管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">員工管理</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#financialCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="financialCollapse">
+                <i class="fa-solid fa-sack-dollar mr-2" style="color: #f4f4f3;"></i> 財務部
+            </a>
+            <div class="collapse" id="financialCollapse">
+            <ul class="nav flex-column ml-5">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">薪資管理</a>
+                </li>
+            </ul>
+            </div>
+        </li>
+    </ul>
+    
+</div>
+<header class="d-flex justify-content-between align-items-center px-3 px-md-5">
+    <div>
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
+            <i class="fa-solid fa-gear"></i> 管理儀錶板
+        </span>
+    </div>
+    
+    <div>
+        <button type="button" class="border border-dark rounded mr-2" data-toggle="modal" data-target="#clock-inout">簽到 / 簽退</button>
+        
+        <span class="dropdown-toggle mr-2" data-toggle="dropdown">
+            <i class="fa-solid fa-user"></i> 王小明
+        </span>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">設定</a>
+            <a class="dropdown-item" href="#">登出</a>
+        </div>
+        <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button" aria-expanded="true" style="display: none;">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+    </div>
+</header>
+<div class="clock-inout modal fade" id="clock-inout" tabindex="-1" aria-labelledby="clock-inout" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clock-inoutLabel">簽到 / 簽退</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            姓名：王小明
+                        </div>
+                        <div class="col-12 col-md-6">
+                            日期：2023/06/01
+                        </div>
+                        <div class="col-12 col-md-6">
+                            時間：08:00
+                        </div>
+                        <div class="col-12 col-md-6">
+                            地點：雲林縣麥寮區
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4" v-if="showConfirmationButton">
+                    <a type="button" class="btn btn-outline-dark" :class="action" @click="confirmAction">
+                        <i class="fa-regular fa-circle-question mr-1"></i>
+                        {{ confirmationMessage }}
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn w-50" @click="setAction('clock-in')">簽到</a>
+                <a type="button" class="btn w-50" @click="setAction('clock-out')">簽退</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="container shadow-sm">
+        <div class="row text-center">
+            <div class="clock-inout-record border-right col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
+                </div>
+            </div>
+            <div class="clock-inout-record border-right col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未請假紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
+                </div>
+            </div>
+            <div class="clock-inout-record col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未申請加班紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container shadow-sm mt-4">
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="font-weight-bold">公司最新資訊</div>
+            </div>
+        </div>
+    </div>
+    <div class="container shadow-sm mt-4">
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="font-weight-bold">個人積分點數版</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /*
+    * 控制 sidebarCollapse（側邊面板） 跟 hamburgerMenu（漢堡icon）在 767px 上下的顯示跟隱藏。
+    * 解決當螢幕小於 767px 展開側邊面板時，resize 尺寸會一直彈開 sidebarCollapse。
+    */
+    function checkScreenSize() {
+        if (window.innerWidth <= 767) {
+            console.log("window.innerWidth <= 767")
+            const sidebarCollapse = document.querySelector('#sidebarCollapse');
+            const hamburgerMenu = document.querySelector('#hamburgerMenu');
+
+            // 如果 hamburgerMenu 已經 display:inline-block，不要移除show
+            if(hamburgerMenu.style.display != "inline-block"){
+                sidebarCollapse.classList.remove('show');
+            }
+            hamburgerMenu.style.display = "inline-block";
+        } else {
+            console.log("window.innerWidth <= 767 not!")
+            const sidebarCollapse = document.querySelector('#sidebarCollapse');
+            sidebarCollapse.classList.add('show');
+
+            const hamburgerMenu = document.querySelector('#hamburgerMenu');
+            hamburgerMenu.style.display = "none";
+        }
+    }
+    // 在頁面載入完成時和視窗尺寸變化時觸發 checkScreenSize 檢查螢幕尺寸的函式
+    window.addEventListener('load', checkScreenSize);
+    // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
+    window.addEventListener('resize', checkScreenSize);
+</script>
+<script>
+    const clock_inout_app = Vue.createApp({
+        data() {
+            return {
+                action: '',
+                showConfirmationButton: false,
+                isFadeIn: false,
+            };
+        },
+        methods: {
+            setAction(action) {
+                this.action = action;
+                this.showConfirmationButton = true;
+                this.isFadeIn = !(this.isFadeIn);
+            },
+            confirmAction() {
+                if (this.action === 'clock-in') {
+                    // 處理簽到
+                    // ....
+                    // 處理完關掉modal $('#clock-inout').modal('hide');
+                } else if (this.action === 'clock-out') {
+                    // 處理簽退
+                    // .... 
+                    // 處理完關掉modal $('#clock-inout').modal('hide');
+                }
+            },
+        },
+        computed: {
+            confirmationMessage() {
+                if(this.action === 'clock-in'){
+                    return '是否確定簽到？';
+                }else if(this.action === 'clock-out'){
+                    return '是否確定簽退？';
+                }
+                
+            },
+        },
+        mounted() {
+            // hidden.bs.modal 當 modal 隱藏後
+            $('#clock-inout').on('hidden.bs.modal', () => {
+                this.showConfirmationButton = false;
+            });
+        },
+        beforeUnmount() {
+            $('#clock-inout').off('hidden.bs.modal');
+        },
+    });
+
+    clock_inout_app.mount('#clock-inout');
+    
+</script>

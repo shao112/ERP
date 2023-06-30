@@ -1,0 +1,8 @@
+:root{
+    --sidebar-width: 200px;
+    --theme-black: #252320;
+    --theme-white: #f4f4f3;
+}
+body{
+    background: var(--theme-white);
+}
