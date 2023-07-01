@@ -1,15 +1,6 @@
 紀錄資料表敘述（與 models.py 的內容還未同步）
+預設都有created_date、update_date
 =========
-
-# Employee（員工）
-| 欄位         | 欄位敘述        |
-|--------------|----------------|
-| user         | 繼承自 User     |
-| employee_id | 員工 ID |
-| department   | 部門 |
-| position     | 職位 |
-| created_date | 建立日期 |
-| update_date  | 更新日期 |
 
 # User（Django 內建，視情況使用某些欄位）
 | 欄位         | 欄位敘述        |
@@ -27,13 +18,26 @@
 | last_login   | 上次登入 |
 | date_joined  | 創建時間 |
 
-# Clock_in_out（打卡）
-| 欄位         | 欄位敘述        |
+
+# Employee（員工）
+| 欄位         | 欄位敘述        | 型態
 |--------------|----------------|
-| employee_id  | 員工 ID（FK）   |
-| clock_in_time| 簽到時間 |
-| clock_in_location| 簽到地點 |
-| clock_out_time| 簽退時間 |
-| clock_out_location| 簽退地點 |
-| created_date | 建立日期 |
-| update_date  | 更新日期 |
+| user         | 繼承自 User     | FK
+| employee_id | 員工 ID | str
+| department   | 部門id | FK
+| position     | 職位 | str
+
+# Department（部門）
+| 欄位         | 欄位敘述        | 型態
+|--------------|----------------|
+| upper_dept |上層部門(採取樹狀結構) | FK, default NULL
+| name   | 部門名稱 |  str
+
+# Clock_in_out（打卡）
+| 欄位         | 欄位敘述        | 型態
+|--------------|----------------|
+| employee_id  | 員工 ID  | FK
+| clock_in_or_out | 簽到簽退 | bool,T為簽到、F為簽退
+| clock_time | 簽到時間 | time
+| clock_GPS | 當下GPS |  str
+
