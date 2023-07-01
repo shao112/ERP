@@ -37,7 +37,14 @@
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------|----------------|
 | employee_id  | 員工 ID  | FK |
+| date | 簽到日期 | date |
 | clock_in_or_out | 簽到簽退 | bool,T為簽到、F為簽退 |
 | clock_time | 簽到時間 | time |
 | clock_GPS | 當下GPS |  str | 
 
+# Information（最新消息）
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| title        | 標題     | str
+| topic        | 主題     | str
+| content      | 內容     | 編輯器
