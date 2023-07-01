@@ -42,9 +42,20 @@
 | clock_time | 簽到時間 | time |
 | clock_GPS | 當下GPS |  str | 
 
-# Information（最新消息）
+# News（最新消息）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
-| title        | 標題     | str
-| topic        | 主題     | str
-| content      | 內容     | 編輯器
+| title        | 標題     | str |
+| type         | 類型     | str |
+| content      | 內容     | 編輯器 |
+
+# Equipment（固定資產管理）
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| barcode      | 資產條碼     | img |
+| equipment_id | 資產標籤     | str |
+| location     | 庫存地點     | str |
+| stocktaker   | 盤點人       | FK，員工ID |
+| no           | 序號         | str |
+| name         | 品名         | str |
+
