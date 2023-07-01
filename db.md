@@ -20,24 +20,24 @@
 
 
 # Employee（員工）
-| 欄位         | 欄位敘述        | 型態
-|--------------|----------------|
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
 | user         | 繼承自 User     | FK
 | employee_id | 員工 ID | str
 | department   | 部門id | FK
 | position     | 職位 | str
 
 # Department（部門）
-| 欄位         | 欄位敘述        | 型態
-|--------------|----------------|
-| upper_dept |上層部門(採取樹狀結構) | FK, default NULL
-| name   | 部門名稱 |  str
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| upper_dept |上層部門(採取樹狀結構) | FK, default NULL |
+| name   | 部門名稱 |  str |
 
 # Clock_in_out（打卡）
-| 欄位         | 欄位敘述        | 型態
-|--------------|----------------|
-| employee_id  | 員工 ID  | FK
-| clock_in_or_out | 簽到簽退 | bool,T為簽到、F為簽退
-| clock_time | 簽到時間 | time
-| clock_GPS | 當下GPS |  str
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------|----------------|
+| employee_id  | 員工 ID  | FK |
+| clock_in_or_out | 簽到簽退 | bool,T為簽到、F為簽退 |
+| clock_time | 簽到時間 | time |
+| clock_GPS | 當下GPS |  str | 
 
