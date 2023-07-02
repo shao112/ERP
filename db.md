@@ -76,5 +76,5 @@
 | project_type | 工作類型     | str |
 | remark       | 備註         | str |
 | support      | 支援人力     | str |
-| Attachment   | 工確單附件   | str |
+| attachment   | 工確單附件   | str |
 
