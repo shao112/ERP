@@ -4,10 +4,11 @@
             <i class="fa-solid fa-gear"></i> 管理儀錶板
         </span>
     </div>
-    
+
     <div>
-        <button type="button" class="border border-dark rounded mr-2" data-toggle="modal" data-target="#clock-inout">簽到 / 簽退</button>
-        
+        <button type="button" class="border border-dark rounded mr-2" data-toggle="modal" data-target="#clock-inout">簽到
+            / 簽退</button>
+
         <span class="dropdown-toggle mr-2" data-toggle="dropdown">
             <i class="fa-solid fa-user"></i> 王小明
         </span>
@@ -15,7 +16,8 @@
             <a class="dropdown-item" href="#">設定</a>
             <a class="dropdown-item" href="#">登出</a>
         </div>
-        <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button" aria-expanded="true" style="display: none;">
+        <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button"
+            aria-expanded="true" style="display: none;">
             <i class="fa-solid fa-bars"></i>
         </a>
     </div>
@@ -26,7 +28,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="clock-inoutLabel">簽到 / 簽退</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -60,7 +62,12 @@
         </div>
     </div>
 </div>
+{% load static %}
+<script src="{% static 'js/fuc/check.js' %}"></script>
+
 <script>
+    var csrftoken = '{{ csrf_token }}';
+    
     const clock_inout_app = Vue.createApp({
         data() {
             return {
@@ -72,14 +79,13 @@
         delimiters: ['[[', ']]'],
         methods: {
             setAction(action) {
+                check_process(action,csrftoken);
                 this.action = action;
                 this.showConfirmationButton = true;
                 this.isFadeIn = !(this.isFadeIn);
             },
             confirmAction() {
-                if (this.action === 'clock-in') {
-                    // 處理簽到
-                    // ....
+                if (this.action === 'clock-in') {            
                     // 處理完關掉modal $('#clock-inout').modal('hide');
                 } else if (this.action === 'clock-out') {
                     // 處理簽退
@@ -90,14 +96,14 @@
         },
         computed: {
             confirmationMessage() {
-                if(this.action === 'clock-in'){
+                if (this.action === 'clock-in') {
                     return '是否確定簽到？';
-                }else if(this.action === 'clock-out'){
+                } else if (this.action === 'clock-out') {
                     return '是否確定簽退？';
-                }else{
+                } else {
                     return '錯誤'
                 }
-                
+
             },
         },
         mounted() {
@@ -113,5 +119,5 @@
     });
 
     clock_inout_app.mount('#clock-inout');
-    
+
 </script>
