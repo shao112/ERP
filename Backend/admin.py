@@ -13,7 +13,7 @@ class MyUserAdmin(UserAdmin):
     inlines = (EmployeeInline, )
 
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('department_id', 'department_name', 'created_date', 'update_date')
+    list_display = ('parent_department', 'department_name', 'created_date', 'update_date')
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)

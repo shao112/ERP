@@ -27,9 +27,10 @@ def save_user_profile(sender, instance, **kwargs):
         instance.employee.save()
     except Employee.DoesNotExist:
         pass
+
 # 部門
 class Department(models.Model):
-    department_id = models.CharField(max_length=30, blank=True,verbose_name='部門ID')
+    parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.CASCADE, null=True, blank=True, verbose_name='上層部門')
     department_name = models.CharField(max_length=30, blank=True,verbose_name='部門名稱')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
@@ -38,7 +39,12 @@ class Department(models.Model):
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-# 部門
+    def __str__(self):
+        if self.parent_department:
+            return f"{self.department_name} ({self.parent_department.department_name})"
+        return self.department_name
+
+# 公告
 class News(models.Model):
     News_type = (
         ('1', '財務部'),
