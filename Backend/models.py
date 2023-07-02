@@ -30,7 +30,7 @@ def save_user_profile(sender, instance, **kwargs):
 
 # 部門
 class Department(models.Model):
-    parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.CASCADE, null=True, blank=True, verbose_name='上層部門')
+    parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.SET_NULL, null=True, blank=True, verbose_name='上層部門')
     department_name = models.CharField(max_length=30, blank=True,verbose_name='部門名稱')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')

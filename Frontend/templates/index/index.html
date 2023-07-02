@@ -15,7 +15,7 @@
 {% block main %}
 
 {% if request.user.is_authenticated %}
-    <!-- 如果登入 -->
+    <!-- 登入 -->
     {% include 'index/index-login.html' %}
 {% else %}
     <!-- 尚未登入 -->

@@ -4,13 +4,16 @@
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="fa-solid fa-file-lines mr-2" style="color: #f4f4f3;"></i> 工程確認單</a>
+            <a class="nav-link active" href="#"><i class="fa-solid fa-file-lines mr-2" style="color: #ffffff;"></i> 工程確認單</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa-solid fa-wrench mr-2" style="color: #f4f4f3;"></i> 派工單</a>
+            <a class="nav-link active" href="{% url 'menu_item' 'project' %}"><i class="fa-solid fa-scroll" style="color: #ffffff;"></i></i> 工作派任計畫</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'equipment' %}"><i class="fa-solid fa-warehouse mr-2" style="color: #f4f4f3;"></i> 固定資產管理</a>
+            <a class="nav-link" href="#"><i class="fa-solid fa-wrench mr-2" style="color: #ffffff;"></i> 派工單</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'menu_item' 'equipment' %}"><i class="fa-solid fa-warehouse mr-2" style="color: #ffffff;"></i> 固定資產管理</a>
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="personnelCollapse">
@@ -29,7 +32,7 @@
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#financialCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="financialCollapse">
-                <i class="fa-solid fa-sack-dollar mr-2" style="color: #f4f4f3;"></i> 財務部
+                <i class="fa-solid fa-sack-dollar mr-2" style="color: #ffffff;"></i> 財務部
             </a>
             <div class="collapse" id="financialCollapse">
             <ul class="nav flex-column ml-5">

@@ -1,8 +1,10 @@
 <header class="d-flex justify-content-between align-items-center px-3 px-md-5">
     <div>
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
-            <i class="fa-solid fa-gear"></i> 管理儀錶板
-        </span>
+        <a href="{% url 'index' %}" style="color: #000; text-decoration: none;">
+            <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
+                <i class="fa-solid fa-gear"></i> 管理儀錶板
+            </span>
+        </a>
     </div>
 
     <div>
@@ -13,7 +15,7 @@
             <i class="fa-solid fa-user"></i> 王小明
         </span>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">設定
+            <a class="dropdown-item" href="#">個人管理</a>
             <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
         </div>
         <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button"

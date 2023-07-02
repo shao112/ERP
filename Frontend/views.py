@@ -52,12 +52,9 @@ def signout(request):
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
 
-#首頁
-def equipment(request):
-    
-        
+def menu_item(request, menu_item):
     context = {
-        # 'login_form':login_form
+        'menu_item': menu_item,
+        # 其他数据...
     }
-
-    return render(request, 'equipment/equipment.html', context)
+    return render(request, 'index/index.html', context)
