@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee, Department
+from .models import Employee, Department, Project
 
 # Register your models here.
 class EmployeeInline(admin.StackedInline):
@@ -15,7 +15,11 @@ class MyUserAdmin(UserAdmin):
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('parent_department', 'department_name', 'created_date', 'update_date')
 
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'work_employee', 'lead_employee', 'vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
+
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Department, DepartmentAdmin)
+admin.site.register(Project, ProjectAdmin)
