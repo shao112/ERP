@@ -67,14 +67,14 @@
 | quotation_id | 報價單號     | str |
 | projecet_id  | 工派單編號   | str |
 | project_name | 工程名稱     | str |
-| c_a          | 母案編號   | str |
-| date         | 出勤日期     | date |
-| name         | 工作人員     | str |
-| name         | 帶班人員     | FK，員工ID |
-| vehicle       | 使用車輛     | str |
-| 0         | 工作人員     | str |
-| 0         | 帶班人員     | str |
-| 0           | 出勤日期     | str |
-| 0         | 工作人員     | str |
-| 0         | 帶班人員     | str |
+| c_a          | 母案編號     | str |
+| attendance   | 出勤日期     | date |
+| work_employee| 工作人員     | FK，員工ID |
+| lead_employee| 帶班人員     | FK，員工ID |
+| vehicle      | 使用車輛     | str |
+| location     | 工作地點     | str |
+| project_type | 工作類型     | str |
+| remark       | 備註         | str |
+| support      | 支援人力     | str |
+| Attachment   | 工確單附件   | str |
 
