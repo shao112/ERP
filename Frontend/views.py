@@ -51,3 +51,13 @@ def signout(request):
 # @receiver(post_save, sender=User)
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
+
+#首頁
+def equipment(request):
+    
+        
+    context = {
+        # 'login_form':login_form
+    }
+
+    return render(request, 'equipment/equipment.html', context)

@@ -13,8 +13,8 @@
             <i class="fa-solid fa-user"></i> 王小明
         </span>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">設定</a>
-            <a class="dropdown-item" href="#">登出</a>
+            <a class="dropdown-item" href="#">設定
+            <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
         </div>
         <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button"
             aria-expanded="true" style="display: none;">
@@ -79,18 +79,20 @@
         delimiters: ['[[', ']]'],
         methods: {
             setAction(action) {
-                check_process(action,csrftoken);
+                // check_process(action,csrftoken);
                 this.action = action;
                 this.showConfirmationButton = true;
                 this.isFadeIn = !(this.isFadeIn);
             },
             confirmAction() {
-                if (this.action === 'clock-in') {            
-                    // 處理完關掉modal $('#clock-inout').modal('hide');
+                if (this.action === 'clock-in') {
+                    check_process(this.action,csrftoken);            
+                    // 處理完關掉modal 
+                    $('#clock-inout').modal('hide');
                 } else if (this.action === 'clock-out') {
-                    // 處理簽退
-                    // .... 
-                    // 處理完關掉modal $('#clock-inout').modal('hide');
+                    check_process(this.action,csrftoken); 
+                    // 處理完關掉modal 
+                    $('#clock-inout').modal('hide');
                 }
             },
         },

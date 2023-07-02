@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+<!-- 放css連結 -->
+<link rel="stylesheet" href="{% static 'css/equipment/equipment.css' %}">
+<link rel="stylesheet" href="{% static 'css/index/index-login.css' %}">
+
+{% endblock %}
+
+{% block main %}
+{% include 'base/sidebar.html' %}
+{% include 'base/header.html' %}
+<div class="main">
+    固定資產管理
+</div>
+
+
+
+{% endblock %}
