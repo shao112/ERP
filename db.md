@@ -30,8 +30,9 @@
 # Department（部門）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
+| department_id| 部門ID，例:IT |  str |
+| department_name | 部門名稱 |  str |
 | upper_dept |上層部門(採取樹狀結構) | FK, default NULL |
-| name   | 部門名稱 |  str |
 
 # Clock_in_out（打卡）
 | 欄位         | 欄位敘述        | 型態 |
@@ -42,11 +43,12 @@
 | clock_time | 簽到時間 | time |
 | clock_GPS | 當下GPS |  str | 
 
-# News（最新消息）
+# News（公司公告）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
 | title        | 標題     | str |
 | type         | 類型     | str |
+| level        | 重要程度   | str |
 | content      | 內容     | 編輯器 |
 
 # Equipment（固定資產管理）
@@ -58,4 +60,21 @@
 | stocktaker   | 盤點人       | FK，員工ID |
 | no           | 序號         | str |
 | name         | 品名         | str |
+
+# Project（工作派任計畫）
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| quotation_id | 報價單號     | str |
+| projecet_id  | 工派單編號   | str |
+| project_name | 工程名稱     | str |
+| c_a          | 母案編號   | str |
+| date         | 出勤日期     | date |
+| name         | 工作人員     | str |
+| name         | 帶班人員     | FK，員工ID |
+| vehicle       | 使用車輛     | str |
+| 0         | 工作人員     | str |
+| 0         | 帶班人員     | str |
+| 0           | 出勤日期     | str |
+| 0         | 工作人員     | str |
+| 0         | 帶班人員     | str |
 
