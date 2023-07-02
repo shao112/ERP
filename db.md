@@ -30,9 +30,9 @@
 # Department（部門）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
-| department_id| 部門ID，例:IT |  str |
+| parent_department| 上層部門| FK |
 | department_name | 部門名稱 |  str |
-| upper_dept |上層部門(採取樹狀結構) | FK, default NULL |
+
 
 # Clock_in_out（打卡）
 | 欄位         | 欄位敘述        | 型態 |
