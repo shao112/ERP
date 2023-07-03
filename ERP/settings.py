@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'Frontend',
     'Backend',
     # 套件
+    # 'django_bootstrap5',
     'django_cleanup',
 ]
 

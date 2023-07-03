@@ -21,6 +21,5 @@ urlpatterns = [
     # path('equipment/', views.equipment, name='equipment'),
     # path('project/', views.project, name='project'),
     path('<str:menu_item>/', views.menu_item, name='menu_item'),
-    # path('login', views.login, name='login'),
     path('accounts/logout/', views.signout, name='logout'),
 ]

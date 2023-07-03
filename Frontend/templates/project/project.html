@@ -6,38 +6,126 @@
         <a href="#" class="btn border border-dark ml-2">＋新增資料</a>
     </div>
     <div class="container shadow-sm">
-        
-        <form>
-            <!-- 2 column grid layout with text inputs for the first and last names -->
-            <div class="row mb-4">
-              <div class="col">
-                <div class="form-outline">
-                  <input type="text" id="form3Example1" class="form-control" />
-                  <label class="form-label" for="form3Example1">First name</label>
+        <form action=""  method="POST">
+            {% csrf_token %}
+            <div class="row my-4">
+                <div class="col-12 col-md-6">
+                    <h5 class="mb-4">工作描述</h5>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-outline">
+                                <label for="quotation_id_control col-form-label-sm">報價單號</label>
+                                <select class="form-control form-control-sm" id="quotation_id_control">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-outline">
+                                <label for="c_a_control col-form-label-sm">母案編號</label>
+                                <input class="form-control form-control-sm" id="c_a_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-outline">
+                                <label for="attendance_control col-form-label-sm">出勤日期</label>
+                                <input type="date" class="form-control form-control-sm" id="attendance_control"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-outline">
+                                <label for="projecet_id_control col-form-label-sm">工派單編號</label>
+                                <input class="form-control form-control-sm" id="projecet_id_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-outline">
+                                <label for="project_name_control col-form-label-sm">工程名稱</label>
+                                <input class="form-control form-control-sm" id="project_name_control"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-outline">
+                                <label for="location_control col-form-label-sm">工作地點</label>
+                                <input class="form-control form-control-sm" id="location_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-outline">
+                                <label for="project_type_control col-form-label-sm">工作類型</label>
+                                <input class="form-control form-control-sm" id="project_type_control"></input>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col">
-                <div class="form-outline">
-                  <input type="text" id="form3Example2" class="form-control" />
-                  <label class="form-label" for="form3Example2">Last name</label>
+                <div class="col-12 col-md-6">
+                    <h5 class="my-4">人力跟資源</h5>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="work_employee_control">工作人員</label>
+                                <select class="form-control form-control-sm choices" id="work_employee_control" multiple>
+                                    <option value="1">王大明</option>
+                                    <option value="1">王中明</option>
+                                    <option value="1">王小明</option>
+                                    <option value="1">王x明</option>
+                                    <option value="1">王a明</option>
+                                    <option value="1">王b明</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="lead_employee_control">帶班人員</label>
+                                <select class="form-control form-control-sm choices" id="lead_employee_control" multiple>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_control">使用車輛</label>
+                                <select class="form-control form-control-sm choices" id="vehicle_control" multiple>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="support_control">支援人力</label>
+                                <select class="form-control form-control-sm choices" id="support_control" multiple>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <input type="email" id="form3Example3" class="form-control" />
-              <label class="form-label" for="form3Example3">Email address</label>
-            </div>
-          
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-              <input type="password" id="form3Example4" class="form-control" />
-              <label class="form-label" for="form3Example4">Password</label>
-            </div>
-          
-            <!-- Submit button -->
             <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
-          </form>
+        </form>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        var multipleCancelButton = new Choices('.choices', {
+            removeItemButton: true,
+            // maxItemCount:5,
+            searchResultLimit:5,
+            // renderChoiceLimit:5
+        }); 
+        console.log(multipleCancelButton)
+    });
+    
+</script>

@@ -1,13 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-# from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sessions.backends.db import SessionStore
 from django .contrib.auth.decorators import login_required
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# from django.contrib.auth.models import User
-# from .models import Employee
 
 # Create your views here.
 
@@ -20,7 +15,6 @@ def index(request):
         auto_login = request.POST.get('auto-login') == 'on'
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
-            print("登入成功")
             login(request, user)
             if auto_login:
                 # Create a long-term session for auto-login
@@ -53,8 +47,9 @@ def signout(request):
 #     instance.employee.save()
 
 def menu_item(request, menu_item):
+
+
     context = {
         'menu_item': menu_item,
-        # 其他数据...
     }
     return render(request, 'index/index.html', context)
