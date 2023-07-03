@@ -5,7 +5,7 @@
 # User（Django 內建，視情況使用某些欄位）
 | 欄位         | 欄位敘述        |
 |--------------|----------------|
-| username     | 使用者名稱      |
+| username     | 使用者名稱，帳號      |
 | first_name   | 名   |
 | last_name    | 姓   |
 | email        | 電子信箱 |
@@ -25,7 +25,7 @@
 | user         | 繼承自 User     | FK
 | employee_id | 員工 ID | str
 | department   | 部門id | FK
-| position     | 職位 | str
+| position     | 職稱 | str
 
 # Department（部門）
 | 欄位         | 欄位敘述        | 型態 |
