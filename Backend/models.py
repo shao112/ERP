@@ -8,12 +8,23 @@ from django.contrib.auth.models import User
 # Create your models here.
 # 員工（以內建 User 擴增）
 class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
-    departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門')# 你可以通过department.employees.all()访问一个部门的所有员工。
-    position = models.CharField(max_length=30, blank=True,verbose_name='職位')
+    departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
+    position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
+    phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
+    contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
+    start_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
+    seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
+    id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
+    birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    age = models.IntegerField(null=True, blank=True, verbose_name='年齡')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+
+    class Meta:
+        verbose_name = "員工"   # 單數
+        verbose_name_plural = verbose_name   #複數
     
 
 @receiver(post_save, sender=User)
