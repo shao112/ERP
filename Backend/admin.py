@@ -14,6 +14,7 @@ class MyUserAdmin(UserAdmin):
 
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('parent_department', 'department_name', 'created_date', 'update_date')
+    
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'work_employee', 'lead_employee', 'vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')

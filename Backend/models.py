@@ -82,3 +82,14 @@ class News(models.Model):
     class Meta:
         verbose_name = "最新消息"   # 單數
         verbose_name_plural = verbose_name   #複數
+
+
+class Clock(models.Model):
+    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    clock_in_or_out = models.BooleanField()
+    clock_time = models.TimeField()
+    clock_GPS = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = "打卡紀錄"   # 單數
+        verbose_name_plural = verbose_name   #複數

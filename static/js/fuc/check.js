@@ -6,13 +6,14 @@ function check_process(check_statu, csrftoken) {
 
     navigator.geolocation.getCurrentPosition(function (position) {
         var gps = position.coords.latitude + ',' + position.coords.longitude;
-        // console.log("gps", gps)
 
         // 建立傳送的資料物件
         var requestData = {
             gps: gps,
-            clock_in_or_out: clock_in_or_out
+            clock_in_or_out: clock_in_or_out,
+            clock_time : new Date().toISOString()
         };
+
 
         // 傳送資料到後端
         fetch('/Backend/check', {
@@ -27,11 +28,11 @@ function check_process(check_statu, csrftoken) {
                 return response.json();
             })
             .then(function (responseData) {
-                if (responseData.status === 'success') {
-                    alert('打卡/簽退成功！');
-                } else {
-                    alert('打卡/簽退失敗！');
-                }
+                    if (clock_in_or_out){
+                        alert('打卡成功！');
+                    }else{                        
+                        alert('打卡成功！');
+                    }
             })
             .catch(function (error) {
                 console.log('錯誤：', error);
@@ -40,7 +41,7 @@ function check_process(check_statu, csrftoken) {
 
     }), function (error) {
         if (error.code === error.PERMISSION_DENIED) {
-            alert('拒絕存取 GPS，無法完成打卡/簽退！');
+            alert('請打開GPS存取權限，否則無法完成打卡/簽退！');
         }
     }
 }
