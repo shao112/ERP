@@ -8,6 +8,26 @@ from django.contrib.auth.models import User
 # Create your models here.
 # 員工（以內建 User 擴增）
 class Employee(models.Model):
+    GENDER_CHOICES = [
+        ('M', '男'),
+        ('F', '女'),
+    ]
+    BLOOD_TYPE_CHOICES = [
+        ('A', 'A型'),
+        ('B', 'B型'),
+        ('AB','AB型'),
+        ('O', 'O型'),
+    ]
+    MARITAL_STATUS_CHOICES = [
+        ('M', '已婚'),
+        ('S', '未婚'),
+        ('D', '離異'),
+    ]
+    MILITARY_STATUS_CHOICES = [
+        ('M', '義務役'),
+        ('E', '免服役'),
+        ('A', '替代役'),
+    ]   
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
     departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
@@ -19,6 +39,20 @@ class Employee(models.Model):
     id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
     birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
     age = models.IntegerField(null=True, blank=True, verbose_name='年齡')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True, verbose_name='性別')
+    blood_type = models.CharField(max_length=2, choices=BLOOD_TYPE_CHOICES, null=True, blank=True, verbose_name='血型')
+    birth_place = models.CharField(max_length=100, null=True, blank=True, verbose_name='出生地')
+    marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True, verbose_name='婚姻狀況')
+    military_status = models.CharField(max_length=1, choices=MILITARY_STATUS_CHOICES, null=True, blank=True, verbose_name='兵役狀況')
+    permanent_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='戶籍地址')
+    current_address_city = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址縣市')
+    current_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址')
+    location = models.CharField(max_length=50, null=True, blank=True, verbose_name='所在地')
+    company_email = models.EmailField(null=True, blank=True, verbose_name='公司E_Mail')
+    personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail')
+    emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
+    emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
+    emergency_contact_phone = models.IntegerField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
