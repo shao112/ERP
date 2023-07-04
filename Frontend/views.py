@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django .contrib.auth.decorators import login_required
 
@@ -30,7 +31,12 @@ def index(request):
         # 'login_form':login_form
     }
 
-    return render(request, 'index/index.html', context)
+    def get(self,request):        
+        # login_form = LoginForm()
+        context = {
+            # 'login_form':login_form
+        }
+        return render(request, 'index/index.html', context)
 
 @login_required
 def signout(request):

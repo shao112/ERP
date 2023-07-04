@@ -6,6 +6,8 @@ from datetime import datetime
 from .models import Clock
 
 
+
+
 def check_in(request):
     if request.method == 'POST':
         data = json.loads(request.body)

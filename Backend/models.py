@@ -138,3 +138,4 @@ class Clock(models.Model):
     class Meta:
         verbose_name = "打卡紀錄"   # 單數
         verbose_name_plural = verbose_name   #複數
+        
