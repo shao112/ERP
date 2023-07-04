@@ -8,28 +8,30 @@ from django .contrib.auth.decorators import login_required
 # Create your views here.
 
 #首頁
-def index(request):
-    # login_form = LoginForm()
-    if request.method == "POST":
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
-        auto_login = request.POST.get('auto-login') == 'on'
-        user = authenticate(username=username, password=password)
-        if user is not None and user.is_active:
-            login(request, user)
-            if auto_login:
-                # Create a long-term session for auto-login
-                session = SessionStore()
-                session['user_id'] = user.id
-                session.set_expiry(1209600)  # Two weeks
-                print("Save")
-                print(session)
-                session.save()
-            return HttpResponseRedirect('/')
-        
-    context = {
-        # 'login_form':login_form
-    }
+class Index(View):
+
+    def post(self,request):
+        # login_form = LoginForm()
+        if request.method == "POST":
+            username = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            auto_login = request.POST.get('auto-login') == 'on'
+            user = authenticate(username=username, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                if auto_login:
+                    # Create a long-term session for auto-login
+                    session = SessionStore()
+                    session['user_id'] = user.id
+                    session.set_expiry(1209600)  # Two weeks
+                    print("Save")
+                    print(session)
+                    session.save()
+                return HttpResponseRedirect('/')
+            
+        context = {
+            # 'login_form':login_form
+        }
 
     def get(self,request):        
         # login_form = LoginForm()

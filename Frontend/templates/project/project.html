@@ -10,7 +10,9 @@
             {% csrf_token %}
             <div class="row my-4">
                 <div class="col-12 col-md-6">
-                    <h5 class="mb-4">工作描述</h5>
+                    <h5 class="mb-4" style="font-size: 1.2rem;">
+                        <kbd>工作描述</kbd>
+                    </h5>
                     <div class="row">
                         <div class="col-4">
                             <div class="form-outline">
@@ -64,13 +66,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-6">
-                    <h5 class="my-4">人力跟資源</h5>
+                <div class="col-12 col-md-6 mt-4 mt-md-0">
+                    <h5 class="mb-4" style="font-size:1.2rem;">
+                        <kbd>人力跟資源</kbd>
+                    </h5>
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="work_employee_control">工作人員</label>
-                                <select class="form-control form-control-sm choices" id="work_employee_control" multiple>
+                                <select class="chosen-select" data-placeholder="選擇工作人員" id="work_employee_control" multiple>
                                     <option value="1">王大明</option>
                                     <option value="1">王中明</option>
                                     <option value="1">王小明</option>
@@ -83,7 +87,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="lead_employee_control">帶班人員</label>
-                                <select class="form-control form-control-sm choices" id="lead_employee_control" multiple>
+                                <select class="chosen-select" data-placeholder="選擇帶班人員" id="lead_employee_control" multiple>
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -93,7 +97,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="vehicle_control">使用車輛</label>
-                                <select class="form-control form-control-sm choices" id="vehicle_control" multiple>
+                                <select class="chosen-select" data-placeholder="選擇使用車輛" id="vehicle_control" multiple>
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -103,29 +107,33 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="support_control">支援人力</label>
-                                <select class="form-control form-control-sm choices" id="support_control" multiple>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
+                                <select class="chosen-select" data-placeholder="選擇支援人力" id="support_control" multiple name="test">
+                                    <option>王大明</option>
+                                    <option>王中明</option>
+                                    <option>王小明</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+            <button type="submit" class="btn btn-primary btn-block mb-4">新增</button>
         </form>
     </div>
 </div>
 <script>
-    $(document).ready(function(){
-        var multipleCancelButton = new Choices('.choices', {
-            removeItemButton: true,
-            // maxItemCount:5,
-            searchResultLimit:5,
-            // renderChoiceLimit:5
-        }); 
-        console.log(multipleCancelButton)
-    });
+    // $(document).ready(function(){
+    //     var multipleCancelButton = new Choices('.choices', {
+    //         removeItemButton: true,
+    //         // maxItemCount:5,
+    //         searchResultLimit:5,
+    //         // renderChoiceLimit:5
+    //     }); 
+    //     console.log(multipleCancelButton)
+    // });
+    $(".chosen-select").chosen({
+        no_results_text: "查無此員工",
+        width: "100%"
+    })
     
 </script>
