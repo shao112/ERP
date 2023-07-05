@@ -46,10 +46,12 @@
 # News（公司公告）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
-| title        | 標題     | str |
-| type         | 類型     | str |
-| level        | 重要程度   | str |
-| content      | 內容     | 編輯器 |
+| publisher    | 發布者     | FK，員工ID |
+| title        | 公告標題   | str |
+| category     | 公告類別   | str |
+| type         | 類型      | str |
+| level        | 重要性    | str |
+| content      | 內容      | 編輯器 |
 
 # Equipment（固定資產管理）
 | 欄位         | 欄位敘述        | 型態 |
