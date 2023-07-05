@@ -61,6 +61,12 @@ def project(request):
     }
     return render(request, 'project/project_test.html', context)
 
+@login_required
+def equipment(request):
+    context = {
+        
+    }
+    return render(request, 'equipment/equipment.html', context)
 
 
 def menu_item(request, menu_item):

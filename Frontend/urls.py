@@ -18,7 +18,7 @@ from . import views
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
-    # path('equipment/', views.equipment, name='equipment'),
+    path('equipment/', views.equipment, name='equipment'),
     path('project/', views.project, name='project'),
     # path('<str:menu_item>/', views.menu_item, name='menu_item'),
     path('accounts/logout/', views.signout, name='logout'),

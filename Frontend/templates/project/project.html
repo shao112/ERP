@@ -15,9 +15,14 @@
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
             工作派任計畫
         </span>
-        <a href="#" class="btn border border-dark ml-2">＋新增資料</a>
+        <a href="" 
+           class="btn border border-dark ml-2" 
+           data-toggle="collapse"
+           data-target="#project-modal">
+           ＋新增資料
+        </a>
     </div>
-    <div class="container shadow-sm">
+    <div class="container shadow-sm collapse" id="project-modal">
         <form action=""  method="POST" class="pb-4">
             {% csrf_token %}
             <div class="row my-4">
@@ -27,8 +32,8 @@
                     </h5>
                     <div class="row">
                         <div class="col-4">
-                            <div class="form-outline">
-                                <label for="quotation_id_control col-form-label-sm">報價單號</label>
+                            <div class="form-group">
+                                <label for="quotation_id_control">報價單號</label>
                                 <select class="form-control form-control-sm" id="quotation_id_control">
                                     <option>1</option>
                                     <option>2</option>
@@ -37,41 +42,41 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-outline">
-                                <label for="c_a_control col-form-label-sm">母案編號</label>
+                            <div class="form-group">
+                                <label for="c_a_control">母案編號</label>
                                 <input class="form-control form-control-sm" id="c_a_control"></input>
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-outline">
-                                <label for="attendance_control col-form-label-sm">出勤日期</label>
+                            <div class="form-group">
+                                <label for="attendance_control">出勤日期</label>
                                 <input type="date" class="form-control form-control-sm" id="attendance_control"></input>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <div class="form-outline">
-                                <label for="projecet_id_control col-form-label-sm">工派單編號</label>
+                            <div class="form-group">
+                                <label for="projecet_id_control">工派單編號</label>
                                 <input class="form-control form-control-sm" id="projecet_id_control"></input>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="form-outline">
-                                <label for="project_name_control col-form-label-sm">{{form.project_name}}</label>
+                            <div class="form-group">
+                                <label for="project_name_control">{{form.project_name}}</label>
                                 <input class="form-control form-control-sm" id="project_name_control"></input>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <div class="form-outline">
-                                <label for="location_control col-form-label-sm">工作地點</label>
+                            <div class="form-group">
+                                <label for="location_control">工作地點</label>
                                 <input class="form-control form-control-sm" id="location_control"></input>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="form-outline">
+                            <div class="form-group">
                                 <label for="project_type_control" class="col-form-label-sm">工作類型</label>
                                 <input class="form-control form-control-sm" id="project_type_control"></input>
                             </div>
@@ -131,7 +136,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="support_control">支援人力</label>
-                                <select class="chosen-select" data-placeholder="選擇支援人力" id="support_control" multiple name="test">
+                                <select class="chosen-select" data-placeholder="選擇支援人力" id="support_control" multiple>
                                     <option>王大明</option>
                                     <option>王中明</option>
                                     <option>王小明</option>
@@ -146,6 +151,11 @@
     </div>
 </div>
 <script>
+    if (e.cancelable) {
+        console.log(e)
+      e.preventDefault();
+    }
+    console.log("這裡")
     // $(document).ready(function(){
     //     var multipleCancelButton = new Choices('.choices', {
     //         removeItemButton: true,
@@ -155,10 +165,13 @@
     //     }); 
     //     console.log(multipleCancelButton)
     // });
+    
     $(".chosen-select").chosen({
         no_results_text: "查無此員工",
-        width: "100%"
+        width: "100%",
+        // max_shown_results:3
     })
+    
     
 </script>
 {% endblock %}

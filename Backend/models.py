@@ -52,7 +52,7 @@ class Employee(models.Model):
     personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail')
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
-    emergency_contact_phone = models.IntegerField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
+    emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
