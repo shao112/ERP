@@ -7,9 +7,10 @@ from .models import Clock
 
 
 
+from django.views import View
 
-def check_in(request):
-    if request.method == 'POST':
+class Check(View):
+    def post(self,request):
         data = json.loads(request.body)
         gps = data.get('gps')
         clock_in_or_out = data.get('clock_in_or_out')
@@ -25,4 +26,5 @@ def check_in(request):
 
         return JsonResponse({'status': 'success'})
 
-    return HttpResponseNotAllowed(['POST'])
+    def get(self,request):        
+       return HttpResponseNotAllowed(['only POST'])

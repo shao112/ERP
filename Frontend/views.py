@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
-from django .contrib.auth.decorators import login_required
-
+from django.contrib.auth.decorators import login_required
+from Backend.forms import  ProjectForm
 # Create your views here.
 
 #首頁
@@ -54,10 +54,20 @@ def signout(request):
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
 
+def project(request):
+    context = {
+        'form': ProjectForm,
+    }
+    return render(request, 'project/project_test.html', context)
+
+
+
 def menu_item(request, menu_item):
 
 
     context = {
         'menu_item': menu_item,
+        # 'form':get_form(menu_item)
+        
     }
     return render(request, 'index/index.html', context)

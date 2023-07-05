@@ -17,5 +17,5 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('check', views.check_in, name="check_in"),
+    path('check', views.Check.as_view(), name="check"),
 ]

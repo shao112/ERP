@@ -1,3 +1,7 @@
+{% extends 'base/base_login.html' %}
+
+
+{% block  main %}
 <div class="main">
     <div class="project-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
@@ -46,7 +50,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-outline">
-                                <label for="project_name_control col-form-label-sm">{{form.project_name}}</label>
+                                <label for="project_name_control col-form-label-sm">工程名稱</label>
                                 <input class="form-control form-control-sm" id="project_name_control"></input>
                             </div>
                         </div>
@@ -137,3 +141,5 @@
     })
     
 </script>
+
+{% endblock %}
