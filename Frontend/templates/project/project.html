@@ -5,6 +5,7 @@
 {% block import %}
 
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/project/project.css' %}">
 
 {% endblock %}
 
@@ -18,8 +19,8 @@
         <a href="" 
            class="btn border border-dark ml-2" 
            data-toggle="collapse"
-           data-target="#equipment-modal">
-           • 點此新增資料
+           data-target="#project-modal">
+           • 展開面板新增資料
         </a>
     </div>
     <div class="container shadow-sm collapse" id="project-modal">
@@ -63,7 +64,7 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="project_name_control">{{form.project_name}}</label>
+                                <label for="project_name_control">工程名稱</label>
                                 <input class="form-control form-control-sm" id="project_name_control"></input>
                             </div>
                         </div>
@@ -149,13 +150,30 @@
             <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
         </form>
     </div>
+    <div class="container shadow-sm table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>報價單號</th>
+                    <th>工派單編號</th>
+                    <th>母案編號</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>a</td>
+                    <td>b</td>
+                    <td>c</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <script>
     // if (e.cancelable) {
     //     console.log(e)
     //   e.preventDefault();
     // }
-    console.log("這裡")
     // $(document).ready(function(){
     //     var multipleCancelButton = new Choices('.choices', {
     //         removeItemButton: true,

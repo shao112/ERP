@@ -5,6 +5,7 @@
 {% block import %}
 
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/department/department.css' %}">
 
 {% endblock %}
 
@@ -19,7 +20,7 @@
            class="btn border border-dark ml-2" 
            data-toggle="collapse"
            data-target="#department-modal">
-           • 點此新增資料
+           • 展開面板新增資料
         </a>
     </div>
     <div class="container shadow-sm collapse" id="department-modal">
@@ -27,46 +28,69 @@
             {% csrf_token %}
             <div class="row my-4">
                 <div class="col-12">
-                    <div class="form-group">
-                        <label for="parent_department_control">上級部門</label>
-                        <input class="form-control form-control-sm" id="parent_department_control"></input>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="parent_department_control">{{ form.parent_department.label }}</label>
+                                <!-- <input class="form-control form-control-sm" id="parent_department_control" name="parent_department"></input> -->
+                                {{ form.parent_department }}
+                              </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="department_id_control">部門編號</label>
+                                <input class="form-control form-control-sm" id="department_id_control" name="department_id"></input>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="department_name_control">部門名稱</label>
+                                <input class="form-control form-control-sm" id="department_name_control" name="department_name"></input>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="department_control">部門名稱</label>
-                        <input class="form-control form-control-sm" id="department_control"></input>
-                    </div>
+                    
+                    
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
+            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
         </form>
     </div>
     <div class="container shadow-sm table-responsive">
         <table class="table table-hover">
             <thead>
-              <tr>
-                <th>上級部門</th>
-                <th>部門名稱</th>
-                <th>部門人數</th>
-              </tr>
+                <tr>
+                    <th></th>
+                    <th>上級部門</th>
+                    <th>部門編號</th>
+                    <th>部門名稱</th>
+                    <th>部門人數</th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>john@example.com</td>
-              </tr>
-              <tr>
-                <td>Mary</td>
-                <td>Moe</td>
-                <td>mary@example.com</td>
-              </tr>
-              <tr>
-                <td>July</td>
-                <td>Dooley</td>
-                <td>july@example.com</td>
-              </tr>
+                <tr>
+                    <td><a href="#" class="btn btn-danger">刪除</a></td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                </tr>
+                <tr>
+                    <td><a href="#" class="btn btn-danger">刪除</a></td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                </tr>
+                <tr>
+                    <td><a href="#" class="btn btn-danger">刪除</a></td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                    <td>ABCD</td>
+                </tr>
             </tbody>
-          </table>
+        </table>
     </div>
 </div>
 {% endblock %}

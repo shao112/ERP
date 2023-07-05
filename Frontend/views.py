@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
-from Backend.forms import  ProjectForm
+from Backend.forms import  ProjectForm, DepartmentForm
+from Backend.models import Department
 # Create your views here.
 
 #首頁
@@ -57,9 +58,9 @@ def signout(request):
 @login_required
 def project(request):
     context = {
-        'form': ProjectForm,
+        # 'form': ProjectForm,
     }
-    return render(request, 'project/project_test.html', context)
+    return render(request, 'project/project.html', context)
 
 @login_required
 def equipment(request):
@@ -68,12 +69,34 @@ def equipment(request):
     }
     return render(request, 'equipment/equipment.html', context)
 
-@login_required
-def department(request):
-    context = {
-        
-    }
-    return render(request, 'department/department.html', context)
+class Department(View):
+    def post(self,request):
+        # parent_department = request.POST.get('parent_department')
+        # department_id = request.POST.get('department_id')
+        # department_name = request.POST.get('department_name')
+        for key, value in request.POST.items():
+            # 对每个字段执行相应的操作
+            print(f"字段名: {key}, 值: {value}")
+
+        # department = Department(
+        #     parent_department=parent_department,
+        #     department_id=department_id,
+        #     department_name=department_name
+        # )
+        # department.save()
+
+        context = {
+            
+        }
+        return render(request, 'department/department.html', context)
+    
+    
+    def get(self,request):
+        # department = Department.objects.all()
+        context = {
+            'form':DepartmentForm
+        }
+        return render(request, 'department/department.html', context)
 
 
 def menu_item(request, menu_item):

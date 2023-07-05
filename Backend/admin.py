@@ -12,12 +12,10 @@ from .models import Employee, Department, Project, Clock
 # class MyUserAdmin(UserAdmin):
 #     inlines = (EmployeeInline, )
 
-# 員工
-# class EmployeeAdmin(admin.ModelAdmin):
-#     list_display = '__all__'
+
 # 部門
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('parent_department', 'department_name', 'created_date', 'update_date')
+    list_display = ('parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
 # 工作派任計畫
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'work_employee', 'lead_employee', 'vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
