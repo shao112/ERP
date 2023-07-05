@@ -1,0 +1,72 @@
+{% extends 'base/base_login.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main">
+    <div class="department-header container mb-4">
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
+            部門管理
+        </span>
+        <a href="" 
+           class="btn border border-dark ml-2" 
+           data-toggle="collapse"
+           data-target="#department-modal">
+           • 點此新增資料
+        </a>
+    </div>
+    <div class="container shadow-sm collapse" id="department-modal">
+        <form action=""  method="POST" class="pb-4">
+            {% csrf_token %}
+            <div class="row my-4">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="parent_department_control">上級部門</label>
+                        <input class="form-control form-control-sm" id="parent_department_control"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="department_control">部門名稱</label>
+                        <input class="form-control form-control-sm" id="department_control"></input>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
+        </form>
+    </div>
+    <div class="container shadow-sm table-responsive">
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>上級部門</th>
+                <th>部門名稱</th>
+                <th>部門人數</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>john@example.com</td>
+              </tr>
+              <tr>
+                <td>Mary</td>
+                <td>Moe</td>
+                <td>mary@example.com</td>
+              </tr>
+              <tr>
+                <td>July</td>
+                <td>Dooley</td>
+                <td>july@example.com</td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+{% endblock %}

@@ -68,6 +68,13 @@ def equipment(request):
     }
     return render(request, 'equipment/equipment.html', context)
 
+@login_required
+def department(request):
+    context = {
+        
+    }
+    return render(request, 'department/department.html', context)
+
 
 def menu_item(request, menu_item):
 
