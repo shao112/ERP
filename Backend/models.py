@@ -102,7 +102,7 @@ class Project(models.Model):
     vehicle = models.CharField(max_length=30, verbose_name='使用車輛')
     location = models.CharField(max_length=30, verbose_name="工作地點")
     project_type = models.CharField(max_length=30, verbose_name='工作類型')
-    remark = models.CharField(max_length=30, null=True, blank=True, verbose_name="備註")
+    remark = models.TextField(null=True, blank=True, verbose_name="備註")
     support = models.CharField(max_length=30, verbose_name='支援人力')
     attachment = models.FileField(upload_to="project-attachment", null=True, blank=True, verbose_name="工確單附件")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
@@ -114,13 +114,28 @@ class Project(models.Model):
 
 # 公告
 class News(models.Model):
-    News_type = (
-        ('1', '財務部'),
-        ('2', '員工相關'),
+    NEWS_TYPE = (
+        ('1', '獎懲規範'),
+        ('2', '系統相關'),
+        ('3', '出勤與薪資相關'),
+        ('4', '車輛相關'),
+        ('5', '津貼相關'),
+        ('6', '異常報告相關'),
     )
-    title = models.CharField(max_length=30, verbose_name="標題")
-    type = models.CharField(max_length=1, choices=News_type)
-    content = models.TextField(blank=True, null=True, verbose_name='編輯器內文')
+    CATEGORY_TYPE = (
+        ('1', '公告'),
+        ('2', '文管'),
+    )
+    LEVEL_TYPE = (
+        ('H', '高'),
+        ('M', '中'),
+        ('L', '低'),
+    )
+    title = models.CharField(max_length=30, blank=True, null=True, verbose_name="公告標題")
+    category = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="公告類別")
+    type = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="類別")
+    level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
+    content = models.TextField(blank=True, null=True, verbose_name='內容')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 

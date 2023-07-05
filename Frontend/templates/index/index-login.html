@@ -1,79 +1,56 @@
-{% include 'base/sidebar.html' %}
-{% include 'base/header.html' %}
+{% extends 'base/base_login.html' %}
 
-{% if menu_item == 'project' %}
-    {% include 'project/project_test.html' %}
-  {% elif menu_item == 'equipment' %}
-    {% include 'equipment/equipment.html' %}
-  {% else %}
-    <div class="main">
-        <div class="container shadow-sm">
-            <div class="row text-center">
-                <div class="clock-inout-record border-right col-12 col-md-4">
-                    <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
-                    <div class="clock-inout-record-content my-3">
-                        無
-                    </div>
-                </div>
-                <div class="clock-inout-record border-right col-12 col-md-4">
-                    <div class="clock-inout-record-title font-weight-bold">未請假紀錄</div>
-                    <div class="clock-inout-record-content my-3">
-                        無
-                    </div>
-                </div>
-                <div class="clock-inout-record col-12 col-md-4">
-                    <div class="clock-inout-record-title font-weight-bold">未申請加班紀錄</div>
-                    <div class="clock-inout-record-content my-3">
-                        無
-                    </div>
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main">
+    <div class="container shadow-sm">
+        <div class="row text-center">
+            <div class="clock-inout-record border-right col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
                 </div>
             </div>
-        </div>
-        <div class="container shadow-sm mt-4">
-            <div class="row text-center">
-                <div class="col-12">
-                    <div class="font-weight-bold" style="min-height: 150px;">
-                        公司最新資訊
-                    </div>
+            <div class="clock-inout-record border-right col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未請假紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
                 </div>
             </div>
-        </div>
-        <div class="container shadow-sm mt-4">
-            <div class="row text-center">
-                <div class="col-12">
-                    <div class="font-weight-bold" style="min-height: 150px;">
-                        個人積分點數版
-                    </div>
+            <div class="clock-inout-record col-12 col-md-4">
+                <div class="clock-inout-record-title font-weight-bold">未申請加班紀錄</div>
+                <div class="clock-inout-record-content my-3">
+                    無
                 </div>
             </div>
         </div>
     </div>
-{% endif %}
-<script>
-    /*
-    * 控制 sidebarCollapse（側邊面板） 跟 hamburgerMenu（漢堡icon）在 767px 上下的顯示跟隱藏。
-    * 解決當螢幕小於 767px 展開側邊面板時，resize 尺寸會一直彈開 sidebarCollapse。
-    */
-    function checkScreenSize() {
-        if (window.innerWidth <= 767) {
-            const sidebarCollapse = document.querySelector('#sidebarCollapse');
-            const hamburgerMenu = document.querySelector('#hamburgerMenu');
+    <div class="container shadow-sm mt-4">
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="font-weight-bold" style="min-height: 150px;">
+                    公司最新資訊
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container shadow-sm mt-4">
+        <div class="row text-center">
+            <div class="col-12">
+                <div class="font-weight-bold" style="min-height: 150px;">
+                    個人積分點數版
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            // 如果 hamburgerMenu 已經 display:inline-block，不要移除show
-            if(hamburgerMenu.style.display != "inline-block"){
-                sidebarCollapse.classList.remove('show');
-            }
-            hamburgerMenu.style.display = "inline-block";
-        } else {
-            const sidebarCollapse = document.querySelector('#sidebarCollapse');
-            sidebarCollapse.classList.add('show');
-
-            const hamburgerMenu = document.querySelector('#hamburgerMenu');
-            hamburgerMenu.style.display = "none";
-        }
-    }
-    // 在頁面載入完成時和視窗尺寸變化時觸發 checkScreenSize 檢查螢幕尺寸的函式
-    window.addEventListener('load', checkScreenSize);
-    // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
-    window.addEventListener('resize', checkScreenSize);
-</script>
+{% endblock %}

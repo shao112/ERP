@@ -54,6 +54,7 @@ def signout(request):
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
 
+@login_required
 def project(request):
     context = {
         'form': ProjectForm,
