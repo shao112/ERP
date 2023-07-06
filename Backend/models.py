@@ -76,8 +76,8 @@ def save_user_profile(sender, instance, **kwargs):
 # 部門
 class Department(models.Model):
     parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.SET_NULL, null=True, blank=True, verbose_name='上層部門')
-    department_name = models.CharField(max_length=30, null=True, blank=True,verbose_name='部門編號')
-    department_id = models.CharField(max_length=20, null=True, blank=True,verbose_name='部門名稱')
+    department_name = models.CharField(max_length=30, null=True, blank=True,verbose_name='部門名稱')
+    department_id = models.CharField(max_length=20, null=True, blank=True,verbose_name='部門編號')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
@@ -91,10 +91,31 @@ class Department(models.Model):
         return self.department_name
 
 
+# 工程確認單
+class Project_Confirmation(models.Model):
+    quotation_id = models.CharField(max_length=50, null=True, blank=True, verbose_name="報價單號")
+    project_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="工程名稱")
+    order_id = models.CharField(max_length=50, null=True, blank=True, verbose_name='訂單編號')
+    c_a = models.CharField(max_length=50, null=True, blank=True, verbose_name='母案編號')
+    client = models.CharField(max_length=20, null=True, blank=True, verbose_name='客戶簡稱')
+    requisition = models.CharField(max_length=50, null=True, blank=True, verbose_name='請購單位')
+    turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
+    is_completed = models.BooleanField(verbose_name='完工狀態')
+    completion_report_employee = models.ForeignKey('Employee', related_name='projects_confirmation_report_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='完工回報人')
+    completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
+    remark = models.TextField(null=True, blank=True, verbose_name="備註")
+    reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+
+    class Meta:
+        verbose_name = "工程確認單"   # 單數
+        verbose_name_plural = verbose_name   #複數
+
 # 工作派任計畫
 class Project(models.Model):
     quotation_id = models.CharField(max_length=30, verbose_name="報價單號")
-    projecet_id = models.CharField(max_length=30, verbose_name='工派單編號')
+    projecet_id = models.CharField(max_length=50, verbose_name='工派單編號')
     project_name = models.CharField(max_length=30, verbose_name="工程名稱")
     c_a = models.CharField(max_length=50, verbose_name='母案編號')
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")

@@ -31,9 +31,12 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="parent_department_control">{{ form.parent_department.label }}</label>
-                                <!-- <input class="form-control form-control-sm" id="parent_department_control" name="parent_department"></input> -->
-                                {{ form.parent_department }}
+                                <label for="parent_department_control">上層部門</label>
+                                <select class="form-control form-control-sm" id="parent_department_control" name="parent_department">
+                                    <option value="a">a</option>
+                                    <option value="b">b</option>
+                                    <option value="c">c</option>
+                                </select>
                               </div>
                         </div>
                         <div class="col">
@@ -68,27 +71,15 @@
                 </tr>
             </thead>
             <tbody>
+                {% for d in department %}
                 <tr>
-                    <td><a href="#" class="btn btn-danger">刪除</a></td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
+                    <td><a href="#" class="btn btn-sm btn-danger">刪除</a></td>
+                    <td>{{ d.parent_department }}</td>
+                    <td>{{ d.department_name }}</td>
+                    <td>{{ d.department_id }}</td>
+                    <td></td>
                 </tr>
-                <tr>
-                    <td><a href="#" class="btn btn-danger">刪除</a></td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                </tr>
-                <tr>
-                    <td><a href="#" class="btn btn-danger">刪除</a></td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                    <td>ABCD</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

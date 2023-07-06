@@ -4,20 +4,27 @@
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link active" href="#"><i class="fa-solid fa-file-lines mr-2" style="color: #ffffff;"></i> 工程確認單</a>
+            <a class="nav-link collapsed" href="#" data-target="#engineerCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+                <i class="fa-solid fa-wrench mr-2" style="color: #ffffff;"></i> 工程部
+            </a>
+            <div class="collapse" id="engineerCollapse">
+                <ul class="nav flex-column ml-5">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department' %}">工程確認單</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'project' %}">工作派任計畫</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">派工單</a>
+                    </li>
+                </ul>
+            </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{% url 'project' %}"><i class="fa-solid fa-scroll" style="color: #ffffff;"></i></i> 工作派任計畫</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa-solid fa-wrench mr-2" style="color: #ffffff;"></i> 派工單</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'equipment' %}"><i class="fa-solid fa-warehouse mr-2" style="color: #ffffff;"></i> 固定資產管理</a>
-        </li>
+        
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="personnelCollapse">
-                <i class="fa-solid fa-user-plus mr-2" style="color: #ffffff;"></i> 人事部
+                <i class="fa-solid fa-user-plus mr-2" style="color: #ffffff;"></i> 管理部
             </a>
             <div class="collapse" id="personnelCollapse">
                 <ul class="nav flex-column ml-5">
@@ -26,6 +33,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">員工管理</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'equipment' %}">固定資產管理</a>
                     </li>
                 </ul>
             </div>

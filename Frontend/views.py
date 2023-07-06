@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
+from django.views.generic import ListView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, DepartmentForm
@@ -96,37 +97,27 @@ def equipment(request):
     }
     return render(request, 'equipment/equipment.html', context)
 
-class Department(View):
-   
+class Department(ListView):
+    model = Department
+    template_name = 'department/department.html'
+    context_object_name = 'department'
 
     def post(self,request):
-        # parent_department = request.POST.get('parent_department')
-        # department_id = request.POST.get('department_id')
-        # department_name = request.POST.get('department_name')
       
         for key, value in request.POST.items():
             # 对每个字段执行相应的操作
             print(f"字段名: {key}, 值: {value}")
-
-        # department = Department(
-        #     parent_department=parent_department,
-        #     department_id=department_id,
-        #     department_name=department_name
-        # )
-        # department.save()
 
         context = {
             
         }
         return render(request, 'department/department.html', context)
     
-    
-    def get(self,request):
-        # department = Department.objects.all()
-        context = {
-            'form':DepartmentForm
-        }
-        return render(request, 'department/department.html', context)
+    # CBV 要取得物件好像要使用 ListView，ListView 就不判斷 get、post，加上 get 會影響吃不到上面寫的 Smodel
+    # def get(self,request):
+    #     context = {
+    #     }
+    #     return render(request, 'department/department.html', context)
 
 
 def menu_item(request, menu_item):
