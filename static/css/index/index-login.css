@@ -60,7 +60,7 @@
 }
 
 .main{
-    width: calc(100vw - var(--sidebar-width));
+    width: calc(100vw - var(--sidebar-width) - 20px);
     position: relative;
     left: var(--sidebar-width);
     top: 100px;

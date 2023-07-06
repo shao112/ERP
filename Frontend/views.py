@@ -10,7 +10,7 @@ from Backend.models import Department
 from django.shortcuts import get_object_or_404
 
 
-#首頁
+# 首頁
 class Index(View):
 
     def post(self,request):
@@ -57,6 +57,19 @@ def signout(request):
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
 
+# 工程確認單
+class Project_Confirmation(View):
+
+
+    def post(self,request):
+
+        return HttpResponseRedirect('/')
+
+
+    def get(self,request):    
+        return render(request, 'project_confirmation/project_confirmation.html')
+
+# 工作派任計畫
 class Project(View):
 
     def put(self, request):#未測試
