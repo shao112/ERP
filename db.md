@@ -63,13 +63,37 @@
 | no           | 序號         | str |
 | name         | 品名         | str |
 
+# Client（客戶）
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| name    | 客戶名稱     | str |
+| address | 公司地址     | str |
+| tel     | 電話     | str |
+| email   | 電子信箱       | str |
+
+# Project_Confirmation（工程確認單）
+| 欄位         | 欄位敘述        | 型態 |
+|--------------|----------------| ---------------- |
+| quotation_id | 報價單號     | str |
+| project_name | 工程名稱     | str |
+| order_id     | 訂單編號     | str |
+| c_a          | 母案編號     | str |
+| client       | 客戶簡稱     | str |
+| requisition  | 請購單位     | str |
+| turnover     | 成交金額     | str |
+| is_completed | 完工狀態     | bool |
+| Completion_report_guy      | 完工回報人     | FK，員工ID |
+| Completion_report_date     | 完工回報日期     | date |
+| remark       | 備註         | str |
+| reassignment_attachment   | 完工重派附件   | str |
+
 # Project（工作派任計畫）
 | 欄位         | 欄位敘述        | 型態 |
 |--------------|----------------| ---------------- |
 | quotation_id | 報價單號     | str |
 | projecet_id  | 工派單編號   | str |
-| project_name | 工程名稱     | str |
-| c_a          | 母案編號     | str |
+| project_name | 工程名稱     | str，disable帶入 |
+| c_a          | 母案編號     | str，disable帶入 |
 | attendance   | 出勤日期     | date |
 | work_employee| 工作人員     | FK，員工ID |
 | lead_employee| 帶班人員     | FK，員工ID |
@@ -79,4 +103,6 @@
 | remark       | 備註         | str |
 | support      | 支援人力     | str |
 | attachment   | 工確單附件   | str |
+
+
 
