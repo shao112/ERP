@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Department
+from .models import Project, Department, Project_Confirmation
 
 from ERP.settings import DEBUG
 
@@ -23,6 +23,12 @@ class BaseModelForm(forms.ModelForm):
                 error_messages.append(f"{chinese_field_name}: {', '.join(errors)}")
         return '\n'.join(error_messages)
 
+# 工程確認單
+class ProjectConfirmationForm(BaseModelForm):
+
+    class Meta:
+        model = Project_Confirmation
+        fields = '__all__'
 
 # 工作派任計畫
 class ProjectForm(BaseModelForm):

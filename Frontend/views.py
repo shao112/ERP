@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
-from Backend.forms import  ProjectForm, DepartmentForm
+from Backend.forms import  ProjectForm, ProjectConfirmationForm
 from Backend.models import Department
 from django.shortcuts import get_object_or_404
 
@@ -63,7 +63,16 @@ class Project_Confirmation(View):
 
     def post(self,request):
 
-        return HttpResponseRedirect('/')
+        form = ProjectConfirmationForm(request.POST)
+
+        if form.is_valid():
+            print(form)
+            form.save() 
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+
+        return HttpResponseRedirect(request.path)
 
 
     def get(self,request):    
