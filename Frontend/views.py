@@ -6,6 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, DepartmentForm
 from Backend.models import Department
+from django.shortcuts import get_object_or_404
 
 
 #首頁
@@ -56,7 +57,21 @@ def signout(request):
 #     instance.employee.save()
 
 class Project(View):
+
+    def put(self, request):#未測試
+        project = get_object_or_404(Project, pk=request.POST['project_id'])
+        form = ProjectForm(request.POST, instance=project)
+
+        if form.is_valid():
+            project = form.save()
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+
+        return HttpResponseRedirect(request.path)
+
     def post(self,request):
+        #目前前端html，只有工作地點有name!
         form = ProjectForm(request.POST)
 
         if form.is_valid():
@@ -64,10 +79,6 @@ class Project(View):
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
-            context = {
-                'form': form,
-            }
-            # return render(request, 'project/project.html', context)
 
         return HttpResponseRedirect(request.path)
 
