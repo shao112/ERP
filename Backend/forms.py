@@ -1,15 +1,38 @@
 from django import forms
 from .models import Project, Department
 
+from ERP.settings import DEBUG
+
+#base modelform
+class BaseModelForm(forms.ModelForm):
+    def get_chinese_field_name(self, field_name):
+        field = self.fields.get(field_name)
+        if field:
+            return field.label or field_name
+        return field_name
+
+    def get_error_messages(self):
+        #根據debug，來顯示要不要顯示對應的欄位英文
+        
+        error_messages = []
+        for field, errors in self.errors.items():
+            chinese_field_name = self.get_chinese_field_name(field)
+            if DEBUG:
+                error_messages.append(f"{chinese_field_name}({field}): {', '.join(errors)}")
+            else:
+                error_messages.append(f"{chinese_field_name}: {', '.join(errors)}")
+        return '\n'.join(error_messages)
+
+
 # 工作派任計畫
-class ProjectForm(forms.ModelForm):
+class ProjectForm(BaseModelForm):
 
     class Meta:
         model = Project
         fields = '__all__'
 
 # 工作派任計畫
-class DepartmentForm(forms.ModelForm):
+class DepartmentForm(BaseModelForm):
 
     class Meta:
         model = Department

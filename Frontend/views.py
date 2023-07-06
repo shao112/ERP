@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, DepartmentForm
 from Backend.models import Department
-# Create your views here.
+
 
 #首頁
 class Index(View):
@@ -55,12 +55,28 @@ def signout(request):
 # def save_employee(sender, instance, **kwargs):
 #     instance.employee.save()
 
-@login_required
-def project(request):
-    context = {
-        # 'form': ProjectForm,
-    }
-    return render(request, 'project/project.html', context)
+class Project(View):
+    def post(self,request):
+        form = ProjectForm(request.POST)
+
+        if form.is_valid():
+            project = form.save() 
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            context = {
+                'form': form,
+            }
+            # return render(request, 'project/project.html', context)
+
+        return HttpResponseRedirect(request.path)
+
+
+    def get(self,request):    
+        context = {
+            'form': ProjectForm,
+        }
+        return render(request, 'project/project.html', context)
 
 @login_required
 def equipment(request):
@@ -70,10 +86,13 @@ def equipment(request):
     return render(request, 'equipment/equipment.html', context)
 
 class Department(View):
+   
+
     def post(self,request):
         # parent_department = request.POST.get('parent_department')
         # department_id = request.POST.get('department_id')
         # department_name = request.POST.get('department_name')
+      
         for key, value in request.POST.items():
             # 对每个字段执行相应的操作
             print(f"字段名: {key}, 值: {value}")
