@@ -23,6 +23,14 @@ class BaseModelForm(forms.ModelForm):
                 error_messages.append(f"{chinese_field_name}: {', '.join(errors)}")
         return '\n'.join(error_messages)
 
+    def is_valid(self):
+        valid = super().is_valid()
+        if 'created_date' in self.errors:
+            del self.errors['created_date']
+        # print(valid)
+
+        return  not bool(self.errors)
+
 # 工程確認單
 class ProjectConfirmationForm(BaseModelForm):
 

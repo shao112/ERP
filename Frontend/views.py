@@ -66,9 +66,9 @@ class Project_Confirmation(View):
         form = ProjectConfirmationForm(request.POST)
 
         if form.is_valid():
-            print(form)
             form.save() 
         else:
+            print("is_valid FALSE")
             error_messages = form.get_error_messages()
             print(error_messages)
 
