@@ -11,7 +11,7 @@
 
 
 {% block main %}
-<div class="main">
+<div class="main" id="project-confirmation-app">
     <div id="error-message"></div>
     <div class="project-confirmation-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
@@ -96,10 +96,35 @@
                         <kbd>完工狀態</kbd>
                     </h5>
                     <div class="row">
+                        <div class="col-12">
+                            <div class="custom-control custom-radio">
+                                <input type="radio"
+                                class="custom-control-input"
+                                id="is_completed_y"
+                                name="is_completed"
+                                value="true"
+                                required
+                                v-model="status">
+                                <label class="custom-control-label" for="is_completed_y">完成</label>
+                            </div>
+                            <div class="custom-control custom-radio mb-3">
+                                <input type="radio"
+                                class="custom-control-input"
+                                id="is_completed_n"
+                                name="is_completed"
+                                value="false"
+                                required
+                                checked
+                                v-model="status">
+                                <label class="custom-control-label" for="is_completed_n">尚未完成</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="completion_report_employee_control">完工回報人</label>
-                                <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee" id="completion_report_employee_control" multiple>
+                                <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
                                     <option value="1">王大明</option>
                                     <option value="1">王中明</option>
                                     <option value="1">王小明</option>
@@ -116,38 +141,67 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="completion_report_date_control">完工回報日期</label>
-                                <input type="date" class="form-control form-control-sm" name="completion_report_date"  id="completion_report_date_control"></input>
+                                <input type="date" class="form-control form-control-sm" name="completion_report_date"  id="completion_report_date_control" :disabled="status == 'false'"></input>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="reassignment_attachment_control">完工重派附件</label>
-                                <input type="file" class="form-control form-control-sm" name="reassignment_attachment"  id="reassignment_attachment_control"></input>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>完工重派附件</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control"  :disabled="status == 'false'">
+                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
+                            </div> 
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
+            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
         </form>
     </div>
     <div class="container shadow-sm table-responsive">
-        <table class="table table-hover">
+        <table class="table table-hover text-center">
             <thead>
-                <tr>
+                <tr class="text-nowrap">
+                    <th></th>
                     <th>報價單號</th>
-                    <th>工派單編號</th>
+                    <th>工程名稱</th>
+                    <th>訂單編號</th>
                     <th>母案編號</th>
-                    <th>編輯</th>
+                    <th>客戶簡稱</th>
+                    <th>請購單位</th>
+                    <th>成交金額</th>
+                    <th>完工狀態</th>
+                    <th>完工回報人</th>
+                    <th>完工回報日期</th>
+                    <th>備註</th>
+                    <th>完工重派附件</th>
+                    <th>建立日期</th>
                 </tr>
             </thead>
             <tbody>
+                {% for p in project_confirmation %}
                 <tr>
-                    <td>a</td>
-                    <td>b</td>
-                    <td>c</td>
-                    <td><button> 展開資料</button> </td>
+                    <td>
+                        <button type="button" class="btn btn-warning m-2" data-toggle="collapse" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="btn btn-danger m-2"><i class="far fa-trash-alt"></i></button>
+                    </td>
+                    <td>{{ p.quotation_id }}</td>
+                    <td>{{ p.project_name }}</td>
+                    <td>{{ p.order_id }}</td>
+                    <td>{{ p.c_a }}</td>
+                    <td>{{ p.client }}</td>
+                    <td>{{ p.requisition }}</td>
+                    <td>{{ p.turnover }}</td>
+                    <td>{{ p.is_completed }}</td>
+                    <td>{{ p.completion_report_employee }}</td>
+                    <td>{{ p.completion_report_date }}</td>
+                    <td>{{ p.remark }}</td>
+                    <td>{{ p.reassignment_attachment }}</td>
+                    <td>{{ p.created_date }}</td>
+                    <!-- <td><button> 展開資料</button> </td> -->
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -168,8 +222,6 @@
                 url: url,
                 data: formData,
                 success: function(response) {
-                    // 处理成功响应
-                    console.log("處理成功")
                     
                 },
                 error: function(xhr, textStatus, errorThrown) {
@@ -180,13 +232,27 @@
         });
     });
 </script>
+
 <script>
-    
-    $(".chosen-select").chosen({
-        no_results_text: "查無此員工",
-        width: "100%",
-        // max_shown_results:3
-    })
-    
+    // 更美化 file input
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
 </script>
+
+<!-- <script>
+    // 這是處理當選則未完成時要把其他input都disable，但有一個問題，完工回報人disable後就無法改變
+    const app = Vue.createApp({
+      data() {
+        return {
+          status: 'false'
+        };
+      }
+    });
+  
+    app.mount('#project-confirmation-app');
+  </script> -->
+
+
 {% endblock %}

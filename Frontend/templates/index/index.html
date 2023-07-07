@@ -1,4 +1,4 @@
-{% extends 'base/base_dashboard.html' %}
+{% extends 'base/base_login.html' %}
 
 {% block title %}艾力克電機{% endblock %}
 
@@ -15,6 +15,8 @@
 
 {% if request.user.is_authenticated %}
     <!-- 登入 -->
+    {% include 'base/sidebar.html' %}
+    {% include 'base/header.html' %}
     {% include 'index/index-login.html' %}
 {% else %}
     <!-- 尚未登入 -->

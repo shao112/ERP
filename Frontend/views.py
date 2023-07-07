@@ -6,7 +6,7 @@ from django.views.generic import ListView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
-from Backend.models import Department
+from Backend.models import Department, Project_Confirmation
 from django.shortcuts import get_object_or_404
 
 
@@ -58,8 +58,10 @@ def signout(request):
 #     instance.employee.save()
 
 # 工程確認單
-class Project_Confirmation(View):
-
+class Project_Confirmation(ListView):
+    model = Project_Confirmation
+    template_name = 'project_confirmation/project_confirmation.html'
+    context_object_name = 'project_confirmation'
 
     def post(self,request):
 
@@ -75,11 +77,11 @@ class Project_Confirmation(View):
         return HttpResponseRedirect(request.path)
 
 
-    def get(self,request):    
-        return render(request, 'project_confirmation/project_confirmation.html')
+    # def get(self,request):    
+    #     return render(request, 'project_confirmation/project_confirmation.html')
 
 # 工作派任計畫
-class Project(View):
+class Project(ListView):
 
     def put(self, request):#未測試
         project = get_object_or_404(Project, pk=request.POST['project_id'])
@@ -135,7 +137,7 @@ class Department(ListView):
         }
         return render(request, 'department/department.html', context)
     
-    # CBV 要取得物件好像要使用 ListView，ListView 就不判斷 get、post，加上 get 會影響吃不到上面寫的 Smodel
+    # CBV 要取得物件好像要使用 ListView，ListView 就不判斷 get、post，加上 get 會影響吃不到上面寫的 model
     # def get(self,request):
     #     context = {
     #     }

@@ -50,10 +50,12 @@
     font-size: 1rem;
 }
 .sidebar .nav-link[data-toggle].collapsed:after {
-    content: " ▾";
+    content: "\25BE";
+    /* content: " ▾"; */
 }
 .sidebar .nav-link[data-toggle]:not(.collapsed):after {
-    content: " ◂";
+    content: "\25C2";
+    /* content: " ◂"; */
 }
 .sidebar-logo{
     height: 100px;

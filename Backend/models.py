@@ -29,6 +29,7 @@ class Employee(models.Model):
         ('A', '替代役'),
     ]   
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=10, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
     departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')

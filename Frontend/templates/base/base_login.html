@@ -37,8 +37,32 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script>
+        /*
+        * 控制 sidebarCollapse（側邊面板） 跟 hamburgerMenu（漢堡icon）在 767px 上下的顯示跟隱藏。
+        * 解決當螢幕小於 767px 展開側邊面板時，resize 尺寸會一直彈開 sidebarCollapse。
+        */
+        function checkScreenSize() {
+            if (window.innerWidth <= 767) {
+                const sidebarCollapse = document.querySelector('#sidebarCollapse');
+                const hamburgerMenu = document.querySelector('#hamburgerMenu');
     
+                // 如果 hamburgerMenu 已經 display:inline-block，不要移除show
+                if(hamburgerMenu.style.display != "inline-block"){
+                    sidebarCollapse.classList.remove('show');
+                }
+                hamburgerMenu.style.display = "inline-block";
+            } else {
+                const sidebarCollapse = document.querySelector('#sidebarCollapse');
+                sidebarCollapse.classList.add('show');
     
-    <!-- <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script> -->
-    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.3/js/bootstrap-select.min.js"></script> -->
+                const hamburgerMenu = document.querySelector('#hamburgerMenu');
+                hamburgerMenu.style.display = "none";
+            }
+        }
+        // 在頁面載入完成時和視窗尺寸變化時觸發 checkScreenSize 檢查螢幕尺寸的函式
+        window.addEventListener('load', checkScreenSize);
+        // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
+        window.addEventListener('resize', checkScreenSize);
+    </script>
 </html>
