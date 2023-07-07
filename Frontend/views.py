@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DeleteView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
 from Backend.models import Department, Project_Confirmation
 from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
 
 
 # 首頁
@@ -48,14 +49,6 @@ def signout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-# @receiver(post_save, sender=User)
-# def create_employee(sender, instance, created, **kwargs):
-#     if created:
-#         Employee.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_employee(sender, instance, **kwargs):
-#     instance.employee.save()
 
 # 工程確認單
 class Project_Confirmation(ListView):
@@ -74,11 +67,17 @@ class Project_Confirmation(ListView):
             error_messages = form.get_error_messages()
             print(error_messages)
 
-        return HttpResponseRedirect(request.path)
+        return HttpResponseRedirect('/')
 
 
     # def get(self,request):    
     #     return render(request, 'project_confirmation/project_confirmation.html')
+
+# 刪除 工程確認單 0708還沒研究完
+class Project_Confirmation_Delete(DeleteView):
+    model = Project_Confirmation
+    template_name = 'project_confirmation/project_confirmation.html'
+    success_url = reverse_lazy('project-confirmation')
 
 # 工作派任計畫
 class Project(ListView):

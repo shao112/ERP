@@ -22,6 +22,8 @@ urlpatterns = [
     path('department/', login_required(views.Department.as_view()), name='department'),
     path('equipment/', views.equipment, name='equipment'),
     path('project-confirmation/', views.Project_Confirmation.as_view(), name='project-confirmation'),
+    # 0708工程確認單刪除還沒研究完
+    path('project_confirmation_delete/<int:pk>', views.Project_Confirmation_Delete.as_view(), name='project_confirmation_delete'),
     path('project/', login_required(views.Project.as_view()), name='project'),
     # path('<str:menu_item>/', views.menu_item, name='menu_item'),
     path('accounts/logout/', views.signout, name='logout'),

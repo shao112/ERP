@@ -14,150 +14,163 @@
 <div class="main" id="project-confirmation-app">
     <div id="error-message"></div>
     <div class="project-confirmation-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
-            工程確認單
-        </span>
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
         <a href="" 
            class="btn border border-dark ml-2" 
-           data-toggle="collapse"
+           data-toggle="modal"
            data-target="#project-confirmation-modal">
            • 展開面板新增資料
         </a>
     </div>
-    <div class="container shadow-sm collapse" id="project-confirmation-modal">
-        <form action=""  method="POST" class="pb-4">
-            {% csrf_token %}
-            <div class="row my-4">
-                <div class="col-12 col-md-6">
-                    <h5 class="my-4" style="font-size: 1.2rem;">
-                        <kbd>確認單描述</kbd>
-                    </h5>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="quotation_id_control">報價單號</label>
-                                <input class="form-control form-control-sm" name="quotation_id" id="quotation_id_control" required></input>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="project_name_control">工程名稱</label>
-                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="order_id_control">訂單編號</label>
-                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" ></input>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="c_a_control">母案編號</label>
-                                <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="client_control">客戶簡稱</label>
-                                <input class="form-control form-control-sm" name="client" id="client_control"></input>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="requisition_control">請購單位</label>
-                                <input class="form-control form-control-sm" name="requisition" id="requisition_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="turnover_control" name="turnover">成交金額</label>
-                                <input class="form-control form-control-sm" name="turnover" id="turnover_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="remark_control" class="col-form-label-sm">備註</label>
-                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
-                            </div>
-                        </div>
-                    </div>
+    <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1" aria-labelledby="project-confirmation" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="project-confirmation-label">工程確認單</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="col-12 col-md-6">
-                    <h5 class="my-4" style="font-size:1.2rem;">
-                        <kbd>完工狀態</kbd>
-                    </h5>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="custom-control custom-radio">
-                                <input type="radio"
-                                class="custom-control-input"
-                                id="is_completed_y"
-                                name="is_completed"
-                                value="true"
-                                required
-                                v-model="status">
-                                <label class="custom-control-label" for="is_completed_y">完成</label>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action=""  method="POST" class="pb-4">
+                            {% csrf_token %}
+                            <div class="row my-4">
+                                <div class="col-12 col-md-6">
+                                    <h5 class="my-4" style="font-size: 1.2rem;">
+                                        <kbd>確認單描述</kbd>
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="quotation_id_control">報價單號</label>
+                                                <input class="form-control form-control-sm" name="quotation_id" id="quotation_id_control" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="project_name_control">工程名稱</label>
+                                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="order_id_control">訂單編號</label>
+                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" ></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="c_a_control">母案編號</label>
+                                                <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="client_control">客戶簡稱</label>
+                                                <input class="form-control form-control-sm" name="client" id="client_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="requisition_control">請購單位</label>
+                                                <input class="form-control form-control-sm" name="requisition" id="requisition_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="turnover_control" name="turnover">成交金額</label>
+                                                <input class="form-control form-control-sm" name="turnover" id="turnover_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="remark_control" class="col-form-label-sm">備註</label>
+                                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <h5 class="my-4" style="font-size:1.2rem;">
+                                        <kbd>完工狀態</kbd>
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio"
+                                                class="custom-control-input"
+                                                id="is_completed_y"
+                                                name="is_completed"
+                                                value="true"
+                                                required
+                                                v-model="status">
+                                                <label class="custom-control-label" for="is_completed_y">完成</label>
+                                            </div>
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input type="radio"
+                                                class="custom-control-input"
+                                                id="is_completed_n"
+                                                name="is_completed"
+                                                value="false"
+                                                required
+                                                checked
+                                                v-model="status">
+                                                <label class="custom-control-label" for="is_completed_n">尚未完成</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="completion_report_employee_control">完工回報人</label>
+                                                <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
+                                                    <option value="1">王大明</option>
+                                                    <option value="1">王中明</option>
+                                                    <option value="1">王小明</option>
+                                                    <option value="1">王x明</option>
+                                                    <option value="1">王a明</option>
+                                                    <option value="1">王b明</option>
+                                                    <option value="1">王1明</option>
+                                                    <option value="1">王2明</option>
+                                                    <option value="1">王3明</option>
+                                                    <option value="1">王4明</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="completion_report_date_control">完工回報日期</label>
+                                                <input type="date" class="form-control form-control-sm" name="completion_report_date"  id="completion_report_date_control" :disabled="status == 'false'"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label>完工重派附件</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control"  :disabled="status == 'false'">
+                                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="custom-control custom-radio mb-3">
-                                <input type="radio"
-                                class="custom-control-input"
-                                id="is_completed_n"
-                                name="is_completed"
-                                value="false"
-                                required
-                                checked
-                                v-model="status">
-                                <label class="custom-control-label" for="is_completed_n">尚未完成</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="completion_report_employee_control">完工回報人</label>
-                                <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
-                                    <option value="1">王大明</option>
-                                    <option value="1">王中明</option>
-                                    <option value="1">王小明</option>
-                                    <option value="1">王x明</option>
-                                    <option value="1">王a明</option>
-                                    <option value="1">王b明</option>
-                                    <option value="1">王1明</option>
-                                    <option value="1">王2明</option>
-                                    <option value="1">王3明</option>
-                                    <option value="1">王4明</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="completion_report_date_control">完工回報日期</label>
-                                <input type="date" class="form-control form-control-sm" name="completion_report_date"  id="completion_report_date_control" :disabled="status == 'false'"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label>完工重派附件</label>
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control"  :disabled="status == 'false'">
-                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
-                            </div> 
-                        </div>
+                            <button type="submit" class="btn border border-dark rounded w-25">送出</button>
+                            <button type="button" class="btn border border-dark rounded w-25" data-dismiss="modal">關閉</button>
+                        </form>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
-        </form>
+        </div>
     </div>
     <div class="container shadow-sm table-responsive">
         <table class="table table-hover text-center">
@@ -183,8 +196,8 @@
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <button type="button" class="btn btn-warning m-2" data-toggle="collapse" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></button>
-                        <button type="button" class="btn btn-danger m-2"><i class="far fa-trash-alt"></i></button>
+                        <a type="button" href="{% url 'project_confirmation_delete' p.id %}" class="btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" class="btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.project_name }}</td>
@@ -214,8 +227,6 @@
             var form = $(this);
             var url = form.attr("action");
             var formData = form.serialize();
-            console.log(url)
-            console.log(formData)
 
             $.ajax({
                 type: "POST",
