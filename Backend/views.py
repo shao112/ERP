@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponseNotAllowed
+from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
 from Backend.models import Department, Project_Confirmation
@@ -34,6 +34,9 @@ class Check(View):
 from urllib.parse import parse_qs
 
 class Project_Confirmation_View(View):
+    model = Project_Confirmation
+    template_name = 'project_confirmation/project_confirmation.html'
+
     def put(self,request):
         print("修改")
         data = request.body  
@@ -56,7 +59,16 @@ class Project_Confirmation_View(View):
 
     
     def delete(self,request):
-        #未做
+        print("刪除")
+        data = request.body  
+        data_str = data.decode('utf-8')
+        json_data = parse_qs(data_str)
+        json_data = {key: value[0] for key, value in json_data.items()}
+        # del  json_data["csrfmiddlewaretoken"]
+        print(json_data)
+        project_confirmation = Project_Confirmation.objects.get(id=json_data['id'])
+        project_confirmation.delete()
+
         return JsonResponse({'status': 200})
 
     def post(self,request):

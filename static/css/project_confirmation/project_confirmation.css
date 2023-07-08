@@ -1,3 +1,11 @@
-#project-confirmation-modal.collapsing {
-    transition: none !important;
+/* 控制 Table 第一列表頭固定 */
+.project-confirmation-table {
+    height:70vh;  
+    overflow:scroll;
+}
+thead tr:nth-child(1) th{
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }

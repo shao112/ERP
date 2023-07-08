@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 from .models import Employee, Department, Project, Project_Confirmation, Clock
 
 # Register your models here.
-# class EmployeeInline(admin.StackedInline):
-#     model = Employee
-#     can_delete = False
-#     verbose_name_plural = 'Employee'
+class EmployeeInline(admin.StackedInline):
+    model = Employee
+    can_delete = False
+    verbose_name_plural = 'Employee'
 
-# class MyUserAdmin(UserAdmin):
-#     inlines = (EmployeeInline, )
+class MyUserAdmin(UserAdmin):
+    inlines = (EmployeeInline, )
 
 
 # 部門
@@ -28,8 +28,8 @@ class ClockAdmin(admin.ModelAdmin):
 
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
-# admin.site.unregister(User)
-# admin.site.register(User, MyUserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Project_Confirmation, Project_ConfirmationAdmin)

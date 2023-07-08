@@ -125,7 +125,7 @@ del_elements.forEach(element => {
 });
 
 function DELETE_handleClick(event) {
-    const clickedElement = event.target;
+    const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
 

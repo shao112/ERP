@@ -32,17 +32,9 @@ class Index(View):
                     print(session)
                     session.save()
                 return HttpResponseRedirect('/')
-            
-        context = {
-            # 'login_form':login_form
-        }
 
-    def get(self,request):        
-        # login_form = LoginForm()
-        context = {
-            # 'login_form':login_form
-        }
-        return render(request, 'index/index.html', context)
+    def get(self,request):
+        return render(request, 'index/index.html')
 
 @login_required
 def signout(request):
@@ -72,12 +64,6 @@ class Project_Confirmation(ListView):
 
     # def get(self,request):    
     #     return render(request, 'project_confirmation/project_confirmation.html')
-
-# 刪除 工程確認單 0708還沒研究完
-class Project_Confirmation_Delete(DeleteView):
-    model = Project_Confirmation
-    template_name = 'project_confirmation/project_confirmation.html'
-    success_url = reverse_lazy('project-confirmation')
 
 # 工作派任計畫
 class Project(ListView):

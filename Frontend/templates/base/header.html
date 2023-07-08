@@ -37,16 +37,13 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12 col-md-6">
-                            姓名：王小明
+                            姓名：{{ request.user.employee.full_name }}
                         </div>
                         <div class="col-12 col-md-6">
                             日期：2023/06/01
                         </div>
                         <div class="col-12 col-md-6">
-                            時間：08:00
-                        </div>
-                        <div class="col-12 col-md-6">
-                            地點：雲林縣麥寮區
+                            現在時間：08:00
                         </div>
                     </div>
                 </div>
@@ -81,7 +78,6 @@
         delimiters: ['[[', ']]'],
         methods: {
             setAction(action) {
-                // check_process(action,csrftoken);
                 this.action = action;
                 this.showConfirmationButton = true;
                 this.isFadeIn = !(this.isFadeIn);
