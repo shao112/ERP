@@ -113,7 +113,7 @@ class Project_Confirmation(models.Model):
         verbose_name = "工程確認單"   # 單數
         verbose_name_plural = verbose_name   #複數
     def __str__(self):
-        return self.name
+        return self.project_name
 
 # 工作派任計畫
 class Project(models.Model):

@@ -7,6 +7,7 @@
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/project_confirmation/project_confirmation.css' %}">
 
+
 {% endblock %}
 
 
@@ -16,11 +17,12 @@
     <div class="project-confirmation-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
         <a href="" 
+        id="sys_new"
            class="btn border border-dark ml-2" 
            data-toggle="modal"
            data-target="#project-confirmation-modal">
            • 展開面板新增資料
-        </a>
+        </a> 
     </div>
     <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1" aria-labelledby="project-confirmation" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -33,8 +35,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action=""  method="POST" class="pb-4">
+                        <form action="/restful/project_confirmation" id="form"  method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
+                            <input name="id" hidden>
                             <div class="row my-4">
                                 <div class="col-12 col-md-6">
                                     <h5 class="my-4" style="font-size: 1.2rem;">
@@ -196,8 +199,8 @@
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <a type="button" href="{% url 'project_confirmation_delete' p.id %}" class="btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a type="button" class="btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a data-url="project_confirmation"  data-id="{{ p.id }}"   type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.project_name }}</td>
@@ -219,29 +222,12 @@
         </table>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        $("form").on("submit", function(event) {
-            event.preventDefault(); // 阻止表单的默认提交行为
-            
-            var form = $(this);
-            var url = form.attr("action");
-            var formData = form.serialize();
 
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                success: function(response) {
-                    
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-                    $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
-                }
-            });
-        });
-    });
+
+<script src="{% static 'js/fuc/restful.js' %}"></script>
+
+<script>
+  
 </script>
 
 <script>

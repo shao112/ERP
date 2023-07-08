@@ -18,4 +18,5 @@ from . import views
 
 urlpatterns = [
     path('check', views.Check.as_view(), name="check"),
+    path('project_confirmation', views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),
 ]

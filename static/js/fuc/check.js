@@ -16,7 +16,7 @@ function check_process(check_statu, csrftoken) {
 
 
         // 傳送資料到後端
-        fetch('/Backend/check', {
+        fetch('/restful/check', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
