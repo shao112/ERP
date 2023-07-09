@@ -26,6 +26,9 @@
     <!-- base css -->
     <link rel="stylesheet" href="{% static 'css/base/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/index/index-login.css' %}">
+    <!-- Excel 選單 -->
+    <!-- <link rel="stylesheet" href="{% static 'css/excel-bootstrap-table-filter-style.css' %}">
+    <link rel="stylesheet" href="{% static 'js/excel-bootstrap-table-filter-bundle.js' %}"> -->
     {% block import %}
 
     {% endblock %}
@@ -41,15 +44,14 @@
 
 </body>
 <!-- 這個 jquery.slim.min.js 是隨著 Bootstrap CDN 複製過來的，但 slim 會卡到 JS 發送表單的 $.ajax 使用-->
-<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
     integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
     crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
     integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
     crossorigin="anonymous"></script>
+    
 
 
 <!-- <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script> -->
@@ -84,11 +86,12 @@
     window.addEventListener('resize', checkScreenSize);
 </script>
 <script>
-    // 多重下拉式選取 chosen 外掛的調整，0707拉到base看看效果
+    // 多重下拉式選取 chosen 外掛的調整
     $(".chosen-select").chosen({
         no_results_text: "查無此資料",
         width: "100%",
         // max_shown_results:3
     })
     </script>
+    
 </html>

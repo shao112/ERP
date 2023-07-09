@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Department, Project_Confirmation
+from .models import Project, Department, Project_Confirmation, Employee
 
 from ERP.settings import DEBUG
 
@@ -51,18 +51,10 @@ class DepartmentForm(BaseModelForm):
     class Meta:
         model = Department
         fields = '__all__'
+        
+# 員工
+class EmployeeForm(BaseModelForm):
 
-    widgets = {
-        'parent_department': forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-sm',
-                'id':'parent_department_control'
-            }),
-        'department_name': forms.TextInput(attrs={'class': 'form-control'}),
-        'department_id': forms.TextInput(attrs={'class': 'form-control'})
-    }
-    labels = {
-        'parent_department': '上層部門',
-        'department_name': '部門編號',
-        'department_id': '部門名稱',
-    }
+    class Meta:
+        model = Employee
+        fields = '__all__'

@@ -8,11 +8,15 @@
     </div>
 
     <div>
-        <button type="button" class="border border-dark rounded mr-2" data-toggle="modal" data-target="#clock-inout">簽到
-            / 簽退</button>
+        <button type="button"
+                class="border border-dark rounded mr-2"
+                data-toggle="modal"
+                data-target="#clock-inout"
+                @click="catchDateTime">簽到 / 簽退
+        </button>
 
         <span class="dropdown-toggle mr-2" data-toggle="dropdown">
-            <i class="fa-solid fa-user"></i> {{request.user}}
+            <i class="fa-solid fa-user"></i> {{ request.user.employee.full_name }}
         </span>
         <div class="dropdown-menu">
             <a class="dropdown-item" href="#">個人管理</a>
@@ -40,10 +44,10 @@
                             姓名：{{ request.user.employee.full_name }}
                         </div>
                         <div class="col-12 col-md-6">
-                            日期：2023/06/01
+                            日期：<span id="current-date"></span>
                         </div>
                         <div class="col-12 col-md-6">
-                            現在時間：08:00
+                            現在時間：<span id="current-date"></span>
                         </div>
                     </div>
                 </div>
@@ -107,9 +111,16 @@
             },
         },
         mounted() {
+            // 获取当前日期
+            const currentDate = new Date().toLocaleDateString();
+            // 将当前日期绑定到HTML元素
+            document.getElementById('current-date').textContent = currentDate;
+            // 获取当前时间
+            const currentTime = new Date().toLocaleTimeString();
+            // 将当前时间绑定到HTML元素
+            document.getElementById('current-time').textContent = currentTime;
             // hidden.bs.modal 當 modal 隱藏後
             $('#clock-inout').on('hidden.bs.modal', () => {
-                console.log("$('#clock-inout')")
                 this.showConfirmationButton = false;
             });
         },

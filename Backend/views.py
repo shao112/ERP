@@ -34,8 +34,6 @@ class Check(View):
 from urllib.parse import parse_qs
 
 class Project_Confirmation_View(View):
-    model = Project_Confirmation
-    template_name = 'project_confirmation/project_confirmation.html'
 
     def put(self,request):
         print("修改")
@@ -46,10 +44,12 @@ class Project_Confirmation_View(View):
         del  json_data["csrfmiddlewaretoken"]
         print(json_data)
         form = ProjectConfirmationForm(json_data)
+        # project_confirmation = Project_Confirmation.objects.get(id=json_data['id'])
+        # form = ProjectConfirmationForm(instance=project_confirmation)
 
         if form.is_valid():
-            #可能要用update
-            # form.save() 
+            #可能要用update，現在會新增一筆
+            form.save() 
             return JsonResponse({'status': 200})
         else:
             print("is_valid FALSE")

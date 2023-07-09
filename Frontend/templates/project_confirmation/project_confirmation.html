@@ -88,7 +88,7 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="turnover_control" name="turnover">成交金額</label>
+                                                <label for="turnover_control">成交金額</label>
                                                 <input class="form-control form-control-sm" name="turnover" id="turnover_control"></input>
                                             </div>
                                         </div>
@@ -167,17 +167,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn border border-dark rounded w-25">送出</button>
-                            <button type="button" class="btn border border-dark rounded w-25" data-dismiss="modal">關閉</button>
+                            <div class=" d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="project-confirmation-table container shadow-sm table-responsive">
-        <table class="table table-hover text-center">
-            <thead>
+    <div class="project-confirmation-table container shadow-sm table-responsive-lg">
+        <table class="table table-hover text-center" id="table">
+            <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
                     <th>報價單號</th>
@@ -213,9 +216,8 @@
                     <td>{{ p.completion_report_employee }}</td>
                     <td>{{ p.completion_report_date }}</td>
                     <td>{{ p.remark }}</td>
-                    <td>{{ p.reassignment_attachment }}</td>
+                    <td><a href="" download>下載</a></td>
                     <td>{{ p.created_date }}</td>
-                    <!-- <td><button> 展開資料</button> </td> -->
                 </tr>
                 {% endfor %}
             </tbody>
@@ -226,9 +228,6 @@
 
 <script src="{% static 'js/fuc/restful.js' %}"></script>
 
-<script>
-  
-</script>
 
 <script>
     // 更美化 file input
@@ -237,7 +236,6 @@
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 </script>
-
 <!-- <script>
     // 這是處理當選則未完成時要把其他input都disable，但有一個問題，完工回報人disable後就無法改變
     const app = Vue.createApp({
@@ -247,8 +245,15 @@
         };
       }
     });
-  
     app.mount('#project-confirmation-app');
+  </script> -->
+  <!-- <script>
+    $('#table').excelTableFilter({
+        // columnSelector: '.apply-filter',    // (optional) if present, will only select <th> with specified class
+        sort: true,                         // (optional) default true
+        search: true,                        // (optional) default true
+        captions: Object                    // (optional) default { a_to_z: 'A to Z', z_to_a: 'Z to A', search: 'Search', select_all: 'Select All' }
+    });
   </script> -->
 
 

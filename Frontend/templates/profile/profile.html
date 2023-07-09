@@ -1,0 +1,141 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main">
+    <div class="profile-header container mb-4">
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
+            個人設定
+        </span>
+    </div>
+    <div class="container shadow-sm">
+        <form action=""  method="POST" class="pb-4">
+            {% csrf_token %}
+            <div class="row my-4">
+                <div class="col-12 col-md-6">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="name_control">姓名</label>
+                                <input class="form-control form-control-sm" name="name" id="name_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="attendance_control">出勤日期</label>
+                                <input type="date" class="form-control form-control-sm" name="attendance" id="attendance_control"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="projecet_id_control">工派單編號</label>
+                                <input class="form-control form-control-sm" name="projecet_id" id="projecet_id_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="project_name_control">工程名稱</label>
+                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="location_control" name="location">工作地點</label>
+                                <input class="form-control form-control-sm" name="location" id="location_control"></input>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="project_type_control" class="col-form-label-sm">工作類型</label>
+                                <input class="form-control form-control-sm" name="project_type" id="project_type_control"></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="remark_control" class="col-form-label-sm">備註</label>
+                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="work_employee_control">工作人員</label>
+                                <select class="chosen-select" data-placeholder="選擇工作人員" name="work_employee" id="work_employee_control" multiple>
+                                    <option value="1">王大明</option>
+                                    <option value="1">王中明</option>
+                                    <option value="1">王小明</option>
+                                    <option value="1">王x明</option>
+                                    <option value="1">王a明</option>
+                                    <option value="1">王b明</option>
+                                    <option value="1">王1明</option>
+                                    <option value="1">王2明</option>
+                                    <option value="1">王3明</option>
+                                    <option value="1">王4明</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="lead_employee_control">帶班人員</label>
+                                <select class="chosen-select" data-placeholder="選擇帶班人員" name="lead_employee" id="lead_employee_control" multiple>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_control">使用車輛</label>
+                                <select class="chosen-select" data-placeholder="選擇使用車輛" name="vehicle" id="vehicle_control" multiple>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="support_control">支援人力</label>
+                                <select class="chosen-select" data-placeholder="選擇支援人力" name="support" id="support_control" multiple>
+                                    <option>王大明</option>
+                                    <option>王中明</option>
+                                    <option>王小明</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
+        </form>
+    </div>
+</div>
+<script>
+    
+    $(".chosen-select").chosen({
+        no_results_text: "查無此員工",
+        width: "100%",
+        // max_shown_results:3
+    })
+    
+    
+</script>
+{% endblock %}
