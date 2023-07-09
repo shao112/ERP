@@ -33,23 +33,30 @@ class Check(View):
 
 from urllib.parse import parse_qs
 
+def convent_dict(data):
+    data_str = data.decode('utf-8')
+    dict_data = parse_qs(data_str)
+    new_dict_data = {}
+    for key, value in dict_data.items():
+        new_dict_data[key] = value[0]
+        match  value[0]:
+            case "true":
+                new_dict_data[key] = True
+            case "false":
+                new_dict_data[key] =False
+            case _:
+                new_dict_data[key] = value[0]
+    del  new_dict_data  ["csrfmiddlewaretoken"]    
+    return new_dict_data
+
 class Project_Confirmation_View(View):
 
     def put(self,request):
         print("修改")
-        data = request.body  
-        data_str = data.decode('utf-8')
-        json_data = parse_qs(data_str)
-        json_data = {key: value[0] for key, value in json_data.items()}
-        del  json_data["csrfmiddlewaretoken"]
-        print(json_data)
-        form = ProjectConfirmationForm(json_data)
-        # project_confirmation = Project_Confirmation.objects.get(id=json_data['id'])
-        # form = ProjectConfirmationForm(instance=project_confirmation)
-
+        dict_data = convent_dict(request.body)  
+        form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
-            #可能要用update，現在會新增一筆
-            form.save() 
+            Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
         else:
             print("is_valid FALSE")
@@ -60,7 +67,7 @@ class Project_Confirmation_View(View):
     
     def delete(self,request):
         print("刪除")
-        data = request.body  
+        data = request.body 
         data_str = data.decode('utf-8')
         json_data = parse_qs(data_str)
         json_data = {key: value[0] for key, value in json_data.items()}
