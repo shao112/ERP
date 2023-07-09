@@ -179,7 +179,7 @@
         </div>
     </div>
     <div class="project-confirmation-table container shadow-sm table-responsive-lg">
-        <table class="table table-hover text-center" id="table">
+        <table class="table table-sm table-hover text-center" id="table">
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -216,7 +216,7 @@
                     <td>{{ p.completion_report_employee }}</td>
                     <td>{{ p.completion_report_date }}</td>
                     <td>{{ p.remark }}</td>
-                    <td><a href="" download>下載</a></td>
+                    <td><a href="media/{{ p.reassignment_attachment }}" download>下載</a></td>
                     <td>{{ p.created_date }}</td>
                 </tr>
                 {% endfor %}

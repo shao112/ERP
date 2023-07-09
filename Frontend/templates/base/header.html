@@ -44,10 +44,10 @@
                             姓名：{{ request.user.employee.full_name }}
                         </div>
                         <div class="col-12 col-md-6">
-                            日期：<span id="current-date"></span>
+                            日期：{{ currentDate }}
                         </div>
                         <div class="col-12 col-md-6">
-                            現在時間：<span id="current-date"></span>
+                            時間：{{ currentTime }}
                         </div>
                     </div>
                 </div>
@@ -77,6 +77,8 @@
                 action: '',
                 showConfirmationButton: false,
                 isFadeIn: false,
+                currentDate: '',
+                currentTime: ''
             };
         },
         delimiters: ['[[', ']]'],
@@ -97,6 +99,12 @@
                     $('#clock-inout').modal('hide');
                 }
             },
+            updateDateTime() {
+                // 获取当前日期和时间
+                const now = new Date();
+                this.currentDate = now.toLocaleDateString();
+                this.currentTime = now.toLocaleTimeString();
+            }
         },
         computed: {
             confirmationMessage() {
@@ -111,6 +119,8 @@
             },
         },
         mounted() {
+            this.updateDateTime(); // 初始化时间
+            setInterval(this.updateDateTime, 1000); // 每秒钟更新时间
             // 获取当前日期
             const currentDate = new Date().toLocaleDateString();
             // 将当前日期绑定到HTML元素

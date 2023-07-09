@@ -42,24 +42,24 @@ def signout(request):
     return HttpResponseRedirect('/')
 
 
-# 工程確認單
+# 工程確認單，使用 ListView 顯示資料而已，做表單送出都在 Backend 的 Views.py
 class Project_Confirmation(ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
 
-    def post(self,request):
+    # def post(self,request):
 
-        form = ProjectConfirmationForm(request.POST)
+    #     form = ProjectConfirmationForm(request.POST)
 
-        if form.is_valid():
-            form.save() 
-        else:
-            print("is_valid FALSE")
-            error_messages = form.get_error_messages()
-            print(error_messages)
+    #     if form.is_valid():
+    #         form.save() 
+    #     else:
+    #         print("is_valid FALSE")
+    #         error_messages = form.get_error_messages()
+    #         print(error_messages)
 
-        return HttpResponseRedirect('/')
+    #     return HttpResponseRedirect('/')
 
 
     # def get(self,request):    

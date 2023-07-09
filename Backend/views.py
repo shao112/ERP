@@ -58,6 +58,7 @@ class Project_Confirmation_View(View):
         if form.is_valid():
             Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
+            # return render(request, 'project_confirmation/project_confirmation.html')
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()

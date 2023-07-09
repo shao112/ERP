@@ -84,6 +84,7 @@ function GET_handleClick(event) {
 // 新增 or 修改(帶pk?)
 
 $("form").on("submit", function (event) {
+    console.log("新增 or 修改")
     event.preventDefault(); // 阻止表单的默认提交行为
 
     var form = $(this);
@@ -105,6 +106,7 @@ $("form").on("submit", function (event) {
         success: function (response) {
             if (response.status == 200) {
                 alert("操作成功");
+                location.reload();
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
@@ -142,7 +144,8 @@ function DELETE_handleClick(event) {
         data: formData,
         success: function (response) {
             if (response.status == 200) {
-                alert("成功");
+                alert("成功刪除");
+                location.reload();
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
