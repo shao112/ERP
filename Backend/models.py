@@ -60,7 +60,9 @@ class Employee(models.Model):
     class Meta:
         verbose_name = "員工"   # 單數
         verbose_name_plural = verbose_name   #複數
-    
+
+    # def __str__(self):
+    #     return self.user.username
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -181,8 +183,8 @@ class Clock(models.Model):
     clock_in_or_out = models.BooleanField()
     clock_time = models.TimeField()
     clock_GPS = models.CharField(max_length=255)
-    # created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    # update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "打卡紀錄"   # 單數

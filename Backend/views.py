@@ -52,7 +52,6 @@ def convent_dict(data):
 class Project_Confirmation_View(View):
 
     def put(self,request):
-        print("修改")
         dict_data = convent_dict(request.body)  
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
@@ -67,15 +66,8 @@ class Project_Confirmation_View(View):
 
     
     def delete(self,request):
-        print("刪除")
-        data = request.body 
-        data_str = data.decode('utf-8')
-        json_data = parse_qs(data_str)
-        json_data = {key: value[0] for key, value in json_data.items()}
-        # del  json_data["csrfmiddlewaretoken"]
-        print(json_data)
-        project_confirmation = Project_Confirmation.objects.get(id=json_data['id'])
-        project_confirmation.delete()
+        dict_data = convent_dict(request.body)  
+        project_confirmation = Project_Confirmation.objects.get(id=dict_data['id']).delete()
 
         return JsonResponse({'status': 200})
 

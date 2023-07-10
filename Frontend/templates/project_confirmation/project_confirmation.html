@@ -136,8 +136,8 @@
                                             <div class="form-group">
                                                 <label for="completion_report_employee_control">完工回報人</label>
                                                 <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
-                                                    {% for f in form.completion_report_employee %}
-                                                    <option value="1">{{ f }}</option>
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>

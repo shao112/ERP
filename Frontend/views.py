@@ -10,6 +10,7 @@ from Backend.forms import  ProjectForm, ProjectConfirmationForm
 from Backend.models import User, Department, Project_Confirmation,Employee
 from django.views.generic import ListView, DeleteView
 
+from Backend.utils import get_weekly_clock_data
 
 
 # 首頁
@@ -35,6 +36,8 @@ class Index(View):
                 return HttpResponseRedirect('/')
 
     def get(self,request):
+        employeeid =request.user.employee
+        print(get_weekly_clock_data(employeeid))
         return render(request, 'index/index.html')
 
 @login_required
@@ -48,11 +51,17 @@ class Project_Confirmation(ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ProjectConfirmationForm()
+        # Add in a QuerySet of all the books
+        context["employees_list"] =employees = Employee.objects.values('id','user__username')
+        print(context)
         return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = ProjectConfirmationForm()
+    #     return context
 
 # 工作派任計畫
 class Project(ListView):
@@ -88,7 +97,6 @@ class Project(ListView):
         }
         return render(request, 'project/project.html', context)
 
-@login_required
 def equipment(request):
     context = {
         
