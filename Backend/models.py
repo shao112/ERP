@@ -60,7 +60,9 @@ class Employee(models.Model):
     class Meta:
         verbose_name = "員工"   # 單數
         verbose_name_plural = verbose_name   #複數
-    
+
+    def __str__(self):
+        return self.user.username
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

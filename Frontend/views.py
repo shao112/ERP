@@ -6,7 +6,7 @@ from django.views.generic import ListView, DeleteView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
-from Backend.models import Department, Project_Confirmation
+from Backend.models import Department, Project_Confirmation,Employee
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 
@@ -47,23 +47,17 @@ class Project_Confirmation(ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
-
-    # def post(self,request):
-
-    #     form = ProjectConfirmationForm(request.POST)
-
-    #     if form.is_valid():
-    #         form.save() 
-    #     else:
-    #         print("is_valid FALSE")
-    #         error_messages = form.get_error_messages()
-    #         print(error_messages)
-
-    #     return HttpResponseRedirect('/')
-
+    # current_usera="5121"
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context["employees_list"] =employees = Employee.objects.values('id','user__username')
+        print(context)
+        return context
 
     # def get(self,request):    
-    #     return render(request, 'project_confirmation/project_confirmation.html')
+        # return render(request, 'project_confirmation/project_confirmation.html')
 
 # 工作派任計畫
 class Project(ListView):
