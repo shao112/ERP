@@ -13,39 +13,35 @@
 <div class="main">
     <div class="profile-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
-            個人設定
+            基本資料
         </span>
     </div>
     <div class="container shadow-sm">
-        <form action=""  method="POST" class="pb-4">
+        <table class="table table-sm">
             {% csrf_token %}
             <div class="row my-4">
                 <div class="col-12 col-md-6">
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="name_control">員工名稱</label>
-                                <input class="form-control form-control-sm" name="name" id="name_control" value="{{ user.employee.full_name }}"></input>
+                                員工名稱：{{ user.employee.full_name }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="employee_id_control">員工ID</label>
-                                <input class="form-control form-control-sm" name="employee_id" id="employee_id_control"></input>
+                                員工名稱：{{ user.employee.full_name }}
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="projecet_id_control">部門名稱</label>
-                                <input class="form-control form-control-sm" name="projecet_id" id="projecet_id_control"></input>
+                                員工名稱：{{ user.employee.full_name }}
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="project_name_control">職稱</label>
-                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
+                                員工名稱：{{ user.employee.full_name }}
                             </div>
                         </div>
                     </div>
@@ -54,26 +50,13 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="work_employee_control">工作人員</label>
-                                <select class="chosen-select" data-placeholder="選擇工作人員" name="work_employee" id="work_employee_control" multiple>
-                                    <option value="1">王大明</option>
-                                    <option value="1">王中明</option>
-                                    <option value="1">王小明</option>
-                                    <option value="1">王x明</option>
-                                    <option value="1">王a明</option>
-                                    <option value="1">王b明</option>
-                                    <option value="1">王1明</option>
-                                    <option value="1">王2明</option>
-                                    <option value="1">王3明</option>
-                                    <option value="1">王4明</option>
-                                </select>
+                                員工名稱：{{ user.employee.full_name }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">修改</button>
-        </form>
+        </table>
     </div>
 </div>
 <script>

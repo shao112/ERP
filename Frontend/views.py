@@ -12,12 +12,11 @@ from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data
 
-
+from django.contrib.auth.models import AnonymousUser
 # 首頁
 class Index(View):
 
     def post(self,request):
-        # login_form = LoginForm()
         if request.method == "POST":
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
@@ -30,16 +29,32 @@ class Index(View):
                     session = SessionStore()
                     session['user_id'] = user.id
                     session.set_expiry(1209600)  # Two weeks
-                    print("Save")
-                    print(session)
+                    # print("Save")
+                    # print(session)
                     session.save()
                 return HttpResponseRedirect('/')
 
     def get(self,request):
-        employeeid =request.user.employee
-        print(get_weekly_clock_data(employeeid))
-        return render(request, 'index/index.html')
+        # 0710
+        # 以下寫法: employeeid = request.user.employee
+        # 這樣寫出現問題: 我們登入登出頁面都做在一起，當登出時，也會跑來此get()，而user會變成AnonymousUser，AnonymousUser裡面不存在employee，頁面壞掉
+        # (Django做使用者登出時，request.user變成AnonymousUser是預設行為)
+        # 目前先加上判斷是不是AnonymousUser，再觀察有沒有效
 
+        if not isinstance(request.user, AnonymousUser):
+            # 使用者不是 AnonymousUser，代表是已登入的使用者
+            # 在這裡處理已登入使用者的邏輯
+            employeeid = request.user.employee
+            print(get_weekly_clock_data(employeeid))
+            clock_inout = get_weekly_clock_data(employeeid)
+            context = {
+                'clock_inout':clock_inout,
+            }
+            return render(request, 'index/index.html', context)
+        else:
+            # 使用者是 AnonymousUser，代表是匿名使用者
+            # 在這裡處理匿名使用者的邏輯
+            return render(request, 'index/index.html')
 @login_required
 def signout(request):
     logout(request)

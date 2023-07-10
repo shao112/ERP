@@ -24,9 +24,26 @@
     </div>
     <div class="container shadow-sm mt-4">
         <div class="row text-center">
-            <div class="col-12">
-                <div class="font-weight-bold" style="min-height: 150px;">
-                    打卡紀錄
+            <div class="col-12" style="min-height: 150px;">
+                <div class="container table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr class="text-nowrap">
+                                <th>日期</th>
+                                <th>簽到</th>
+                                <th>簽退</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in clock_inout %}
+                            <tr>
+                                <td>{{ e.day }}</td>
+                                <td>{{ e.checkin }}</td>
+                                <td>{{ e.checkout }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

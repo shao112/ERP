@@ -30,8 +30,10 @@ function check_process(check_statu, csrftoken) {
             .then(function (responseData) {
                     if (clock_in_or_out){
                         alert('打卡成功！');
+                        // sweetAlert('簽到成功！');
                     }else{                        
                         alert('打卡成功！');
+                        // sweetAlert('簽退成功！');
                     }
             })
             .catch(function (error) {

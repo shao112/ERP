@@ -179,7 +179,7 @@ class News(models.Model):
 
 
 class Clock(models.Model):
-    employee_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
     clock_in_or_out = models.BooleanField()
     clock_time = models.TimeField()
     clock_GPS = models.CharField(max_length=255)

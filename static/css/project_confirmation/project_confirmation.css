@@ -9,3 +9,6 @@ thead tr:nth-child(1) th{
     top: 0;
     z-index: 1;
 }
+.project-confirmation-table td{
+    vertical-align: middle;
+}

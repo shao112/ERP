@@ -52,10 +52,11 @@
                     </div>
                 </div>
                 <div class="text-center mt-4" v-if="showConfirmationButton">
-                    <a type="button" class="btn btn-outline-dark" :class="action" @click="confirmAction">
+                    <a type="button" class="btn btn-outline-dark mb-2" :class="action" @click="confirmAction">
                         <i class="fa-regular fa-circle-question mr-1"></i>
                         [[ confirmationMessage ]]
-                    </a>
+                    </a><br>
+                    <span class="text-muted">要同意打開GPS存取權限唷!</span>
                 </div>
             </div>
             <div class="modal-footer">
