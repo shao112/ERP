@@ -91,7 +91,7 @@ class Department(models.Model):
             return f"{self.department_name} ({self.parent_department.department_name})"
         return self.department_name
 
-
+from django.utils.html import format_html
 # 工程確認單
 class Project_Confirmation(models.Model):
     quotation_id = models.CharField(max_length=50, null=True, blank=True, verbose_name="報價單號")
@@ -114,6 +114,13 @@ class Project_Confirmation(models.Model):
         verbose_name_plural = verbose_name   #複數
     def __str__(self):
         return self.project_name
+    def reassignment_attachment_link(self):
+        if self.reassignment_attachment:
+            return format_html("<a href='%s' download>下載</a>" % (self.reassignment_attachment.url,))
+        else:
+            return "無"
+    
+    reassignment_attachment_link.allow_tags = True
 
 # 工作派任計畫
 class Project(models.Model):
@@ -170,10 +177,12 @@ class News(models.Model):
 
 
 class Clock(models.Model):
-    employee_id = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee_id = models.ForeignKey(User, on_delete=models.CASCADE)
     clock_in_or_out = models.BooleanField()
     clock_time = models.TimeField()
     clock_GPS = models.CharField(max_length=255)
+    # created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    # update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "打卡紀錄"   # 單數

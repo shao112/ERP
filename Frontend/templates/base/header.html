@@ -19,7 +19,7 @@
             <i class="fa-solid fa-user"></i> {{ request.user.employee.full_name }}
         </span>
         <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">個人管理</a>
+            <a class="dropdown-item" href="{% url 'profile' request.user.id %}">基本資料</a>
             <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
         </div>
         <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button"
@@ -44,10 +44,10 @@
                             姓名：{{ request.user.employee.full_name }}
                         </div>
                         <div class="col-12 col-md-6">
-                            日期：{{ currentDate }}
+                            日期：[[ currentDate ]]
                         </div>
                         <div class="col-12 col-md-6">
-                            時間：{{ currentTime }}
+                            時間：[[ currentTime ]]
                         </div>
                     </div>
                 </div>

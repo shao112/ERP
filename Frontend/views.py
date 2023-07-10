@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import get_object_or_404
 from django.views import View
-from django.views.generic import ListView, DeleteView
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
+
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
-from Backend.models import Department, Project_Confirmation
-from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
+from Backend.models import User, Department, Project_Confirmation,Employee
+from django.views.generic import ListView, DeleteView
+
 
 
 # 首頁
@@ -48,22 +49,10 @@ class Project_Confirmation(ListView):
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
 
-    # def post(self,request):
-
-    #     form = ProjectConfirmationForm(request.POST)
-
-    #     if form.is_valid():
-    #         form.save() 
-    #     else:
-    #         print("is_valid FALSE")
-    #         error_messages = form.get_error_messages()
-    #         print(error_messages)
-
-    #     return HttpResponseRedirect('/')
-
-
-    # def get(self,request):    
-    #     return render(request, 'project_confirmation/project_confirmation.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ProjectConfirmationForm()
+        return context
 
 # 工作派任計畫
 class Project(ListView):
@@ -128,13 +117,8 @@ class Department(ListView):
     #     }
     #     return render(request, 'department/department.html', context)
 
-
-def menu_item(request, menu_item):
-
-
-    context = {
-        'menu_item': menu_item,
-        # 'form':get_form(menu_item)
-        
-    }
-    return render(request, 'index/index.html', context)
+# 基本資料
+class Profile(DeleteView):
+    model = User
+    template_name = 'profile/profile.html'
+    context_object_name = 'user'

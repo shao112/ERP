@@ -136,16 +136,9 @@
                                             <div class="form-group">
                                                 <label for="completion_report_employee_control">完工回報人</label>
                                                 <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
-                                                    <option value="1">王大明</option>
-                                                    <option value="1">王中明</option>
-                                                    <option value="1">王小明</option>
-                                                    <option value="1">王x明</option>
-                                                    <option value="1">王a明</option>
-                                                    <option value="1">王b明</option>
-                                                    <option value="1">王1明</option>
-                                                    <option value="1">王2明</option>
-                                                    <option value="1">王3明</option>
-                                                    <option value="1">王4明</option>
+                                                    {% for f in form.completion_report_employee %}
+                                                    <option value="1">{{ f }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -202,7 +195,7 @@
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <a data-url="project_confirmation"  data-id="{{ p.id }}"   type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
@@ -216,7 +209,7 @@
                     <td>{{ p.completion_report_employee }}</td>
                     <td>{{ p.completion_report_date }}</td>
                     <td>{{ p.remark }}</td>
-                    <td><a href="media/{{ p.reassignment_attachment }}" download>下載</a></td>
+                    <td>{{ p.reassignment_attachment_link }}</td>
                     <td>{{ p.created_date }}</td>
                 </tr>
                 {% endfor %}
