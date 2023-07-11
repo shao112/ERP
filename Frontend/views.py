@@ -7,7 +7,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
-from Backend.models import User, Department,Project, Project_Confirmation,Employee
+from Backend.models import User, Department,Project_Job_Assign, Project_Confirmation,Employee
 from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data
@@ -79,8 +79,8 @@ class Project_Confirmation(ListView):
 
 # 工作派任計畫
 class Job_Assign(ListView):
-    model = Project
-    template_name = 'project/project.html'
+    model = Project_Job_Assign
+    template_name = 'job_assign/job_assign.html'
     context_object_name = 'project'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

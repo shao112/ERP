@@ -125,7 +125,7 @@ class Project_Confirmation(models.Model):
     reassignment_attachment_link.allow_tags = True
 
 # 工作派任計畫
-class Project(models.Model):
+class Project_Job_Assign(models.Model):
     quotation_id = models.CharField(max_length=30, verbose_name="報價單號")
     projecet_id = models.CharField(max_length=50, verbose_name='工派單編號')
     project_name = models.CharField(max_length=30, verbose_name="工程名稱")

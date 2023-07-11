@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Department, Project_Confirmation, Employee
+from .models import Project_Job_Assign, Department, Project_Confirmation, Employee
 
 from ERP.settings import DEBUG
 
@@ -42,7 +42,7 @@ class ProjectConfirmationForm(BaseModelForm):
 class ProjectForm(BaseModelForm):
 
     class Meta:
-        model = Project
+        model = Project_Job_Assign
         fields = '__all__'
 
 # 工作派任計畫

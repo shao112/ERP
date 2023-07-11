@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee, Department, Project, Project_Confirmation, Clock
+from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock
 
 # Register your models here.
 class EmployeeInline(admin.StackedInline):
@@ -33,5 +33,5 @@ admin.site.register(User, MyUserAdmin)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Project_Confirmation, Project_ConfirmationAdmin)
-admin.site.register(Project, ProjectAdmin)
+admin.site.register(Project_Job_Assign, ProjectAdmin)
 admin.site.register(Clock, ClockAdmin)
