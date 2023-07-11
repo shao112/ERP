@@ -4,7 +4,7 @@ from .models import Clock
 def get_weekdays():
     weekdays = []
     today = date.today()
-    current_date = today
+    current_date = today - timedelta(days=today.weekday())
     while current_date.weekday() < 5:
         weekdays.append(current_date)
         current_date += timedelta(days=1)

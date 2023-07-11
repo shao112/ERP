@@ -23,6 +23,6 @@ urlpatterns = [
     path('department/', login_required(views.Department.as_view()), name='department'),
     path('equipment/', views.equipment, name='equipment'),
     path('project-confirmation/', views.Project_Confirmation.as_view(), name='project-confirmation'),
-    path('project/', login_required(views.Project.as_view()), name='project'),
+    path('project/', login_required(views.Job_Assign.as_view()), name='project'),
     path('accounts/logout/', views.signout, name='logout'),
 ]

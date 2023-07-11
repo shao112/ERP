@@ -7,7 +7,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectForm, ProjectConfirmationForm
-from Backend.models import User, Department, Project_Confirmation,Employee
+from Backend.models import User, Department,Project, Project_Confirmation,Employee
 from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data
@@ -68,7 +68,6 @@ class Project_Confirmation(ListView):
     context_object_name = 'project_confirmation'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
         context["employees_list"] =employees = Employee.objects.values('id','user__username')
         print(context)
         return context
@@ -79,38 +78,14 @@ class Project_Confirmation(ListView):
     #     return context
 
 # 工作派任計畫
-class Project(ListView):
+class Job_Assign(ListView):
+    model = Project
+    template_name = 'project/project.html'
+    context_object_name = 'project'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
-    def put(self, request):#未測試
-        project = get_object_or_404(Project, pk=request.POST['project_id'])
-        form = ProjectForm(request.POST, instance=project)
-
-        if form.is_valid():
-            project = form.save()
-        else:
-            error_messages = form.get_error_messages()
-            print(error_messages)
-
-        return HttpResponseRedirect(request.path)
-
-    def post(self,request):
-        #目前前端html，只有工作地點有name!
-        form = ProjectForm(request.POST)
-
-        if form.is_valid():
-            project = form.save() 
-        else:
-            error_messages = form.get_error_messages()
-            print(error_messages)
-
-        return HttpResponseRedirect(request.path)
-
-
-    def get(self,request):    
-        context = {
-            'form': ProjectForm,
-        }
-        return render(request, 'project/project.html', context)
 
 def equipment(request):
     context = {
@@ -125,9 +100,6 @@ class Department(ListView):
 
     def post(self,request):
       
-        for key, value in request.POST.items():
-            # 对每个字段执行相应的操作
-            print(f"字段名: {key}, 值: {value}")
 
         context = {
             
