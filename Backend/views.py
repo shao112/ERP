@@ -2,13 +2,14 @@ from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
-from Backend.models import Department, Project_Confirmation
+from Backend.models import Department, Project_Confirmation,Employee
 from .models import Clock
-from Backend.forms import   ProjectConfirmationForm
+from django.contrib.auth.models import User
+from Backend.forms import   ProjectConfirmationForm,EmployeeForm
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from django.core.serializers.json import DjangoJSONEncoder
+from .utils import convent_dict
 
 class Check(View):
     def post(self,request):
@@ -31,23 +32,55 @@ class Check(View):
        return HttpResponseNotAllowed(['only POST'])
     
 
-from urllib.parse import parse_qs
 
-def convent_dict(data):
-    data_str = data.decode('utf-8')
-    dict_data = parse_qs(data_str)
-    new_dict_data = {}
-    for key, value in dict_data.items():
-        new_dict_data[key] = value[0]
-        match  value[0]:
-            case "true":
-                new_dict_data[key] = True
-            case "false":
-                new_dict_data[key] =False
-            case _:
-                new_dict_data[key] = value[0]
-    del  new_dict_data  ["csrfmiddlewaretoken"]    
-    return new_dict_data
+
+class Employee_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)  
+        form = EmployeeForm(dict_data)
+        if form.is_valid():
+            Employee.objects.filter(id=dict_data['id']).update(**dict_data)
+            return JsonResponse({'status': 200})
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({'status': 400,"error":error_messages})
+
+    
+    def delete(self,request):
+        dict_data = convent_dict(request.body)  
+        empolyee = Employee.objects.get(id=dict_data['id'])
+        empolyee.user.is_active =False
+        empolyee.user.save()
+        return JsonResponse({'status': 200})
+
+    def post(self,request):
+        form = EmployeeForm(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data['full_name']
+            password = form.cleaned_data['id_number']
+            user = User.objects.create_user(username=username, password=password)
+            employee = form.save(commit=False)
+            employee.user = user
+            employee.save()
+            return JsonResponse({'status': 200})
+        else:
+            print("is_valid FALSE")
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({'status': 400,"error":error_messages})
+
+
+    def get(self,request):        
+        id = request.GET.get('id')
+        data = get_object_or_404(Employee, id=id)
+        data = model_to_dict(data)
+        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+
+
+
+
 
 class Project_Confirmation_View(View):
 
@@ -57,17 +90,14 @@ class Project_Confirmation_View(View):
         if form.is_valid():
             Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
-            # return render(request, 'project_confirmation/project_confirmation.html')
         else:
-            print("is_valid FALSE")
             error_messages = form.get_error_messages()
-            print(error_messages)
             return JsonResponse({'status': 400,"error":error_messages})
 
     
     def delete(self,request):
         dict_data = convent_dict(request.body)  
-        project_confirmation = Project_Confirmation.objects.get(id=dict_data['id']).delete()
+        Project_Confirmation.objects.get(id=dict_data['id']).delete()
 
         return JsonResponse({'status': 200})
 
@@ -85,7 +115,6 @@ class Project_Confirmation_View(View):
 
 
     def get(self,request):        
-        print(request)
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data)
@@ -93,8 +122,5 @@ class Project_Confirmation_View(View):
             data['reassignment_attachment'] = data.url
         else:
             data['reassignment_attachment'] = None            
-
-        # json_data = json.dumps(data, cls=DjangoJSONEncoder)
-
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 

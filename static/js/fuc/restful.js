@@ -152,8 +152,8 @@ function DELETE_handleClick(event) {
 
         },
         error: function (xhr, textStatus, errorThrown) {
-            var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-            $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
+            // var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
+            $("#error-message").text("系統發生錯誤"); // 在错误消息显示区域显示错误消息
         }
     });
 

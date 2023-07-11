@@ -86,6 +86,11 @@ class Job_Assign(ListView):
         context = super().get_context_data(**kwargs)
         return context
 
+class Employee_list(ListView):
+    model = Employee
+    template_name = 'employee/employee.html'
+    context_object_name = 'employee'
+
 
 def equipment(request):
     context = {
@@ -99,8 +104,6 @@ class Department(ListView):
     context_object_name = 'department'
 
     def post(self,request):
-      
-
         context = {
             
         }

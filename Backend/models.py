@@ -31,7 +31,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=10, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
-    departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
+    # departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
     contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
@@ -64,17 +64,17 @@ class Employee(models.Model):
     # def __str__(self):
     #     return self.user.username
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Employee.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         Employee.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    try:
-        instance.employee.save()
-    except Employee.DoesNotExist:
-        pass
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     try:
+#         instance.employee.save()
+#     except Employee.DoesNotExist:
+#         pass
 
 # 部門
 class Department(models.Model):
