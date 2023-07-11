@@ -14,12 +14,10 @@
 {% block main %}
 
 {% if request.user.is_authenticated %}
-    <!-- 登入 -->
     {% include 'base/sidebar.html' %}
     {% include 'base/header.html' %}
     {% include 'index/index-login.html' %}
 {% else %}
-    <!-- 尚未登入 -->
     {% include 'index/index-unlogin.html' %}
 {% endif %}
 

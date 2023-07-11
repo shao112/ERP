@@ -43,18 +43,16 @@ class Index(View):
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
-            # 在這裡處理已登入使用者的邏輯
             employeeid = request.user.employee
             print(get_weekly_clock_data(employeeid))
             clock_inout = get_weekly_clock_data(employeeid)
             context = {
                 'clock_inout':clock_inout,
             }
-            return render(request, 'index/index.html', context)
+            return render(request, 'index/index-login.html', context)
         else:
             # 使用者是 AnonymousUser，代表是匿名使用者
-            # 在這裡處理匿名使用者的邏輯
-            return render(request, 'index/index.html')
+            return render(request, 'index/index-unlogin.html')
 @login_required
 def signout(request):
     logout(request)

@@ -15,7 +15,7 @@
 <div class="main" id="project-confirmation-app">
     <div id="error-message"></div>
     <div class="project-confirmation-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工作派任計畫</span>
         <a href="" 
         id="sys_new"
            class="btn border border-dark ml-2" 
@@ -28,7 +28,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="project-confirmation-label">工程確認單</h5>
+                    <h5 class="modal-title" id="project-confirmation-label">工作派任計畫</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -41,7 +41,7 @@
                             <div class="row my-4">
                                 <div class="col-12 col-md-6">
                                     <h5 class="my-4" style="font-size: 1.2rem;">
-                                        <kbd>確認單描述</kbd>
+                                        <kbd>派任單描述</kbd>
                                     </h5>
                                     <div class="row">
                                         <div class="col-6">
@@ -192,27 +192,25 @@
                 </tr>
             </thead>
             <tbody>
-                {% for p in project_confirmation %}
                 <tr>
                     <td>
                         <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
-                    <td>{{ p.quotation_id }}</td>
-                    <td>{{ p.project_name }}</td>
-                    <td>{{ p.order_id }}</td>
-                    <td>{{ p.c_a }}</td>
-                    <td>{{ p.client }}</td>
-                    <td>{{ p.requisition }}</td>
-                    <td>{{ p.turnover }}</td>
-                    <td>{{ p.is_completed }}</td>
-                    <td>{{ p.completion_report_employee }}</td>
-                    <td>{{ p.completion_report_date }}</td>
-                    <td>{{ p.remark }}</td>
-                    <td>{{ p.reassignment_attachment_link }}</td>
-                    <td>{{ p.created_date }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
-                {% endfor %}
             </tbody>
         </table>
     </div>

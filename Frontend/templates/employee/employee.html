@@ -5,28 +5,27 @@
 {% block import %}
 
 {% load static%}
-<link rel="stylesheet" href="{% static 'css/project_confirmation/project_confirmation.css' %}">
+<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
 
 
 {% endblock %}
 
 
 {% block main %}
-<div class="main" id="project-confirmation-app">
+<div class="main" id="employee-app">
     <div id="error-message"></div>
-    <div class="project-confirmation-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
+    <div class="employee-header container mb-4">
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">員工管理</span>
         <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal"
-            data-target="#project-confirmation-modal">
+            data-target="#employee-modal">
             • 展開面板新增資料
         </a>
     </div>
-    <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1"
-        aria-labelledby="project-confirmation" aria-hidden="true">
+    <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="project-confirmation-label">工程確認單</h5>
+                    <h5 class="modal-title" id="employee-label">員工管理</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -38,9 +37,9 @@
                             <input name="id" hidden>
                             <div class="row my-4">
                                 <div class="col-12 col-md-6">
-                                    <h5 class="my-4" style="font-size: 1.2rem;">
+                                    <!-- <h5 class="my-4" style="font-size: 1.2rem;">
                                         <kbd>使用者描述</kbd>
-                                    </h5>
+                                    </h5> -->
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
@@ -131,9 +130,9 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <h5 class="my-4" style="font-size:1.2rem;">
+                                    <!-- <h5 class="my-4" style="font-size:1.2rem;">
                                         <kbd>完工狀態</kbd>
-                                    </h5>
+                                    </h5> -->
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
@@ -256,7 +255,7 @@
             </div>
         </div>
     </div>
-    <div class="project-confirmation-table container shadow-sm table-responsive-lg">
+    <div class="employee-table container shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table">
             <thead class="thead-light">
                 <tr class="text-nowrap">
@@ -272,10 +271,11 @@
                 <tr>
                     <td>
                         <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2"
-                            data-toggle="modal" data-target="#project-confirmation-modal"><i
-                                class="fas fa-edit"></i></a>
-                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2"><i
-                                class="far fa-trash-alt"></i></a>
+                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i>
+                        </a>
+                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
@@ -299,25 +299,5 @@
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 </script>
-<!-- <script>
-    // 這是處理當選則未完成時要把其他input都disable，但有一個問題，完工回報人disable後就無法改變
-    const app = Vue.createApp({
-      data() {
-        return {
-          status: 'false'
-        };
-      }
-    });
-    app.mount('#project-confirmation-app');
-  </script> -->
-<!-- <script>
-    $('#table').excelTableFilter({
-        // columnSelector: '.apply-filter',    // (optional) if present, will only select <th> with specified class
-        sort: true,                         // (optional) default true
-        search: true,                        // (optional) default true
-        captions: Object                    // (optional) default { a_to_z: 'A to Z', z_to_a: 'Z to A', search: 'Search', select_all: 'Select All' }
-    });
-  </script> -->
-
 
 {% endblock %}

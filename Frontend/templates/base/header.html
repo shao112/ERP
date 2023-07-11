@@ -125,11 +125,11 @@
             // 获取当前日期
             const currentDate = new Date().toLocaleDateString();
             // 将当前日期绑定到HTML元素
-            document.getElementById('current-date').textContent = currentDate;
+            $('#current-date').text(currentDate);
             // 获取当前时间
             const currentTime = new Date().toLocaleTimeString();
             // 将当前时间绑定到HTML元素
-            document.getElementById('current-time').textContent = currentTime;
+            $('#current-time').text(currentTime);
             // hidden.bs.modal 當 modal 隱藏後
             $('#clock-inout').on('hidden.bs.modal', () => {
                 this.showConfirmationButton = false;

@@ -64,17 +64,6 @@ class Employee(models.Model):
     # def __str__(self):
     #     return self.user.username
 
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Employee.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     try:
-#         instance.employee.save()
-#     except Employee.DoesNotExist:
-#         pass
 
 # 部門
 class Department(models.Model):
@@ -126,10 +115,10 @@ class Project_Confirmation(models.Model):
 
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
-    quotation_id = models.CharField(max_length=30, verbose_name="報價單號")
+    quotation_id = models.ForeignKey(Project_Confirmation, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="報價單號")
     projecet_id = models.CharField(max_length=50, verbose_name='工派單編號')
-    project_name = models.CharField(max_length=30, verbose_name="工程名稱")
-    c_a = models.CharField(max_length=50, verbose_name='母案編號')
+    project_name = models.CharField(max_length=30, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
+    c_a = models.CharField(max_length=50, verbose_name='母案編號') # 不做外鍵，透過quotation_id帶入
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ForeignKey('Employee', related_name='projects_work_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工作人員')
     lead_employee = models.ForeignKey('Employee', related_name='projects_lead_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="帶班人員")

@@ -1,0 +1,14 @@
+/* 控制 Table 第一列表頭固定 */
+.employee-table {
+    height:70vh;  
+    overflow:scroll;
+}
+thead tr:nth-child(1) th{
+    /* background: white; */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.employee-table td{
+    vertical-align: middle;
+}
