@@ -17,7 +17,7 @@
     <div class="project-confirmation-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
         <a href="" 
-        id="sys_new"
+            id="sys_new"
            class="btn border border-dark ml-2" 
            data-toggle="modal"
            data-target="#project-confirmation-modal">
@@ -205,7 +205,11 @@
                     <td>{{ p.client }}</td>
                     <td>{{ p.requisition }}</td>
                     <td>{{ p.turnover }}</td>
-                    <td>{{ p.is_completed }}</td>
+                    {% if p.is_completed == True%}
+                        <td>是</td>
+                    {% else %}
+                        <td>否</td>
+                    {% endif %}
                     <td>{{ p.completion_report_employee }}</td>
                     <td>{{ p.completion_report_date }}</td>
                     <td>{{ p.remark }}</td>

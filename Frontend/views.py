@@ -6,7 +6,7 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  ProjectForm, ProjectConfirmationForm
+from Backend.forms import  ProjectConfirmationForm
 from Backend.models import User, Department,Project_Job_Assign, Project_Confirmation,Employee
 from django.views.generic import ListView, DeleteView
 
@@ -69,7 +69,8 @@ class Project_Confirmation(ListView):
         context["employees_list"] =employees = Employee.objects.values('id','user__username')
         print(context)
         return context
-
+    
+    # 在 ListView 傳送 form
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
     #     context['form'] = ProjectConfirmationForm()
@@ -79,11 +80,14 @@ class Project_Confirmation(ListView):
 class Job_Assign(ListView):
     model = Project_Job_Assign
     template_name = 'job_assign/job_assign.html'
-    context_object_name = 'project'
+    context_object_name = 'job_assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["employees_list"] =employees = Employee.objects.values('id','user__username')
+        print(context)
         return context
 
+# 員工
 class Employee_list(ListView):
     model = Employee
     template_name = 'employee/employee.html'

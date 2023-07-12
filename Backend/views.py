@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
-from Backend.models import Department, Project_Confirmation,Employee
+
 from .models import Clock
+from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign
 from django.contrib.auth.models import User
-from Backend.forms import   ProjectConfirmationForm,EmployeeForm
+from Backend.forms import   ProjectConfirmationForm, EmployeeForm, ProjectJobAssignForm
+
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
@@ -86,7 +88,7 @@ class Project_Confirmation_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)  
-        form = ProjectConfirmationForm(dict_data)
+        form = ProjectJobAssignForm(dict_data)
         if form.is_valid():
             Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
@@ -117,6 +119,48 @@ class Project_Confirmation_View(View):
     def get(self,request):        
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
+        data = model_to_dict(data)
+        if  data['reassignment_attachment']:
+            data['reassignment_attachment'] = data.url
+        else:
+            data['reassignment_attachment'] = None            
+        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+
+class Job_Assign_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)  
+        form = ProjectJobAssignForm(dict_data)
+        if form.is_valid():
+            Project_Job_Assign.objects.filter(id=dict_data['id']).update(**dict_data)
+            return JsonResponse({'status': 200})
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({'status': 400,"error":error_messages})
+
+    
+    def delete(self,request):
+        dict_data = convent_dict(request.body)  
+        Project_Job_Assign.objects.get(id=dict_data['id']).delete()
+
+        return JsonResponse({'status': 200})
+
+    def post(self,request):
+        form = ProjectJobAssignForm(request.POST)
+
+        if form.is_valid():
+            form.save() 
+            return JsonResponse({'status': 200})
+        else:
+            print("is_valid FALSE")
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({'status': 400,"error":error_messages})
+
+
+    def get(self,request):        
+        id = request.GET.get('id')
+        data = get_object_or_404(Project_Job_Assign, id=id)
         data = model_to_dict(data)
         if  data['reassignment_attachment']:
             data['reassignment_attachment'] = data.url

@@ -39,7 +39,7 @@ class ProjectConfirmationForm(BaseModelForm):
         fields = '__all__'
 
 # 工作派任計畫
-class ProjectForm(BaseModelForm):
+class ProjectJobAssignForm(BaseModelForm):
 
     class Meta:
         model = Project_Job_Assign
