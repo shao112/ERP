@@ -16,6 +16,7 @@ function getcsrftoken() {
 }
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
+    $("#form")[0].reset();
     $("#form").attr("data-method", "POST");
 });
 
@@ -72,10 +73,6 @@ function GET_handleClick(event) {
         },
         error: function (xhr, textStatus, errorThrown) {
             console.log("get error");
-
-
-            // var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-            // $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
         }
     });
 
@@ -95,7 +92,6 @@ $("form").on("submit", function (event) {
     var method = form.data("method");
 
 
-
     $.ajax({
         type: method,
         url: url,
@@ -110,13 +106,13 @@ $("form").on("submit", function (event) {
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
-
         },
         error: function (xhr, textStatus, errorThrown) {
             var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
             $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
         }
     });
+    
 });
 
 // 刪除
