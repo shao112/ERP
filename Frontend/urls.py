@@ -22,8 +22,8 @@ urlpatterns = [
     path('profile/<int:pk>', login_required(views.Profile.as_view()), name='profile'),
     path('department/', login_required(views.Department.as_view()), name='department'),
     path('equipment/', views.equipment, name='equipment'),
-    path('project-confirmation/', views.Project_Confirmation.as_view(), name='project-confirmation'),
+    path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('employee/', views.Employee_list.as_view(), name='employee_list'),
-    path('job-assign/', login_required(views.Job_Assign.as_view()), name='project'),
+    path('job-assign/', login_required(views.Job_Assign_ListView.as_view()), name='project'),
     path('accounts/logout/', views.signout, name='logout'),
 ]

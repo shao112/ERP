@@ -60,7 +60,7 @@ def signout(request):
 
 
 # 工程確認單，使用 ListView 顯示資料而已，做表單送出都在 Backend 的 Views.py
-class Project_Confirmation(ListView):
+class Project_Confirmation_ListView(ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
@@ -77,14 +77,14 @@ class Project_Confirmation(ListView):
     #     return context
 
 # 工作派任計畫
-class Job_Assign(ListView):
+class Job_Assign_ListView(ListView):
     model = Project_Job_Assign
     template_name = 'job_assign/job_assign.html'
     context_object_name = 'job_assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =employees = Employee.objects.values('id','user__username')
-        print(context)
+        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context['project_confirmation_list'] = Project_Confirmation.objects.all()
         return context
 
 # 員工

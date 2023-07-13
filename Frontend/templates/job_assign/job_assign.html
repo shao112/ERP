@@ -40,7 +40,7 @@
                             <input name="id" hidden>
                             <div class="row my-4">
                                 <div class="col-12 col-md-6">
-                                    <h5 class="my-4" style="font-size: 1.2rem;">
+                                    <h5 style="font-size: 1.2rem;">
                                         <kbd>派任計畫描述</kbd>
                                     </h5>
                                     <div class="row">
@@ -48,9 +48,9 @@
                                             <div class="form-group">
                                                 <label for="quotation_id_control">報價單號</label>
                                                 <select class="chosen-select" data-placeholder="選擇報價單號" name="quotation_id_control"  id="quotation_id_control" multiple >
-
-                                                    <option value="1">1</option>
-
+                                                    {% for project_confirmation in project_confirmation_list %}
+                                                    <option value="1">{{ project_confirmation.quotation_id }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <h5 class="my-4" style="font-size:1.2rem;">
+                                    <h5 style="font-size:1.2rem;">
                                         <kbd>人力跟資源</kbd>
                                     </h5>
                                     <div class="row">
