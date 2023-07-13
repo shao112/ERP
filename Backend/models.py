@@ -83,6 +83,8 @@ class Department(models.Model):
         return self.department_name
 
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+
 # 工程確認單
 class Project_Confirmation(models.Model):
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
@@ -107,11 +109,10 @@ class Project_Confirmation(models.Model):
         return self.project_name
     def reassignment_attachment_link(self):
         if self.reassignment_attachment:
-            return format_html("<a href='%s' download>下載</a>" % (self.reassignment_attachment.url,))
+            download_link = "<a href='{}' download>下載</a>".format(self.reassignment_attachment.url)
+            return mark_safe(download_link)
         else:
             return "無"
-    
-    reassignment_attachment_link.allow_tags = True
 
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
@@ -140,7 +141,7 @@ class Project_Job_Assign(models.Model):
             return format_html("<a href='%s' download>下載</a>" % (self.attachment.url,))
         else:
             return "無"
-    
+    # 告訴admin這個包含HTML代碼，要幫忙解析
     attachment_link.allow_tags = True
 
 # 公告

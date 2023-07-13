@@ -28,8 +28,8 @@ get_elements.forEach(element => {
 });
 
 function GET_handleClick(event) {
-    
-    const clickedElement = event.target;
+    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+    // const clickedElement = event.target;
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
 
@@ -123,7 +123,8 @@ del_elements.forEach(element => {
 });
 
 function DELETE_handleClick(event) {
-    const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
+    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+    // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
 

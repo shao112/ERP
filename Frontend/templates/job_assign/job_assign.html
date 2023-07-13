@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/job-assign" id="form"  method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/job_assign" id="form"  method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
@@ -47,9 +47,9 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="quotation_id_control">報價單號</label>
-                                                <select class="chosen-select" data-placeholder="選擇報價單號" name="quotation_id_control"  id="quotation_id_control" multiple >
+                                                <select class="form-control" name="quotation_id_control"  id="quotation_id_control" >
                                                     {% for project_confirmation in project_confirmation_list %}
-                                                    <option value="1">{{ project_confirmation.quotation_id }}</option>
+                                                    <option value="{{ project_confirmation.quotation_id }}">{{ project_confirmation.quotation_id }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -140,7 +140,7 @@
                                         <div class="col-12">
                                             <label>完工重派附件</label>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control"  :disabled="status == 'false'">
+                                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control">
                                                 <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
                                             </div> 
                                         </div>
@@ -190,8 +190,8 @@
                 {% for j in job_assign %}
                 <tr>
                     <td>
-                        <a data-url="project_confirmation"  data-id="{{ j.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#job_assign-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation"  data-id="{{ j.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#job_assign-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ j.quotation_id }}</td>
                     <td>{{ j.projecet_id }}</td>

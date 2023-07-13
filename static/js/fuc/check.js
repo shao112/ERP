@@ -14,7 +14,8 @@ function check_process(check_statu, csrftoken) {
             clock_time : new Date().toISOString()
         };
 
-
+        console.log("clock_time")
+        console.log(clock_time)
         // 傳送資料到後端
         fetch('/restful/check', {
             method: 'POST',
@@ -30,9 +31,11 @@ function check_process(check_statu, csrftoken) {
             .then(function (responseData) {
                     if (clock_in_or_out){
                         alert('打卡成功！');
+                        location.reload();
                         // sweetAlert('簽到成功！');
                     }else{                        
                         alert('打卡成功！');
+                        location.reload();
                         // sweetAlert('簽退成功！');
                     }
             })
