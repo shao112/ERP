@@ -47,7 +47,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="quotation_id_control">報價單號</label>
-                                                <select class="form-control" name="quotation_id_control"  id="quotation_id_control" >
+                                                <select class="form-control" name="quotation_id"  id="quotation_id_control" >
                                                     {% for project_confirmation in project_confirmation_list %}
                                                     <option value="{{ project_confirmation.quotation_id }}">{{ project_confirmation.quotation_id }}</option>
                                                     {% endfor %}
@@ -125,7 +125,15 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="vehicle_control">使用車輛</label>
+                                                <select class="chosen-select" data-placeholder="選擇使用車輛" name="vehicle"  id="vehicle_control" multiple >
+                                                    <option value="車輛1">車輛1</option>
+                                                </select>                                          
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
                                             <div class="form-group">
                                                 <label for="support_control">支援人力</label>
                                                 <select class="chosen-select" data-placeholder="選擇帶班人員" name="lead_employee"  id="lead_employee_control" multiple >

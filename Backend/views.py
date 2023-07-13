@@ -121,7 +121,7 @@ class Project_Confirmation_View(View):
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data)
         if  data['reassignment_attachment']:
-            data['reassignment_attachment'] = data.url
+            data['reassignment_attachment'] = data['reassignment_attachment'].url
         else:
             data['reassignment_attachment'] = None            
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)

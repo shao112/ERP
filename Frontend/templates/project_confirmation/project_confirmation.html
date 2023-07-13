@@ -206,7 +206,7 @@
                     <td>{{ p.requisition }}</td>
                     <td>{{ p.turnover }}</td>
                     {% if p.is_completed == True %}<td>是</td>{% else %}<td>否</td>{% endif %}
-                    <td>{{ p.completion_report_employee }}</td>
+                    <td>{{ p.completion_report_employee.full_name }}</td>
                     <td>{{ p.completion_report_date }}</td>
                     <td>{{ p.remark }}</td>
                     <td>{{ p.reassignment_attachment_link }}</td>
