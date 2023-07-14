@@ -21,23 +21,10 @@ $("#sys_new").on("click", function () {
 });
 
 //  獲取資料並帶入
-const get_elements = document.querySelectorAll('.sys_get');
 
-get_elements.forEach(element => {
-    element.addEventListener('click', GET_handleClick);
-    // 抓得到element，但無法執行監聽器
-    // element.addEventListener('mousedown', function() {
-    //     console.log('Click event triggered.');
-    // });
-});
-
-function GET_handleClick(event) {
-    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
-    // const clickedElement = event.target;
-    const url = "/restful/" + clickedElement.getAttribute('data-url');
-    const id = clickedElement.getAttribute('data-id');
-
-    console.log(`URL: ${url}, ID: ${id}`);
+function GET_handleClick(get_id,get_url){
+    const url = "/restful/" + get_url;
+    const id = get_id;
 
     formData = { id: id, };
 
@@ -82,10 +69,10 @@ function GET_handleClick(event) {
 
 }
 
+
 // 新增 or 修改(帶pk?)
 
 $("form").on("submit", function (event) {
-    console.log("新增 or 修改")
     event.preventDefault(); // 阻止表单的默认提交行为
 
     var form = $(this);
@@ -120,17 +107,10 @@ $("form").on("submit", function (event) {
 });
 
 // 刪除
-const del_elements = document.querySelectorAll('.sys_del');
 
-del_elements.forEach(element => {
-    element.addEventListener('click', DELETE_handleClick);
-});
-
-function DELETE_handleClick(event) {
-    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
-    // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
-    const url = "/restful/" + clickedElement.getAttribute('data-url');
-    const id = clickedElement.getAttribute('data-id');
+function DELETE_handleClick(get_id,get_url){
+    const url = "/restful/" + get_url;
+    const id = get_id;
 
     console.log(`URL: ${url}, ID: ${id}`);
 

@@ -119,7 +119,7 @@ class Project_Confirmation_View(View):
     def get(self,request):        
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
-        data = model_to_dict(data)
+        data = model_to_dict(data)  
         if  data['reassignment_attachment']:
             data['reassignment_attachment'] = data['reassignment_attachment'].url
         else:
@@ -162,9 +162,10 @@ class Job_Assign_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Job_Assign, id=id)
         data = model_to_dict(data)
-        if  data['reassignment_attachment']:
-            data['reassignment_attachment'] = data.url
-        else:
-            data['reassignment_attachment'] = None            
+        if  "reassignment_attachment" in data:
+            if  data['reassignment_attachment']:
+                data['reassignment_attachment'] = data.url
+            else:
+                data['reassignment_attachment'] = None            
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 

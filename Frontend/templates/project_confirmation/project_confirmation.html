@@ -195,8 +195,8 @@
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation"  data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a  onclick="GET_handleClick({{p.id}},'project_confirmation')"    type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a  onclick="DELETE_handleClick({{p.id}},'project_confirmation')"  type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.project_name }}</td>
