@@ -21,9 +21,10 @@ urlpatterns = [
     path('', views.Index.as_view(), name="index"),
     path('profile/<int:pk>', login_required(views.Profile.as_view()), name='profile'),
     path('department/', login_required(views.Department.as_view()), name='department'),
-    path('equipment/', views.equipment, name='equipment'),
+    path('equipment/', views.equipment, name='equipment'), 
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('employee/', views.Employee_list.as_view(), name='employee_list'),
+    path('employee_permission/', views.Employee_Permission_list.as_view(), name='employee_permission_list'),
     path('job-assign/', login_required(views.Job_Assign_ListView.as_view()), name='project'),
     path('accounts/logout/', views.signout, name='logout'),
 ]

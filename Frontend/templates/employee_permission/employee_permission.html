@@ -1,0 +1,115 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
+
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main" id="employee-app">
+    <div id="error-message"></div>
+    <div class="employee-header container mb-4">
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">權限管理</span>
+        <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal" data-target="#employee-modal">
+            • 展開面板新增資料
+        </a>
+    </div>
+    <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employee-label">員工管理</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action="/restful/employee" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="row my-4">
+                                <div class="col-12 col-md-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="completion_report_employee_control">權限控管</label>
+                                                <select class="chosen-select" data-placeholder="權限控管"
+                                                    name="completion_report_employee"
+                                                    id="completion_report_employee_control" multiple>
+                                                    {% for permission in permissions %}
+                                                    <option value="{{ permission.id }}">{{ permission.name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="employee-table container shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table">
+            <thead class="thead-light">
+                <tr class="text-nowrap">
+                    <th></th>
+                    <th>員工編號</th>
+                    <th>員工姓名</th>
+                    <th>建立日期</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in employee %}
+                {% if p.user.is_active %}
+                <tr>
+                    <td>
+                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2"
+                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i>
+                        </a>
+                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <td>{{ p.employee_id }} </td>
+                    <td>{{ p.full_name }}</td>
+                    <td>{{ p.created_date }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="{% static 'js/fuc/restful.js' %}"></script>
+
+
+<script>
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
@@ -67,7 +66,6 @@ class Project_Confirmation_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees_list"] =employees = Employee.objects.values('id','user__username')
-        print(context)
         return context
     
     # 在 ListView 傳送 form
@@ -92,13 +90,34 @@ class Employee_list(ListView):
     model = Employee
     template_name = 'employee/employee.html'
     context_object_name = 'employee'
+    
 
-
+# 
 def equipment(request):
-    context = {
-        
-    }
-    return render(request, 'equipment/equipment.html', context)
+    pass
+    
+
+
+from django.contrib.auth.models import Permission
+# 員工權限
+class Employee_Permission_list(ListView):
+    model = Employee
+    template_name = 'employee_permission/employee_permission.html'
+    context_object_name = 'employee'
+    def get_context_data(self, **kwargs):
+        permissions = Permission.objects.all()
+        print(permissions)
+        for permission in permissions:
+            print(permission.name)
+            print(permission.id)
+
+
+        context = super().get_context_data(**kwargs)
+        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context['permissions'] = Permission.objects.all()
+        return context
+    
+
 
 class Department(ListView):
     model = Department
@@ -107,7 +126,7 @@ class Department(ListView):
 
     def post(self,request):
         context = {
-            
+           
         }
         return render(request, 'department/department.html', context)
     
