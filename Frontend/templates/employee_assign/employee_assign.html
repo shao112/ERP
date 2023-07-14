@@ -1,0 +1,79 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+
+{% endblock %}
+
+
+{% block main %}
+<style>
+    thead tr:nth-child(1) th{
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+</style>
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <table id="table" data-toggle="table">
+                    <thead>
+                        <tr>
+                            <th data-field="id" data-sortable="true">ID</th>
+                            <th data-field="name" data-sortable="true">Name</th>
+                            <th data-field="age" data-sortable="true">Age</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@</td>
+                            <td>測試</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>中文</td>
+                            <td>30</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Zed</td>
+                            <td>25</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>哈哈</td>
+                            <td>99</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>哈哈</td>
+                            <td>99</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>哈哈</td>
+                            <td>99</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/fuc/restful.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('#table').bootstrapTable();
+    });
+</script>
+
+
+{% endblock %}

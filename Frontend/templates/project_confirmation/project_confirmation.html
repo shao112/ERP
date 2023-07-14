@@ -176,19 +176,19 @@
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
-                    <th>報價單號</th>
-                    <th>工程名稱</th>
-                    <th>訂單編號</th>
-                    <th>母案編號</th>
-                    <th>客戶簡稱</th>
-                    <th>請購單位</th>
-                    <th>成交金額</th>
-                    <th>完工狀態</th>
-                    <th>完工回報人</th>
-                    <th>完工回報日期</th>
-                    <th>備註</th>
-                    <th>完工重派附件</th>
-                    <th>建立日期</th>
+                    <th data-field="quotation_id" data-sortable="true">報價單號</th>
+                    <th data-field="project_name" data-sortable="true">工程名稱</th>
+                    <th data-field="order_id" data-sortable="true">訂單編號</th>
+                    <th data-field="c_a" data-sortable="true">母案編號</th>
+                    <th data-field="client" data-sortable="true">客戶簡稱</th>
+                    <th data-field="requisition" data-sortable="true">請購單位</th>
+                    <th data-field="turnover" data-sortable="true">成交金額</th>
+                    <th data-field="is_completed" data-sortable="true">完工狀態</th>
+                    <th data-field="completion_report_employee" data-sortable="true">完工回報人</th>
+                    <th data-field="completion_report_date" data-sortable="true">完工回報日期</th>
+                    <th data-field="remark" data-sortable="true">備註</th>
+                    <th data-field="reassignment_attachment_link" data-sortable="true">完工重派附件</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody>
@@ -227,6 +227,12 @@
     $(".custom-file-input").on("change", function() {
       var fileName = $(this).val().split("\\").pop();
       $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+<script>
+    // Bootstrap-Table
+    $(document).ready(function() {
+        $('#table').bootstrapTable();
     });
 </script>
 <!-- <script>

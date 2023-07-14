@@ -25,6 +25,10 @@ const get_elements = document.querySelectorAll('.sys_get');
 
 get_elements.forEach(element => {
     element.addEventListener('click', GET_handleClick);
+    // 抓得到element，但無法執行監聽器
+    // element.addEventListener('mousedown', function() {
+    //     console.log('Click event triggered.');
+    // });
 });
 
 function GET_handleClick(event) {

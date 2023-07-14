@@ -85,6 +85,12 @@ class Job_Assign_ListView(ListView):
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         return context
 
+# 派工單
+class Employee_Assign_ListView(ListView):
+    model = Project_Job_Assign
+    template_name = 'employee_assign/employee_assign.html'
+    
+
 # 員工
 class Employee_list(ListView):
     model = Employee
