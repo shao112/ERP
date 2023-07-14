@@ -119,13 +119,13 @@ class Project_Job_Assign(models.Model):
     quotation_id = models.CharField(max_length=100,null=True, blank=True, verbose_name="報價單號")
     projecet_id = models.CharField(max_length=50,null=True, blank=True, verbose_name='工派單編號')
     project_name = models.CharField(max_length=30,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
-    c_a = models.CharField(max_length=50, verbose_name='母案編號') # 不做外鍵，透過quotation_id帶入
+    c_a = models.CharField(max_length=50, null=True, blank=True, verbose_name='母案編號') # 不做外鍵，透過quotation_id帶入
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ForeignKey('Employee', related_name='projects_work_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工作人員')
     lead_employee = models.ForeignKey('Employee', related_name='projects_lead_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="帶班人員")
     vehicle = models.CharField(max_length=30,null=True, blank=True, verbose_name='使用車輛')
-    location = models.CharField(max_length=30, verbose_name="工作地點")
-    project_type = models.CharField(max_length=30, verbose_name='工作類型')
+    location = models.CharField(max_length=30,null=True, blank=True, verbose_name="工作地點")
+    project_type = models.CharField(max_length=30,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     support = models.CharField(max_length=30,null=True, blank=True, verbose_name='支援人力')
     attachment = models.FileField(upload_to="project-attachment", null=True, blank=True, verbose_name="工確單附件")

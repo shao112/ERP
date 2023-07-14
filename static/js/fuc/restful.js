@@ -24,9 +24,7 @@ $("#sys_new").on("click", function () {
 const get_elements = document.querySelectorAll('.sys_get');
 
 get_elements.forEach(element => {
-    console.log("eee11")
     element.addEventListener('click', GET_handleClick.bind(element));
-    console.log("eee")
     // 抓得到element，但無法執行監聽器
     // element.addEventListener('mousedown', function() {
     //     console.log('Click event triggered.');
@@ -34,6 +32,8 @@ get_elements.forEach(element => {
 });
 
 function GET_handleClick(event) {
+    
+
     const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
@@ -113,8 +113,8 @@ $("form").on("submit", function (event) {
             }
         },
         error: function (xhr, textStatus, errorThrown) {
-            var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-            $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
+            alert("系統發生錯誤");
+            console.log(errorThrown)
         }
     });
 
@@ -167,13 +167,14 @@ async function DELETE_handleClick(event) {
                 alert("成功刪除");
                 location.reload();
             } else {
-                $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
+                alert(response.error);
+                // $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
 
         },
         error: function (xhr, textStatus, errorThrown) {
             // var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-            $("#error-message").text("系統發生錯誤"); // 在错误消息显示区域显示错误消息
+            alert("系統發生錯誤"); // 在错误消息显示区域显示错误消息
         }
     });
 

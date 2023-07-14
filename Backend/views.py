@@ -39,7 +39,7 @@ class Check(View):
 class Employee_View(View):
 
     def put(self,request):
-        dict_data = convent_dict(request.body)  
+        dict_data = convent_dict(request.body)
         form = EmployeeForm(dict_data)
         if form.is_valid():
             Employee.objects.filter(id=dict_data['id']).update(**dict_data)
@@ -88,7 +88,7 @@ class Project_Confirmation_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)  
-        form = ProjectJobAssignForm(dict_data)
+        form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
             Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})

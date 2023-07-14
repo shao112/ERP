@@ -31,6 +31,9 @@ def get_weekly_clock_data(userid):
 def convent_dict(data):
     data_str = data.decode('utf-8')
     dict_data = parse_qs(data_str)
+    if "csrfmiddlewaretoken" in dict_data:
+        del dict_data["csrfmiddlewaretoken"]
+        
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
