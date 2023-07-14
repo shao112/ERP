@@ -127,8 +127,25 @@ del_elements.forEach(element => {
     element.addEventListener('click', DELETE_handleClick.bind(element));
 });
 
+function showSwal(title, text, icon) {
+    return Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+    });
+}
 
-function DELETE_handleClick(event) {
+
+async function DELETE_handleClick(event) {
+    const result = await showSwal('確認刪除', '你確定要刪除該項目嗎？', 'warning');
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
     const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
     // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
     const url = "/restful/" + clickedElement.getAttribute('data-url');
