@@ -21,10 +21,24 @@ $("#sys_new").on("click", function () {
 });
 
 //  獲取資料並帶入
+const get_elements = document.querySelectorAll('.sys_get');
 
-function GET_handleClick(get_id,get_url){
-    const url = "/restful/" + get_url;
-    const id = get_id;
+get_elements.forEach(element => {
+    console.log("eee11")
+    element.addEventListener('click', GET_handleClick.bind(element));
+    console.log("eee")
+    // 抓得到element，但無法執行監聽器
+    // element.addEventListener('mousedown', function() {
+    //     console.log('Click event triggered.');
+    // });
+});
+
+function GET_handleClick(event) {
+    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+    const url = "/restful/" + clickedElement.getAttribute('data-url');
+    const id = clickedElement.getAttribute('data-id');
+
+    console.log(`URL: ${url}, ID: ${id}`);
 
     formData = { id: id, };
 
@@ -37,26 +51,26 @@ function GET_handleClick(get_id,get_url){
         data: formData,
         success: function (response) {
             console.log(response.data);
-            jsonData=response.data
+            jsonData = response.data
             if (response.status == 200) {
                 // alert("成功");
                 console.log(response);
                 for (var key in jsonData) {
                     if (jsonData.hasOwnProperty(key)) {
-                      var input = document.getElementsByName(key)[0];
-                      if (input) {
-                        input.value = jsonData[key];
-                      } else {
-                        console.log("Input not found for key:", key);
-                      }
+                        var input = document.getElementsByName(key)[0];
+                        if (input) {
+                            input.value = jsonData[key];
+                        } else {
+                            console.log("Input not found for key:", key);
+                        }
                     }
-                  }
+                }
 
                 //   更改form method
                 $("#form").attr("data-method", "put");
                 $("#form").attr("data-id", id);
 
-                
+
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
@@ -69,10 +83,10 @@ function GET_handleClick(get_id,get_url){
 
 }
 
-
 // 新增 or 修改(帶pk?)
 
 $("form").on("submit", function (event) {
+    console.log("新增 or 修改")
     event.preventDefault(); // 阻止表单的默认提交行为
 
     var form = $(this);
@@ -103,14 +117,22 @@ $("form").on("submit", function (event) {
             $("#error-message").text(errorMessage); // 在错误消息显示区域显示错误消息
         }
     });
-    
+
 });
 
 // 刪除
+const del_elements = document.querySelectorAll('.sys_del');
 
-function DELETE_handleClick(get_id,get_url){
-    const url = "/restful/" + get_url;
-    const id = get_id;
+del_elements.forEach(element => {
+    element.addEventListener('click', DELETE_handleClick.bind(element));
+});
+
+
+function DELETE_handleClick(event) {
+    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+    // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
+    const url = "/restful/" + clickedElement.getAttribute('data-url');
+    const id = clickedElement.getAttribute('data-id');
 
     console.log(`URL: ${url}, ID: ${id}`);
 

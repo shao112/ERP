@@ -16,15 +16,13 @@
     <div id="error-message"></div>
     <div class="project-confirmation-header container mb-4">
         <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
-        <a href="" 
-            id="sys_new"
-           class="btn border border-dark ml-2" 
-           data-toggle="modal"
-           data-target="#project-confirmation-modal">
-           • 展開面板新增資料
-        </a> 
+        <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal"
+            data-target="#project-confirmation-modal">
+            • 展開面板新增資料
+        </a>
     </div>
-    <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1" aria-labelledby="project-confirmation" aria-hidden="true">
+    <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1"
+        aria-labelledby="project-confirmation" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -35,7 +33,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_confirmation" id="form"  method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
+                            data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
@@ -47,13 +46,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="quotation_id_control">報價單號</label>
-                                                <input class="form-control form-control-sm" name="quotation_id" id="quotation_id_control" required></input>
+                                                <input class="form-control form-control-sm" name="quotation_id"
+                                                    id="quotation_id_control" required></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
+                                                <input class="form-control form-control-sm" name="project_name"
+                                                    id="project_name_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -61,13 +62,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="order_id_control">訂單編號</label>
-                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" ></input>
+                                                <input class="form-control form-control-sm" name="order_id"
+                                                    id="order_id_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="c_a_control">母案編號</label>
-                                                <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
+                                                <input class="form-control form-control-sm" name="c_a"
+                                                    id="c_a_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -75,13 +78,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="client_control">客戶簡稱</label>
-                                                <input class="form-control form-control-sm" name="client" id="client_control"></input>
+                                                <input class="form-control form-control-sm" name="client"
+                                                    id="client_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="requisition_control">請購單位</label>
-                                                <input class="form-control form-control-sm" name="requisition" id="requisition_control"></input>
+                                                <input class="form-control form-control-sm" name="requisition"
+                                                    id="requisition_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -89,7 +94,8 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="turnover_control">成交金額</label>
-                                                <input class="form-control form-control-sm" name="turnover" id="turnover_control"></input>
+                                                <input class="form-control form-control-sm" name="turnover"
+                                                    id="turnover_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +103,8 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="remark_control" class="col-form-label-sm">備註</label>
-                                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                                                <textarea class="form-control form-control-sm" name="remark"
+                                                    id="remark_control"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -109,24 +116,13 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="custom-control custom-radio">
-                                                <input type="radio"
-                                                class="custom-control-input"
-                                                id="is_completed_y"
-                                                name="is_completed"
-                                                value="true"
-                                                required
-                                                v-model="status">
+                                                <input type="radio" class="custom-control-input" id="is_completed_y"
+                                                    name="is_completed" value="true" required v-model="status">
                                                 <label class="custom-control-label" for="is_completed_y">完成</label>
                                             </div>
                                             <div class="custom-control custom-radio mb-3">
-                                                <input type="radio"
-                                                class="custom-control-input"
-                                                id="is_completed_n"
-                                                name="is_completed"
-                                                value="false"
-                                                required
-                                                checked
-                                                v-model="status">
+                                                <input type="radio" class="custom-control-input" id="is_completed_n"
+                                                    name="is_completed" value="false" required checked v-model="status">
                                                 <label class="custom-control-label" for="is_completed_n">尚未完成</label>
                                             </div>
                                         </div>
@@ -135,9 +131,12 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="completion_report_employee_control">完工回報人</label>
-                                                <select class="chosen-select" data-placeholder="選擇完工回報人" name="completion_report_employee"  id="completion_report_employee_control" multiple >
+                                                <select class="chosen-select" data-placeholder="選擇完工回報人"
+                                                    name="completion_report_employee"
+                                                    id="completion_report_employee_control" multiple>
                                                     {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}</option>
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -145,7 +144,9 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="completion_report_date_control">完工回報日期</label>
-                                                <input type="date" class="form-control form-control-sm" name="completion_report_date"  id="completion_report_date_control" :disabled="status == 'false'"></input>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="completion_report_date" id="completion_report_date_control"
+                                                    :disabled="status == 'false'"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -153,16 +154,20 @@
                                         <div class="col-12">
                                             <label>完工重派附件</label>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control">
-                                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
-                                            </div> 
+                                                <input type="file" class="custom-file-input"
+                                                    name="reassignment_attachment" id="reassignment_attachment_control">
+                                                <label class="custom-file-label"
+                                                    for="reassignment_attachment_control">Choose file</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class=" d-flex justify-content-between">
-                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;">送出</button>
-                                <button type="button" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
 
                             </div>
                         </form>
@@ -195,8 +200,11 @@
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <a  onclick="GET_handleClick({{p.id}},'project_confirmation')"    type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a  onclick="DELETE_handleClick({{p.id}},'project_confirmation')"  type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
+                            class="sys_get btn btn-warning m-2" data-toggle="modal"
+                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
+                            class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.project_name }}</td>
@@ -219,22 +227,29 @@
 </div>
 
 
-<script src="{% static 'js/fuc/restful.js' %}"></script>
-
 
 <script>
     // 更美化 file input
-    $(".custom-file-input").on("change", function() {
-      var fileName = $(this).val().split("\\").pop();
-      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 </script>
 <script>
     // Bootstrap-Table
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#table').bootstrapTable();
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+</script>
+
 <!-- <script>
     // 這是處理當選則未完成時要把其他input都disable，但有一個問題，完工回報人disable後就無法改變
     const app = Vue.createApp({
@@ -246,7 +261,7 @@
     });
     app.mount('#project-confirmation-app');
   </script> -->
-  <!-- <script>
+<!-- <script>
     $('#table').excelTableFilter({
         // columnSelector: '.apply-filter',    // (optional) if present, will only select <th> with specified class
         sort: true,                         // (optional) default true
