@@ -6,16 +6,13 @@ function check_process(check_statu, csrftoken) {
 
     navigator.geolocation.getCurrentPosition(function (position) {
         var gps = position.coords.latitude + ',' + position.coords.longitude;
-
         // 建立傳送的資料物件
         var requestData = {
             gps: gps,
             clock_in_or_out: clock_in_or_out,
-            clock_time : new Date().toISOString()
         };
+        
 
-        console.log("clock_time")
-        console.log(clock_time)
         // 傳送資料到後端
         fetch('/restful/check', {
             method: 'POST',
@@ -31,13 +28,10 @@ function check_process(check_statu, csrftoken) {
             .then(function (responseData) {
                     if (clock_in_or_out){
                         alert('打卡成功！');
-                        location.reload();
-                        // sweetAlert('簽到成功！');
                     }else{                        
                         alert('打卡成功！');
-                        location.reload();
-                        // sweetAlert('簽退成功！');
                     }
+                    location.reload();
             })
             .catch(function (error) {
                 console.log('錯誤：', error);

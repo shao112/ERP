@@ -12,14 +12,14 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
 from .utils import convent_dict
+import datetime
 
 class Check(View):
     def post(self,request):
         data = json.loads(request.body)
         gps = data.get('gps')
         clock_in_or_out = data.get('clock_in_or_out')
-        clock_time = data.get('clock_time')
-        clock_time = datetime.strptime(clock_time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        clock_time = datetime.datetime.now()
 
         Clock.objects.create(
             employee_id=request.user.employee,
