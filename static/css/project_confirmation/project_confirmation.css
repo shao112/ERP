@@ -1,13 +1,30 @@
 /* 控制 Table 第一列表頭固定 */
-.project-confirmation-table {
+/* .project-confirmation-table {
     height:70vh;  
     overflow:scroll;
-}
-thead tr:nth-child(1) th{
+} */
+/* thead tr:nth-child(1) th{
     position: sticky;
     top: 0;
     z-index: 1;
-}
+} */
 .project-confirmation-table td{
     vertical-align: middle;
 }
+/* .bootstrap-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+} */
+/* .fixed-table-toolbar{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #e9ecef;
+}
+.bootstrap-table .fixed-table-container .table thead th{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+} */
