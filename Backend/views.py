@@ -68,9 +68,7 @@ class Employee_View(View):
             employee.save()
             return JsonResponse({'status': 200})
         else:
-            print("is_valid FALSE")
             error_messages = form.get_error_messages()
-            print(error_messages)
             return JsonResponse({'status': 400,"error":error_messages})
 
 
@@ -152,9 +150,7 @@ class Job_Assign_View(View):
             form.save() 
             return JsonResponse({'status': 200})
         else:
-            print("is_valid FALSE")
             error_messages = form.get_error_messages()
-            print(error_messages)
             return JsonResponse({'status': 400,"error":error_messages})
 
 

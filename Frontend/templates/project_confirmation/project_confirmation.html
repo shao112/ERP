@@ -177,7 +177,8 @@
         </div>
     </div>
     <div class="project-confirmation-table container shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true"  data-pagination="true"
+            data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -227,15 +228,12 @@
 </div>
 
 
-
 <script>
     // 更美化 file input
     $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-</script>
-<script>
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable();
@@ -248,27 +246,8 @@
         script.src = "{% static 'js/fuc/restful.js' %}";
         document.body.appendChild(script);
     });
-</script>
 
-<!-- <script>
-    // 這是處理當選則未完成時要把其他input都disable，但有一個問題，完工回報人disable後就無法改變
-    const app = Vue.createApp({
-      data() {
-        return {
-          status: 'false'
-        };
-      }
-    });
-    app.mount('#project-confirmation-app');
-  </script> -->
-<!-- <script>
-    $('#table').excelTableFilter({
-        // columnSelector: '.apply-filter',    // (optional) if present, will only select <th> with specified class
-        sort: true,                         // (optional) default true
-        search: true,                        // (optional) default true
-        captions: Object                    // (optional) default { a_to_z: 'A to Z', z_to_a: 'Z to A', search: 'Search', select_all: 'Select All' }
-    });
-  </script> -->
+</script>
 
 
 {% endblock %}

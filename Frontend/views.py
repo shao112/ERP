@@ -43,7 +43,6 @@ class Index(View):
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             employeeid = request.user.employee
-            print(get_weekly_clock_data(employeeid))
             clock_inout = get_weekly_clock_data(employeeid)
             context = {
                 'clock_inout':clock_inout,
