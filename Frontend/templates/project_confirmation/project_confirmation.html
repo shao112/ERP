@@ -226,7 +226,11 @@
                     <td>{{ p.order_id }}</td>
                     <td>{{ p.turnover }}</td>
                     {% if p.is_completed == True %}<td>是</td>{% else %}<td>否</td>{% endif %}
-                    <td>{{ p.completion_report_employee.full_name }}</td>
+                    <td>
+                        {% for employees_list in p.completion_report_employee.all %}
+                            {{ employees_list.full_name }}
+                        {% endfor %}
+                    </td>
                     {% if p.completion_report_date %}<td>{{ p.completion_report_date }}</td>{% else %}<td>無</td>{% endif %}
                     <td>{{ p.remark }}</td>
                     <td>{{ p.reassignment_attachment_link }}</td>

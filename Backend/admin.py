@@ -18,8 +18,11 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
 #工程確認單
 class Project_ConfirmationAdmin(admin.ModelAdmin):
-    list_display = ('quotation_id', 'project_confirmation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'completion_report_employee', 'completion_report_date', 'remark', 'reassignment_attachment', 'created_date', 'update_date')
-
+    list_display = ('quotation_id', 'project_confirmation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'reassignment_attachment', 'created_date', 'update_date')
+    def display_completion_report_employee(self, obj):
+        return ', '.join([str(item) for item in obj.completion_report_employee.all()])
+    display_completion_report_employee.short_description = '多對多_完工回報人'
+    
 # 工作派任計畫
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'display_work_employee', 'display_lead_employee','vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
