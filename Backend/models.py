@@ -88,11 +88,12 @@ from django.utils.safestring import mark_safe
 # 工程確認單
 class Project_Confirmation(models.Model):
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
-    project_name = models.CharField(max_length=50, null=True, blank=True, verbose_name="工程名稱")
-    order_id = models.CharField(max_length=50, null=True, blank=True, verbose_name='訂單編號')
-    c_a = models.CharField(max_length=50, null=True, blank=True, verbose_name='母案編號')
-    client = models.CharField(max_length=20, null=True, blank=True, verbose_name='客戶簡稱')
-    requisition = models.CharField(max_length=50, null=True, blank=True, verbose_name='請購單位')
+    project_confirmation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="工確單編號")
+    project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
+    order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
+    c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
+    client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
+    requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
     is_completed = models.BooleanField(verbose_name='完工狀態')
     completion_report_employee = models.ForeignKey('Employee', related_name='projects_confirmation_report_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='完工回報人')
@@ -117,17 +118,17 @@ class Project_Confirmation(models.Model):
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
     quotation_id = models.CharField(max_length=100,null=True, blank=True, verbose_name="報價單號")
-    projecet_id = models.CharField(max_length=50,null=True, blank=True, verbose_name='工派單編號')
-    project_name = models.CharField(max_length=30,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
-    c_a = models.CharField(max_length=50, null=True, blank=True, verbose_name='母案編號') # 不做外鍵，透過quotation_id帶入
+    projecet_id = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
+    project_name = models.CharField(max_length=100,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
+    c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ForeignKey('Employee', related_name='projects_work_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工作人員')
     lead_employee = models.ForeignKey('Employee', related_name='projects_lead_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="帶班人員")
-    vehicle = models.CharField(max_length=30,null=True, blank=True, verbose_name='使用車輛')
-    location = models.CharField(max_length=30,null=True, blank=True, verbose_name="工作地點")
-    project_type = models.CharField(max_length=30,null=True, blank=True, verbose_name='工作類型')
+    vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
+    location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
+    project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    support = models.CharField(max_length=30,null=True, blank=True, verbose_name='支援人力')
+    support = models.CharField(max_length=100,null=True, blank=True, verbose_name='支援人力')
     attachment = models.FileField(upload_to="project-attachment", null=True, blank=True, verbose_name="工確單附件")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')

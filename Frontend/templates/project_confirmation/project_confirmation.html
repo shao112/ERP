@@ -183,11 +183,12 @@
                 <tr class="text-nowrap">
                     <th></th>
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
-                    <th data-field="project_name" data-sortable="true">工程名稱</th>
-                    <th data-field="order_id" data-sortable="true">訂單編號</th>
                     <th data-field="c_a" data-sortable="true">母案編號</th>
+                    <th data-field="project_confirmation_id" data-sortable="true">工確單編號</th>
+                    <th data-field="project_name" data-sortable="true">工程名稱</th>
                     <th data-field="client" data-sortable="true">客戶簡稱</th>
                     <th data-field="requisition" data-sortable="true">請購單位</th>
+                    <th data-field="order_id" data-sortable="true">訂單編號</th>
                     <th data-field="turnover" data-sortable="true">成交金額</th>
                     <th data-field="is_completed" data-sortable="true">完工狀態</th>
                     <th data-field="completion_report_employee" data-sortable="true">完工回報人</th>
@@ -208,15 +209,16 @@
                             class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
-                    <td>{{ p.project_name }}</td>
-                    <td>{{ p.order_id }}</td>
                     <td>{{ p.c_a }}</td>
+                    {% if p.project_confirmation_id %}<td>{{ p.project_confirmation_id }}</td>{% else %}<td></td>{% endif %}
+                    <td>{{ p.project_name }}</td>
                     <td>{{ p.client }}</td>
                     <td>{{ p.requisition }}</td>
+                    <td>{{ p.order_id }}</td>
                     <td>{{ p.turnover }}</td>
                     {% if p.is_completed == True %}<td>是</td>{% else %}<td>否</td>{% endif %}
                     <td>{{ p.completion_report_employee.full_name }}</td>
-                    <td>{{ p.completion_report_date }}</td>
+                    {% if p.completion_report_date %}<td>{{ p.completion_report_date }}</td>{% else %}<td>無</td>{% endif %}
                     <td>{{ p.remark }}</td>
                     <td>{{ p.reassignment_attachment_link }}</td>
                     <td>{{ p.created_date }}</td>
