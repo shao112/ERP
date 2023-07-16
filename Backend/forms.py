@@ -1,6 +1,8 @@
 from django import forms
 from .models import Project_Job_Assign, Department, Project_Confirmation, Employee
 
+from django.contrib.auth.models import Group
+
 from ERP.settings import DEBUG
 
 #base modelform
@@ -36,6 +38,12 @@ class ProjectConfirmationForm(BaseModelForm):
 
     class Meta:
         model = Project_Confirmation
+        fields = '__all__'
+
+class  GroupForm(BaseModelForm):
+
+    class Meta:
+        model = Group
         fields = '__all__'
 
 # 工作派任計畫

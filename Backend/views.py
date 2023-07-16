@@ -5,14 +5,53 @@ from datetime import datetime
 
 from .models import Clock
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign
+from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
-from Backend.forms import   ProjectConfirmationForm, EmployeeForm, ProjectJobAssignForm
+from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm
 
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
 from .utils import convent_dict
 import datetime
+
+class Groups_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = GroupForm(dict_data)
+        if form.is_valid():
+            Employee.objects.filter(id=dict_data['id']).update(**dict_data)
+            return JsonResponse({'status': 200})
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({'status': 400,"error":error_messages})
+    
+    def post(self,request):
+        form = GroupForm(request.POST)
+        print(form)
+        if form.is_valid():
+            username = form.cleaned_data['full_name']
+            password = form.cleaned_data['id_number']
+            # user = User.objects.create_user(username=username, password=password)
+            # employee = form.save(commit=False)
+            # employee.user = user
+            # employee.save()
+            return JsonResponse({'status': 200})
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({'status': 400,"error":error_messages})
+
+    def get(self, request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Group, id=id)
+        groups_employee = data.user_set.all()
+        users = [user.id for user in groups_employee]
+        data={"user_set":users}
+        print(users)
+        print(data)
+
+        return JsonResponse({"data": data, "status": 200}, status=200)
 
 class Check(View):
     def post(self,request):

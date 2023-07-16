@@ -103,23 +103,18 @@ def equipment(request):
     
 
 
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group
 # 員工權限
 class Employee_Permission_list(ListView):
     model = Employee
     template_name = 'employee_permission/employee_permission.html'
-    context_object_name = 'employee'
+    context_object_name = 'Group'
     def get_context_data(self, **kwargs):
-        permissions = Permission.objects.all()
-        print(permissions)
-        for permission in permissions:
-            print(permission.name)
-            print(permission.id)
-
-
+        Groups = Group.objects.all()
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = employee = Employee.objects.values('id','user__username')
-        context['permissions'] = Permission.objects.all()
+        context["employees_list"] =  Employee.objects.values('user__id','user__username')
+        print(context["employees_list"])
+        context['groups'] = Groups
         return context
     
 
@@ -141,7 +136,7 @@ class Department(ListView):
     #     }
     #     return render(request, 'department/department.html', context)
 
-# 基本資料
+# 基本資料(無法使用別人的id)
 class Profile(DeleteView):
     model = User
     template_name = 'profile/profile.html'

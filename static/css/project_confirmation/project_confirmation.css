@@ -1,3 +1,12 @@
+.project-confirmation-header a{
+    text-decoration: none;
+    color: black;
+}
+.project-confirmation-table td{
+    vertical-align: middle;
+}
+
+/* 這些再留一下，穩定後就可刪除不須要 */
 /* 控制 Table 第一列表頭固定 */
 /* .project-confirmation-table {
     height:70vh;  
@@ -7,15 +16,6 @@
     position: sticky;
     top: 0;
     z-index: 1;
-} */
-.project-confirmation-table td{
-    vertical-align: middle;
-}
-/* .bootstrap-table th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #fff;
 } */
 /* .fixed-table-toolbar{
     position: sticky;

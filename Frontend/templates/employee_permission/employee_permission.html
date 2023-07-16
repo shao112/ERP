@@ -24,7 +24,7 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employee-label">員工管理</h5>
+                    <h5 class="modal-title" id="employee-label">權限群組管理</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -39,12 +39,12 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="completion_report_employee_control">權限控管</label>
-                                                <select class="chosen-select" data-placeholder="權限控管"
+                                                <label for="completion_report_employee_control">員工增減</label>
+                                                <select class="chosen-select" data-placeholder="選擇員工"
                                                     name="completion_report_employee"
                                                     id="completion_report_employee_control" multiple>
-                                                    {% for permission in permissions %}
-                                                    <option value="{{ permission.id }}">{{ permission.name }}
+                                                    {% for employees in employees_list %}
+                                                    <option value="{{ employees.user__id }}">{{ employees.user__username }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
@@ -72,28 +72,24 @@
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
-                    <th>員工編號</th>
-                    <th>員工姓名</th>
+                    <th>群組名稱</th>
                     <th>建立日期</th>
                 </tr>
             </thead>
             <tbody>
-                {% for p in employee %}
-                {% if p.user.is_active %}
+                {% for g in groups %}
                 <tr>
                     <td>
-                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2"
+                        <a data-url="group" data-id="{{ g.id }}" type="button" class="sys_get btn btn-warning m-2"
                             data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i>
                         </a>
-                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2">
+                        <a data-url="group" data-id="{{ g.id }}" type="button" class="sys_del btn btn-danger m-2">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </td>
-                    <td>{{ p.employee_id }} </td>
-                    <td>{{ p.full_name }}</td>
-                    <td>{{ p.created_date }}</td>
+                    <td>{{ g.name }} </td>
+                    <td>{{ g.user_set.all }}</td>
                 </tr>
-                {% endif %}
                 {% endfor %}
             </tbody>
         </table>

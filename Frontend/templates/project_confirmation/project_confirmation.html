@@ -12,14 +12,10 @@
 
 
 {% block main %}
-<div class="main" id="project-confirmation-app">
+<div class="main px-3 px-md-5" id="project-confirmation-app">
     <div id="error-message"></div>
-    <div class="project-confirmation-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工程確認單</span>
-        <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal"
-            data-target="#project-confirmation-modal">
-            • 展開面板新增資料
-        </a>
+    <div class="project-confirmation-header container-fluid">
+        <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#project-confirmation-modal">點此新增工程確認單</a>
     </div>
     <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1"
         aria-labelledby="project-confirmation" aria-hidden="true">
@@ -52,13 +48,21 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name"
-                                                    id="project_name_control"></input>
+                                                <label for="c_a_control">母案編號</label>
+                                                <input class="form-control form-control-sm" name="c_a"
+                                                    id="c_a_control"></input>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="project_confirmation_id_control">工確單編號</label>
+                                                <input class="form-control form-control-sm" name="project_confirmation_id"
+                                                    id="project_confirmation_id_control"></input>
+                                            </div>
+                                        </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="order_id_control">訂單編號</label>
@@ -66,13 +70,7 @@
                                                     id="order_id_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="c_a_control">母案編號</label>
-                                                <input class="form-control form-control-sm" name="c_a"
-                                                    id="c_a_control"></input>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
@@ -84,13 +82,20 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
+                                                <label for="project_name_control">工程名稱</label>
+                                                <input class="form-control form-control-sm" name="project_name"
+                                                    id="project_name_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
                                                 <label for="requisition_control">請購單位</label>
                                                 <input class="form-control form-control-sm" name="requisition"
                                                     id="requisition_control"></input>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="turnover_control">成交金額</label>
@@ -176,7 +181,7 @@
             </div>
         </div>
     </div>
-    <div class="project-confirmation-table container shadow-sm table-responsive-lg">
+    <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
             data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
             <thead class="thead-light">

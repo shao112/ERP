@@ -25,16 +25,12 @@ const get_elements = document.querySelectorAll('.sys_get');
 
 get_elements.forEach(element => {
     element.addEventListener('click', GET_handleClick.bind(element));
-    // 抓得到element，但無法執行監聽器
-    // element.addEventListener('mousedown', function() {
-    //     console.log('Click event triggered.');
-    // });
 });
 
 function GET_handleClick(event) {
     
 
-    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+    const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
 
@@ -46,23 +42,41 @@ function GET_handleClick(event) {
         type: "GET",
         url: url,
         headers: {
-            'X-CSRFToken': getcsrftoken()  // 在請求標頭中包含 CSRF token
+            'X-CSRFToken': getcsrftoken()
         },
         data: formData,
         success: function (response) {
-            console.log(response.data);
-            jsonData = response.data
+            
             if (response.status == 200) {
-                // alert("成功");
-                console.log(response);
+                jsonData = response.data
                 for (var key in jsonData) {
-                    if (jsonData.hasOwnProperty(key)) {
-                        var input = document.getElementsByName(key)[0];
-                        if (input) {
+                    var input = document.getElementsByName(key)[0];
+                    if (input) {
+                        let get_value = jsonData[key];
+
+                        if (typeof (jsonData[key]) == "object") {
+
+                            const options = input.options;
+                            console.log(get_value);
+                            console.log(options);
+                            console.log("----");
+                            for (let i = 0; i < options.length; i++) {
+                                const option = options[i];
+                                const id = Number(option.value);
+                                console.log(id);
+                                console.log("id");
+                                if (get_value.includes(id)) {
+                                    console.log("checkd")
+                                    option.selected = true;
+                                }
+                            }
+
+
+                        }  else {
                             input.value = jsonData[key];
-                        } else {
-                            console.log("Input not found for key:", key);
                         }
+                    } else {
+                        console.log("Input not found for key:", key);
                     }
                 }
 
@@ -72,7 +86,7 @@ function GET_handleClick(event) {
 
 
             } else {
-                $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
+                $("#error-message").text(response.error);
             }
 
         },
@@ -87,7 +101,7 @@ function GET_handleClick(event) {
 
 $("form").on("submit", function (event) {
     console.log("新增 or 修改")
-    event.preventDefault(); // 阻止表单的默认提交行为
+    event.preventDefault();
 
     var form = $(this);
     var url = form.attr("action");
