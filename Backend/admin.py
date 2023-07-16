@@ -19,9 +19,18 @@ class DepartmentAdmin(admin.ModelAdmin):
 #工程確認單
 class Project_ConfirmationAdmin(admin.ModelAdmin):
     list_display = ('quotation_id', 'project_confirmation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'completion_report_employee', 'completion_report_date', 'remark', 'reassignment_attachment', 'created_date', 'update_date')
+
 # 工作派任計畫
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'work_employee', 'lead_employee', 'vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
+    list_display = ('quotation_id', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'display_work_employee', 'display_lead_employee','vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
+    # ManyToMany不能在list_display顯示
+    def display_work_employee(self, obj):
+        return ', '.join([str(item) for item in obj.work_employee.all()])
+    display_work_employee.short_description = '多對多_工作人員'
+    def display_lead_employee(self, obj):
+        return ', '.join([str(item) for item in obj.lead_employee.all()])
+    display_lead_employee.short_description = '多對多_帶班人員'
+
 # 打卡
 class ClockAdmin(admin.ModelAdmin):
     list_display = ('employee_id', 'clock_in_or_out', 'clock_time', 'clock_GPS',"created_date")

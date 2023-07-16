@@ -122,8 +122,8 @@ class Project_Job_Assign(models.Model):
     project_name = models.CharField(max_length=100,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
-    work_employee = models.ForeignKey('Employee', related_name='projects_work_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工作人員')
-    lead_employee = models.ForeignKey('Employee', related_name='projects_lead_employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="帶班人員")
+    work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', verbose_name='工作人員')
+    lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', verbose_name="帶班人員")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
