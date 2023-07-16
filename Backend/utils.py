@@ -31,19 +31,24 @@ def get_weekly_clock_data(userid):
 def convent_dict(data):
     data_str = data.decode('utf-8')
     dict_data = parse_qs(data_str)
+    print("convent")
+    print(dict_data)
     if "csrfmiddlewaretoken" in dict_data:
         del dict_data["csrfmiddlewaretoken"]
         
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
-        match  value[0]:
-            case "true":
-                new_dict_data[key] = True
-            case "false":
-                new_dict_data[key] =False
-            case "csrfmiddlewaretoken":
-                pass
-            case _:
-                new_dict_data[key] = value[0]
+        if len(value) >1:
+            new_dict_data[key] = value
+        else:
+            match  value[0]:
+                case "true":
+                    new_dict_data[key] = True
+                case "false":
+                    new_dict_data[key] =False
+                case "csrfmiddlewaretoken":
+                    pass
+                case _:
+                    new_dict_data[key] = value[0]
     return new_dict_data

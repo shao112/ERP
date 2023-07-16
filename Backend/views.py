@@ -5,8 +5,7 @@ from datetime import datetime
 
 from .models import Clock
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm
 
 from django.shortcuts import get_object_or_404
@@ -17,39 +16,37 @@ import datetime
 
 class Groups_View(View):
 
+    def delete(self,request):
+        dict_data = convent_dict(request.body)
+        group = Group.objects.get(id=dict_data['id'])
+        print("put")
+        print(dict_data)
+        for userid in dict_data["user_set"]:
+            user = User.objects.get(id=userid)
+            user.groups.remove(group)
+        return JsonResponse({'status': 200})
+
+
     def put(self,request):
         dict_data = convent_dict(request.body)
-        form = GroupForm(dict_data)
-        if form.is_valid():
-            Employee.objects.filter(id=dict_data['id']).update(**dict_data)
-            return JsonResponse({'status': 200})
-        else:
-            error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
-    
+        group = Group.objects.get(id=dict_data['id'])
+        print("put")
+        print(dict_data)
+        for userid in dict_data["user_set"]:
+            user = User.objects.get(id=userid)
+            user.groups.add(group)
+        return JsonResponse({'status': 200})
+
+
     def post(self,request):
-        form = GroupForm(request.POST)
-        print(form)
-        if form.is_valid():
-            username = form.cleaned_data['full_name']
-            password = form.cleaned_data['id_number']
-            # user = User.objects.create_user(username=username, password=password)
-            # employee = form.save(commit=False)
-            # employee.user = user
-            # employee.save()
-            return JsonResponse({'status': 200})
-        else:
-            error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+        pass
 
     def get(self, request):
         id = request.GET.get('id')
         data = get_object_or_404(Group, id=id)
         groups_employee = data.user_set.all()
         users = [user.id for user in groups_employee]
-        data={"user_set":users}
-        print(users)
-        print(data)
+        data={"user_set":users,"id":data.id}
 
         return JsonResponse({"data": data, "status": 200}, status=200)
 

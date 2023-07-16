@@ -28,7 +28,7 @@ get_elements.forEach(element => {
 });
 
 function GET_handleClick(event) {
-    
+
 
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
@@ -46,7 +46,7 @@ function GET_handleClick(event) {
         },
         data: formData,
         success: function (response) {
-            
+
             if (response.status == 200) {
                 jsonData = response.data
                 for (var key in jsonData) {
@@ -72,7 +72,7 @@ function GET_handleClick(event) {
                             }
 
 
-                        }  else {
+                        } else {
                             input.value = jsonData[key];
                         }
                     } else {
@@ -106,7 +106,7 @@ $("form").on("submit", function (event) {
     var form = $(this);
     var url = form.attr("action");
     var formData = form.serialize();
-    console.log(formData)
+    console.log(formData);
 
     var method = form.data("method");
 
@@ -121,7 +121,7 @@ $("form").on("submit", function (event) {
         success: function (response) {
             if (response.status == 200) {
                 alert("操作成功");
-                location.reload();
+                // location.reload();
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }

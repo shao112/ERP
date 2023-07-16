@@ -182,8 +182,12 @@
         </div>
     </div>
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
+
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        data-toolbar="#toolbar"  data-pagination="true" data-height="100%" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            your buttons here
+          </div>            
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -243,7 +247,9 @@
     });
     // Bootstrap-Table
     $(document).ready(function () {
-        $('#table').bootstrapTable();
+        $('#table').bootstrapTable({
+            toolbar: "#toolbar"
+        });
     });
 </script>
 
