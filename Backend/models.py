@@ -198,4 +198,19 @@ class Clock(models.Model):
     class Meta:
         verbose_name = "打卡紀錄"   # 單數
         verbose_name_plural = verbose_name   #複數
+
+# 固定資產管理
+class Equipment(models.Model):
+    equipment_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="資產標籤")
+    order_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="序號")
+    equipment_category = models.CharField(max_length=100, blank=True, null=True, verbose_name="資產種類別")
+    equipment_type = models.CharField(max_length=100, blank=True, null=True, verbose_name="中類")
+    equipment_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名")
+    product_model = models.CharField(max_length=100, blank=True, null=True, verbose_name="廠牌/型號")
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+
+    class Meta:
+        verbose_name = "固定資產管理"   # 單數
+        verbose_name_plural = verbose_name   #複數
         

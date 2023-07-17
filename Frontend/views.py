@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm
-from Backend.models import User, Department,Project_Job_Assign, Project_Confirmation,Employee, News
+from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data
@@ -97,9 +97,12 @@ class Employee_list(ListView):
     context_object_name = 'employee'
     
 
-# 
-def equipment(request):
-    pass
+# 固定資產管理
+class Equipment_ListView(ListView):
+    model = Equipment
+    template_name = 'equipment/equipment.html'
+    context_object_name = 'equipment'
+
     
 
 

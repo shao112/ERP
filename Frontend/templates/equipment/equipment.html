@@ -5,137 +5,147 @@
 {% block import %}
 
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/equipment/equipment.css' %}">
+
 
 {% endblock %}
 
 
 {% block main %}
-<div class="main">
-    <div class="equipment-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
-            固定資產管理
-        </span>
-        <a href="" 
-           class="btn border border-dark ml-2" 
-           data-toggle="collapse"
-           data-target="#equipment-modal">
-           • 展開面板新增資料
-        </a>
-    </div>
-    <div class="container shadow-sm collapse" id="equipment-modal">
-        <form action=""  method="POST" class="pb-4">
-            {% csrf_token %}
-            <div class="row my-4">
-                <div class="col-12 col-md-6">
-                    <h5 class="my-4" style="font-size: 1.2rem;">
-                        <kbd>工作描述</kbd>
-                    </h5>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="quotation_id_control">報價單號</label>
-                                <select class="form-control form-control-sm" id="quotation_id_control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="c_a_control">母案編號</label>
-                                <input class="form-control form-control-sm" id="c_a_control"></input>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="attendance_control">出勤日期</label>
-                                <input type="date" class="form-control form-control-sm" id="attendance_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="projecet_id_control">工派單編號</label>
-                                <input class="form-control form-control-sm" id="projecet_id_control"></input>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="project_name_control">0</label>
-                                <input class="form-control form-control-sm" id="project_name_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="location_control">工作地點</label>
-                                <input class="form-control form-control-sm" id="location_control"></input>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="project_type_control">工作類型</label>
-                                <input class="form-control form-control-sm" id="project_type_control"></input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="remark_control">備註</label>
-                                <textarea class="form-control form-control-sm" id="remark_control"></textarea>
-                            </div>
-                        </div>
-                    </div>
+<div class="main px-3 px-md-5">
+    <div id="error-message"></div>
+    <div class="equipment modal fade" id="equipment-modal" tabindex="-1" aria-labelledby="equipment" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="equipment-label">固定資產管理</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="col-12 col-md-6">
-                    <h5 class="my-4" style="font-size:1.2rem;">
-                        <kbd>人力跟資源</kbd>
-                    </h5>
-                    右邊
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="row my-2">
+                                <div class="col-12 col-md-6">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_id_control">資產標籤</label>
+                                                <input class="form-control form-control-sm" name="equipment_id" id="equipment_id_control" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="order_id_control">序號</label>
+                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_category_control">資產種類別</label>
+                                                <input class="form-control form-control-sm" name="equipment_category" id="equipment_category_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_type_control">中類</label>
+                                                <input class="form-control form-control-sm" name="equipment_type" id="equipment_type_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_name_control">品名</label>
+                                                <input class="form-control" name="equipment_name" id="equipment_name_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class=" d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">新增</button>
-        </form>
+        </div>
     </div>
-    <div class="container shadow-sm table-responsive">
-        <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>Email</th>
-                <th>a</th>
-                <th>b</th>
-              </tr>
+    <div class="equipment-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            <div class="equipment-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#equipment-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
+                </a>
+            </div>
+          </div>            
+            <thead class="thead-light">
+                <tr class="text-nowrap">
+                    <th></th>
+                    <th data-field="category" data-sortable="true">公告標題</th>
+                    <th data-field="type" data-sortable="true">公告類別</th>
+                    <th data-field="title" data-sortable="true">類別</th>
+                    <th data-field="level" data-sortable="true">重要性</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
+                </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>john@example.com</td>
-                <td>a</td>
-                <td>b</td>
-              </tr>
-              <tr>
-                <td>Mary</td>
-                <td>Moe</td>
-                <td>mary@example.com</td>
-                <td>a</td>
-                <td>b</td>
-              </tr>
-              <tr>
-                <td>July</td>
-                <td>Dooley</td>
-                <td>july@example.com</td>
-                <td>a</td>
-                <td>b</td>
-              </tr>
+                <tr>
+                    <td>
+                        <a type="button" data-url="project_confirmation" data-id=""
+                            class="sys_get btn btn-warning mx-2" data-toggle="modal"
+                            data-target="#equipment-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="" type="button"
+                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                    </td>
+                    <td>系統更新</td>
+                    <td>系統相關</td>
+                    <td>公告</td>
+                    <td>中</td>
+                    <td>2023年7月17日</td>
+                </tr>
             </tbody>
-          </table>
+        </table>
     </div>
 </div>
+
+
+<script>
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
+</script>
+
+
 {% endblock %}

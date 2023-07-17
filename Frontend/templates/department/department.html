@@ -13,9 +13,6 @@
 {% block main %}
 <div class="main px-3 px-md-5">
     <div id="error-message"></div>
-    <div class="department-header container-fluid">
-        <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#department-modal">點此新增部門</a>
-    </div>
     <div class="department modal fade" id="department-modal" tabindex="-1" aria-labelledby="department" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
@@ -66,9 +63,16 @@
             </div>
         </div>
     </div>
-    <div class="department container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-hover">
-            <thead>
+    <div class="department-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            <div class="department-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#department-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增部門
+                </a>
+            </div>
+            <thead class="thead-light">
                 <tr>
                     <th></th>
                     <th>上級部門</th>
@@ -81,8 +85,10 @@
                 {% for d in department %}
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a type="button" data-url="project_confirmation" data-id="{{ d.id }}" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="{{ d.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ d.parent_department }}</td>
                     <td>{{ d.department_name }}</td>
@@ -94,4 +100,27 @@
         </table>
     </div>
 </div>
+<script>
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
+</script>
 {% endblock %}

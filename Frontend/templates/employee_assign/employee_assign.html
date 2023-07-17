@@ -5,74 +5,146 @@
 {% block import %}
 
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/employee_assign/employee_assign.css' %}">
 
 
 {% endblock %}
 
 
 {% block main %}
-<style>
-    thead tr:nth-child(1) th{
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-</style>
-<div class="main">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <table id="table" data-toggle="table">
-                    <thead>
-                        <tr>
-                            <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="name" data-sortable="true">Name</th>
-                            <th data-field="age" data-sortable="true">Age</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>@</td>
-                            <td>測試</td>
-                            <td>25</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>中文</td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Zed</td>
-                            <td>25</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>哈哈</td>
-                            <td>99</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>哈哈</td>
-                            <td>99</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>哈哈</td>
-                            <td>99</td>
-                        </tr>
-                    </tbody>
-                </table>
+<div class="main px-3 px-md-5">
+    <div id="error-message"></div>
+    <div class="employee-assign modal fade" id="employee-assign-modal" tabindex="-1" aria-labelledby="employee-assign" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employee-assign-label">派工單</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="row my-2">
+                                <div class="col-12 col-md-6">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_id_control">資產標籤</label>
+                                                <input class="form-control form-control-sm" name="equipment_id" id="equipment_id_control" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="order_id_control">序號</label>
+                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_category_control">資產種類別</label>
+                                                <input class="form-control form-control-sm" name="equipment_category" id="equipment_category_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_type_control">中類</label>
+                                                <input class="form-control form-control-sm" name="equipment_type" id="equipment_type_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="equipment_name_control">品名</label>
+                                                <input class="form-control" name="equipment_name" id="equipment_name_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            <div class=" d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="employee-assign-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            <div class="employee-assign-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-assign-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增派工單
+                </a>
+            </div>
+          </div>            
+            <thead class="thead-light">
+                <tr class="text-nowrap">
+                    <th></th>
+                    <th data-field="category" data-sortable="true">公告標題</th>
+                    <th data-field="type" data-sortable="true">公告類別</th>
+                    <th data-field="title" data-sortable="true">類別</th>
+                    <th data-field="level" data-sortable="true">重要性</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a type="button" data-url="project_confirmation" data-id=""
+                            class="sys_get btn btn-warning mx-2" data-toggle="modal"
+                            data-target="#equipment-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="" type="button"
+                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                    </td>
+                    <td>系統更新</td>
+                    <td>系統相關</td>
+                    <td>公告</td>
+                    <td>中</td>
+                    <td>2023年7月17日</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<script src="{% static 'js/fuc/restful.js' %}"></script>
+
 <script>
-    $(document).ready(function() {
-        $('#table').bootstrapTable();
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
 </script>
 
 

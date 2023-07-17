@@ -213,10 +213,10 @@
                 <tr>
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
-                            class="sys_get btn btn-warning my-2 mx-md-2" data-toggle="modal"
+                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
                             data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.c_a }}</td>
@@ -253,7 +253,7 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height()*0.8,
+            height: $(window).height()*0.85,
             toolbar: "#toolbar"
         });
     });
