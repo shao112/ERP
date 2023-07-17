@@ -14,9 +14,6 @@
 {% block main %}
 <div class="main px-3 px-md-5" id="project-confirmation-app">
     <div id="error-message"></div>
-    <div class="project-confirmation-header container-fluid">
-        <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#project-confirmation-modal">點此新增工程確認單</a>
-    </div>
     <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1"
         aria-labelledby="project-confirmation" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -186,8 +183,12 @@
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
         data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
         <div id="toolbar">
-            your buttons here
-          </div>            
+            <div class="project-confirmation-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#project-confirmation-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工程確認單
+                </a>
+            </div>
+        </div>            
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -212,10 +213,10 @@
                 <tr>
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
-                            class="sys_get btn btn-warning m-2" data-toggle="modal"
+                            class="sys_get btn btn-warning my-2 mx-md-2" data-toggle="modal"
                             data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                            class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.c_a }}</td>

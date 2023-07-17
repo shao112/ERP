@@ -12,18 +12,8 @@
 
 
 {% block main %}
-<div class="main" id="job_assign-app">
+<div class="main px-3 px-md-5" id="job_assign-app">
     <div id="error-message"></div>
-    <div class="job_assign-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">工作派任計畫</span>
-        <a href="" 
-            id="sys_new"
-           class="btn border border-dark ml-2" 
-           data-toggle="modal"
-           data-target="#job_assign-modal">
-           • 展開面板新增資料
-        </a> 
-    </div>
     <div class="job_assign modal fade" id="job_assign-modal" tabindex="-1" aria-labelledby="job_assign" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
@@ -173,8 +163,15 @@
             </div>
         </div>
     </div>
-    <div class="job_assign-table container shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table">
+    <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            <div class="job_assign-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#job_assign-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
+                </a>
+            </div>
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -198,8 +195,8 @@
                 {% for j in job_assign %}
                 <tr>
                     <td>
-                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#job_assign-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_get btn btn-warning my-2 mx-md-2" data-toggle="modal" data-target="#job_assign-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ j.quotation_id }}</td>
                     <td>{{ j.projecet_id }}</td>
@@ -236,10 +233,26 @@
 
 <script>
     // 更美化 file input
-    $(".custom-file-input").on("change", function() {
-      var fileName = $(this).val().split("\\").pop();
-      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.8,
+            toolbar: "#toolbar"
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
 </script>
 
 

@@ -1,0 +1,149 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/news/news.css' %}">
+
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main px-3 px-md-5" id="news-app">
+    <div id="error-message"></div>
+    <div class="news modal fade" id="news-modal" tabindex="-1" aria-labelledby="news" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="news-label">最新消息</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="row my-4">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="category_control">公告類別</label>
+                                        <select class="form-control form-control-sm" name="category" id="category_control">
+                                            <option value="1">1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="type_control">類別</label>
+                                        <select class="form-control form-control-sm" name="type" id="type_control">
+                                            <option value="1">1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="level_control">重要性</label>
+                                        <select class="form-control form-control-sm" name="level" id="level_control">
+                                            <option value="1">1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="title_control">公告標題</label>
+                                        <input class="form-control form-control-sm" name="title" id="title_control" required></input>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="content_control">內容</label>
+                                        <textarea class="form-control" name="content" id="content_control"></textarea>
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                            <div class=" d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="news-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <div id="toolbar">
+            <div class="news-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#news-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
+                </a>
+            </div>
+          </div>            
+            <thead class="thead-light">
+                <tr class="text-nowrap">
+                    <th></th>
+                    <th data-field="category" data-sortable="true">公告標題</th>
+                    <th data-field="type" data-sortable="true">公告類別</th>
+                    <th data-field="title" data-sortable="true">類別</th>
+                    <th data-field="level" data-sortable="true">重要性</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a type="button" data-url="project_confirmation" data-id=""
+                            class="sys_get btn btn-warning mx-2" data-toggle="modal"
+                            data-target="#news-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="" type="button"
+                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.8,
+            toolbar: "#toolbar"
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
+</script>
+
+
+{% endblock %}

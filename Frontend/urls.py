@@ -27,5 +27,6 @@ urlpatterns = [
     path('employee_permission/', views.Employee_Permission_list.as_view(), name='employee_permission_list'),
     path('job-assign/', login_required(views.Job_Assign_ListView.as_view()), name='project'),
     path('employee_assign/', login_required(views.Employee_Assign_ListView.as_view()), name='employee_assign'),
+    path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('accounts/logout/', views.signout, name='logout'),
 ]

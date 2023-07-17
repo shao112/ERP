@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm
-from Backend.models import User, Department,Project_Job_Assign, Project_Confirmation,Employee
+from Backend.models import User, Department,Project_Job_Assign, Project_Confirmation,Employee, News
 from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data
@@ -141,3 +141,9 @@ class Profile(DeleteView):
     model = User
     template_name = 'profile/profile.html'
     context_object_name = 'user'
+
+# 最新消息
+class News_ListView(ListView):
+    model = News
+    template_name = 'news/news.html'
+    context_object_name = 'news'

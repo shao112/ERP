@@ -176,7 +176,7 @@ class News(models.Model):
     )
     title = models.CharField(max_length=30, blank=True, null=True, verbose_name="公告標題")
     category = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="公告類別")
-    type = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="類別")
+    type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
     content = models.TextField(blank=True, null=True, verbose_name='內容')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
