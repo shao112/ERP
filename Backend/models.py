@@ -117,9 +117,9 @@ class Project_Confirmation(models.Model):
         else:
             return "無"
 # 中介資料庫
-# class Data_Management(models.Model):
-#     project_confirmation = models.ForeignKey(Project_Confirmation, on_delete=models.SET_NULL)
-#     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL)
+# class ProjectConfirmationEmployeeManagement(models.Model):
+#     project_confirmation = models.ForeignKey(Project_Confirmation, on_delete = models.CASCADE)
+#     employee = models.ForeignKey(Employee, on_delete = models.CASCADE)
 #     class Meta:
 #         verbose_name = "中介資料庫"   # 單數
 #         verbose_name_plural = verbose_name   #複數
