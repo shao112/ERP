@@ -229,7 +229,7 @@
                     <td>
                         {% for employees_list in p.completion_report_employee.all %}
                             {{ employees_list.full_name }}
-                        {% endfor %}
+                        {% endfor %}    
                     </td>
                     {% if p.completion_report_date %}<td>{{ p.completion_report_date }}</td>{% else %}<td>無</td>{% endif %}
                     <td>{{ p.remark }}</td>

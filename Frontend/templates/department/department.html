@@ -11,69 +11,79 @@
 
 
 {% block main %}
-<div class="main">
-    <div class="department-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
-            部門管理
-        </span>
-        <a href="" 
-           class="btn border border-dark ml-2" 
-           data-toggle="collapse"
-           data-target="#department-modal">
-           • 展開面板新增資料
-        </a>
+<div class="main px-3 px-md-5">
+    <div id="error-message"></div>
+    <div class="department-header container-fluid">
+        <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#department-modal">點此新增部門</a>
     </div>
-    <div class="container shadow-sm collapse" id="department-modal">
-        <form action=""  method="POST" class="pb-4">
-            {% csrf_token %}
-            <div class="row my-4">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="parent_department_control">上層部門</label>
-                                <select class="form-control form-control-sm" id="parent_department_control" name="parent_department">
-                                    <option value="a">a</option>
-                                    <option value="b">b</option>
-                                    <option value="c">c</option>
-                                </select>
-                              </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="department_id_control">部門編號</label>
-                                <input class="form-control form-control-sm" id="department_id_control" name="department_id"></input>
+    <div class="department modal fade" id="department-modal" tabindex="-1" aria-labelledby="department" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="department-label">部門管理</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action=""  id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <div class="row my-4">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="parent_department_control">上層部門</label>
+                                                <select class="form-control form-control-sm" id="parent_department_control" name="parent_department">
+                                                    <option value="a">a</option>
+                                                    <option value="b">b</option>
+                                                    <option value="c">c</option>
+                                                </select>
+                                              </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="department_id_control">部門編號</label>
+                                                <input class="form-control form-control-sm" id="department_id_control" name="department_id"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="department_name_control">部門名稱</label>
+                                                <input class="form-control form-control-sm" id="department_name_control" name="department_name"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
                             </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="department_name_control">部門名稱</label>
-                                <input class="form-control form-control-sm" id="department_name_control" name="department_name"></input>
-                            </div>
-                        </div>
+                            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
+                        </form>
                     </div>
-                    
-                    
                 </div>
             </div>
-            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
-        </form>
+        </div>
     </div>
-    <div class="container shadow-sm table-responsive">
+    <div class="department container-fluid shadow-sm table-responsive-lg">
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th></th>
                     <th>上級部門</th>
-                    <th>部門編號</th>
                     <th>部門名稱</th>
+                    <th>部門編號</th>
                     <th>部門人數</th>
                 </tr>
             </thead>
             <tbody>
                 {% for d in department %}
                 <tr>
-                    <td><a href="#" class="btn btn-sm btn-danger">刪除</a></td>
+                    <td>
+                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-warning m-2" data-toggle="modal" data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="" type="button" class="sys_del btn btn-danger m-2"><i class="far fa-trash-alt"></i></a>
+                    </td>
                     <td>{{ d.parent_department }}</td>
                     <td>{{ d.department_name }}</td>
                     <td>{{ d.department_id }}</td>

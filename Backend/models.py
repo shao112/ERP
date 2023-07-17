@@ -32,7 +32,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=10, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
-    # departments = models.ManyToManyField('Department', related_name='employees', blank=True, verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
+    # departments = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
     contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
@@ -97,7 +97,7 @@ class Project_Confirmation(models.Model):
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
     is_completed = models.BooleanField(verbose_name='完工狀態')
-    completion_report_employee = models.ManyToManyField('Employee', related_name='projects_confirmation_report_employee', verbose_name='完工回報人')
+    completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
@@ -116,11 +116,15 @@ class Project_Confirmation(models.Model):
             return mark_safe(download_link)
         else:
             return "無"
-# 設置completion_report_employee欄位初始值是空，因為多對多不能設default跟null
-@receiver(pre_save, sender=Project_Confirmation)
-def set_completion_report_employee_initial_value(sender, instance, **kwargs):
-    if not instance.pk:
-        instance.completion_report_employee.set([])
+# 中介資料庫
+# class Data_Management(models.Model):
+#     project_confirmation = models.ForeignKey(Project_Confirmation, on_delete=models.SET_NULL)
+#     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL)
+#     class Meta:
+#         verbose_name = "中介資料庫"   # 單數
+#         verbose_name_plural = verbose_name   #複數
+
+
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
     quotation_id = models.CharField(max_length=100,null=True, blank=True, verbose_name="報價單號")
