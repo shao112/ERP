@@ -164,12 +164,17 @@
         </div>
     </div>
     <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true" 
+        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
         <div id="toolbar">
             <div class="job_assign-header container-fluid">
                 <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#job_assign-modal">
                     <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工作派任計畫
+                </a>
+                <br>
+                <a href="" class="font-weight-bold" id="" >
+                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
                 </a>
             </div>
             <thead class="thead-light">
