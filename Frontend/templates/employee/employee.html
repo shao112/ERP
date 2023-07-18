@@ -12,15 +12,8 @@
 
 
 {% block main %}
-<div class="main" id="employee-app">
+<div class="main px-3 px-md-5" id="employee-app">
     <div id="error-message"></div>
-    <div class="employee-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">員工管理</span>
-        <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal"
-            data-target="#employee-modal">
-            • 展開面板新增資料
-        </a>
-    </div>
     <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
@@ -250,13 +243,26 @@
         </div>
     </div>
     <div class="employee-table container shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="employee-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增員工
+                    </a>
+                    <br>
+                    <a href="" class="font-weight-bold" id="" >
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    </a>
+                </div>
+            </div>      
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
-                    <th>員工編號</th>
-                    <th>員工姓名</th>
-                    <th>建立日期</th>
+                    <th data-field="employee_id" data-sortable="true">員工編號</th>
+                    <th data-field="full_name" data-sortable="true">員工姓名</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody>
@@ -264,12 +270,9 @@
                 {% if p.user.is_active %}
                 <tr>
                     <td>
-                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_get btn btn-warning m-2"
-                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i>
-                        </a>
-                        <a data-url="employee" data-id="{{ p.id }}" type="button" class="sys_del btn btn-danger m-2">
-                            <i class="far fa-trash-alt"></i>
-                        </a>
+                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="project_confirmation" data-id="" type="button" class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
@@ -292,6 +295,21 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+    });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
+</script>
 {% endblock %}

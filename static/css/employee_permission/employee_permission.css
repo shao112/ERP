@@ -1,7 +1,7 @@
-.employee-header a{
+.employee-permission-header a{
     text-decoration: none;
     color: black;
 }
-.employee-table td{
+.employee-permission-table td{
     vertical-align: middle;
 }

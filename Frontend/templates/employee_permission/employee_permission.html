@@ -12,19 +12,13 @@
 
 
 {% block main %}
-<div class="main" id="employee-app">
+<div class="main px-3 px-md-5" id="employee-permission-app">
     <div id="error-message"></div>
-    <div class="employee-header container mb-4">
-        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">權限管理</span>
-        <a href="" id="sys_new" class="btn border border-dark ml-2" data-toggle="modal" data-target="#employee-modal">
-            • 展開面板新增資料
-        </a>
-    </div>
-    <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="employee-permission modal fade" id="employee-permission-modal" tabindex="-1" aria-labelledby="employee-permission" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employee-label">權限群組管理</h5>
+                    <h5 class="modal-title" id="employee-permission-label">權限群組管理</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -35,23 +29,38 @@
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
-                                <div class="col-12 col-md-6">
+                                <div class="col-12">
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="completion_report_employee_control">員工增減</label>
-                                                <select class="chosen-select" data-placeholder="選擇員工"
-                                                    name="user_set"
-                                                    id="completion_report_employee_control" multiple>
+                                                <label for="group_control">群組名稱</label>
+                                                <input class="form-control form-control-sm" name="group" id="group_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="permission-select">選擇權限(按住ctrl多選)</label>
+                                                <select class="form-control " name="user_set" id="permission-select" size="6" multiple>
                                                     {% for employees in employees_list %}
-                                                    <option value="{{ employees.user__id }}">{{ employees.user__username }}
-                                                    </option>
+                                                    <option value="{{ employees.user__id }}" label="{{ employees.user__username }}"></option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="permission-selected">已選權限</label>
+                                                <select class="form-control " name="user_set" id="permission-selected" size="6" readonly>
+                                                    <option  value=""> </option>
+                                                </select>
+                                            </div>
+                                            <div id="selectedOptions"></div>
+                                        </div>
                                     </div>
                                 </div>
+                                
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4"
@@ -67,22 +76,33 @@
             </div>
         </div>
     </div>
-    <div class="employee-table container shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table">
+    <div class="employee-permission-table  container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="employee-permission-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-permission-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增群組權限
+                    </a>
+                </div>
+            </div>
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
-                    <th>群組名稱</th>
-                    <th>建立日期</th>
+                    <th data-field="group" data-sortable="true">群組名稱</th>
+                    <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody>
                 {% for g in groups %}
                 <tr>
                     <td>
-                        <a data-url="group" data-id="{{ g.id }}" type="button" class="sys_get btn btn-warning m-2"
-                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i>
-                        </a>
+                        <a type="button" data-url="group" data-id="{{ g.id }}"
+                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="group" data-id="{{ g.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                       
                     </td>
                     <td>{{ g.name }} </td>
@@ -94,6 +114,17 @@
     </div>
 </div>
 
+<script>
+    console.log("#permission-select")
+    $(document).ready(function() {
+        $('#permission-select').on('change', function() {
+            var selectedOptions = $(this).find('option:selected').map(function() {
+                return $(this).text();
+            }).get();
+            $('#selectedOptions').text(selectedOptions.join(', '));
+        });
+    });
+</script>
 
 <script src="{% static 'js/fuc/restful.js' %}"></script>
 
@@ -104,8 +135,23 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-
-    
+    // Bootstrap-Table
+    $(document).ready(function () {
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+    });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var script = document.createElement('script');
+        script.src = "{% static 'js/fuc/restful.js' %}";
+        document.body.appendChild(script);
+    });
+
+</script>
+
 
 {% endblock %}
