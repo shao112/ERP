@@ -98,7 +98,7 @@ class Project_Confirmation(models.Model):
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
     is_completed = models.BooleanField(verbose_name='完工狀態')
-    completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', verbose_name='完工回報人')
+    completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
@@ -117,13 +117,6 @@ class Project_Confirmation(models.Model):
             return mark_safe(download_link)
         else:
             return "無"
-# 中介資料庫
-# class ProjectConfirmationEmployeeManagement(models.Model):
-#     project_confirmation = models.ForeignKey(Project_Confirmation, on_delete = models.CASCADE)
-#     employee = models.ForeignKey(Employee, on_delete = models.CASCADE)
-#     class Meta:
-#         verbose_name = "中介資料庫"   # 單數
-#         verbose_name_plural = verbose_name   #複數
 
 
 # 工作派任計畫
@@ -133,8 +126,8 @@ class Project_Job_Assign(models.Model):
     project_name = models.CharField(max_length=100,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
-    work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', verbose_name='工作人員')
-    lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', verbose_name="帶班人員")
+    work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
+    lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
