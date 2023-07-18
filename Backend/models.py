@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # 員工（以內建 User 擴增）
+# admin:admin IT0000:itadmin123
 class Employee(models.Model):
     GENDER_CHOICES = [
         ('M', '男'),

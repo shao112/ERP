@@ -95,7 +95,7 @@
                         <a data-url="project_confirmation" data-id="{{ d.id }}" type="button"
                             class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
-                    <td>{{ d.parent_department }}</td>
+                    {% if d.parent_department %}<td>{{ d.parent_department }}</td>{% else %}<td>無</td>{% endif %}
                     <td>{{ d.department_name }}</td>
                     <td>{{ d.department_id }}</td>
                     <td></td>

@@ -5,7 +5,7 @@
 {% block import %}
 
 {% load static%}
-<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
+<link rel="stylesheet" href="{% static 'css/employee_permission-table/employee_permission.css' %}">
 
 
 {% endblock %}
@@ -44,7 +44,7 @@
                                                 <label for="permission-select">選擇權限(按住ctrl多選)</label>
                                                 <select class="form-control " name="user_set" id="permission-select" size="6" multiple>
                                                     {% for employees in employees_list %}
-                                                    <option value="{{ employees.user__id }}" label="{{ employees.user__username }}"></option>
+                                                    <option value="{{ employees.user__id }}">{{ employees.user__username }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -53,10 +53,9 @@
                                             <div class="form-group">
                                                 <label for="permission-selected">已選權限</label>
                                                 <select class="form-control " name="user_set" id="permission-selected" size="6" readonly>
-                                                    <option  value=""> </option>
+                                                    
                                                 </select>
                                             </div>
-                                            <div id="selectedOptions"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -115,13 +114,18 @@
 </div>
 
 <script>
-    console.log("#permission-select")
+    var selected_arr =[]
     $(document).ready(function() {
         $('#permission-select').on('change', function() {
-            var selectedOptions = $(this).find('option:selected').map(function() {
-                return $(this).text();
-            }).get();
-            $('#selectedOptions').text(selectedOptions.join(', '));
+            var selected = $("#permission-select option:selected")
+            selected.attr('data-select','new')
+            selected_arr.push(selected.text())
+            // console.log(selected.val())
+            // console.log(selected.text())
+            $('#permission-selected').empty();
+            $.each(selected_arr, function(index, value) {
+                $('#permission-selected').append($('<option>').text(value));
+            });
         });
     });
 </script>
