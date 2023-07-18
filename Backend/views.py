@@ -11,8 +11,12 @@ from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, Pro
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict
+from .utils import convent_dict,convent_employee
 import datetime
+
+
+
+
 
 class Groups_View(View):
 
@@ -154,12 +158,7 @@ class Project_Confirmation_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data) 
-        del data["completion_report_employee"]
-        # data =   model_to_dict(data, fields=['completion_report_employee'])
-        
-        
-        print("xxx")
-        print(data)
+        data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         if  data['reassignment_attachment']:
             data['reassignment_attachment'] = data['reassignment_attachment'].url
         else:
@@ -200,6 +199,12 @@ class Job_Assign_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Job_Assign, id=id)
         data = model_to_dict(data)
+        # print(data)
+        data["lead_employee"] = convent_employee(data["lead_employee"])
+        data["work_employee"] = convent_employee(data["work_employee"])
+        del data["created_date"]
+        print(data)
+
         if  "reassignment_attachment" in data:
             if  data['reassignment_attachment']:
                 data['reassignment_attachment'] = data.url

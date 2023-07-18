@@ -21,9 +21,8 @@ $("#sys_new").on("click", function () {
 });
 
 //  獲取資料並帶入
-const get_elements = document.querySelectorAll('.sys_get');
 
-get_elements.forEach(element => {
+document.querySelectorAll('.sys_get').forEach(element => {
     element.addEventListener('click', GET_handleClick.bind(element));
 });
 
@@ -54,7 +53,7 @@ function GET_handleClick(event) {
                     if (input) {
                         let get_value = jsonData[key];
 
-                        if (typeof (jsonData[key]) == "object") {
+                        if (typeof (jsonData[key]) == "object" && get_value!=null) {
 
                             const options = input.options;
                             console.log(get_value);
@@ -103,6 +102,7 @@ $("form").on("submit", function (event) {
     console.log("新增 or 修改")
     event.preventDefault();
 
+
     var form = $(this);
     var url = form.attr("action");
     var formData = form.serialize();
@@ -135,9 +135,8 @@ $("form").on("submit", function (event) {
 });
 
 // 刪除
-const del_elements = document.querySelectorAll('.sys_del');
 
-del_elements.forEach(element => {
+document.querySelectorAll('.sys_del').forEach(element => {
     element.addEventListener('click', DELETE_handleClick.bind(element));
 });
 

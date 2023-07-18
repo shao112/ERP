@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from .models import Clock
 from urllib.parse import parse_qs
+from django.forms.models import model_to_dict
 
 
 def get_weekdays():
@@ -27,6 +28,13 @@ def get_weekly_clock_data(userid):
         }
         weekly_clock_data.append(daily_data)
     return weekly_clock_data
+
+def convent_employee(employees):
+    employee_ary=[]
+    for get_employee in employees:
+        employee_ary.append(model_to_dict(get_employee))
+    return employee_ary
+
 
 def convent_dict(data):
     data_str = data.decode('utf-8')
