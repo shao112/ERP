@@ -131,10 +131,10 @@
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="completion_report_employee_control">完工回報人</label>
-                                                <select class="chosen-select" data-placeholder="選擇完工回報人"
+                                                <label for="completion_report_employee">完工回報人</label>
+                                                <select data-placeholder="選擇完工回報人"
                                                     name="completion_report_employee"
-                                                    id="completion_report_employee_control" multiple>
+                                                    id="completion_report_employee_select2" multiple>
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}
                                                     </option>
@@ -254,12 +254,21 @@
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
-    // Bootstrap-Table
     $(document).ready(function () {
+        // Bootstrap-Table
         $('#table').bootstrapTable({
             height: $(window).height()*0.85,
             toolbar: "#toolbar"
         });
+        // select2    
+        $('#completion_report_employee_select2').select2({
+
+            width: '250ph',
+    placeholder: 'Select an option',
+    allowClear: true
+
+        });
+
     });
 </script>
 

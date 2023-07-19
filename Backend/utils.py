@@ -40,7 +40,6 @@ def convent_dict(data):
     data_str = data.decode('utf-8')
     dict_data = parse_qs(data_str)
     print("convent")
-    print(dict_data)
     if "csrfmiddlewaretoken" in dict_data:
         del dict_data["csrfmiddlewaretoken"]
         
@@ -48,7 +47,8 @@ def convent_dict(data):
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
         if len(value) >1:
-            new_dict_data[key] = value
+            
+            new_dict_data[key] =  [int(num) for num in  value]
         else:
             match  value[0]:
                 case "true":
@@ -59,4 +59,5 @@ def convent_dict(data):
                     pass
                 case _:
                     new_dict_data[key] = value[0]
+    print(new_dict_data)
     return new_dict_data
