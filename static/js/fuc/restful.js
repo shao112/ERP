@@ -14,11 +14,23 @@ function getcsrftoken() {
     }
     return cookieValue;
 }
+
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
     $("#form")[0].reset();
     $("#form").attr("data-method", "POST");
+
+    //清除select2的資訊
+    $("[id*='_select2']").each(function() {
+        var id = $(this).attr("id");
+        if (id.endsWith("_select2")) {
+          $('#' + id).val(null).trigger('change');
+        }
+      });
+
 });
+
+
 
 //  獲取資料並帶入
 
@@ -53,22 +65,20 @@ function GET_handleClick(event) {
                     if (input) {
                         let get_value = jsonData[key];
 
-                        if (typeof (jsonData[key]) == "object" && get_value!=null) {
-
+                        if (typeof (jsonData[key]) == "object" && get_value != null) {
+                            // 如果是陣列，先取得對應的options，以及select2的欄位
                             const options = input.options;
-                            console.log(get_value);
-                            console.log(options);
-                            console.log("----");
+                            selectname = `#${key}_select2`
                             for (let i = 0; i < options.length; i++) {
+                                //取出單一optons的id，在get_value比對id是不是匹配
                                 const option = options[i];
-                                const id = Number(option.value);
-                                console.log(id);
-                                console.log("id");
-                                if (get_value.includes(id)) {
-                                    console.log("checkd")
+                                const id = option.value;
+                                const matchedItem = get_value.find(item => item.id === Number(id));
+                                if (matchedItem) {
                                     option.selected = true;
                                 }
                             }
+                            $(selectname).trigger('change');
 
 
                         } else {
