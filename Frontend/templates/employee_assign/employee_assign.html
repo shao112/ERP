@@ -92,7 +92,9 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="equipment_type_control">檢測人員</label>
-                                                <input class="form-control form-control-sm" name="equipment_type" id="equipment_type_control"></input>
+                                                <select class="select2" data-placeholder="選擇檢測人員" name="support"  id="support_control" multiple >+
+                                                    <option value="1">1</option>++
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
@@ -234,6 +236,11 @@
         $('#table').bootstrapTable({
             height: $(window).height()*0.85,
             toolbar: "#toolbar"
+        });
+        // select2    
+        $('.select2').select2({
+            width: '100%',
+            allowClear: true
         });
     });
 </script>

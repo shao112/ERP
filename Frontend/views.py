@@ -32,6 +32,12 @@ class Index(View):
                     # print(session)
                     session.save()
                 return HttpResponseRedirect('/')
+        verified = False
+        context = {
+            'verified':verified,
+        }
+        return render(request, 'index/index-unlogin.html', context)
+        
 
     def get(self,request):
         # 0710

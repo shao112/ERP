@@ -75,7 +75,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="work_employee_control">工作人員</label>
-                                                <select class="chosen-select" data-placeholder="選擇工作人員" name="work_employee"  id="work_employee_control" multiple >
+                                                <select class="select2" data-placeholder="選擇工作人員" name="work_employee"  id="work_employee_control" multiple >
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}</option>
                                                     {% endfor %}
@@ -87,7 +87,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="lead_employee_control">帶班人員</label>
-                                                <select class="chosen-select" data-placeholder="選擇帶班人員" name="lead_employee"  id="lead_employee_control" multiple >
+                                                <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"  id="lead_employee_control" multiple >
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}</option>
                                                     {% endfor %}
@@ -118,7 +118,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="vehicle_control">使用車輛</label>
-                                                <select class="chosen-select" data-placeholder="選擇使用車輛" name="vehicle"  id="vehicle_control" multiple >
+                                                <select class="form-control form-control-sm" name="vehicle"  id="vehicle_control" >
                                                     <option value="車輛1">車輛1</option>
                                                 </select>                                          
                                             </div>
@@ -126,7 +126,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="support_control">支援人力</label>
-                                                <select class="chosen-select" data-placeholder="選擇帶班人員" name="lead_employee"  id="lead_employee_control" multiple >
+                                                <select class="select2" data-placeholder="選擇帶班人員" name="support"  id="support_control" multiple >
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}</option>
                                                     {% endfor %}
@@ -247,6 +247,11 @@
         $('#table').bootstrapTable({
             height: $(window).height()*0.85,
             toolbar: "#toolbar"
+        });
+        // select2    
+        $('.select2').select2({
+            width: '100%',
+            allowClear: true
         });
     });
 </script>
