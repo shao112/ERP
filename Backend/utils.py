@@ -49,6 +49,7 @@ def convent_dict(data):
         if len(value) >1:
             
             new_dict_data[key] =  [int(num) for num in  value]
+            # new_dict_data[key] = value
         else:
             match  value[0]:
                 case "true":
