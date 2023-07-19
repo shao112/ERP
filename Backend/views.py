@@ -128,17 +128,7 @@ class Project_Confirmation_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
-            get_completion_report_employee = dict_data["completion_report_employee"]
-            print(get_object_or_404)
-            del dict_data["completion_report_employee"]
-            getObject = Project_Confirmation.objects.get(id=dict_data['id'])
-            getObject.completion_report_employee.set(get_completion_report_employee)
-            for key, value in dict_data.items():
-                setattr(getObject, key, value)
-
-            getObject.save()
-            # getObject.update(**dict_data)
-
+            Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()
