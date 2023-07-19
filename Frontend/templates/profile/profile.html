@@ -17,56 +17,68 @@
         </span>
     </div>
     <div class="container shadow-sm">
-        <table class="table table-sm">
-            {% csrf_token %}
-            <div class="row my-4">
-                <div class="col-12 col-md-6">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                員工名稱：{{ user.employee.full_name }}
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                員工名稱：{{ user.employee.full_name }}
-                            </div>
+        {% csrf_token %}
+        <div class="row my-4">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            員工名稱：{{ user.employee.full_name }}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                員工名稱：{{ user.employee.full_name }}
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                員工名稱：{{ user.employee.full_name }}
-                            </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            所屬部門：工程部
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-6">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                員工名稱：{{ user.employee.full_name }}
-                            </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            職稱：工程師
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            目前年資：2.0
                         </div>
                     </div>
                 </div>
             </div>
-        </table>
+        </div>
+    </div>
+    <div class="profile-header container mb-4">
+        <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.3rem);">
+            更改密碼
+        </span>
+    </div>
+    <div class="container shadow-sm">
+        <div class="row">
+            <div class="col-5">
+                <form action="">
+                    <div class="form-group">
+                        <label for="old-password-form-control">請輸入舊密碼</label>
+                        <input type="password" class="form-control form-control-sm" id="old-password-form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password-form-control">請輸入新密碼</label>
+                        <input type="password" class="form-control form-control-sm" id="new-password-form-control">
+                    </div>
+                    <button type="submit" class="btn border border-dark rounded w-100 " style="color: #fff;background: #1E3050;">送出</button>
+                </form>
+            </div>
+            <div class="col-7">
+                <div class="password-rule">
+                    <ul>
+                        <li>你的密碼不能與其他個人資訊太相近。</li>
+                        <li>你的密碼必須包含至少 8 個字元。</li>
+                        <li>你不能使用常見的密碼。</li>
+                        <li>你的密碼不能完全是數字。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
-<script>
-    
-    $(".chosen-select").chosen({
-        no_results_text: "查無此員工",
-        width: "100%",
-        // max_shown_results:3
-    })
-    
-    
-</script>
 {% endblock %}
