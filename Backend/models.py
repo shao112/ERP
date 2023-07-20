@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models.signals import post_save
-from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
@@ -133,7 +131,7 @@ class Project_Job_Assign(models.Model):
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     support = models.CharField(max_length=100,null=True, blank=True, verbose_name='支援人力')
-    attachment = models.FileField(upload_to="project-attachment", null=True, blank=True, verbose_name="工確單附件")
+    attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
@@ -195,12 +193,45 @@ class Clock(models.Model):
 
 # 固定資產管理
 class Equipment(models.Model):
+    TRANSMITTER_SIZE = (
+        ('1', '大'),
+        ('2', '小'),
+    )
     equipment_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="資產標籤")
     order_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="序號")
     equipment_category = models.CharField(max_length=100, blank=True, null=True, verbose_name="資產種類別")
     equipment_type = models.CharField(max_length=100, blank=True, null=True, verbose_name="中類")
     equipment_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名")
     product_model = models.CharField(max_length=100, blank=True, null=True, verbose_name="廠牌/型號")
+    manufacturing_numbe = models.CharField(max_length=100, blank=True, null=True, verbose_name="製造序號")
+    supplier = models.CharField(max_length=100, blank=True, null=True, verbose_name="供應商")
+    invoice = models.CharField(max_length=100, blank=True, null=True, verbose_name="發票號碼")
+    date_of_purchase = models.DateField(blank=True, null=True, verbose_name="購入日期")
+    cost_including_tax = models.CharField(max_length=100,blank=True, null=True, verbose_name="購入成本(含稅)")
+    buyer = models.CharField(max_length=100,blank=True, null=True, verbose_name="採購人")
+    user = models.CharField(max_length=100,blank=True, null=True, verbose_name="使用人")
+    custodian = models.CharField(max_length=100,blank=True, null=True, verbose_name="保管人")
+    abnormal_condition = models.CharField(max_length=100,blank=True, null=True, verbose_name="異常狀態")
+    abnormal_condition_description = models.CharField(max_length=100,blank=True, null=True, verbose_name="狀態說明")
+    normal_or_abnormal = models.CharField(max_length=100,blank=True, null=True, verbose_name="正常/異常")
+    abnormal_description = models.CharField(max_length=100,blank=True, null=True, verbose_name="異常說明")
+    abnormal_img = models.ImageField(upload_to='equipment_abnormal_img/', blank=True, null=True, verbose_name="異常照片")
+    inventory = models.CharField(max_length=100, blank=True, null=True, verbose_name="盤點")
+    produced_stickers = models.BooleanField(blank=True, null=True, verbose_name="需補產編貼紙")
+    transmitter = models.CharField(max_length=1, choices=TRANSMITTER_SIZE, blank=True, null=True, verbose_name="發報器大小")
+    storage_location = models.CharField(max_length=100, blank=True, null=True, verbose_name="庫存地點")
+    detailed_location = models.CharField(max_length=100, blank=True, null=True, verbose_name="位置")
+    warranty = models.CharField(max_length=100, blank=True, null=True, verbose_name="保固期")
+    warranty_period = models.CharField(max_length=100, blank=True, null=True, verbose_name="保固期間")
+    is_check = models.BooleanField(blank=True, null=True, verbose_name="校驗類別")
+    latest_check_date = models.DateField(max_length=100, blank=True, null=True, verbose_name="最近一次校驗日")
+    check_order_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="校驗報告編碼")
+    check_remark = models.CharField(max_length=100, blank=True, null=True, verbose_name="校驗註記")
+    maintenance_status = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修狀態")
+    repair_date = models.DateField(blank=True, null=True, verbose_name="送修日")
+    repair_finished_date = models.DateField(blank=True, null=True, verbose_name="完成日")
+    number_of_repairs = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計次數")
+    accruing_amounts = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計金額")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 

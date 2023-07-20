@@ -12,7 +12,7 @@
 
 
 {% block main %}
-<div class="main px-3 px-md-5" id="project-confirmation-app">
+<div class="main px-3" id="project-confirmation-app">
     <div id="error-message"></div>
     <div class="project-confirmation modal fade" id="project-confirmation-modal" tabindex="-1" aria-labelledby="project-confirmation" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -180,7 +180,7 @@
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
 
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-export-options='{"ignoreColumn": [0,1]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
         data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
         <div id="toolbar">
             <div class="project-confirmation-header container-fluid">
@@ -195,6 +195,7 @@
         </div>            
             <thead class="thead-light">
                 <tr class="text-nowrap">
+                    <th></th>
                     <th></th>
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="c_a" data-sortable="true">母案編號</th>
@@ -212,15 +213,19 @@
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="font-size: 14px;">
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
-                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        <a type="button" data-url="project_confirmation" data-id="{{ p.id }}" class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                            data-target="#project-confirmation-modal">
+                            <i class="fas fa-sm fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-url="project_confirmation" data-id="{{ p.id }}" type="button" class="sys_del btn btn-sm btn-danger">
+                            <i class="far fa-sm fa-trash-alt"></i>
+                        </a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
                     <td>{{ p.c_a }}</td>
