@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('check', views.Check.as_view(), name="check"),
     path('project_confirmation', views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),
+    path('<str:model>/file', views.FileUploadView.as_view(), name='file_upload'),
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
     path('employee_assign', views.Job_Assign_View.as_view(), name="employee_assign_api"),
     path('employee', views.Employee_View.as_view(), name="project_confirmation_api"),

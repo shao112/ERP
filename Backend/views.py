@@ -13,8 +13,31 @@ from django.forms.models import model_to_dict
 from django.views import View
 from .utils import convent_dict,convent_employee
 import datetime
+import openpyxl
 
+class FileUploadView(View):
+   def post(self, request, *args, **kwargs):
+        get_model = self.kwargs['model']
+        uploaded_file = request.FILES.get('fileInput')
+        print(get_model)
+        print(type(uploaded_file))
+        print(request.FILES)
+        workbook = openpyxl.load_workbook(uploaded_file)
+        worksheet = workbook.active
+        for row in worksheet.iter_row():
+            for cell in row:
+                print(cell.value)
+            print("----")
+        
+        if uploaded_file:
+            file_path = "ee"
 
+            if file_path:
+                return JsonResponse({'message': 'File uploaded and saved successfully'})
+            else:
+                return JsonResponse({'error': 'Failed to save the file'}, status=500)
+        else:
+            return JsonResponse({'error': 'No file provided in the request'}, status=400)
 
 
 
@@ -128,7 +151,17 @@ class Project_Confirmation_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
-            Project_Confirmation.objects.filter(id=dict_data['id']).update(**dict_data)
+            get_completion_report_employee = dict_data["completion_report_employee"]
+            print(get_object_or_404)
+            del dict_data["completion_report_employee"]
+            getObject = Project_Confirmation.objects.get(id=dict_data['id'])
+            getObject.completion_report_employee.set(get_completion_report_employee)
+            for key, value in dict_data.items():
+                setattr(getObject, key, value)
+
+            getObject.save()
+            # getObject.update(**dict_data)
+
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()

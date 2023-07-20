@@ -68,14 +68,14 @@ def signout(request):
 # 工程確認單，使用 ListView 顯示資料而已，做表單送出都在 Backend 的 Views.py
 class Project_Confirmation_ListView(ListView):
     # 讀取 Excel 文件
-    workbook = openpyxl.load_workbook('C:/Users/rauou/Downloads/TEST.xlsx')
-    worksheet = workbook.active
+    # workbook = openpyxl.load_workbook('C:/Users/rauou/Downloads/TEST.xlsx')
+    # worksheet = workbook.active
 
     # 迭代行並讀取數據
-    for row in worksheet.iter_rows():
-        for cell in row:
-            # 在這裡處理每一個儲存格的數據
-            print(cell.value)
+    # for row in worksheet.iter_rows():
+    #     for cell in row:
+    #         # 在這裡處理每一個儲存格的數據
+    #         print(cell.value)
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
