@@ -100,6 +100,7 @@ class Project_Confirmation(models.Model):
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
+    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
@@ -132,6 +133,7 @@ class Project_Job_Assign(models.Model):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     support = models.CharField(max_length=100,null=True, blank=True, verbose_name='支援人力')
     attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
+    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
@@ -232,6 +234,7 @@ class Equipment(models.Model):
     repair_finished_date = models.DateField(blank=True, null=True, verbose_name="完成日")
     number_of_repairs = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計次數")
     accruing_amounts = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計金額")
+    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
