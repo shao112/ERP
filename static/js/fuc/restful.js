@@ -58,6 +58,7 @@ fileInput.addEventListener('change', async function () {
         contentType: false,
         success: function (response) {
             console.log(response); // Handle the success response from Django
+            location.reload();
         },
         error: function (error) {
             console.error(error); // Handle the error response, if any
@@ -184,7 +185,6 @@ $("form").on("submit", function (event) {
         success: function (response) {
             if (response.status == 200) {
                 alert("操作成功");
-                // location.reload();
             } else {
                 $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }

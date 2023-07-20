@@ -42,7 +42,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="permission-select">選擇權限(按住ctrl多選)</label>
-                                                <select class="form-control " name="user_set" id="permission-select" size="6" multiple>
+                                                <select class="form-control " name="user_set" id="permission-select" size="6" v-model="selectedOptions" multiple>
                                                     {% for employees in employees_list %}
                                                     <option value="{{ employees.user__id }}">{{ employees.user__username }}</option>
                                                     {% endfor %}
@@ -53,7 +53,7 @@
                                             <div class="form-group">
                                                 <label for="permission-selected">已選權限</label>
                                                 <select class="form-control " name="user_set" id="permission-selected" size="6" readonly>
-                                                    
+                                                    <option  v-for="option in selectedOptionsText" value="">[[ option ]]</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -112,23 +112,28 @@
         </table>
     </div>
 </div>
-
 <script>
-    var selected_arr =[]
-    $(document).ready(function() {
-        $('#permission-select').on('change', function() {
-            var selected = $("#permission-select option:selected")
-            selected.attr('data-select','new')
-            selected_arr.push(selected.text())
-            // console.log(selected.val())
-            // console.log(selected.text())
-            $('#permission-selected').empty();
-            $.each(selected_arr, function(index, value) {
-                $('#permission-selected').append($('<option>').text(value));
-            });
-        });
+    const app = Vue.createApp({
+        data() {
+            return {
+                selectedOptions: [], // 將被選中的選項存儲在此數組中
+                selectedOptionsText: [], // 存儲被選中的選項的文字標籤
+            };
+        },
+        delimiters :['[[', ']]'],
+        watch: {
+            selectedOptions(newSelectedOptions) {
+                // 在被選中的選項改變時更新 selectedOptionsText
+                this.selectedOptionsText = newSelectedOptions.map(option => {
+                    const optionElement = document.querySelector(`#permission-select option[value="${option}"]`);
+                    return optionElement.textContent;
+                });
+            }
+        }
     });
-</script>
+
+    app.mount('#employee-permission-app');
+  </script>
 
 <script src="{% static 'js/fuc/restful.js' %}"></script>
 
