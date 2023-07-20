@@ -1,7 +1,8 @@
 from datetime import date, timedelta
-from .models import Clock
+from .models import Clock,Project_Confirmation
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
+
 
 
 def get_weekdays():
@@ -61,3 +62,42 @@ def convent_dict(data):
                     new_dict_data[key] = value[0]
     print(new_dict_data)
     return new_dict_data
+
+
+def convent_excel_dict(worksheet,model):
+    template_dict={}
+    convent_model= None
+
+    match  model:
+        case "project-confirmation":
+            template_dict= {
+                "quotation_id":"",
+                "project_confirmation_id":"",
+                "project_name":"",
+                "order_id":"",
+                "c_a":"",
+                "client":"",
+                "requisition":"",
+                "turnover":"",
+            }
+            convent_model=Project_Confirmation
+        case _:
+            return "error"
+
+    convent_ary=[]
+    pass_one =True
+    for row in worksheet.iter_rows():
+        if pass_one:
+            pass_one =False
+            continue
+            
+        new_dict = template_dict.copy()
+        for i, key in enumerate(new_dict.keys()):
+            new_dict[key] = row[i].value
+        
+        #防止全空白+入
+        all_values_are_none_or_blank = all(value is None or value == '' for value in new_dict.values())
+        if not all_values_are_none_or_blank: 
+            convent_ary.append(new_dict)
+
+    return convent_ary,convent_model

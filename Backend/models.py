@@ -95,7 +95,7 @@ class Project_Confirmation(models.Model):
     client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
-    is_completed = models.BooleanField(verbose_name='完工狀態')
+    is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")

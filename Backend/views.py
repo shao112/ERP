@@ -11,24 +11,32 @@ from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, Pro
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee
+from .utils import convent_dict,convent_employee,convent_excel_dict
 import datetime
 import openpyxl
+from django.db.utils import IntegrityError
+
 
 class FileUploadView(View):
    def post(self, request, *args, **kwargs):
-        get_model = self.kwargs['model']
+        modelstr = self.kwargs['model']
         uploaded_file = request.FILES.get('fileInput')
-        print(get_model)
+        print(modelstr)
         print(type(uploaded_file))
         print(request.FILES)
         workbook = openpyxl.load_workbook(uploaded_file)
         worksheet = workbook.active
-        for row in worksheet.iter_row():
-            for cell in row:
-                print(cell.value)
-            print("----")
-        
+        get_dicts,get_model = convent_excel_dict(worksheet,modelstr)
+        print("end")
+        print(get_dicts)
+        error_ary=[]
+        for get_dict in get_dicts:
+            try:
+                result = get_model.objects.create(**get_dict)
+            except IntegrityError as e:
+                error_ary.append(get_dict)
+                print("error")                  
+
         if uploaded_file:
             file_path = "ee"
 
