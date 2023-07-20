@@ -204,6 +204,8 @@
                     <td>
                         <a data-url="project_confirmation" data-id="" type="button" class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-sm fa-trash-alt"></i></a>
                     </td>
+
+                    {% for p in project_confirmation %}
                     <td></td>
                     <td></td>
                     <td></td>
@@ -219,6 +221,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    {% empty %}
+
+                    <p>無資料</p>
+                    {% endfor %}
+
                 </tr>
             </tbody>
         </table>

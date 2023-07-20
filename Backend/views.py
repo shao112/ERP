@@ -21,31 +21,26 @@ class FileUploadView(View):
    def post(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']
         uploaded_file = request.FILES.get('fileInput')
-        print(modelstr)
-        print(type(uploaded_file))
-        print(request.FILES)
+
+        if uploaded_file ==None:
+             return JsonResponse({'error': '請上傳檔案'}, status=500)
+        #檢查type，回傳上傳正確檔案
+
         workbook = openpyxl.load_workbook(uploaded_file)
         worksheet = workbook.active
         get_dicts,get_model = convent_excel_dict(worksheet,modelstr)
-        print("end")
+        error_str=""
         print(get_dicts)
-        error_ary=[]
-        for get_dict in get_dicts:
+        for i,get_dict in enumerate(get_dicts):
             try:
-                result = get_model.objects.create(**get_dict)
-            except IntegrityError as e:
-                error_ary.append(get_dict)
-                print("error")                  
+                 get_model.objects.create(**get_dict)
+            except IntegrityError as e: #錯誤發生紀錄，傳給前端
+                error_str=f"第{i+1}欄資料錯誤\n"
 
-        if uploaded_file:
-            file_path = "ee"
-
-            if file_path:
-                return JsonResponse({'message': 'File uploaded and saved successfully'})
-            else:
-                return JsonResponse({'error': 'Failed to save the file'}, status=500)
+        if error_str=="":
+            return JsonResponse({'message': '上傳成功'})
         else:
-            return JsonResponse({'error': 'No file provided in the request'}, status=400)
+            return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
 
 
 
