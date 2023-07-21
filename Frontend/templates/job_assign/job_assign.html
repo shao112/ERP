@@ -136,8 +136,8 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="support">支援人力</label>
-                                                <select class="select2" data-placeholder="選擇帶班人員" name="support"
-                                                    id="support_select2" multiple>
+                                                <select class="select2" data-placeholder="選擇帶班人員" name="support_employee"
+                                                    id="support_employee_select2" multiple>
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}
                                                     </option>
@@ -245,7 +245,11 @@
                         <td>{{ j.location }}</td>
                         <td>{{ j.project_type }}</td>
                         <td>{{ j.remark }}</td>
-                        <td>{{ j.support }}</td>
+                        <td>
+                            {% for employees_list in j.support_employee.all %}
+                            {{ employees_list.full_name }}
+                            {% endfor %}
+                        </td>
                         <td>{{ j.attachment_link }}</td>
                         <td>{{ j.created_date }}</td>
                     </tr>

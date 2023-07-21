@@ -36,7 +36,7 @@ class ProjectAdmin(admin.ModelAdmin):
     display_lead_employee.short_description = '多對多_帶班人員'
     def display_support_employee(self, obj):
         return ', '.join([str(item) for item in obj.support_employee.all()])
-    display_lead_employee.short_description = '多對多_支援人員'
+    display_support_employee.short_description = '多對多_支援人員'
 
 # 打卡
 class ClockAdmin(admin.ModelAdmin):

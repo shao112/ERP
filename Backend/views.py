@@ -155,7 +155,6 @@ class Project_Confirmation_View(View):
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
             get_completion_report_employee = dict_data["completion_report_employee"]
-            print(get_object_or_404)
             del dict_data["completion_report_employee"]
             getObject = Project_Confirmation.objects.get(id=dict_data['id'])
             getObject.completion_report_employee.set(get_completion_report_employee)
@@ -207,7 +206,27 @@ class Job_Assign_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectJobAssignForm(dict_data)
         if form.is_valid():
-            Project_Job_Assign.objects.filter(id=dict_data['id']).update(**dict_data)
+            print("eemgo")
+            getObject = Project_Job_Assign.objects.get(id=dict_data['id'])
+            print("eem11go")
+            for key, value in dict_data.items():
+                employee_key =("support_employee","work_employee","lead_employee","completion_report_employeeS")
+                if key in employee_key: #處理員工多對多陣列        
+                    print("emgo")
+                    print("emgo")
+                    print("emgo")
+                    field = getattr(getObject, key)
+                    field.set(value)
+                else:
+                    if key =="project_confirmation":
+                        confirmation_instance = Project_Confirmation.objects.get(pk=value)
+                        getObject.project_confirmation = confirmation_instance
+                    else:
+                        setattr(getObject, key, value)
+
+            getObject.save()
+
+            # Project_Job_Assign.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()
@@ -217,6 +236,7 @@ class Job_Assign_View(View):
     def delete(self,request):
         dict_data = convent_dict(request.body)  
         Project_Job_Assign.objects.get(id=dict_data['id']).delete()
+
 
         return JsonResponse({'status': 200})
 
@@ -238,6 +258,9 @@ class Job_Assign_View(View):
         # print(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
+        data["support_employee"] = convent_employee(data["support_employee"])
+
+
 
         if  "attachment" in data:
             if  data['attachment']:
