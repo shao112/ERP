@@ -41,15 +41,19 @@ fileInput.addEventListener('change', async function () {
     // if (!result.isConfirmed) {
     //     return;
     // }
+    
+    const url = "/restful/" + fileInput.getAttribute('data-url')+"/file";
 
-    const formData = new FormData(); // Create a new FormData object
-    formData.append('fileInput', fileInput.files[0]); // Add the selected file to the FormData
-    console.log("ee"); // Handle the success response from Django
-    console.log(formData); // Handle the success response from Django
+    const formData = new FormData(); 
+    formData.append('fileInput', fileInput.files[0]);
+    console.log("go"); 
+    console.log(formData); 
 
+    
+    
     $.ajax({
         type: 'POST',
-        url: '/restful/project-confirmation/file', // Replace this with your actual Django endpoint URL
+        url: url,
         headers: {
             'X-CSRFToken': getcsrftoken()
         },
@@ -57,15 +61,21 @@ fileInput.addEventListener('change', async function () {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response); // Handle the success response from Django
-            location.reload();
+            if (response.status == 200) {
+                console.log(response); 
+                alert("操作成功");
+                // location.reload();
+            } else {
+                $("#error-message").text(response.error); 
+            }
         },
         error: function (error) {
-            console.error(error); // Handle the error response, if any
+            alert("發送失敗");
+            console.error(error); 
         }
     });
-
-    // Handle the selected file here (e.g., read its contents, upload it, etc.)
+    fileInput.value = ''
+    
 });
 
 
@@ -73,7 +83,7 @@ fileInput.addEventListener('change', async function () {
 $("#sys_new").on("click", function () {
     $("#form")[0].reset();
     $("#form").attr("data-method", "POST");
-
+    
     //清除select2的資訊
     $("[id*='_select2']").each(function () {
         var id = $(this).attr("id");
@@ -186,7 +196,7 @@ $("form").on("submit", function (event) {
             if (response.status == 200) {
                 alert("操作成功");
             } else {
-                $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
+                $("#error-message").text(response.error); 
             }
         },
         error: function (xhr, textStatus, errorThrown) {

@@ -38,9 +38,9 @@ class FileUploadView(View):
                 error_str=f"第{i+1}欄資料錯誤\n"
 
         if error_str=="":
-            return JsonResponse({'message': '上傳成功'})
+            return JsonResponse({'status': 200})
         else:
-            return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
+            return JsonResponse({"status":207,'error': f'上傳失敗欄為:{error_str}'})
 
 
 
