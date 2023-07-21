@@ -27,63 +27,12 @@ function showSwal(title, text, icon) {
 }
 
 
-//匯入處理
-const fileInput = document.getElementById('fileInput');
-function importfile() {
-
-    fileInput.click();
-
-}
-
-fileInput.addEventListener('change', async function () {
-    // const result = await showSwal('確認上傳', '你確定要上傳嗎？', 'warning');
-
-    // if (!result.isConfirmed) {
-    //     return;
-    // }
-    
-    const url = "/restful/" + fileInput.getAttribute('data-url')+"/file";
-
-    const formData = new FormData(); 
-    formData.append('fileInput', fileInput.files[0]);
-    console.log("go"); 
-    console.log(formData); 
-
-    
-    
-    $.ajax({
-        type: 'POST',
-        url: url,
-        headers: {
-            'X-CSRFToken': getcsrftoken()
-        },
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            if (response.status == 200) {
-                console.log(response); 
-                alert("操作成功");
-                // location.reload();
-            } else {
-                $("#error-message").text(response.error); 
-            }
-        },
-        error: function (error) {
-            alert("發送失敗");
-            console.error(error); 
-        }
-    });
-    fileInput.value = ''
-    
-});
-
 
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
     $("#form")[0].reset();
     $("#form").attr("data-method", "POST");
-    
+
     //清除select2的資訊
     $("[id*='_select2']").each(function () {
         var id = $(this).attr("id");
@@ -196,7 +145,7 @@ $("form").on("submit", function (event) {
             if (response.status == 200) {
                 alert("操作成功");
             } else {
-                $("#error-message").text(response.error); 
+                $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
             }
         },
         error: function (xhr, textStatus, errorThrown) {

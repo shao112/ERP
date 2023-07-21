@@ -14,8 +14,7 @@
 {% block main %}
 <div class="main px-3 px-md-5" id="employee-permission-app">
     <div id="error-message"></div>
-    <div class="employee-permission modal fade" id="employee-permission-modal" tabindex="-1"
-        aria-labelledby="employee-permission" aria-hidden="true">
+    <div class="employee-permission modal fade" id="employee-permission-modal" tabindex="-1" aria-labelledby="employee-permission" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -35,8 +34,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="group_control">群組名稱</label>
-                                                <input class="form-control form-control-sm" name="group"
-                                                    id="group_control"></input>
+                                                <input class="form-control form-control-sm" name="group" id="group_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +59,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4"
@@ -78,18 +76,15 @@
         </div>
     </div>
     <div class="employee-permission-table  container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
-            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
-            data-show-columns="true" data-show-columns-toggle-all="true">
+        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
+        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
             <div id="toolbar">
-                <!--
                 <div class="employee-permission-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-permission-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增群組權限
                     </a>
                 </div>
-                -->
             </div>
             <thead class="thead-light">
                 <tr class="text-nowrap">
@@ -107,7 +102,7 @@
                             data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="group" data-id="{{ g.id }}" type="button"
                             class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
-
+                      
                     </td>
                     <td>{{ g.name }} </td>
                     <td>{{ g.user_set.all }}</td>
@@ -152,7 +147,7 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height() * 0.85,
+            height: $(window).height()*0.85,
             toolbar: "#toolbar"
         });
     });

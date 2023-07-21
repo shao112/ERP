@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Clock,Project_Confirmation
+from .models import Clock,Project_Confirmation,Project_Job_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -81,6 +81,11 @@ def convent_excel_dict(worksheet,model):
                 "turnover":"",
             }
             convent_model=Project_Confirmation
+        case "job-assign":
+            template_dict= {
+                "quotation_id":"",
+            }
+            convent_model=Project_Job_Assign
         case _:
             return "error"
 

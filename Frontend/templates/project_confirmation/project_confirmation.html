@@ -191,12 +191,11 @@
                     <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 下載公版
                 </a>
                 <br>
-                <a href="" class="font-weight-bold" onclick="importfile()"  >
+                <div href="" class="font-weight-bold" onclick="importfile()"  >
                     <i  class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 
                     <span id="importLink" >匯入</span>
-                    <input type="file" id="fileInput" data-url="project-confirmation" style="display: none;"/>
-
-                </a>
+                    <input type="file" id="fileInput" style="display: none;"/>
+                </div>
             </div>
         </div>            
             <thead class="thead-light" style="font-size: 14px;">
@@ -284,7 +283,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         var script = document.createElement('script');
         script.src = "{% static 'js/fuc/restful.js' %}";
+        var file_script = document.createElement('script');
+        file_script.src = "{% static 'js/fuc/fileimport.js' %}";
         document.body.appendChild(script);
+        document.body.appendChild(file_script);
     });
 
 </script>

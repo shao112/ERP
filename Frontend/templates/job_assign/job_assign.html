@@ -14,7 +14,8 @@
 {% block main %}
 <div class="main px-3">
     <div id="error-message"></div>
-    <div class="job_assign modal fade" id="job_assign-modal" tabindex="-1" aria-labelledby="job_assign" aria-hidden="true">
+    <div class="job_assign modal fade" id="job_assign-modal" tabindex="-1" aria-labelledby="job_assign"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/job_assign" id="form"  method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/job_assign" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
@@ -36,10 +37,12 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="quotation_id_control">報價單號</label>
-                                                <select class="form-control" name="quotation_id"  id="quotation_id_control" >
+                                                <label for="    ">報價單號</label>
+                                                <select class="form-control" name="project_confirmation"
+                                                    id="project_confirmation_id">
                                                     {% for project_confirmation in project_confirmation_list %}
-                                                    <option value="{{ project_confirmation.quotation_id }}">{{ project_confirmation.quotation_id }}</option>
+                                                    <option value="{{ project_confirmation.pk }}">
+                                                        {{project_confirmation.project_confirmation_id }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -47,7 +50,8 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="projecet_id_control">工派單編號</label>
-                                                <input class="form-control form-control-sm" name="projecet_id" id="projecet_id_control"></input>
+                                                <input class="form-control form-control-sm" name="projecet_id"
+                                                    id="projecet_id_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -55,13 +59,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name" id="project_name_control"></input>
+                                                <input class="form-control form-control-sm" name="project_name"
+                                                    id="project_name_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="c_a_control">母案編號</label>
-                                                <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
+                                                <input class="form-control form-control-sm" name="c_a"
+                                                    id="c_a_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -69,15 +75,18 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="attendance_date_control">出勤日期</label>
-                                                <input type="date" class="form-control form-control-sm" name="attendance_date"  id="attendance_date_control"></input>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="attendance_date" id="attendance_date_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="work_employee_control">工作人員</label>
-                                                <select class="select2" data-placeholder="選擇工作人員" name="work_employee"  id="work_employee_control" multiple >
+                                                <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
+                                                    id="work_employee_control" multiple>
                                                     {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}</option>
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -87,9 +96,11 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="lead_employee_control">帶班人員</label>
-                                                <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"  id="lead_employee_control" multiple >
+                                                <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"
+                                                    id="lead_employee_control" multiple>
                                                     {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}</option>
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -104,13 +115,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="location_control">工作地點</label>
-                                                <input class="form-control form-control-sm" name="location" id="location_control"></input>
+                                                <input class="form-control form-control-sm" name="location"
+                                                    id="location_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_type_control">工作類型</label>
-                                                <input class="form-control form-control-sm" name="project_type" id="project_type_control"></input>
+                                                <input class="form-control form-control-sm" name="project_type"
+                                                    id="project_type_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -118,19 +131,22 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="vehicle_control">使用車輛</label>
-                                                <select class="form-control form-control-sm" name="vehicle"  id="vehicle_control" >
+                                                <select class="form-control form-control-sm" name="vehicle"
+                                                    id="vehicle_control">
                                                     <option value="車輛1">車輛1</option>
-                                                </select>                                          
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="support_control">支援人力</label>
-                                                <select class="select2" data-placeholder="選擇帶班人員" name="support"  id="support_control" multiple >
+                                                <select class="select2" data-placeholder="選擇帶班人員" name="support"
+                                                    id="support_control" multiple>
                                                     {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}</option>
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
                                                     {% endfor %}
-                                                </select>                                          
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -138,24 +154,29 @@
                                         <div class="col-12">
                                             <label>完工重派附件</label>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="reassignment_attachment" id="reassignment_attachment_control">
-                                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
-                                            </div> 
+                                                <input type="file" class="custom-file-input"
+                                                    name="reassignment_attachment" id="reassignment_attachment_control">
+                                                <label class="custom-file-label"
+                                                    for="reassignment_attachment_control">Choose file</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="remark_control" class="col-form-label-sm">備註</label>
-                                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                                                <textarea class="form-control form-control-sm" name="remark"
+                                                    id="remark_control"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class=" d-flex justify-content-between">
-                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;">送出</button>
-                                <button type="button" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
                             </div>
                         </form>
                     </div>
@@ -164,79 +185,83 @@
         </div>
     </div>
     <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true" 
-        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
-        <div id="toolbar">
-            <div class="job_assign-header container-fluid">
-                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#job_assign-modal">
-                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工作派任計畫
-                </a>
-                <br>
-                <a href="" class="font-weight-bold" id="" >
-                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                </a>
-            </div>
-            <thead class="thead-light" style="font-size: 14px;">
-                <tr class="text-nowrap">
-                    <th></th>
-                    <th></th>
-                    <th>報價單號</th>
-                    <th>工派單編號</th>
-                    <th>工程名稱</th>
-                    <th>母案編號</th>
-                    <th>出勤日期</th>
-                    <th>工作人員</th>
-                    <th>帶班人員</th>
-                    <th>使用車輛</th>
-                    <th>工作地點</th>
-                    <th>工作類型</th>
-                    <th>備註</th>
-                    <th>支援人力</th>
-                    <th>工確單附件</th>
-                    <th>建立日期</th>
-                </tr>
-            </thead>
-            <tbody style="font-size: 14px;">
-                {% for j in job_assign %}
-                <tr>
-                    <td>
-                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_get btn btn-sm btn-warning" data-toggle="modal" data-target="#job_assign-modal"><i class="fas fa-sm fa-edit"></i></a>
-                    </td>
-                    <td>
-                        <a data-url="job_assign"  data-id="{{ j.id }}" type="button" class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
-                    </td>
-                    <td>{{ j.quotation_id }}</td>
-                    <td>{{ j.projecet_id }}</td>
-                    <td>{{ j.project_name }}</td>
-                    <td>{{ j.c_a }}</td>
-                    <td>{{ j.attendance_date }}</td>
-                    <td>
-                    {% for employees_list in j.work_employee.all %}
-                        {{ employees_list.full_name }}
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
+            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
+            data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="job_assign-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
+                        data-target="#job_assign-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工作派任計畫
+                    </a>
+                    <br>
+                    <a href="" class="font-weight-bold" id="">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    </a>
+                </div>
+                <thead class="thead-light" style="font-size: 14px;">
+                    <tr class="text-nowrap">
+                        <th></th>
+                        <th></th>
+                        <th>報價單號</th>
+                        <th>工派單編號</th>
+                        <th>工程名稱</th>
+                        <th>母案編號</th>
+                        <th>出勤日期</th>
+                        <th>工作人員</th>
+                        <th>帶班人員</th>
+                        <th>使用車輛</th>
+                        <th>工作地點</th>
+                        <th>工作類型</th>
+                        <th>備註</th>
+                        <th>支援人力</th>
+                        <th>工確單附件</th>
+                        <th>建立日期</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                    {% for j in job_assign %}
+                    <tr>
+                        <td>
+                            <a data-url="job_assign" data-id="{{ j.id }}" type="button"
+                                class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                                data-target="#job_assign-modal"><i class="fas fa-sm fa-edit"></i></a>
+                        </td>
+                        <td>
+                            <a data-url="job_assign" data-id="{{ j.id }}" type="button"
+                                class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
+                        </td>
+                        <td>{{ j.quotation_id }}</td>
+                        <td>{{ j.projecet_id }}</td>
+                        <td>{{ j.project_name }}</td>
+                        <td>{{ j.c_a }}</td>
+                        <td>{{ j.attendance_date }}</td>
+                        <td>
+                            {% for employees_list in j.work_employee.all %}
+                            {{ employees_list.full_name }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for employees_list in j.lead_employee.all %}
+                            {{ employees_list.full_name }}
+                            {% endfor %}
+                        </td>
+                        <td>{{ j.vehicle }}</td>
+                        <td>{{ j.location }}</td>
+                        <td>{{ j.project_type }}</td>
+                        <td>{{ j.remark }}</td>
+                        <td>{{ j.support }}</td>
+                        <td>{{ j.attachment_link }}</td>
+                        <td>{{ j.created_date }}</td>
+                    </tr>
                     {% endfor %}
-                    </td>
-                    <td>
-                    {% for employees_list in j.lead_employee.all %}
-                        {{ employees_list.full_name }}
-                    {% endfor %}
-                    </td>
-                    <td>{{ j.vehicle }}</td>
-                    <td>{{ j.location }}</td>
-                    <td>{{ j.project_type }}</td>
-                    <td>{{ j.remark }}</td>
-                    <td>{{ j.support }}</td>
-                    <td>{{ j.attachment_link }}</td>
-                    <td>{{ j.created_date }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+                </tbody>
         </table>
     </div>
 </div>
 
 
-<script src="{% static 'js/fuc/restful.js' %}"></script>
 
 
 <script>
@@ -248,7 +273,7 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
+            height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
         // select2    
@@ -263,8 +288,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         var script = document.createElement('script');
         script.src = "{% static 'js/fuc/restful.js' %}";
+        var job_assign_script = document.createElement('script');
+        job_assign_script.src = "{% static 'js/job-assign/job-assign.js' %}";
         document.body.appendChild(script);
+        document.body.appendChild(job_assign_script);
     });
+
 
 </script>
 

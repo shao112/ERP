@@ -87,8 +87,8 @@ from django.utils.safestring import mark_safe
 
 # 工程確認單
 class Project_Confirmation(models.Model):
-    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
     project_confirmation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="工確單編號")
+    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
     project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
@@ -120,10 +120,11 @@ class Project_Confirmation(models.Model):
 
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
-    quotation_id = models.CharField(max_length=100,null=True, blank=True, verbose_name="報價單號")
-    projecet_id = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
-    project_name = models.CharField(max_length=100,null=True, blank=True, verbose_name="工程名稱") # 不做外鍵，透過quotation_id帶入
-    c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
+    # quotation_id = models.CharField(max_length=100,null=True, blank=True, verbose_name="報價單號")
+    # projecet_id = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
+    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project',null=True, blank=True, verbose_name="工程名稱") 
+    # 不做外鍵，透過quotation_id帶入
+    # c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
