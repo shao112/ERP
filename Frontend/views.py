@@ -80,6 +80,7 @@ class Project_Confirmation_ListView(ListView):
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
     def get_context_data(self, **kwargs):
+        
         context = super().get_context_data(**kwargs)
         context["employees_list"] =employees = Employee.objects.values('id','user__username')
         return context

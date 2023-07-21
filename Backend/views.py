@@ -17,6 +17,7 @@ import openpyxl
 from django.db.utils import IntegrityError
 
 
+
 class FileUploadView(View):
    def post(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']

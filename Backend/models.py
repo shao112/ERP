@@ -1,3 +1,4 @@
+from django.db.models.signals import pre_save
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -240,3 +241,16 @@ class Equipment(models.Model):
         verbose_name = "固定資產管理"   # 單數
         verbose_name_plural = verbose_name   #複數
         
+
+# @receiver(pre_save, sender=Project_Job_Assign)
+# def set_author(sender, instance, **kwargs):
+#     if not instance.author:
+#         # 只有在 `author` 欄位為空時，才會將其設置為 `request.user`
+#         # User = get_user_model()
+#         print("gogog")
+#         print(instance)
+#         # print(instance)
+#         print(instance.request.user)
+#         # print(request.user)
+#         instance.author = User.objects.get(username='request.user')
+#         print("gogog")
