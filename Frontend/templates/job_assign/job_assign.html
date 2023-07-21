@@ -37,9 +37,11 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="    ">報價單號</label>
+                                                <label for="project_confirmation">工程確認單編號</label>
                                                 <select class="form-control" name="project_confirmation"
                                                     id="project_confirmation_id">
+                                                    <option value="-1">
+                                                       請選擇</option>
                                                     {% for project_confirmation in project_confirmation_list %}
                                                     <option value="{{ project_confirmation.pk }}">
                                                         {{project_confirmation.project_confirmation_id }}</option>
@@ -47,27 +49,21 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="projecet_id_control">工派單編號</label>
-                                                <input class="form-control form-control-sm" name="projecet_id"
-                                                    id="projecet_id_control"></input>
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name"
-                                                    id="project_name_control"></input>
+                                                <input class="form-control form-control-sm" id="project_name"
+                                                readonly      id="project_name_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="c_a_control">母案編號</label>
-                                                <input class="form-control form-control-sm" name="c_a"
-                                                    id="c_a_control"></input>
+                                                <input class="form-control form-control-sm" id="c_a"
+                                                readonly   id="c_a_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +200,6 @@
                     <tr class="text-nowrap">
                         <th></th>
                         <th></th>
-                        <th>報價單號</th>
                         <th>工派單編號</th>
                         <th>工程名稱</th>
                         <th>母案編號</th>
@@ -232,10 +227,9 @@
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
                         </td>
-                        <td>{{ j.quotation_id }}</td>
-                        <td>{{ j.projecet_id }}</td>
-                        <td>{{ j.project_name }}</td>
-                        <td>{{ j.c_a }}</td>
+                        <td>{{ j.project_confirmation.project_confirmation_id }}</td>
+                        <td>{{ j.project_confirmation.project_name }}</td>
+                        <td>{{ j.project_confirmation.c_a }}</td>
                         <td>{{ j.attendance_date }}</td>
                         <td>
                             {% for employees_list in j.work_employee.all %}

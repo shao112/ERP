@@ -52,6 +52,15 @@ class ProjectJobAssignForm(BaseModelForm):
     class Meta:
         model = Project_Job_Assign
         fields = '__all__'
+    def clean(self):
+        cleaned_data = super().clean()
+        project_confirmation = cleaned_data.get('project_confirmation')
+
+        if project_confirmation == -1:
+            raise forms.ValidationError("請選擇有效的工程確認單。")
+
+        return cleaned_data
+
 
 # 工作派任計畫
 class DepartmentForm(BaseModelForm):
