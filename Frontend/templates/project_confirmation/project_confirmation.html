@@ -180,8 +180,8 @@
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
 
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0,1]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+         data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+        data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true" >
         <div id="toolbar">
             <div class="project-confirmation-header container-fluid">
                 <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#project-confirmation-modal">
@@ -200,9 +200,9 @@
         </div>            
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th></th>
-                    <th></th>
-                    <th data-field="quotation_id" data-sortable="true">報價單號</th>
+                    <th data-force-hide="true"> </th>
+                    <th data-force-hide="true"></th>
+                    <th data-field="quotation_id" data-searchable="true" data-sortable="true">報價單號</th>
                     <th data-field="c_a" data-sortable="true">母案編號</th>
                     <th data-field="project_confirmation_id" data-sortable="true">工確單編號</th>
                     <th data-field="project_name" data-sortable="true">工程名稱</th>
