@@ -19,11 +19,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="project-confirmation-label">工程確認單</h5>
+                    <a href="#" onclick="exportToPDF()">下載pdf</a>
+                    
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-download_pdf">
                     <div class="container shadow-sm">
                         <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
                             data-method="post">
@@ -182,9 +184,7 @@
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
          data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
         data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true"
-        data-show-fullscreen="true"
-
-        >
+        data-show-fullscreen="true" data-export-types="['excel', 'json', 'csv', 'txt']"data-export-options='{"fileName": "工程確認單"}'>
         <div id="toolbar">
             <div class="project-confirmation-header container-fluid">
                 <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#project-confirmation-modal">
@@ -194,8 +194,8 @@
                     <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                 </a>
                 <br>
-                <div href="" class="font-weight-bold" onclick="importfile()"  >
-                    <i  class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 
+                <div class="font-weight-bold" onclick="importfile()"  >
+                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 
                     <span id="importLink" >匯入</span>
                     <input type="file" id="fileInput" style="display: none;"/>
                 </div>
@@ -221,7 +221,7 @@
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody style="font-size: 14px;">
+            <tbody style="font-size: 14px;background: #f4f4f3;">
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
@@ -281,7 +281,42 @@
 
     });
 </script>
-
+<script>
+    function exportToPNG() {
+        html2canvas(document.getElementById('project-confirmation-modal'), {
+            allowTaint: true,
+            useCORS: true,
+            logging: true,
+            // width: 1920,
+            // height: 1280,
+            scale:2,
+            dpi: 300,
+            onrendered: function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var link = document.createElement('a');
+                link.download = '工程確認單.png';
+                link.href = imgData;
+                link.click();
+            }
+        });
+    }
+</script>
+<script>
+    function exportToPDF() {
+        var modalContent = document.getElementById('modal-download_pdf');
+        console.log(modalContent);
+        var doc = new jsPDF();
+        // 可以把元素存成pdf，但是太複雜的元素會有問題
+        // doc.text('Hello world!', 10, 10); // 顯示文字 'Hello world!' 位置在 (10,10)
+        // doc.save('工程確認單.pdf'); // 存檔
+        doc.html(modalContent, {
+            callback: function(pdf) {
+                console.log('PDF 轉換成功！');
+                pdf.save('工程確認單.pdf');
+            }
+        });
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var script = document.createElement('script');
