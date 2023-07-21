@@ -80,6 +80,7 @@ function GET_handleClick(event) {
 
                         if (typeof (jsonData[key]) == "object" && get_value != null) {
                             // 如果是陣列，先取得對應的options，以及select2的欄位
+                            console.log(key)
                             const options = input.options;
                             selectname = `#${key}_select2`
                             for (let i = 0; i < options.length; i++) {

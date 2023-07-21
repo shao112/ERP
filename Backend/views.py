@@ -238,13 +238,11 @@ class Job_Assign_View(View):
         # print(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
-        del data["created_date"]
-        print(data)
 
-        if  "reassignment_attachment" in data:
-            if  data['reassignment_attachment']:
-                data['reassignment_attachment'] = data.url
+        if  "attachment" in data:
+            if  data['attachment']:
+                data['attachment'] = data.url
             else:
-                data['reassignment_attachment'] = None            
+                data['attachment'] = None            
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 
