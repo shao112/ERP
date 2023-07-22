@@ -33,28 +33,39 @@
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="equipment_id_control">報價單號</label>
-                                                <input class="form-control form-control-sm" name="equipment_id" id="equipment_id_control" required></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="order_id_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" required></input>
+                                                <label for="project_confirmation_control">工程確認單</label>
+                                                <select class="form-control form-control-sm" name="project_confirmation" id="project_confirmation_control">
+                                                    <!-- for迴圈 -->
+                                                    <option value="0"></option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label for="equipment_type_control">客戶名稱</label>
-                                                <input class="form-control form-control-sm" name="equipment_type" id="equipment_type_control"></input>
+                                                <label for="quotation_id_control">報價單號</label>
+                                                <input class="form-control form-control-sm" id="quotation_id" readonly id="quotation_id_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label for="equipment_name_control">請購單位</label>
-                                                <input class="form-control" name="equipment_name" id="equipment_name_control"></input>
+                                                <label for="project_name_control">工程名稱</label>
+                                                <input class="form-control form-control-sm" id="project_name" readonly id="project_name_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="client_control">客戶名稱</label>
+                                                <input class="form-control form-control-sm" id="client_" readonly id="client_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="requisition_control">請購單位</label>
+                                                <input class="form-control form-control-sm" id="requisition" readonly id="requisition_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -91,16 +102,18 @@
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="equipment_type_control">檢測人員</label>
-                                                <select class="select2" data-placeholder="選擇檢測人員" name="support"  id="support_control" multiple >+
-                                                    <option value="1">1</option>++
+                                                <label for="inspector_select2">檢測人員</label>
+                                                <select class="select2" data-placeholder="選擇檢測人員" name="support"  id="inspector_select2" multiple >
+                                                    <option value="1">1</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="equipment_name_control">使用車輛</label>
-                                                <input class="form-control" name="equipment_name" id="equipment_name_control"></input>
+                                                <label for="vehicle_select2">使用車輛</label>
+                                                <select class="select2" data-placeholder="選擇車輛" name="vehicle"  id="vehicle_select2" multiple >
+                                                    <option value="1">1</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -160,8 +173,9 @@
     </div>
     <div class="employee-assign-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0,1]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
+       data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true"
+       data-show-fullscreen="true" data-export-types="['excel', 'json', 'csv', 'txt']"data-export-options='{"fileName": "派工單"}'>
         <div id="toolbar">
             <div class="employee-assign-header container-fluid">
                 <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-assign-modal">
@@ -175,8 +189,8 @@
           </div>            
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th></th>
-                    <th></th>
+                    <th data-force-hide="true"></th>
+                    <th data-force-hide="true"></th>
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="project_name" data-sortable="true">工程名稱</th>
                     <th data-field="client" data-sortable="true">客戶名稱</th>

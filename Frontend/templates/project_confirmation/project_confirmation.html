@@ -133,10 +133,10 @@
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="completion_report_employee">完工回報人</label>
+                                                <label for="completion_report_select2">完工回報人</label>
                                                 <select class="select2" data-placeholder="選擇完工回報人"
                                                     name="completion_report_employee"
-                                                    id="completion_report_employee" multiple>
+                                                    id="completion_report_select2" multiple>
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}
                                                     </option>
@@ -197,7 +197,7 @@
                     <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                 </a>
                 <br>
-                <div class="font-weight-bold" onclick="importfile()"  >
+                <div class="upload-file font-weight-bold" onclick="importfile()">
                     <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 
                     <span id="importLink" >匯入</span>
                     <input type="file" id="fileInput" style="display: none;"/>
@@ -224,7 +224,7 @@
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody style="font-size: 14px;background: #f4f4f3;">
+            <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
                 {% for p in project_confirmation %}
                 <tr>
                     <td>
@@ -314,9 +314,6 @@
         var modalContent = document.getElementById('modal-download_pdf');
         console.log(modalContent);
         var doc = new jsPDF();
-        // 可以把元素存成pdf，但是太複雜的元素會有問題
-        // doc.text('Hello world!', 10, 10); // 顯示文字 'Hello world!' 位置在 (10,10)
-        // doc.save('工程確認單.pdf'); // 存檔
 
         html2canvas(modalContent).then(function(canvas) {
             // 獲取canvas的圖像數據URL
@@ -326,18 +323,11 @@
             var pdf = new jsPDF('p', 'mm', 'a4');
     
             // 添加圖像數據到PDF
-            pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+            pdf.addImage(imgData, 'PNG', 0, 0, 210, 150);
     
             // 下載PDF文件
-            pdf.save('downloaded_pdf.pdf');
+            pdf.save('工程確認單.pdf');
           });
-
-        // doc.html(modalContent, {
-        //     callback: function(pdf) {
-        //         console.log('PDF 轉換成功！');
-        //         pdf.save('工程確認單.pdf');
-        //     }
-        // });
     }
 </script>
 <script>

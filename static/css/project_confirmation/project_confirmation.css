@@ -2,6 +2,9 @@
     text-decoration: none;
     color: black;
 }
+.project-confirmation-header .upload-file:hover{
+    cursor: pointer;
+}
 .project-confirmation-table td{
     vertical-align: middle;
 }
