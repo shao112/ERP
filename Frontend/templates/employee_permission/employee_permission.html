@@ -34,7 +34,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="group_control">群組名稱</label>
-                                                <input class="form-control form-control-sm" name="group" id="group_control"></input>
+                                                <input class="form-control form-control-sm" name="group_name" readonly  id="group_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -42,7 +42,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="permission-select">選擇權限(按住ctrl多選)</label>
-                                                <select class="form-control " name="user_set" id="permission-select" size="6" v-model="selectedOptions" multiple>
+                                                <select class="form-control " name="user_set" id="user_set_select2" size="6" v-model="selectedOptions" multiple>
                                                     {% for employees in employees_list %}
                                                     <option value="{{ employees.user__id }}">{{ employees.user__username }}</option>
                                                     {% endfor %}
@@ -52,7 +52,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="permission-selected">已選權限</label>
-                                                <select class="form-control " name="user_set" id="permission-selected" size="6" readonly>
+                                                <select class="form-control "  id="permission-selected" size="6" readonly>
                                                     <option  v-for="option in selectedOptionsText" value="">[[ option ]]</option>
                                                 </select>
                                             </div>
@@ -81,15 +81,12 @@
         data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="employee-permission-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-permission-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增群組權限
-                    </a>
                 </div>
             </div>
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
-                    <th data-field="group" data-sortable="true">群組名稱</th>
+                    <th data-field="group" data-sortable="true"  >群組名稱</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
@@ -105,7 +102,12 @@
                       
                     </td>
                     <td>{{ g.name }} </td>
-                    <td>{{ g.user_set.all }}</td>
+                    <td>
+                        {% for employees_list in g.user_set.all %}
+                        {{ employees_list.id }}
+                    {% endfor %}    
+                        {{ g.user_set.all }}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -125,7 +127,7 @@
             selectedOptions(newSelectedOptions) {
                 // 在被選中的選項改變時更新 selectedOptionsText
                 this.selectedOptionsText = newSelectedOptions.map(option => {
-                    const optionElement = document.querySelector(`#permission-select option[value="${option}"]`);
+                    const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
                     return optionElement.textContent;
                 });
             }
@@ -135,7 +137,6 @@
     app.mount('#employee-permission-app');
   </script>
 
-<script src="{% static 'js/fuc/restful.js' %}"></script>
 
 
 <script>

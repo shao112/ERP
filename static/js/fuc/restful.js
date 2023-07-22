@@ -80,16 +80,22 @@ function GET_handleClick(event) {
 
                         if (typeof (jsonData[key]) == "object" && get_value != null) {
                             // 如果是陣列，先取得對應的options，以及select2的欄位
-                            console.log("GET_" + key)
                             const options = input.options;
                             selectname = `#${key}_select2`
+                            console.log("GET_" + key + "=> " + selectname);
+                            console.log(get_value)
                             for (let i = 0; i < options.length; i++) {
                                 //取出單一optons的id，在get_value比對id是不是匹配
                                 const option = options[i];
-                                const id = option.value;
-                                const matchedItem = get_value.find(item => item.id === Number(id));
-                                if (matchedItem) {
+                                const option_id = option.value;
+                                console.log(option_id)
+                                const matchedItem = get_value.find(item => item.id == option_id);
+                                const containsValue = get_value.find(item => item == option_id);
+                                console.log(matchedItem)
+                                console.log(containsValue)
+                                if (matchedItem||containsValue) {
                                     option.selected = true;
+                                    console.log("c")
                                 }
                             }
                             $(selectname).trigger('change');
@@ -127,8 +133,6 @@ function GET_handleClick(event) {
 
 }
 
-// 新增 or 修改(帶pk?)
-
 $("form").on("submit", function (event) {
     console.log("新增 or 修改")
     event.preventDefault();
@@ -137,6 +141,7 @@ $("form").on("submit", function (event) {
     var form = $(this);
     var url = form.attr("action");
     var formData = form.serialize();
+    console.log("add form");
     console.log(formData);
 
     var method = form.data("method");
@@ -147,13 +152,13 @@ $("form").on("submit", function (event) {
         url: url,
         data: formData,
         headers: {
-            'X-CSRFToken': getcsrftoken()  // 在請求標頭中包含 CSRF token
+            'X-CSRFToken': getcsrftoken()
         },
         success: function (response) {
             if (response.status == 200) {
                 alert("操作成功");
             } else {
-                $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
+                $("#error-message").text(response.error);
             }
         },
         error: function (xhr, textStatus, errorThrown) {
