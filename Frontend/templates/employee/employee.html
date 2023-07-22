@@ -65,6 +65,28 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
+                                                <label for="position">職稱</label>
+                                                <input class="form-control form-control-sm" name="position"
+                                                    id="position"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="age">部門</label>
+                                                <select class="select2" data-placeholder="選擇部門"
+                                                name="completion_report_employee"
+                                                id="completion_report_employee_select2">
+                                                {% for employee in employees_list %}
+                                                <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
                                                 <label for="start_date_control">到職日期</label>
                                                 <input type="date" class="form-control form-control-sm"
                                                     name="start_date" id="start_date_control"></input>
@@ -270,9 +292,9 @@
                 {% if p.user.is_active %}
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="" type="button" class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        <a type="button" data-url="employee" data-id="{{p.pk}}" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            data-target="#employee-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="employee" data-id="{{p.pk}}" type="button" class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
@@ -285,8 +307,6 @@
     </div>
 </div>
 
-
-<script src="{% static 'js/fuc/restful.js' %}"></script>
 
 
 <script>
@@ -310,6 +330,7 @@
         script.src = "{% static 'js/fuc/restful.js' %}";
         document.body.appendChild(script);
     });
+
 
 </script>
 {% endblock %}
