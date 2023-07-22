@@ -104,11 +104,30 @@
     // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
     window.addEventListener('resize', checkScreenSize);
 </script>
-<!-- <script>
-    $(".chosen-select").chosen({
-        no_results_text: "查無此資料",
-        width: "100%",
-    })
-</script> -->
+<script>
+    // 更美化 file input
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    // read 時，初始化這些套件(select2、bootstrap-table)，套件只能被初始化一次
+    $(document).ready(function () {
+        $('.select2').select2({
+            width: '100%',
+            allowClear: true
+        });
+
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.85,
+            toolbar: "#toolbar"
+        });
+        //  height 初始化設定過一次，resize 要再重設
+        $(window).resize(function () {
+            var newHeight = $(window).height() * 0.65;
+            $(".fixed-table-container.fixed-height").css("height", newHeight);
+        });
+
+    });
+</script>
 
 </html>

@@ -162,7 +162,7 @@ class Project_Employee_Assign(models.Model):
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
     author = models.ForeignKey(Employee,max_length=100, on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name="建立人")
-    enterprise_signature = models.CharField(max_length=100,null=True, blank=True, verbose_name='業主簽名')
+    enterprise_signature = models.ImageField(null=True, blank=True, verbose_name='業主簽名')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 

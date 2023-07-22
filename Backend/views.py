@@ -86,6 +86,25 @@ class Groups_View(View):
 
         return JsonResponse({"data": data, "status": 200}, status=200)
 
+class Profile_View(View):
+
+    def delete(self,request):
+        pass
+
+    def put(self,request):
+        pass
+
+    def post(self,request):
+        new_password = request.POST["new_password"]
+        print(new_password)
+        user = User.objects.get(id=request.user.id)
+        user.set_password(new_password)
+        user.save()
+        return HttpResponseRedirect('/')
+
+    def get(self, request):
+        pass
+
 class Check(View):
     def post(self,request):
         data = json.loads(request.body)

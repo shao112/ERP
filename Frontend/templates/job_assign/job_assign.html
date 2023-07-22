@@ -260,28 +260,6 @@
 </div>
 
 
-
-
-<script>
-    // 更美化 file input
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-    // Bootstrap-Table
-    $(document).ready(function () {
-        $('#table').bootstrapTable({
-            height: $(window).height() * 0.85,
-            toolbar: "#toolbar"
-        });
-        // select2    
-        $('.select2').select2({
-            width: '100%',
-            allowClear: true
-        });
-    });
-</script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var script = document.createElement('script');

@@ -19,31 +19,17 @@
     <div class="container shadow-sm">
         {% csrf_token %}
         <div class="row my-4">
-            <div class="col-12 col-md-6">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            員工名稱：{{ user.employee.full_name }}
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            所屬部門：工程部
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            職稱：工程師
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            目前年資：2.0
-                        </div>
-                    </div>
-                </div>
+            <div class="col-6 col-md-3">
+                員工名稱：{{ user.employee.full_name }}
+            </div>
+            <div class="col-6 col-md-3">
+                所屬部門：OOO
+            </div>
+            <div class="col-6 col-md-3">
+                職稱：OOO
+            </div>
+            <div class="col-6 col-md-3">
+                目前年資：OO
             </div>
         </div>
     </div>
@@ -55,14 +41,19 @@
     <div class="container shadow-sm">
         <div class="row">
             <div class="col-5">
-                <form action="">
+                <form action="{% url 'profile_view_api' %}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="old-password-form-control">請輸入舊密碼</label>
-                        <input type="password" class="form-control form-control-sm" id="old-password-form-control">
+                        <input type="password" class="form-control form-control-sm" id="old-password-form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="new-password-form-control">請輸入新密碼</label>
-                        <input type="password" class="form-control form-control-sm" id="new-password-form-control">
+                        <input type="password" class="form-control form-control-sm" pattern="^(?=.*[a-zA-Z]).{8,}$" title="至少8位數，不能全部是數字" name="new_password" id="new-password-form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password-form-control">再輸入一次密碼</label>
+                        <input type="password" class="form-control form-control-sm" name="confirm_password" id="confirm-password-form-control" required>
                     </div>
                     <button type="submit" class="btn border border-dark rounded w-100 " style="color: #fff;background: #1E3050;">送出</button>
                 </form>
@@ -81,4 +72,17 @@
         
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#change-password-form').submit(function(event) {
+            var newPassword = $('#new-password-form-control').val();
+            var confirmPassword = $('#confirm-password-form-control').val();
+
+            if (newPassword !== confirmPassword) {
+                alert('兩次輸入的密碼不相符');
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 {% endblock %}
