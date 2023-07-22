@@ -6,6 +6,7 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/news/news.css' %}">
+<script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
 
 
 {% endblock %}
@@ -25,14 +26,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
+                            data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
                                 <div class="col-12 col-md-4">
                                     <div class="form-group">
                                         <label for="category_control">公告類別</label>
-                                        <select class="form-control form-control-sm" name="category" id="category_control">
+                                        <select class="form-control form-control-sm" name="category"
+                                            id="category_control">
                                             <option value="1">1</option>
                                         </select>
                                     </div>
@@ -56,16 +59,17 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="title_control">公告標題</label>
-                                        <input class="form-control form-control-sm" name="title" id="title_control" required></input>
+                                        <input class="form-control form-control-sm" name="title" id="title_control"
+                                            required></input>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="content_control">內容</label>
-                                        <textarea class="form-control" name="content" id="content_control"></textarea>
+                                        <textarea class="form-control"  name="content" id="editor"></textarea>
                                     </div>
                                 </div>
-                                    
+
                             </div>
                             <div class=" d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
@@ -81,20 +85,21 @@
         </div>
     </div>
     <div class="news-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
-        <div id="toolbar">
-            <div class="news-header container-fluid">
-                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#news-modal">
-                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
-                </a>
-                <br>
-                <a href="" class="font-weight-bold" id="" >
-                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                </a>
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
+            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
+            data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="news-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#news-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
+                    </a>
+                    <br>
+                    <a href="" class="font-weight-bold" id="">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    </a>
+                </div>
             </div>
-          </div>            
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -108,9 +113,8 @@
             <tbody>
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id=""
-                            class="sys_get btn btn-warning mx-2" data-toggle="modal"
-                            data-target="#news-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-warning mx-2"
+                            data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
                         <a data-url="project_confirmation" data-id="" type="button"
                             class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
@@ -135,10 +139,19 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
+            height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
     });
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 </script>
 
 <script>
