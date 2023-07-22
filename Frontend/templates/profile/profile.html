@@ -53,15 +53,15 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="current-password-form-control">請輸入目前密碼</label>
-                        <input type="password" class="form-control form-control-sm" name="current-password" id="current-password-form-control" required>
+                        <input type="password" class="form-control form-control-sm" id="current-password-form-control" name="old_password" required>
                     </div>
                     <div class="form-group">
                         <label for="new-password-form-control">請輸入新密碼</label>
-                        <input type="password" class="form-control form-control-sm" pattern="^(?=.*[a-zA-Z]).{8,}$" title="至少8位數，不能全部是數字" name="new-password" id="new-password-form-control" required>
+                        <input type="password" class="form-control form-control-sm" pattern="^(?=.*[a-zA-Z]).{8,}$" title="至少8位數，不能全部是數字" name="new_password1" id="new-password-form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm-password-form-control">再輸入一次密碼</label>
-                        <input type="password" class="form-control form-control-sm" name="confirm-password" id="confirm-password-form-control" required>
+                        <input type="password" class="form-control form-control-sm" id="confirm-password-form-control" name="new_password2" required>
                     </div>
                     <button type="submit" class="btn border border-dark rounded w-100 " style="color: #fff;background: #1E3050;">送出</button>
                 </form>
@@ -80,17 +80,4 @@
         
     </div>
 </div>
-<!-- <script>
-    $(document).ready(function() {
-        $('#change-password-form').submit(function(event) {
-            var newPassword = $('#new-password-form-control').val();
-            var confirmPassword = $('#confirm-password-form-control').val();
-
-            if (newPassword !== confirmPassword) {
-                alert('兩次輸入的密碼不相符');
-                event.preventDefault();
-            }
-        });
-    });
-</script> -->
 {% endblock %}

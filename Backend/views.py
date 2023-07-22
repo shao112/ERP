@@ -7,6 +7,7 @@ from .models import Clock
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
@@ -86,6 +87,7 @@ class Groups_View(View):
 
         return JsonResponse({"data": data, "status": 200}, status=200)
 
+from django.contrib.auth import update_session_auth_hash
 class Profile_View(View):
 
     def delete(self,request):
@@ -95,13 +97,25 @@ class Profile_View(View):
         pass
 
     def post(self,request):
-        new_password = request.POST["new-password"]
-        print(new_password)
-        user = User.objects.get(id=request.user.id)
-        user.set_password(new_password)
-        user.is_staff = True
-        user.save()
-        return HttpResponseRedirect('/')
+        print(request.POST)
+        print(request.user)
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            print('Your password has been changed successfully!')
+            return HttpResponseRedirect('/')
+        else:
+            print(form.errors)
+            print('錯誤')
+            return HttpResponseRedirect('/')
+        # new_password = request.POST["new-password"]
+        # print(new_password)
+        # user = User.objects.get(id=request.user.id)
+        # user.set_password(new_password)
+        # user.is_staff = True
+        # user.save()
+        # return HttpResponseRedirect('/')
 
     def get(self, request):
         pass
