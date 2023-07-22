@@ -129,7 +129,7 @@ from django.contrib.auth.models import Group
 class Employee_Permission_list(ListView):
     model = Employee
     template_name = 'employee_permission/employee_permission.html'
-    context_object_name = 'Group'
+    context_object_name = 'employees'
     def get_context_data(self, **kwargs):
         Groups = Group.objects.all()
         context = super().get_context_data(**kwargs)
