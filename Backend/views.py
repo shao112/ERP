@@ -62,10 +62,15 @@ class Groups_View(View):
         dict_data = convent_dict(request.body)
         group = Group.objects.get(id=dict_data['id'])
         print("put")
-        print(dict_data)
-        for userid in dict_data["user_set"]:
-            user = User.objects.get(id=userid)
-            user.groups.add(group)
+        print(dict_data)        
+        user_ids= dict_data["user_set"]
+        print(user_ids)
+        users = User.objects.filter(id__in=user_ids)       
+        # for userid in dict_data["user_set"]:
+        #     user = User.objects.get(id=userid)
+        #     user.groups.add(group)
+        group.user_set.set(users)
+   
         return JsonResponse({'status': 200})
 
 
@@ -77,7 +82,7 @@ class Groups_View(View):
         data = get_object_or_404(Group, id=id)
         groups_employee = data.user_set.all()
         users = [user.id for user in groups_employee]
-        data={"user_set":users,"id":data.id}
+        data={"user_set":users,"id":data.id,"group_name":data.name}
 
         return JsonResponse({"data": data, "status": 200}, status=200)
 
