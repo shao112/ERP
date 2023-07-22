@@ -95,10 +95,11 @@ class Profile_View(View):
         pass
 
     def post(self,request):
-        new_password = request.POST["new_password"]
+        new_password = request.POST["new-password"]
         print(new_password)
         user = User.objects.get(id=request.user.id)
         user.set_password(new_password)
+        user.is_staff = True
         user.save()
         return HttpResponseRedirect('/')
 
