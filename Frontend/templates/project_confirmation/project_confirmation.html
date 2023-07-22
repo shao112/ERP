@@ -179,8 +179,11 @@
             </div>
         </div>
     </div>
+
+    
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
 
+        
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
          data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
         data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true"
@@ -309,12 +312,27 @@
         // 可以把元素存成pdf，但是太複雜的元素會有問題
         // doc.text('Hello world!', 10, 10); // 顯示文字 'Hello world!' 位置在 (10,10)
         // doc.save('工程確認單.pdf'); // 存檔
-        doc.html(modalContent, {
-            callback: function(pdf) {
-                console.log('PDF 轉換成功！');
-                pdf.save('工程確認單.pdf');
-            }
-        });
+
+        html2canvas(modalContent).then(function(canvas) {
+            // 獲取canvas的圖像數據URL
+            var imgData = canvas.toDataURL('image/png');
+    
+            // 設置PDF的尺寸，這裡使用A4尺寸，也可以自行調整
+            var pdf = new jsPDF('p', 'mm', 'a4');
+    
+            // 添加圖像數據到PDF
+            pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+    
+            // 下載PDF文件
+            pdf.save('downloaded_pdf.pdf');
+          });
+
+        // doc.html(modalContent, {
+        //     callback: function(pdf) {
+        //         console.log('PDF 轉換成功！');
+        //         pdf.save('工程確認單.pdf');
+        //     }
+        // });
     }
 </script>
 <script>
