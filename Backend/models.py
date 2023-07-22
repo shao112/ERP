@@ -89,13 +89,13 @@ from django.utils.safestring import mark_safe
 # 工程確認單
 class Project_Confirmation(models.Model):
     project_confirmation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="工確單編號")
-    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
+    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號") # 唯一
     project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
     client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
-    turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額') # 限制10個字輸入數字應該夠?
+    turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
@@ -108,6 +108,7 @@ class Project_Confirmation(models.Model):
     class Meta:
         verbose_name = "工程確認單"   # 單數
         verbose_name_plural = verbose_name   #複數
+        ordering = ['-id']
     # def __str__(self):
     #     return self.project_name
     
@@ -121,7 +122,7 @@ class Project_Confirmation(models.Model):
 
 # 工作派任計畫
 class Project_Job_Assign(models.Model):
-    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project',null=True, blank=True, verbose_name="工程確認單") 
+    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project',null=True, blank=True, verbose_name="工程確認單") # 連帶帶出來的資料可重複
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
@@ -138,6 +139,7 @@ class Project_Job_Assign(models.Model):
     class Meta:
         verbose_name = "工作派任計畫"   # 單數
         verbose_name_plural = verbose_name   #複數
+        ordering = ['-id']
 
 
     def attachment_link(self):
@@ -147,6 +149,29 @@ class Project_Job_Assign(models.Model):
             return "無"
     # 告訴admin這個包含HTML代碼，要幫忙解析
     attachment_link.allow_tags = True
+
+# 派工單
+class Project_Employee_Assign(models.Model):
+    # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱、請購單位）
+    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project_employee_assign',null=True, blank=True, verbose_name="工程確認單")
+    construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
+    completion_date = models.DateField(null=True, blank=True, verbose_name="完工日期")
+    is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
+    construction_location = models.CharField(max_length=100,null=True, blank=True, verbose_name='施工地點')
+    inspector = models.ManyToManyField('Employee', related_name='employee_assign_work_employee', blank=True, verbose_name='檢測人員')
+    vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
+    manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
+    lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
+    author = models.ForeignKey(Employee,max_length=100, on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name="建立人")
+    enterprise_signature = models.CharField(max_length=100,null=True, blank=True, verbose_name='業主簽名')
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+
+    class Meta:
+        verbose_name = "派工單"   # 單數
+        verbose_name_plural = verbose_name   #複數
+        ordering = ['-id']
+
 
 # 公告
 class News(models.Model):
