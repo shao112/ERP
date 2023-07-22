@@ -40,7 +40,6 @@ class Employee(models.Model):
     seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
     id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
     birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
-    age = models.IntegerField(null=True, blank=True, verbose_name='年齡')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True, verbose_name='性別')
     blood_type = models.CharField(max_length=2, choices=BLOOD_TYPE_CHOICES, null=True, blank=True, verbose_name='血型')
     birth_place = models.CharField(max_length=100, null=True, blank=True, verbose_name='出生地')

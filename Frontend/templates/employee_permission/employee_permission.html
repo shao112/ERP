@@ -41,8 +41,8 @@
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="user_set_select2">選擇權限(按住ctrl多選)</label>
-                                                <select class="form-control " name="user_set" id="user_set_select2" size="6" multiple>
+                                                <label>選擇權限(按住ctrl多選)</label>
+                                                <select class="form-control " name="user_set" id="user_set_select2" size="6" multiple v-model="selectedOptions" @change="handleSelectionChange">
                                                     {% for employee in employees %}
                                                     <option value="{{ employees.user__id }}">{{ employee.full_name }}</option>
                                                     {% endfor %}
@@ -51,7 +51,7 @@
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label for="permission-selected">已選權限</label>
+                                                <label>已選權限</label>
                                                 <select class="form-control "  id="permission-selected" size="6" readonly>
                                                     <option  v-for="option in selectedOptionsText" value=""></option>
                                                 </select>
@@ -126,14 +126,14 @@
             };
         },
         delimiters :['[[', ']]'],
-        watch: {
-            selectedOptions(newSelectedOptions) {
-                console.log(newSelectedOptions)
+        methdod: {
+            handleSelectionChange() {
+                console.log("選擇的值:", this.selectedOptions);
                 // 在被選中的選項改變時更新 selectedOptionsText
-                this.selectedOptionsText = newSelectedOptions.map(option => {
-                    const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
-                    return optionElement.textContent;
-                });
+                // this.selectedOptionsText = newSelectedOptions.map(option => {
+                //     const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
+                //     return optionElement.textContent;
+                // });
             }
         }
     });
