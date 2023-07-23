@@ -130,13 +130,12 @@ class Employee_Permission_list(ListView):
         Groups = Group.objects.all()
         context = super().get_context_data(**kwargs)
         context["employees_list"] =  Employee.objects.values('user__id','user__username')
-        print(context["employees_list"])
         context['groups'] = Groups
         return context
     
 
 
-class Department(ListView):
+class Department_list(ListView):
     model = Department
     template_name = 'department/department.html'
     context_object_name = 'department'
