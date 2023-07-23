@@ -42,7 +42,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>選擇人員(按住ctrl多選)</label>
-                                                <select class="form-control" name="user_set" id="user_set_select2" size="6" multiple>
+                                                <select class="form-control" name="user_set" id="user_set_select2" size="10" multiple>
                                                     {% for employee in employees %}
                                                     <option value="{{ employees.user__id }}">{{ employee.full_name }}</option>
                                                     {% endfor %}
@@ -52,7 +52,7 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label>已選權限</label>
-                                                <select class="form-control "  id="permission-selected" size="6" readonly>
+                                                <select class="form-control "  id="permission-selected" size="10" readonly>
                                                     <option  v-for="option in selectedOptionsText" value=""></option>
                                                 </select>
                                             </div>
@@ -75,46 +75,44 @@
             </div>
         </div>
     </div>
-    <div class="employee-permission-table  container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true"
-        data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true" data-export-types="['excel', 'json', 'csv', 'txt']"data-export-options='{"fileName": "派工單"}'>
-            <!-- <div id="toolbar">
-                <div class="employee-permission-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-permission-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增權限群組
-                    </a>
-                </div>
-            </div> -->
-            <thead class="thead-light" style="font-size: 14px;">
-                <tr class="text-nowrap">
-                    <th></th>
-                    <th data-field="group" data-sortable="true"   >群組名稱</th>
-                    <th data-field="created_date" data-sortable="true">建立日期</th>
-                </tr>
-            </thead>
-            <tbody style="font-size: 14px;">
-                {% for g in groups %}
-                <tr>
-                    <td>
-                        <a type="button" data-url="group" data-id="{{ g.id }}"
-                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
-                        <!-- <a data-url="group" data-id="{{ g.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a> -->
-                      
-                    </td>
-                    <td>{{ g.name }} </td>
-                    <td>
-                        {% for employees_list in g.user_set.all %}
-                        {{ employees_list.id }}
-                    {% endfor %}    
-                        {{ g.user_set.all }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="employee-permission-table  container">
+        <div class="col-12 col-md-10 mx-auto shadow-sm table-responsive-lg">
+            <table class="table table-sm table-hover text-center">
+                <thead class="thead-light" style="font-size: 14px;">
+                    <tr class="text-nowrap">
+                        <th></th>
+                        <th>群組名稱</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                    {% for g in groups %}
+                    <tr>
+                        <td>
+                            <a type="button" data-url="group" data-id="{{ g.id }}"
+                                class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                                data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
+                          
+                        </td>
+                        <td  data-toggle="collapse" data-target="#sub-row-{{ g.id }}">{{ g.name }} </td>
+                    </tr>
+                    <tr class="collapse" id="sub-row-{{ g.id }}">
+                        <td></td>
+                        <td>
+                            id ==> 
+                            {% for employees_list in g.user_set.all %}
+                                {{ employees_list.id }}
+                            {% endfor %}
+                            name ==> 
+                            {% for employees_list in g.user_set.all %}
+                                {{ employees_list }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
     </div>
 </div>
 <!-- <script>
