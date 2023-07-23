@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
-    path('profile/<int:pk>', login_required(views.Profile.as_view()), name='profile'),
+    path('profile/', login_required(views.Profile.as_view()), name='profile'),
     path('department/', login_required(views.Department_list.as_view()), name='department'),
     path('equipment/', login_required(views.Equipment_ListView.as_view()), name='equipment'), 
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),

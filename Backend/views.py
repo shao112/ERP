@@ -87,18 +87,16 @@ class Profile_View(View):
         pass
 
     def post(self,request):
+
+
         print(request.POST)
-        print(request.user)
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            print('Your password has been changed successfully!')
-            return HttpResponseRedirect('/')
+            return JsonResponse(status=200)
         else:
-            print(form.errors)
-            print('錯誤')
-            return HttpResponseRedirect('/')
+            return JsonResponse({"data":form.errors}, status=400,safe=False)
         # new_password = request.POST["new-password"]
         # print(new_password)
         # user = User.objects.get(id=request.user.id)

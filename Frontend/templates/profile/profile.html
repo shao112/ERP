@@ -17,7 +17,6 @@
         </span>
     </div>
     <div class="container shadow-sm">
-        {% csrf_token %}
         <div class="row my-4">
             <div class="col-6 col-md-3">
                 <div class="form-group">
@@ -34,11 +33,11 @@
                     職稱：OOO
                 </div>
             </div>
-                <div class="col-6 col-md-3">
-                    <div class="form-group">
-                        目前年資：OO
-                    </div>
+            <div class="col-6 col-md-3">
+                <div class="form-group">
+                    目前年資：OO
                 </div>
+            </div>
         </div>
     </div>
     <div class="profile-header container mb-4">
@@ -49,21 +48,25 @@
     <div class="container shadow-sm">
         <div class="row">
             <div class="col-5">
-                <form action="{% url 'profile_view_api' %}" method="POST">
+                <form id="profileform">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="current-password-form-control">請輸入目前密碼</label>
-                        <input type="password" class="form-control form-control-sm" id="current-password-form-control" name="old_password" required>
+                        <input type="password" class="form-control form-control-sm" id="current-password-form-control"
+                            name="old_password" required>
                     </div>
                     <div class="form-group">
                         <label for="new-password-form-control">請輸入新密碼</label>
-                        <input type="password" class="form-control form-control-sm" pattern="^(?=.*[a-zA-Z]).{8,}$" title="至少8位數，不能全部是數字" name="new_password1" id="new-password-form-control" required>
+                        <input type="password" class="form-control form-control-sm" pattern="^(?=.*[a-zA-Z]).{8,}$"
+                            title="至少8位數，不能全部是數字" name="new_password1" id="new-password-form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm-password-form-control">再輸入一次密碼</label>
-                        <input type="password" class="form-control form-control-sm" id="confirm-password-form-control" name="new_password2" required>
+                        <input type="password" class="form-control form-control-sm" id="confirm-password-form-control"
+                            name="new_password2" required>
                     </div>
-                    <button type="submit" class="btn border border-dark rounded w-100 " style="color: #fff;background: #1E3050;">送出</button>
+                    <button type="submit" class="btn border border-dark rounded w-100 "
+                        style="color: #fff;background: #1E3050;">送出</button>
                 </form>
             </div>
             <div class="col-7">
@@ -77,7 +80,65 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
+
+<script>
+    console.log("eee")
+    $("form").on("submit", function (event) {
+        event.preventDefault();
+        // console.log(jsonData)
+
+        var form = $(this);
+        var formData = form.serialize();
+        // var jsonData = JSON.stringify(formData);
+        // console.log(jsonData)
+
+
+
+
+        $.ajax({
+            type: "post",
+            url: "{% url 'profile_view_api' %}",
+            data: formData,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (response) {
+                alert("操作成功");
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (xhr.status === 400) {
+                    // 處理400錯誤，顯示伺服器返回的錯誤訊息
+                    var errorMessage = xhr.responseJSON.data;
+                    console.log(errorMessage)
+                    console.log(errorMessage[0])
+                    var errorMessageHTML = "<ul>";
+                    Object.entries(errorMessage).map(([key, errors]) => {
+                        errors.forEach(error => {
+                            errorMessageHTML += "<li><strong>" + key + ":</strong> " + error + "</li>";
+                        });
+                    });
+                    errorMessageHTML += "</ul>";
+                    console.log(errorMessageHTML)
+
+
+                    Swal.fire({
+                        title: '更新失敗',
+                        html: errorMessageHTML,
+                        icon: 'error',
+                        confirmButtonText: '確定',
+                    })
+                } else {
+                    // 其他錯誤處理
+                    alert("系統發生錯誤");
+                }
+            }
+        });
+
+    });
+
+</script>
+
 {% endblock %}

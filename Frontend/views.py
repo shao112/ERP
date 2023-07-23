@@ -157,6 +157,9 @@ class Profile(DeleteView):
     model = User
     template_name = 'profile/profile.html'
     context_object_name = 'user'
+    def get_object(self, queryset=None):
+        # 從request.user中獲取當前用戶的id，然後返回相應的User物件
+        return self.request.user
 
 # 最新消息
 class News_ListView(ListView):
