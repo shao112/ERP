@@ -98,7 +98,7 @@
                     {% if d.parent_department %}<td>{{ d.parent_department }}</td>{% else %}<td>無</td>{% endif %}
                     <td>{{ d.department_name }}</td>
                     <td>{{ d.department_id }}</td>
-                    <td></td>
+                    <td>{{ d.employees.all.count }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

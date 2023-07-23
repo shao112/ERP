@@ -1,3 +1,6 @@
+
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models.signals import pre_save
 from django.db import models
 from django.contrib.auth.models import User
@@ -114,8 +117,6 @@ class Department(models.Model):
             return f"{self.department_name} ({self.parent_department.department_name})"
         return self.department_name
 
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 
 # 工程確認單
 class Project_Confirmation(models.Model):

@@ -74,10 +74,11 @@
                                             <div class="form-group">
                                                 <label for="age">部門</label>
                                                 <select class="select2" data-placeholder="選擇部門"
-                                                name="completion_report_employee"
+                                                name="departments"
                                                 id="completion_report_employee_select2">
-                                                {% for employee in employees_list %}
-                                                <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                <option value="-1">請選擇部門</option>
+                                                {% for department in department_list %}
+                                                <option value="{{ department.id }}">{{ department.department_name }}
                                                 </option>
                                                 {% endfor %}
                                             </select>
@@ -284,6 +285,7 @@
                     <th></th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
+                    <th data-field="departments" data-sortable="true">部門</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
@@ -298,6 +300,7 @@
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
+                    <td>{{ p.departments.department_name }}</td>
                     <td>{{ p.created_date }}</td>
                 </tr>
                 {% endif %}
@@ -328,7 +331,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
-            "{% static 'js/fuc/fileimport.js' %}",
+            // "{% static 'js/fuc/fileimport.js' %}",
             "{% static 'js/fuc/modaltopdf.js' %}"
         ];
 
