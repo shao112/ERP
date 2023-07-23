@@ -32,12 +32,12 @@
                             data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
-                            <div class="row my-4">
+                            <div class="form-row my-2">
                                 <div class="col-12 col-md-6">
                                     <h5 style="font-size: 1.2rem;">
                                         <kbd>確認單描述</kbd>
                                     </h5>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="quotation_id_control">報價單號</label>
@@ -54,7 +54,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_confirmation_id_control">工確單編號</label>
@@ -72,7 +72,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="client_control">客戶簡稱</label>
@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="requisition_control">請購單位</label>
@@ -104,7 +104,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="remark_control" class="col-form-label-sm">備註</label>
@@ -118,21 +118,21 @@
                                     <h5 style="font-size:1.2rem;">
                                         <kbd>完工狀態</kbd>
                                     </h5>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" id="is_completed_y"
-                                                    name="is_completed" value="true" required v-model="status">
-                                                <label class="custom-control-label" for="is_completed_y">完成</label>
+                                    <div class="form-row">
+                                        <div class="col-12 my-4">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="is_completed_y"></label>
+                                                <input type="radio" class="form-check-input" id="is_completed_y"
+                                                    name="is_completed" value="true" required>完成</label>
                                             </div>
-                                            <div class="custom-control custom-radio mb-3">
-                                                <input type="radio" class="custom-control-input" id="is_completed_n"
-                                                    name="is_completed" value="false" required checked v-model="status">
-                                                <label class="custom-control-label" for="is_completed_n">尚未完成</label>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label" for="is_completed_n"></label>
+                                                <input type="radio" class="form-check-input" id="is_completed_n"
+                                                    name="is_completed" value="false" required checked>尚未完成</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="completion_report_select2">完工回報人</label>
@@ -155,7 +155,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-12">
                                             <label>完工重派附件</label>
                                             <div class="custom-file">

@@ -30,8 +30,7 @@ function showSwal(title, text, icon) {
 
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
-    $("#form")[0].reset();
-    $("#form").attr("data-method", "POST");
+    
 
     //清除select2的資訊
     $("[id*='_select2']").each(function () {
@@ -40,6 +39,8 @@ $("#sys_new").on("click", function () {
             $('#' + id).val(null).trigger('change');
         }
     });
+    $("#form")[0].reset();
+    $("#form").attr("data-method", "POST");
 
 });
 

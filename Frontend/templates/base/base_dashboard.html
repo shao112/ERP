@@ -118,12 +118,12 @@
         });
 
         $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
+            height: $(window).height()*0.70,
             toolbar: "#toolbar"
         });
         //  height 初始化設定過一次，resize 要再重設
         $(window).resize(function () {
-            var newHeight = $(window).height() * 0.65;
+            var newHeight = $(window).height() * 0.70;
             $(".fixed-table-container.fixed-height").css("height", newHeight);
         });
 

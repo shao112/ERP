@@ -66,7 +66,7 @@ class Groups_View(View):
 
 
     def post(self,request):
-        pass
+        return JsonResponse({"data": "data", "status": 200}, status=200)
 
     def get(self, request):
         id = request.GET.get('id')

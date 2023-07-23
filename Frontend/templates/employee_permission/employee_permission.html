@@ -34,15 +34,15 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="group_control">權限群組名稱</label>
-                                                <input readonly class="form-control form-control-sm" name="group_name"  id="group_control"></input>
+                                                <input class="form-control form-control-sm" name="group_name"  id="group_control"></input>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
-                                                <label>選擇權限(按住ctrl多選)</label>
-                                                <select class="form-control " name="user_set" id="user_set_select2" size="6" multiple v-model="selectedOptions" @change="handleSelectionChange">
+                                                <label>選擇人員(按住ctrl多選)</label>
+                                                <select class="form-control" name="user_set" id="user_set_select2" size="6" multiple>
                                                     {% for employee in employees %}
                                                     <option value="{{ employees.user__id }}">{{ employee.full_name }}</option>
                                                     {% endfor %}
@@ -79,13 +79,13 @@
         <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
         data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true"
         data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true" data-export-types="['excel', 'json', 'csv', 'txt']"data-export-options='{"fileName": "派工單"}'>
-            <div id="toolbar">
+            <!-- <div id="toolbar">
                 <div class="employee-permission-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-permission-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增權限群組
                     </a>
                 </div>
-            </div>
+            </div> -->
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th></th>
@@ -100,8 +100,8 @@
                         <a type="button" data-url="group" data-id="{{ g.id }}"
                             class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
                             data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="group" data-id="{{ g.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        <!-- <a data-url="group" data-id="{{ g.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a> -->
                       
                     </td>
                     <td>{{ g.name }} </td>
@@ -117,7 +117,7 @@
         </table>
     </div>
 </div>
-<script>
+<!-- <script>
     const app = Vue.createApp({
         data() {
             return {
@@ -129,34 +129,32 @@
         methdod: {
             handleSelectionChange() {
                 console.log("選擇的值:", this.selectedOptions);
-                // 在被選中的選項改變時更新 selectedOptionsText
-                // this.selectedOptionsText = newSelectedOptions.map(option => {
-                //     const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
-                //     return optionElement.textContent;
-                // });
+                在被選中的選項改變時更新 selectedOptionsText
+                this.selectedOptionsText = newSelectedOptions.map(option => {
+                    const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
+                    return optionElement.textContent;
+                });
             }
         }
     });
 
     app.mount('#employee-permission-app');
-  </script>
+  </script> -->
 
-
-
+<!-- 印出被選中的內容 -->
 <script>
-    // 更美化 file input
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-    // Bootstrap-Table
-    $(document).ready(function () {
-        $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
-            toolbar: "#toolbar"
+    document.addEventListener("DOMContentLoaded", function() {
+      $("#user_set_select2").on("change", function() {
+        var selectedOptions = [];
+        $("#user_set_select2 option:selected").each(function() {
+          selectedOptions.push($(this).text());
         });
+    
+        console.log("選中的option內容：", selectedOptions);
+      });
     });
-</script>
+    </script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
