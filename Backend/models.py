@@ -5,6 +5,38 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 
+
+class Approval(models.Model):
+    finish = models.BooleanField(default=False, verbose_name='完成')
+    class Meta:
+        verbose_name = '簽核狀態'
+        verbose_name_plural = '簽核狀態'
+        permissions = ( ('can_approval', '簽核權限'), )
+    def __str__(self):
+        return f'Approval {self.id}'
+
+
+class ApprovalLog(models.Model):
+    approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval_logs')
+    user = models.ForeignKey('Employee', on_delete=models.DO_NOTHING, verbose_name='簽核者')
+    content = models.TextField(blank=True, null=True, verbose_name='內容')
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+
+    class Meta:
+        verbose_name = '簽核記錄'
+        verbose_name_plural = '簽核記錄'
+
+    def __str__(self):
+        return f'ApprovalLog {self.id}'
+
+
+class ApprovalModel(models.Model):
+    approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval')
+
+    class Meta:
+        abstract = True
+
+
 # Create your models here.
 # 員工（以內建 User 擴增）
 # admin:admin IT0000:itadmin000
