@@ -326,18 +326,16 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.addEventListener('DOMContentLoaded', function () {
-            var scripts = [
-                "{% static 'js/fuc/restful.js' %}",
-                "{% static 'js/fuc/fileimport.js' %}",
-                "{% static 'js/fuc/modaltopdf.js' %}"
-            ];
-    
-            scripts.forEach(function (src) {
-                var script = document.createElement('script');
-                script.src = src;
-                document.body.appendChild(script);
-            });
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/fileimport.js' %}",
+            "{% static 'js/fuc/modaltopdf.js' %}"
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
         });
     });
 

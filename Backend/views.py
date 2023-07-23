@@ -49,14 +49,7 @@ class FileUploadView(View):
 class Groups_View(View):
 
     def delete(self,request):
-        dict_data = convent_dict(request.body)
-        group = Group.objects.get(id=dict_data['id'])
-        print("put")
-        print(dict_data)
-        for userid in dict_data["user_set"]:
-            user = User.objects.get(id=userid)
-            user.groups.remove(group)
-        return JsonResponse({'status': 200})
+        pass
 
 
     def put(self,request):
@@ -67,9 +60,6 @@ class Groups_View(View):
         user_ids= dict_data["user_set"]
         print(user_ids)
         users = User.objects.filter(id__in=user_ids)       
-        # for userid in dict_data["user_set"]:
-        #     user = User.objects.get(id=userid)
-        #     user.groups.add(group)
         group.user_set.set(users)
    
         return JsonResponse({'status': 200})
