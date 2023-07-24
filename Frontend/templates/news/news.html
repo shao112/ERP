@@ -6,7 +6,8 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/news/news.css' %}">
-<script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
+<link rel="stylesheet" href="{% static 'js/ckeditor5/build/ckeditor.js' %}">
+<link rel="stylesheet" href="{% static 'js/ckeditor/ckeditor.js' %}">
 
 
 {% endblock %}
@@ -66,6 +67,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="content_control">內容</label>
+                                        <div id="text"></div>
                                         <textarea class="form-control"  name="content" id="editor"></textarea>
                                     </div>
                                 </div>
@@ -143,14 +145,14 @@
             toolbar: "#toolbar"
         });
     });
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(editor => {
-            console.log(editor);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    // ClassicEditor
+    //     .create(document.querySelector('#editor'))
+    //     .then(editor => {
+    //         console.log(editor);
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
 
 </script>
 
