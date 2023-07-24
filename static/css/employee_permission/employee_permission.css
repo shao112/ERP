@@ -5,7 +5,7 @@
 .employee-permission-table td{
     vertical-align: middle;
 }
-.employee-permission-table{
+.employee-permission-table table{
     table-layout: fixed;
     word-break: break-all;
 }
