@@ -13,30 +13,30 @@
     <!-- Bootstrap CSS 4.2.1 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <!-- Vue 3 開發版跟生產版-->
-    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
-    <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.prod.js"></script>
-    <!-- font awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Bootstrap-Table -->
-    <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
-    <!-- <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/sticky-header/bootstrap-table-sticky-header.css" rel="stylesheet"> -->
-
-    <!-- 多選下拉式外掛 chosen -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
-    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
-    <!-- 引入 jsPDF 函式庫 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        // 將 jsPDF 賦值給全域變數
-        window.jsPDF = window.jspdf.jsPDF;
-    </script>
+        <!-- Vue 3 開發版跟生產版-->
+        <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+        <script src="https://unpkg.com/vue@3.1.1/dist/vue.global.prod.js"></script>
+        <!-- font awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Bootstrap-Table -->
+        <link href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css" rel="stylesheet">
+        
+        <!-- 多選下拉式外掛 chosen -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet" />
+        <!-- 引入 jsPDF 函式庫 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            // 將 jsPDF 賦值給全域變數
+            window.jsPDF = window.jspdf.jsPDF;
+            </script>
     {% load static%}
     <!-- base css -->
     <link rel="stylesheet" href="{% static 'css/base/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/index/index-login.css' %}">
-
+    
+    
     <!-- select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -74,7 +74,6 @@
 " rel="stylesheet">
 <!-- 引入 html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
 
 <script>
@@ -127,6 +126,7 @@
             var newHeight = $(window).height() * 0.70;
             $(".fixed-table-container.fixed-height").css("height", newHeight);
         });
+
 
     });
 </script>
