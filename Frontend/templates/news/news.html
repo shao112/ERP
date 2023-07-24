@@ -6,9 +6,7 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/news/news.css' %}">
-<link rel="stylesheet" href="{% static 'js/ckeditor5/build/ckeditor.js' %}">
-<link rel="stylesheet" href="{% static 'js/ckeditor/ckeditor.js' %}">
-
+<script src="{% static 'js\ckeditor5\build\bundle.js' %}"></script>
 
 {% endblock %}
 
@@ -67,8 +65,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="content_control">內容</label>
-                                        <div id="text"></div>
-                                        <textarea class="form-control"  name="content" id="editor"></textarea>
+                                        <textarea class="form-control" name="content" id="text"></textarea>
                                     </div>
                                 </div>
 
@@ -145,23 +142,25 @@
             toolbar: "#toolbar"
         });
     });
-    // ClassicEditor
-    //     .create(document.querySelector('#editor'))
-    //     .then(editor => {
-    //         console.log(editor);
-    //     })
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-
 </script>
 
 <script>
+
+
     document.addEventListener('DOMContentLoaded', function () {
-        var script = document.createElement('script');
-        script.src = "{% static 'js/fuc/restful.js' %}";
-        document.body.appendChild(script);
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            // "{% static 'js/ckeditor5/build/bundle.js' %}",
+            "{% static 'js/ckeditor/setting_ckeditor.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
     });
+
 
 </script>
 
