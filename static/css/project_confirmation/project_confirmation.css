@@ -11,11 +11,15 @@
 .select2-container {
     font-size: 14px;
 }
+.bootstrap-table .fixed-table-container .table thead th {
+    padding: 0 7px 4px 7px;
+}
 .filter-control input{
-    height: calc(1.8125rem + 2px);
+    height: 1.5rem;
     padding: 0.25rem 0.5rem;
     font-size: .875rem;
-    line-height: 1.5;
+    /* line-height: 1.5; */
+    background: #f5f5f5;
     border-radius: 0.2rem;
 }
 
