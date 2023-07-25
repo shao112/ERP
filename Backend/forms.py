@@ -88,3 +88,9 @@ class EmployeeForm(BaseModelForm):
     class Meta:
         model = Employee
         fields = '__all__'
+        widgets = {
+            'gender': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'blood_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'marital_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'military_status': forms.Select(attrs={'class': 'form-control form-control-sm'})
+        }

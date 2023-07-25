@@ -68,9 +68,7 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="gender_control">性別</label>
-                                                <select class="form-control form-control-sm" name="gender" id="gender_control">
-                                                    <option value="{{ employee_form.gender }}">{{ employee_form.get_gender_display }}</option>
-                                                </select>
+                                                {{ employee_form.gender }}
                                             </div>
                                         </div>
                                         <div class="col-4">
@@ -92,9 +90,7 @@
                                         <div class="col-4">
                                             <div class="form-group">
                                                 <label for="blood_type_control">血型</label>
-                                                <select class="form-control form-control-sm" name="blood_type" id="blood_type_control">
-                                                    <option value="{{ employee_form.blood_type }}">{{ employee_form.get_blood_type_display }}</option>
-                                                </select>
+                                                {{ employee_form.blood_type }}
                                             </div>
                                         </div>
                                         <div class="col-4">
@@ -109,17 +105,13 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="marital_status_control">婚姻狀況</label>
-                                                <select class="form-control form-control-sm" name="marital_status" id="marital_status_control">
-                                                    <option value="{{ employee_form.marital_status }}">{{ employee_form.get_marital_status_display }}</option>
-                                                </select>
+                                                {{ employee_form.marital_status }}
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="military_status_control">兵役狀況</label>
-                                                <select class="form-control form-control-sm" name="military_status" id="military_status_control">
-                                                    <option value="{{ employee_form.military_status }}"> {{ employee_form.get_military_status_display }}</option>
-                                                </select>
+                                                {{ employee_form.military_status }}
                                             </div>
                                         </div>
                                     </div>
@@ -193,14 +185,14 @@
                                                     id="current_address_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_control">緊急聯絡人1</label>
                                                 <input class="form-control form-control-sm" name="emergency_contact"
                                                     id="emergency_contact_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_relations_control">關係1</label>
                                                 <input class="form-control form-control-sm"
@@ -208,7 +200,7 @@
                                                     id="emergency_contact_relations_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_phone_control">聯絡人電話1</label>
                                                 <input class="form-control form-control-sm"
@@ -239,7 +231,7 @@
         data-height="0" data-sticky-header="true" data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
         data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true"
         data-show-pagination-switch="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]"
-        data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "工程確認單"}'
+        data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "員工"}'
         data-checkbox="true" data-filter-control="true">
             <div id="toolbar">
                 <div class="employee-header container-fluid">
@@ -257,17 +249,17 @@
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th></th>
+                    <th></th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
+            <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in employee %}
                 {% if p.user.is_active %}
                 <tr>
-                    <td></td>
                     <td>
                         <a type="button" data-url="employee" data-id="{{p.pk}}"
                         class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -288,23 +280,6 @@
         </table>
     </div>
 </div>
-
-
-
-<script>
-    // 更美化 file input
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-    // Bootstrap-Table
-    $(document).ready(function () {
-        $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
-            toolbar: "#toolbar"
-        });
-    });
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
