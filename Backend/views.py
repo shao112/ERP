@@ -26,7 +26,7 @@ class New_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
-        form = NewForm(dict_data)
+        form = NewsForm(dict_data)
         if form.is_valid():
             News.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
             # News.objects.filter(id=dict_data['id']).update(**dict_data)
