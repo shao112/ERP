@@ -186,12 +186,13 @@
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
 
 
-        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true" data-show-export="true"
-        data-toolbar="#toolbar"  data-pagination="true" data-page-list="[10, 25, 50, all]"
-       data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true"
-       data-show-fullscreen="true" data-checkbox="true"
-            data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "工程確認單"}'>
-             
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-toolbar="#toolbar" data-pagination="true" data-page-list="[10, 25, 50, all]"
+            data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-show-fullscreen="true" data-checkbox="true"
+            data-filter-control="true" data-export-types="['excel', 'json', 'csv', 'txt']"
+            data-export-options='{"fileName": "工程確認單"}'>
+
             <div id="toolbar">
                 <div class="project-confirmation-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
@@ -218,7 +219,7 @@
                     <th data-force-hide="true" data-field="state" data-checkbox="true"></th>
                     <th data-force-hide="true"></th>
                     <th data-force-hide="true"></th>
-                    <th data-sortable="true">報價單號</th>
+                    <th data-sortable="true"   data-filter-control="input" data-field="quotation_id" >報價單號</th>
                     <th data-sortable="true">母案編號</th>
                     <th data-sortable="true">工確單編號</th>
                     <th data-sortable="true">工程名稱</th>
@@ -226,11 +227,11 @@
                     <th data-sortable="true">請購單位</th>
                     <th data-sortable="true">訂單編號</th>
                     <th data-sortable="true">成交金額</th>
-                    <th data-sortable="true" >完工狀態</th>
-                    <th data-sortable="true" >完工回報人</th>
+                    <th data-sortable="true">完工狀態</th>
+                    <th data-sortable="true">完工回報人</th>
                     <th data-sortable="true">完工回報日期</th>
                     <th data-sortable="true">備註</th>
-                    <th data-sortable="true" >完工重派附件</th>
+                    <th data-sortable="true">完工重派附件</th>
                     <th data-sortable="true">建立日期</th>
                 </tr>
             </thead>
@@ -241,13 +242,13 @@
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                            data-target="#project-confirmation-modal">
+                            data-target="#project-confirmation-modal" onclick="GET_handleClick(event)" >
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger">
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)" >
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
@@ -280,14 +281,14 @@
 
 <script>
     var $table = $('#table');
-        $(function () {
-            $('#toolbar').find('select').change(function () {
-                $table.bootstrapTable('refreshOptions', {
-                    exportDataType: $(this).val()
-                });
-                console.log($(this).val())
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+            $table.bootstrapTable('refreshOptions', {
+                exportDataType: $(this).val()
             });
-        })
+            console.log($(this).val())
+        });
+    })
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
