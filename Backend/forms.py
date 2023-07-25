@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project_Job_Assign, Department, Project_Confirmation, Employee
+from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News
 
 from django.contrib.auth.models import Group
 
@@ -32,6 +32,13 @@ class BaseModelForm(forms.ModelForm):
         # print(valid)
 
         return  not bool(self.errors)
+
+# 公告表單
+class NewForm(BaseModelForm):
+
+    class Meta:
+        model = News
+        fields = '__all__'
 
 # 工程確認單
 class ProjectConfirmationForm(BaseModelForm):

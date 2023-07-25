@@ -37,7 +37,17 @@ class ApprovalModel(models.Model):
     approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval')
 
     class Meta:
+
         abstract = True
+
+#紀錄修改者
+class ModifiedModel(models.Model):
+    modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    class Meta:
+        abstract = True
+
+
+
 
 
 # Create your models here.
@@ -206,7 +216,7 @@ class Project_Employee_Assign(models.Model):
 
 
 # 公告
-class News(models.Model):
+class News(ModifiedModel):
     NEWS_TYPE = (
         ('1', '獎懲規範'),
         ('2', '系統相關'),
@@ -229,6 +239,7 @@ class News(models.Model):
     type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
     content = models.TextField(blank=True, null=True, verbose_name='內容')
+    # author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 

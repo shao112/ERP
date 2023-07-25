@@ -23,8 +23,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
-                            data-method="post">
+                        <form action="/restful/new" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-4">
@@ -49,7 +48,7 @@
                                     <div class="form-group">
                                         <label for="level_control">重要性</label>
                                         <select class="form-control form-control-sm" name="level" id="level_control">
-                                            <option value="1">1</option>
+                                            <option value="H">高</option>
                                         </select>
                                     </div>
                                 </div>
@@ -108,19 +107,23 @@
                 </tr>
             </thead>
             <tbody>
+                {% for new in news %}
+
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id="" class="sys_get btn btn-warning mx-2"
+                        <a type="button" data-url="new" data-id="{{ new.id }}" class="sys_get btn btn-warning mx-2"
                             data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="" type="button"
-                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        <a data-url="new" data-id="{{ new.id }}" type="button" class="sys_del btn btn-danger my-2 mx-md-2"><i
+                                class="far fa-trash-alt"></i></a>
                     </td>
-                    <td>系統更新</td>
-                    <td>系統相關</td>
+
+                    <td>{{ new.title }}</td>
+                    <td>{{  new }}</td>
                     <td>公告</td>
                     <td>中</td>
                     <td>2023年7月17日</td>
                 </tr>
+                {% endfor%}
             </tbody>
         </table>
     </div>

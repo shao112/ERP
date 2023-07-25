@@ -28,4 +28,5 @@ urlpatterns = [
     path('employee', views.Employee_View.as_view(), name="project_confirmation_api"),
     path('group', views.Groups_View.as_view(), name="groups_view_api"),
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
+    path('new', views.New_View.as_view(), name="news_view_api"),
 ]

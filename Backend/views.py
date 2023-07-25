@@ -4,9 +4,9 @@ import json
 from datetime import datetime
 
 from .models import Clock
-from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign
+from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm
+from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -18,6 +18,52 @@ import openpyxl
 from django.db.utils import IntegrityError
 import random
 from  django.conf import settings
+
+
+
+class New_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        # form = EmployeeForm(dict_data)
+        # if form.is_valid():
+        #     Employee.objects.filter(id=dict_data['id']).update(**dict_data)
+        #     return JsonResponse({'status': 200})
+        # else:
+        #     error_messages = form.get_error_messages()
+        #     return JsonResponse({'status': 400,"error":error_messages})
+
+    
+    def delete(self,request):
+        # dict_data = convent_dict(request.body)  
+        # empolyee = Employee.objects.get(id=dict_data['id'])
+        # empolyee.user.is_active =False
+        # empolyee.user.save()
+        return JsonResponse({'status': 200})
+
+    def post(self,request):
+        form = NewForm(request.POST)
+
+        if form.is_valid():
+            # username = form.cleaned_data['full_name']
+            # password = form.cleaned_data['id_number']
+            # user = User.objects.create_user(username=username, password=password)
+            # employee = form.save(commit=False)
+            # employee.user = user
+            x=form.save()
+            print(x)
+            return JsonResponse({'status': 200})
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):        
+        id = request.GET.get('id')
+        data = get_object_or_404(News, id=id)
+        data = model_to_dict(data)
+        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 
 
 
