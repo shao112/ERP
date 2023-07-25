@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 import openpyxl
 
-from Backend.forms import  ProjectConfirmationForm, EmployeeForm
+from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
@@ -167,3 +167,7 @@ class News_ListView(ListView):
     model = News
     template_name = 'news/news.html'
     context_object_name = 'news'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['news_form'] = NewsForm()
+        return context

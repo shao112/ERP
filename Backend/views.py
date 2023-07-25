@@ -6,7 +6,7 @@ from datetime import datetime
 from .models import Clock
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewForm
+from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewsForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -42,7 +42,7 @@ class New_View(View):
         return JsonResponse({'status': 200})
 
     def post(self,request):
-        form = NewForm(request.POST)
+        form = NewsForm(request.POST)
 
         if form.is_valid():
             # username = form.cleaned_data['full_name']

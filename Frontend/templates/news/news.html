@@ -30,26 +30,19 @@
                                 <div class="col-12 col-md-4">
                                     <div class="form-group">
                                         <label for="category_control">公告類別</label>
-                                        <select class="form-control form-control-sm" name="category"
-                                            id="category_control">
-                                            <option value="1">1</option>
-                                        </select>
+                                        {{ news_form.category }}
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="form-group">
                                         <label for="type_control">類別</label>
-                                        <select class="form-control form-control-sm" name="type" id="type_control">
-                                            <option value="1">1</option>
-                                        </select>
+                                        {{ news_form.type }}
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="form-group">
                                         <label for="level_control">重要性</label>
-                                        <select class="form-control form-control-sm" name="level" id="level_control">
-                                            <option value="H">高</option>
-                                        </select>
+                                        {{ news_form.level }}
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -82,7 +75,7 @@
     </div>
     <div class="news-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
+            data-show-export="true" data-toolbar="#toolbar"
             data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
             data-show-columns="true" data-show-columns-toggle-all="true">
             <div id="toolbar">
@@ -90,14 +83,11 @@
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#news-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增公告
                     </a>
-                    <br>
-                    <a href="" class="font-weight-bold" id="">
-                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                    </a>
                 </div>
             </div>
-            <thead class="thead-light">
+            <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
+                    <th></th>
                     <th></th>
                     <th data-field="category" data-sortable="true">公告標題</th>
                     <th data-field="type" data-sortable="true">公告類別</th>
@@ -106,22 +96,24 @@
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="font-size: 14px;background: #f4f4f3;">
                 {% for new in news %}
 
                 <tr>
                     <td>
-                        <a type="button" data-url="new" data-id="{{ new.id }}" class="sys_get btn btn-warning mx-2"
+                        <a type="button" data-url="new" data-id="{{ new.id }}" class="sys_get btn btn-sm btn-warning"
                             data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="new" data-id="{{ new.id }}" type="button" class="sys_del btn btn-danger my-2 mx-md-2"><i
-                                class="far fa-trash-alt"></i></a>
+                    </td>
+                    <td>
+                        <a data-url="new" data-id="{{ new.id }}" type="button" class="sys_del btn btn-sm btn-danger"><i
+                            class="far fa-trash-alt"></i></a>
                     </td>
 
                     <td>{{ new.title }}</td>
                     <td>{{  new }}</td>
-                    <td>公告</td>
-                    <td>中</td>
-                    <td>2023年7月17日</td>
+                    <td>{{ new.get_category_display }}</td>
+                    <td>{{ new.get_level_display }}</td>
+                    <td>{{ new.created_date }}</td>
                 </tr>
                 {% endfor%}
             </tbody>

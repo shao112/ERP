@@ -123,16 +123,29 @@
             $(".fixed-table-container.fixed-height").css("height", newHeight);
         }
         bt_height();
-        $('#table').bootstrapTable({
-            height: $(window).height()*0.7,
-            toolbar: "#toolbar",
-            pageSize : 20, //一頁顯示幾筆
-            pageList : [ 20, 50, 100], //一頁顯示幾筆的選項
-        });
         //  height 初始化設定過一次，resize 要再重設
         $(window).resize(function () {
             bt_height();
         });
+
+        $('#table').bootstrapTable({
+            height: $(window).height()*0.7,
+            toolbar: "#toolbar",
+            minimumCountColumns:2,
+            pageSize : 20, //一頁顯示幾筆
+            pageList : [ 20, 50, 100], //一頁顯示幾筆的選項
+            detailView:true, //1，开启详情视树形图模式
+            detailFormatter:"detailFormatter", //2，定义详情显示函数
+            
+        });
+        function detailFormatter(index, row) {
+            var html = []
+            $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+            });
+            return html.join('');
+        }
+        
         
 
     });

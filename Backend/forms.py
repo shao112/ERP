@@ -33,12 +33,18 @@ class BaseModelForm(forms.ModelForm):
 
         return  not bool(self.errors)
 
-# 公告表單
-class NewForm(BaseModelForm):
+# 最新公告表單
+class NewsForm(BaseModelForm):
 
     class Meta:
         model = News
         fields = '__all__'
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'level': forms.Select(attrs={'class': 'form-control form-control-sm'})
+        }
+
 
 # 工程確認單
 class ProjectConfirmationForm(BaseModelForm):

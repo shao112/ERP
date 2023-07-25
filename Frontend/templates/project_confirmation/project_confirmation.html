@@ -188,8 +188,8 @@
 
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-height="0" data-sticky-header="true" data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
-            data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true"
-            data-show-pagination-switch="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]"
+            data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true" data-show-pagination-switch="true"
+            data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-detail-view="true" data-detail-formatter="detailFormatter"
             data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "工程確認單"}'
             data-checkbox="true" data-filter-control="true">
              
@@ -208,7 +208,7 @@
                         <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                     </a>
                     <select class="form-control form-control-sm mt-2">
-                        <option value="">選擇輸出範圍</option>
+                        <option value="">請先選擇輸出範圍</option>
                         <option value="all">輸出全部資料</option>
                         <option value="selected">輸出選擇資料</option>
                     </select>
@@ -286,17 +286,26 @@
                 $table.bootstrapTable('refreshOptions', {
                     exportDataType: $(this).val()
                 });
+                console.log($(this).val())
             });
         })
 
-            var trBoldBlue = $("table");
+            // var trBoldBlue = $("table");
 
-        $(trBoldBlue).on("click", "tr", function (){
-            console.log("...")
-            $(this).toggleClass("bold-blue");
-        });
+        // $(trBoldBlue).on("click", "tr", function (){
+        //     console.log("...")
+        //     $(this).toggleClass("bold-blue");
+        // });
 </script>
-
+<script>
+    function detailFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+            });
+        return html.join('');
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
