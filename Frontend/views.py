@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 import openpyxl
 
-from Backend.forms import  ProjectConfirmationForm
+from Backend.forms import  ProjectConfirmationForm, EmployeeForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
@@ -108,6 +108,7 @@ class Employee_list(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["department_list"] = Department.objects.values('id','department_name')
+        context['employee_form'] = EmployeeForm()
         return context
 
 

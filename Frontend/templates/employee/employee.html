@@ -12,7 +12,7 @@
 
 
 {% block main %}
-<div class="main px-3 px-md-5" id="employee-app">
+<div class="main px-3" id="employee-app">
     <div id="error-message"></div>
     <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -28,25 +28,102 @@
                         <form action="/restful/employee" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
-                            <div class="row my-4">
+                            <div class="form-row my-2">
                                 <div class="col-12 col-md-6">
-                                    <div class="row">
-                                        <div class="col-6">
+                                    <div class="form-row">
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label for="full_name_control">員工名稱</label>
                                                 <input class="form-control form-control-sm" name="full_name"
                                                     id="full_name_control" required></input>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="position">職稱</label>
+                                                <input class="form-control form-control-sm" name="position" id="position"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="departments">部門</label>
+                                                <select class="form-control form-control-sm" data-placeholder="選擇部門"
+                                                name="departments" id="completion_report_employee_select2">
+                                                <option value="-1">請選擇部門</option>
+                                                {% for department in department_list %}
+                                                <option value="{{ department.id }}">{{ department.department_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label for="employee_id_control">員工ID</label>
                                                 <input class="form-control form-control-sm" name="employee_id"
                                                     id="employee_id_control"></input>
                                             </div>
                                         </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="gender_control">性別</label>
+                                                <select class="form-control form-control-sm" name="gender" id="gender_control">
+                                                    <option value="{{ employee_form.gender }}">{{ employee_form.get_gender_display }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="start_date_control">到職日期</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="start_date" id="start_date_control"></input>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="id_number_control">身份證字號</label>
+                                                <input class="form-control form-control-sm" name="id_number"
+                                                    id="id_number_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="blood_type_control">血型</label>
+                                                <select class="form-control form-control-sm" name="blood_type" id="blood_type_control">
+                                                    <option value="{{ employee_form.blood_type }}">{{ employee_form.get_blood_type_display }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="birthday_control">出生日期</label>
+                                                <input type="date" class="form-control form-control-sm" name="birthday"
+                                                    id="birthday_control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="marital_status_control">婚姻狀況</label>
+                                                <select class="form-control form-control-sm" name="marital_status" id="marital_status_control">
+                                                    <option value="{{ employee_form.marital_status }}">{{ employee_form.get_marital_status_display }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="military_status_control">兵役狀況</label>
+                                                <select class="form-control form-control-sm" name="military_status" id="military_status_control">
+                                                    <option value="{{ employee_form.military_status }}"> {{ employee_form.get_military_status_display }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="phone_number_control">手機號碼</label>
@@ -62,149 +139,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="position">職稱</label>
-                                                <input class="form-control form-control-sm" name="position"
-                                                    id="position"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="age">部門</label>
-                                                <select class="select2" data-placeholder="選擇部門"
-                                                name="departments"
-                                                id="completion_report_employee_select2">
-                                                <option value="-1">請選擇部門</option>
-                                                {% for department in department_list %}
-                                                <option value="{{ department.id }}">{{ department.department_name }}
-                                                </option>
-                                                {% endfor %}
-                                            </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="start_date_control">到職日期</label>
-                                                <input type="date" class="form-control form-control-sm"
-                                                    name="start_date" id="start_date_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="seniority_control">目前年資</label>
-                                                <input class="form-control form-control-sm" name="seniority"
-                                                    id="seniority_control"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="id_number_control">身份證字號</label>
-                                                <input class="form-control form-control-sm" name="id_number"
-                                                    id="id_number_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="birthday_control">出生日期</label>
-                                                <input type="date" class="form-control form-control-sm" name="birthday"
-                                                    id="birthday_control"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="gender_control">性別</label>
-                                                <select class="form-control form-control-sm" name="gender"
-                                                    id="gender_control">
-                                                    <option value="M">男</option>
-                                                    <option value="F">女</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="blood_type_control">血型</label>
-                                                <select class="form-control form-control-sm" name="blood_type"
-                                                    id="blood_type_control">
-                                                    <option value="A">A型</option>
-                                                    <option value="B">B型</option>
-                                                    <option value="AB">AB型</option>
-                                                    <option value="O">O型</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="birth_place_control">出生地</label>
-                                                <input class="form-control form-control-sm" name="birth_place"
-                                                    id="birth_place_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="marital_status_control">婚姻狀況</label>
-                                                <select class="form-control form-control-sm" name="marital_status"
-                                                    id="marital_status_control">
-                                                    <option value="M">已婚</option>
-                                                    <option value="S">未婚</option>
-                                                    <option value="D">離異</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="military_status_control">兵役狀況</label>
-                                                <select class="form-control form-control-sm" name="military_status"
-                                                    id="military_status_control">
-                                                    <option value="M">義務役</option>
-                                                    <option value="E">免服役</option>
-                                                    <option value="A">替代役</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="permanent_address_control">戶籍地址</label>
-                                                <input class="form-control form-control-sm" name="permanent_address"
-                                                    id="permanent_address_control"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="current_address_city_control">現居地址縣市</label>
-                                                <input class="form-control form-control-sm" name="current_address_city"
-                                                    id="current_address_city_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="current_address_control">現居地址</label>
-                                                <input class="form-control form-control-sm" name="current_address"
-                                                    id="current_address_control"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="location_control">所在地</label>
-                                                <input class="form-control form-control-sm" name="location"
-                                                    id="location_control"></input>
+                                                <label for="personal_email_control">個人E-Mail</label>
+                                                <input class="form-control form-control-sm" name="personal_email"
+                                                    id="personal_email_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -215,24 +155,52 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-6">
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-row">
+                                        <div class="col-12">
                                             <div class="form-group">
-                                                <label for="personal_email_control">個人E-Mail</label>
-                                                <input class="form-control form-control-sm" name="personal_email"
-                                                    id="personal_email_control"></input>
+                                                <label for="birth_place_control">出生地</label>
+                                                <input class="form-control form-control-sm" name="birth_place"
+                                                    id="birth_place_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="location_control">所在地</label>
+                                                <input class="form-control form-control-sm" name="location"
+                                                    id="location_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="permanent_address_control">戶籍地址</label>
+                                                <input class="form-control form-control-sm" name="permanent_address"
+                                                    id="permanent_address_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="current_address_city_control">現居地址縣市</label>
+                                                <input class="form-control form-control-sm" name="current_address_city"
+                                                    id="current_address_city_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="current_address_control">現居地址</label>
+                                                <input class="form-control form-control-sm" name="current_address"
+                                                    id="current_address_control"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_control">緊急聯絡人1</label>
                                                 <input class="form-control form-control-sm" name="emergency_contact"
                                                     id="emergency_contact_control"></input>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_relations_control">關係1</label>
                                                 <input class="form-control form-control-sm"
@@ -240,7 +208,7 @@
                                                     id="emergency_contact_relations_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_phone_control">聯絡人電話1</label>
                                                 <input class="form-control form-control-sm"
@@ -248,6 +216,7 @@
                                                     id="emergency_contact_phone_control"></input>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -265,22 +234,27 @@
             </div>
         </div>
     </div>
-    <div class="employee-table container shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+    <div class="employee-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+        data-height="0" data-sticky-header="true" data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
+        data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true"
+        data-show-pagination-switch="true" data-pagination="true" data-page-list="[10, 25, 50, 100, all]"
+        data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "工程確認單"}'
+        data-checkbox="true" data-filter-control="true">
             <div id="toolbar">
                 <div class="employee-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增員工
                     </a>
                     <br>
-                    <a href="" class="font-weight-bold" id="" >
-                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    <a class="upload-file font-weight-bold" onclick="importfile()">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i>
+                        <span id="importLink">匯入</span>
+                        <input type="file" id="fileInput" style="display: none;" />
                     </a>
                 </div>
             </div>      
-            <thead class="thead-light">
+            <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th></th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
@@ -289,14 +263,19 @@
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
                 {% for p in employee %}
                 {% if p.user.is_active %}
                 <tr>
+                    <td></td>
                     <td>
-                        <a type="button" data-url="employee" data-id="{{p.pk}}" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#employee-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="employee" data-id="{{p.pk}}" type="button" class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        <a type="button" data-url="employee" data-id="{{p.pk}}"
+                        class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                        data-target="#employee-modal"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a data-url="employee" data-id="{{p.pk}}" type="button"
+                        class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
