@@ -53,7 +53,7 @@
                                             <div class="form-group">
                                                 <label>已選權限</label>
                                                 <select class="form-control "  id="permission-selected" size="10" readonly>
-                                                    <option  v-for="option in selectedOptionsText" value=""></option>
+                                                    
                                                 </select>
                                             </div>
                                         </div>
@@ -124,22 +124,19 @@
             };
         },
         delimiters :['[[', ']]'],
-        methdod: {
-            handleSelectionChange() {
-                console.log("選擇的值:", this.selectedOptions);
-                在被選中的選項改變時更新 selectedOptionsText
+        watch: {
+            selectedOptions(newSelectedOptions) {
+                // 在被選中的選項改變時更新 selectedOptionsText
                 this.selectedOptionsText = newSelectedOptions.map(option => {
-                    const optionElement = document.querySelector(`#user_set_select2 option[value="${option}"]`);
+                    const optionElement = document.querySelector(`#permission-select option[value="${option}"]`);
                     return optionElement.textContent;
                 });
             }
         }
     });
-
-    app.mount('#employee-permission-app');
   </script> -->
 
-<!-- 印出被選中的內容 -->
+<!-- 印出被選中的內容 (option是selected的)-->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
       $("#user_set_select2").on("change", function() {
@@ -149,6 +146,14 @@
         });
     
         console.log("選中的option內容：", selectedOptions);
+
+        var permissionSelected = document.getElementById("permission-selected");
+        permissionSelected.innerHTML = ""; 
+        selectedOptions.forEach(function(optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            permissionSelected.add(option);
+        });
       });
     });
     </script>
