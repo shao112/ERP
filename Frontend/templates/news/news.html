@@ -6,8 +6,6 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/news/news.css' %}">
-<script src="{% static 'js\ckeditor5\build\bundle.js' %}"></script>
-
 {% endblock %}
 
 
@@ -144,14 +142,23 @@
     });
 </script>
 
+
+<script>
+    function loadSettingCkeditor() {
+        var script = document.createElement('script');
+        script.src = "{% static 'js\ckeditor5\build\setting_ckeditor.js' %}";
+        document.body.appendChild(script);
+    }
+</script>
+<script src="{% static 'js\ckeditor5\build\bundle.js' %}" onload="loadSettingCkeditor()"></script>
+
+
 <script>
 
 
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
-            // "{% static 'js/ckeditor5/build/bundle.js' %}",
-            "{% static 'js/ckeditor/setting_ckeditor.js' %}",
         ];
 
         scripts.forEach(function (src) {

@@ -17,6 +17,26 @@ import datetime
 import openpyxl
 from django.db.utils import IntegrityError
 
+from  django.conf import settings
+
+
+class IMGUploadView(View):
+    def post(self, request):
+        if request.FILES.get('image'):
+        # uploaded_file = request.FILES.get('upload')
+            image_file = request.FILES['upload']
+
+            file_path = rf'{settings.MEDIA_ROOT}/news_uploads/{image_file.name}'
+
+            with open(file_path, 'wb') as f:
+                for chunk in image_file.chunks():
+                    f.write(chunk)
+
+            return JsonResponse({'status': 'success', 'message': 'Image uploaded and saved successfully.'})
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+
+
 
 
 class FileUploadView(View):
@@ -96,14 +116,7 @@ class Profile_View(View):
             update_session_auth_hash(request, form.user)
             return JsonResponse(status=200)
         else:
-            return JsonResponse({"data":form.errors}, status=400,safe=False)
-        # new_password = request.POST["new-password"]
-        # print(new_password)
-        # user = User.objects.get(id=request.user.id)
-        # user.set_password(new_password)
-        # user.is_staff = True
-        # user.save()
-        # return HttpResponseRedirect('/')
+            return JsonResponse({"data":form.errors}, status=400,safe=False)        
 
     def get(self, request):
         pass

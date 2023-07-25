@@ -1,4 +1,19 @@
 
+function getcsrftoken() {
+    var name = "csrftoken";
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 class MyUploadAdapter {
     constructor(loader) {
@@ -17,9 +32,9 @@ class MyUploadAdapter {
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
 
-        xhr.open('POST', '/upload', true);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + "csrf_token()");
-        xhr.setRequestHeader('X-CSRFToken', "csrf_token");
+        xhr.open('POST', '/restful/saveimg', true);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + getcsrftoken());
+        xhr.setRequestHeader('X-CSRFToken', getcsrftoken());
         xhr.responseType = 'json';
     }
 
@@ -56,7 +71,7 @@ class MyUploadAdapter {
         const data = new FormData();
 
         data.append('upload', file);
-        data.append('X-CSRFToken', "csrf_token()");
+        data.append('X-CSRFToken', getcsrftoken());
 
         this.xhr.send(data);
     }
