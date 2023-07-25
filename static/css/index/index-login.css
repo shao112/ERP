@@ -26,6 +26,13 @@
     }
 }
 /* Vue.js transition */
+
+.news .row{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .modal-body a:hover{
     color: #fff;
     background: #f0f0f0;

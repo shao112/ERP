@@ -44,7 +44,7 @@
                                                 <label>選擇人員(按住ctrl多選)</label>
                                                 <select class="form-control" name="user_set" id="user_set_select2" size="10" multiple>
                                                     {% for employee in employees %}
-                                                    <option value="{{ employees.user__id }}">{{ employee.full_name }}</option>
+                                                    <option value="{{ employee.user_id }}">{{ employee.full_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -115,26 +115,6 @@
         
     </div>
 </div>
-<!-- <script>
-    const app = Vue.createApp({
-        data() {
-            return {
-                selectedOptions: [], // 將被選中的選項存儲在此數組中
-                selectedOptionsText: [], // 存儲被選中的選項的文字標籤
-            };
-        },
-        delimiters :['[[', ']]'],
-        watch: {
-            selectedOptions(newSelectedOptions) {
-                // 在被選中的選項改變時更新 selectedOptionsText
-                this.selectedOptionsText = newSelectedOptions.map(option => {
-                    const optionElement = document.querySelector(`#permission-select option[value="${option}"]`);
-                    return optionElement.textContent;
-                });
-            }
-        }
-    });
-  </script> -->
 
 <!-- 印出被選中的內容 (option是selected的)-->
 <script>
