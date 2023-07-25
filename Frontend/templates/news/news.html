@@ -62,7 +62,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="content_control">內容</label>
-                                        <textarea class="form-control" name="content" id="text"></textarea>
+                                        <textarea class="form-control" name="editor_content" id="ckeditor5"></textarea>
                                     </div>
                                 </div>
 
@@ -113,12 +113,19 @@
                     <td>
                         <a type="button" data-url="new" data-id="{{ new.id }}" class="sys_get btn btn-warning mx-2"
                             data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="new" data-id="{{ new.id }}" type="button" class="sys_del btn btn-danger my-2 mx-md-2"><i
-                                class="far fa-trash-alt"></i></a>
+                        <a data-url="new" data-id="{{ new.id }}" type="button"
+                            class="sys_del btn btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
 
                     <td>{{ new.title }}</td>
-                    <td>{{  new }}</td>
+                    <td>
+                        {% if new.editor_content|length > 10 %}
+                        {{ new.editor_content|safe|slice:":10" }} …
+                      {% else %}
+                        {{ new.editor_content|safe }}
+                      {% endif %}
+
+                    </td>
                     <td>公告</td>
                     <td>中</td>
                     <td>2023年7月17日</td>
@@ -142,17 +149,18 @@
             height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
+
+
+
     });
-</script>
-
-
-<script>
+    // 後加載此js
     function loadSettingCkeditor() {
         var script = document.createElement('script');
         script.src = "{% static 'js\ckeditor5\build\setting_ckeditor.js' %}";
         document.body.appendChild(script);
     }
 </script>
+
 <script src="{% static 'js\ckeditor5\build\bundle.js' %}" onload="loadSettingCkeditor()"></script>
 
 
@@ -170,6 +178,7 @@
             document.body.appendChild(script);
         });
     });
+
 
 
 </script>

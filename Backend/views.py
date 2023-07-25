@@ -25,34 +25,26 @@ class New_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
-        # form = EmployeeForm(dict_data)
-        # if form.is_valid():
-        #     Employee.objects.filter(id=dict_data['id']).update(**dict_data)
-        #     return JsonResponse({'status': 200})
-        # else:
-        #     error_messages = form.get_error_messages()
-        #     return JsonResponse({'status': 400,"error":error_messages})
+        form = EmployeeForm(dict_data)
+        if form.is_valid():
+            News.objects.filter(id=dict_data['id']).update(**dict_data)
+            return JsonResponse({'status': 200},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({'status': 400,"error":error_messages},status=400)
 
     
     def delete(self,request):
-        # dict_data = convent_dict(request.body)  
-        # empolyee = Employee.objects.get(id=dict_data['id'])
-        # empolyee.user.is_active =False
-        # empolyee.user.save()
-        return JsonResponse({'status': 200})
+        dict_data = convent_dict(request.body)  
+        News.objects.get(id=dict_data['id']).delete()
+        return JsonResponse({"status":200},status=200)
 
     def post(self,request):
         form = NewForm(request.POST)
 
         if form.is_valid():
-            # username = form.cleaned_data['full_name']
-            # password = form.cleaned_data['id_number']
-            # user = User.objects.create_user(username=username, password=password)
-            # employee = form.save(commit=False)
-            # employee.user = user
-            x=form.save()
-            print(x)
-            return JsonResponse({'status': 200})
+            form.save()
+            return JsonResponse({"data":"刪除成功"},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -147,11 +139,6 @@ class Groups_View(View):
 from django.contrib.auth import update_session_auth_hash
 class Profile_View(View):
 
-    def delete(self,request):
-        pass
-
-    def put(self,request):
-        pass
 
     def post(self,request):
 
@@ -165,8 +152,6 @@ class Profile_View(View):
         else:
             return JsonResponse({"data":form.errors}, status=400,safe=False)        
 
-    def get(self, request):
-        pass
 
 class Check(View):
     def post(self,request):
