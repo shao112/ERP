@@ -4,7 +4,6 @@ from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
 
-
 def get_weekdays():
     weekdays = []
     today = date.today()

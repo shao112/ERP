@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django_currentuser.middleware import get_current_authenticated_user
 
 
 class Approval(models.Model):
@@ -37,14 +38,30 @@ class ApprovalModel(models.Model):
     approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval')
 
     class Meta:
-
         abstract = True
+
+
 
 #紀錄修改者
 class ModifiedModel(models.Model):
-    modified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
     class Meta:
         abstract = True
+    def save(self, *args, **kwargs):
+        # print("xxx save")
+        # Get the current authenticated user
+        user = get_current_authenticated_user()
+        self.modified_by = user.employee
+        super().save(*args, **kwargs)
+
+    def update_fields_and_save(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()
+
+
 
 
 
@@ -53,7 +70,7 @@ class ModifiedModel(models.Model):
 # Create your models here.
 # 員工（以內建 User 擴增）
 # admin:admin IT0000:itadmin000
-class Employee(models.Model):
+class Employee(ModifiedModel):
     GENDER_CHOICES = [
         ('M', '男'),
         ('F', '女'),
@@ -99,8 +116,7 @@ class Employee(models.Model):
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
     emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+  
 
     class Meta:
         verbose_name = "員工"   # 單數
@@ -111,12 +127,10 @@ class Employee(models.Model):
 
 
 # 部門
-class Department(models.Model):
+class Department(ModifiedModel):
     parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.SET_NULL, null=True, blank=True, verbose_name='上層部門')
     department_name = models.CharField(max_length=30, null=True, blank=True,verbose_name='部門名稱')
     department_id = models.CharField(max_length=20, null=True, blank=True,verbose_name='部門編號')
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "部門"   # 單數
@@ -129,7 +143,7 @@ class Department(models.Model):
 
 
 # 工程確認單
-class Project_Confirmation(models.Model):
+class Project_Confirmation(ModifiedModel):
     project_confirmation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="工確單編號")
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號") # 唯一
     project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
@@ -143,9 +157,6 @@ class Project_Confirmation(models.Model):
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
-    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "工程確認單"   # 單數
@@ -163,7 +174,7 @@ class Project_Confirmation(models.Model):
 
 
 # 工作派任計畫
-class Project_Job_Assign(models.Model):
+class Project_Job_Assign(ModifiedModel):
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project',null=True, blank=True, verbose_name="工程確認單") # 連帶帶出來的資料可重複
     attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
@@ -174,9 +185,6 @@ class Project_Job_Assign(models.Model):
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
-    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "工作派任計畫"   # 單數
@@ -193,7 +201,7 @@ class Project_Job_Assign(models.Model):
     attachment_link.allow_tags = True
 
 # 派工單
-class Project_Employee_Assign(models.Model):
+class Project_Employee_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱、請購單位）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project_employee_assign',null=True, blank=True, verbose_name="工程確認單")
     construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
@@ -204,10 +212,7 @@ class Project_Employee_Assign(models.Model):
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
-    author = models.ForeignKey(Employee,max_length=100, on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name="建立人")
     enterprise_signature = models.ImageField(null=True, blank=True, verbose_name='業主簽名')
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "派工單"   # 單數
@@ -239,13 +244,14 @@ class News(ModifiedModel):
     type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
     editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
-    # author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "最新消息"   # 單數
         verbose_name_plural = verbose_name   #複數
+    
+    def save(self, *args, **kwargs):
+        # Call the save method of the parent class (ModifiedModel) using super()
+        super().save(*args, **kwargs)
 
 
 class Clock(models.Model):
@@ -261,7 +267,7 @@ class Clock(models.Model):
         verbose_name_plural = verbose_name   #複數
 
 # 固定資產管理
-class Equipment(models.Model):
+class Equipment(ModifiedModel):
     TRANSMITTER_SIZE = (
         ('1', '大'),
         ('2', '小'),
@@ -301,24 +307,8 @@ class Equipment(models.Model):
     repair_finished_date = models.DateField(blank=True, null=True, verbose_name="完成日")
     number_of_repairs = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計次數")
     accruing_amounts = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計金額")
-    author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
     class Meta:
         verbose_name = "固定資產管理"   # 單數
         verbose_name_plural = verbose_name   #複數
         
-
-# @receiver(pre_save, sender=Project_Job_Assign)
-# def set_author(sender, instance, **kwargs):
-#     if not instance.author:
-#         # 只有在 `author` 欄位為空時，才會將其設置為 `request.user`
-#         # User = get_user_model()
-#         print("gogog")
-#         print(instance)
-#         # print(instance)
-#         print(instance.request.user)
-#         # print(request.user)
-#         instance.author = User.objects.get(username='request.user')
-#         print("gogog")
