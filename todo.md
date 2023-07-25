@@ -1,5 +1,8 @@
 # 紀錄待完成項目
 
+## 希望可以改
+restful 對應的status 接收 、view 發送的status
+
 ## 較緊急
 
 - [x] 表單搜尋排序篩選（加上Bootstrap-Table會影響編輯跟刪除功能，新增估能正常）

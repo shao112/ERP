@@ -55,7 +55,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label for="content_control">內容</label>
-                                        <textarea class="form-control" name="content" id="text"></textarea>
+                                        <textarea class="form-control" name="editor_content" id="ckeditor5"></textarea>
                                     </div>
                                 </div>
 
@@ -110,7 +110,13 @@
                     </td>
 
                     <td>{{ new.title }}</td>
-                    <td>{{  new }}</td>
+                    <td>
+                        {% if new.editor_content|length > 10 %}
+                            {{ new.editor_content|safe|slice:":10" }} …
+                        {% else %}
+                            {{ new.editor_content|safe }}
+                        {% endif %}
+                    </td>
                     <td>{{ new.get_category_display }}</td>
                     <td>{{ new.get_level_display }}</td>
                     <td>{{ new.created_date }}</td>
@@ -134,17 +140,18 @@
             height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
+
+
+
     });
-</script>
-
-
-<script>
+    // 後加載此js
     function loadSettingCkeditor() {
         var script = document.createElement('script');
         script.src = "{% static 'js\ckeditor5\build\setting_ckeditor.js' %}";
         document.body.appendChild(script);
     }
 </script>
+
 <script src="{% static 'js\ckeditor5\build\bundle.js' %}" onload="loadSettingCkeditor()"></script>
 
 
@@ -162,6 +169,7 @@
             document.body.appendChild(script);
         });
     });
+
 
 
 </script>

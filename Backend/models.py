@@ -238,7 +238,7 @@ class News(ModifiedModel):
     category = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="公告類別")
     type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
-    content = models.TextField(blank=True, null=True, verbose_name='內容')
+    editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
     # author = models.ForeignKey(Employee,max_length=100, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="建立人")
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')

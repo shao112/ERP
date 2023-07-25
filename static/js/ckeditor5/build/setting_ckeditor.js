@@ -90,9 +90,9 @@ function MyCustomUploadAdapterPlugin(editor) {
 }
 
 
-ClassicEditor.create(document.querySelector('#text'), {
+ClassicEditor.create(document.querySelector('#ckeditor5'), {
     extraPlugins: [MyCustomUploadAdapterPlugin],
-
+    // "name": "content",
     fontColor: {
         colors: [
             {
@@ -177,10 +177,11 @@ ClassicEditor.create(document.querySelector('#text'), {
 
         editor.model.document.on('change:data', () => {
             let htmlData = editor.getData({ 'exportData': 'html' });
-            console.log(htmlData);
-            console.log(editor.getData());
         });
+        window.editor = editor;
 
+
+        // editor.setData("ee");
         // console.log(editor);
     })
     .catch(error => {

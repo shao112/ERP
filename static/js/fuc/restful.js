@@ -30,7 +30,7 @@ function showSwal(title, text, icon) {
 
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
-    
+
 
     //清除select2的資訊
     $("[id*='_select2']").each(function () {
@@ -94,7 +94,7 @@ function GET_handleClick(event) {
                                 const containsValue = get_value.find(item => item == option_id);
                                 console.log(matchedItem)
                                 console.log(containsValue)
-                                if (matchedItem||containsValue) {
+                                if (matchedItem || containsValue) {
                                     option.selected = true;
                                     console.log("c")
                                 }
@@ -104,8 +104,12 @@ function GET_handleClick(event) {
 
                         } else {
                             input.value = jsonData[key];
+                            console.log(input.value)
                         }
 
+                        if (key == "editor_content") { //觸發change事件
+                            editor.setData( jsonData[key]);
+                        }
 
                         if (key == "project_confirmation") { //觸發change事件
                             const event = new Event("change");
@@ -163,6 +167,8 @@ $("form").on("submit", function (event) {
             }
         },
         error: function (xhr, textStatus, errorThrown) {
+            // 根據xhr.status 處理
+            if (xhr.status === 400) {}
             alert("系統發生錯誤");
             console.log(errorThrown)
         }
