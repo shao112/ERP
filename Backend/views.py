@@ -16,25 +16,26 @@ from .utils import convent_dict,convent_employee,convent_excel_dict
 import datetime
 import openpyxl
 from django.db.utils import IntegrityError
-
+import random
 from  django.conf import settings
+
 
 
 class IMGUploadView(View):
     def post(self, request):
-        if request.FILES.get('image'):
-        # uploaded_file = request.FILES.get('upload')
-            image_file = request.FILES['upload']
-
-            file_path = rf'{settings.MEDIA_ROOT}/news_uploads/{image_file.name}'
+        image_file = request.FILES.get('upload_img')
+        if image_file !=None:
+            random_number = str(random.randint(1, 99))
+            new_file_name = f"{random_number}_{image_file.name}"
+            file_path = rf'{settings.MEDIA_ROOT}/news_uploads/{new_file_name}'
 
             with open(file_path, 'wb') as f:
                 for chunk in image_file.chunks():
                     f.write(chunk)
 
-            return JsonResponse({'status': 'success', 'message': 'Image uploaded and saved successfully.'})
+            return JsonResponse({"url":f"/media/news_uploads/{new_file_name}"},status=200)
 
-        return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+        return JsonResponse(status=500)
 
 
 

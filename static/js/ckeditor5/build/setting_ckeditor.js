@@ -70,7 +70,7 @@ class MyUploadAdapter {
     _sendRequest(file) {
         const data = new FormData();
 
-        data.append('upload', file);
+        data.append('upload_img', file);
         data.append('X-CSRFToken', getcsrftoken());
 
         this.xhr.send(data);
