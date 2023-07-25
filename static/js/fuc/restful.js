@@ -49,12 +49,15 @@ $("#sys_new").on("click", function () {
 //  獲取資料並帶入
 
 document.querySelectorAll('.sys_get').forEach(element => {
+    console.log("element");
+    console.log(element);
     element.addEventListener('click', GET_handleClick.bind(element));
 });
 
 function GET_handleClick(event) {
 
-
+    console.log("event.target");
+    console.log(event.target);
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');

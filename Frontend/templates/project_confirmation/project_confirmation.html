@@ -189,7 +189,7 @@
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-height="0" data-sticky-header="true" data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
             data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true" data-show-pagination-switch="true"
-            data-pagination="true" data-page-list="[10, 25, 50, 100, all]" data-detail-view="true" data-detail-formatter="detailFormatter"
+            data-pagination="true" data-page-list="[10, 25, 50, 100, all]" 
             data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "工程確認單"}'
             data-checkbox="true" data-filter-control="true">
              
@@ -216,7 +216,6 @@
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-field="state" data-checkbox="true"></th>
                     <th data-force-hide="true"></th>
                     <th data-force-hide="true"></th>
                     <th data-sortable="true" data-field="quotation_id" data-searchable="true" data-filter-control="input">報價單號</th>
@@ -238,7 +237,6 @@
             <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
                 {% for p in project_confirmation %}
                 <tr>
-                    <td></td>
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
