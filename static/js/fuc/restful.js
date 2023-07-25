@@ -30,8 +30,6 @@ function showSwal(title, text, icon) {
 
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
-
-
     //清除select2的資訊
     $("[id*='_select2']").each(function () {
         var id = $(this).attr("id");
@@ -92,8 +90,6 @@ function GET_handleClick(event) {
                                 console.log(option_id)
                                 const matchedItem = get_value.find(item => item.id == option_id);
                                 const containsValue = get_value.find(item => item == option_id);
-                                console.log(matchedItem)
-                                console.log(containsValue)
                                 if (matchedItem || containsValue) {
                                     option.selected = true;
                                     console.log("c")

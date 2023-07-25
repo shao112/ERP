@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
+from django.contrib.auth import update_session_auth_hash
 
-from .models import Clock
-from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News
+from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewsForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -21,13 +21,15 @@ from  django.conf import settings
 
 
 
+
 class New_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
-        form = EmployeeForm(dict_data)
+        form = NewForm(dict_data)
         if form.is_valid():
-            News.objects.filter(id=dict_data['id']).update(**dict_data)
+            News.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+            # News.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -114,10 +116,7 @@ class Groups_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
         group = Group.objects.get(id=dict_data['id'])
-        print("put")
-        print(dict_data)        
         user_ids= dict_data["user_set"]
-        print(user_ids)
         users = User.objects.filter(id__in=user_ids)       
         group.user_set.set(users)
    
@@ -136,14 +135,9 @@ class Groups_View(View):
 
         return JsonResponse({"data": data, "status": 200}, status=200)
 
-from django.contrib.auth import update_session_auth_hash
 class Profile_View(View):
 
-
     def post(self,request):
-
-
-        print(request.POST)
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
@@ -173,15 +167,13 @@ class Check(View):
        return HttpResponseNotAllowed(['only POST'])
     
 
-
-
 class Employee_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = EmployeeForm(dict_data)
         if form.is_valid():
-            Employee.objects.filter(id=dict_data['id']).update(**dict_data)
+            Employee.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()
@@ -231,11 +223,7 @@ class Project_Confirmation_View(View):
             del dict_data["completion_report_employee"]
             getObject = Project_Confirmation.objects.get(id=dict_data['id'])
             getObject.completion_report_employee.set(get_completion_report_employee)
-            for key, value in dict_data.items():
-                setattr(getObject, key, value)
-
-            getObject.save()
-            # getObject.update(**dict_data)
+            getObject.update_fields_and_save(dict_data)
 
             return JsonResponse({'status': 200})
         else:
@@ -279,27 +267,28 @@ class Job_Assign_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectJobAssignForm(dict_data)
         if form.is_valid():
-            print("eemgo")
+            employee_key =("support_employee","work_employee","lead_employee")
             getObject = Project_Job_Assign.objects.get(id=dict_data['id'])
-            print("eem11go")
-            for key, value in dict_data.items():
-                employee_key =("support_employee","work_employee","lead_employee","completion_report_employeeS")
-                if key in employee_key: #處理員工多對多陣列        
-                    print("emgo")
-                    print("emgo")
-                    print("emgo")
+
+            for key in employee_key:
+                if key in dict_data:
                     field = getattr(getObject, key)
-                    field.set(value)
-                else:
-                    if key =="project_confirmation":
-                        confirmation_instance = Project_Confirmation.objects.get(pk=value)
-                        getObject.project_confirmation = confirmation_instance
-                    else:
-                        setattr(getObject, key, value)
+                    field.set(dict_data[key])
+                else:#沒有對應的name，代表沒有被選，代表取消所有勾選資料
+                    field = getattr(getObject, key)
+                    field.set([])
+                    
+            for key in employee_key:
+                if key in dict_data:
+                    del dict_data[key]
+            
+            if key =="project_confirmation":
+                confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
+                getObject.project_confirmation = confirmation_instance
+            del dict_data["project_confirmation"]
 
-            getObject.save()
+            getObject.update_fields_and_save(**dict_data)
 
-            # Project_Job_Assign.objects.filter(id=dict_data['id']).update(**dict_data)
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()
@@ -323,17 +312,13 @@ class Job_Assign_View(View):
             error_messages = form.get_error_messages()
             return JsonResponse({'status': 400,"error":error_messages})
 
-
     def get(self,request):        
         id = request.GET.get('id')
         data = get_object_or_404(Project_Job_Assign, id=id)
         data = model_to_dict(data)
-        # print(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
         data["support_employee"] = convent_employee(data["support_employee"])
-
-
 
         if  "attachment" in data:
             if  data['attachment']:
