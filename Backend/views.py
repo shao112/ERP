@@ -228,11 +228,11 @@ class Project_Confirmation_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
+            getObject = Project_Confirmation.objects.get(id=dict_data['id'])
             get_completion_report_employee = dict_data["completion_report_employee"]
             del dict_data["completion_report_employee"]
-            getObject = Project_Confirmation.objects.get(id=dict_data['id'])
             getObject.completion_report_employee.set(get_completion_report_employee)
-            getObject.update_fields_and_save(dict_data)
+            getObject.update_fields_and_save(**dict_data)
 
             return JsonResponse({'status': 200})
         else:
