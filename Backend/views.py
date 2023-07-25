@@ -26,10 +26,11 @@ class New_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
-        form = NewForm(dict_data)
+        form = NewsForm(dict_data)
         if form.is_valid():
             News.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
             # News.objects.filter(id=dict_data['id']).update(**dict_data)
+
             return JsonResponse({'status': 200},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -172,8 +173,16 @@ class Employee_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = EmployeeForm(dict_data)
-        if form.is_valid():
-            Employee.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+        if form.is_valid():               
+            getObject=Employee.objects.get(id=dict_data['id'])
+            if "departments" in dict_data:
+                Department_instance = Department.objects.get(pk=int(dict_data["departments"]))
+                getObject.departments = Department_instance            
+                del dict_data["departments"]
+            else:
+                getObject.departments = None
+
+            getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'status': 200})
         else:
             error_messages = form.get_error_messages()
@@ -281,11 +290,11 @@ class Job_Assign_View(View):
             for key in employee_key:
                 if key in dict_data:
                     del dict_data[key]
-            
-            if key =="project_confirmation":
-                confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
-                getObject.project_confirmation = confirmation_instance
-            del dict_data["project_confirmation"]
+                
+                if key =="project_confirmation":
+                    confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
+                    getObject.project_confirmation = confirmation_instance
+                del dict_data["project_confirmation"]
 
             getObject.update_fields_and_save(**dict_data)
 
