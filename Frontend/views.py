@@ -16,6 +16,13 @@ from Backend.utils import get_weekly_clock_data
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from django.views.defaults import permission_denied
+
+def custom_permission_denied(request, exception=None,template_name='403.html'):
+    return permission_denied(request, exception, template_name='403.html')
+
+
+
 # 首頁
 class Index(View):
 

@@ -17,6 +17,10 @@ from django.urls import path, include, re_path
 from . import views
 from django.contrib.auth.decorators import login_required, permission_required
 
+
+handler403 = views.custom_permission_denied
+
+
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
