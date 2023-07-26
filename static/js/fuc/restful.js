@@ -50,9 +50,7 @@ $("#sys_new").on("click", function () {
 
 document.querySelectorAll('.sys_get').forEach(element => {
     console.log("ee")
-    element.onclick=function(){
-        GET_handleClick(element);
-    }
+    element.addEventListener('click', GET_handleClick.bind(element));
 });
 
 function GET_handleClick(event) {
@@ -109,7 +107,7 @@ function GET_handleClick(event) {
                         }
 
                         if (key == "editor_content") { //觸發change事件
-                            editor.setData( jsonData[key]);
+                            editor.setData(jsonData[key]);
                         }
 
                         if (key == "project_confirmation") { //觸發change事件
@@ -169,7 +167,7 @@ $("form").on("submit", function (event) {
         },
         error: function (xhr, textStatus, errorThrown) {
             // 根據xhr.status 處理
-            if (xhr.status === 400) {}
+            if (xhr.status === 400) { }
             alert("系統發生錯誤");
             console.log(errorThrown)
         }

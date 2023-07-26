@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.urls import path, include, re_path
 from . import views
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
+    path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('department/', login_required(views.Department_list.as_view()), name='department'),
     path('equipment/', login_required(views.Equipment_ListView.as_view()), name='equipment'), 
-    path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('employee/', views.Employee_list.as_view(), name='employee_list'),
     path('employee_permission/', views.Employee_Permission_list.as_view(), name='employee_permission_list'),
     path('job-assign/', login_required(views.Job_Assign_ListView.as_view()), name='project'),

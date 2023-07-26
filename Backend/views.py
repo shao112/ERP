@@ -19,6 +19,8 @@ from django.db.utils import IntegrityError
 import random
 from  django.conf import settings
 
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 

@@ -14,6 +14,8 @@ from django.views.generic import ListView, DeleteView
 from Backend.utils import get_weekly_clock_data
 
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 # 首頁
 class Index(View):
 
@@ -62,6 +64,7 @@ class Index(View):
         else:
             # 使用者是 AnonymousUser，代表是匿名使用者
             return render(request, 'index/index-unlogin.html')
+
 @login_required
 def signout(request):
     logout(request)
@@ -69,15 +72,19 @@ def signout(request):
 
 
 # 工程確認單，使用 ListView 顯示資料而已，做表單送出都在 Backend 的 Views.py
-class Project_Confirmation_ListView(ListView):
+class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
+
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
         context["employees_list"] =employees = Employee.objects.values('id','user__username')
         return context
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='工程部總管理').exists()    
     
     # 在 ListView 傳送 form
     # def get_context_data(self, **kwargs):
