@@ -88,14 +88,14 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="container">
-                                        <h5>
+                                        <h5 class="mb-4">
                                             <span class="badge badge-dark">{{ n.get_category_display }}</span>
                                             <span class="badge badge-dark">{{ n.get_type_display }}</span>
                                             <span class="badge badge-dark">重要度：{{ n.get_level_display }}</span>
                                             {{ n.created_date }}
                                         </h5>
                                         <div class="content">
-                                            內容
+                                            {{ n.editor_content|safe }}
                                         </div>
                                     </div>
                                 </div>

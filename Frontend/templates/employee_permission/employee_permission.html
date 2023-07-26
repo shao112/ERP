@@ -75,16 +75,16 @@
             </div>
         </div>
     </div>
-    <div class="employee-permission-table  container">
+    <div class="employee-permission-table container">
         <div class="col-12 col-md-10 mx-auto shadow-sm table-responsive-lg">
             <table class="table table-sm table-hover">
-                <thead class="thead-light" style="font-size: 14px;">
+                <thead class="thead-light">
                     <tr class="text-nowrap">
                         <th></th>
                         <th>群組名稱</th>
                     </tr>
                 </thead>
-                <tbody style="font-size: 14px;">
+                <tbody>
                     {% for g in groups %}
                     <tr>
                         <td>
@@ -93,18 +93,15 @@
                                 data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
                           
                         </td>
-                        <td  data-toggle="collapse" data-target="#sub-row-{{ g.id }}">{{ g.name }} </td>
+                        <td data-toggle="collapse" data-target="#sub-row-{{ g.id }}">
+                            {{ g.name }}
+                        </td>
                     </tr>
                     <tr class="collapse" id="sub-row-{{ g.id }}">
                         <td></td>
                         <td>
-                            id ==> 
                             {% for employees_list in g.user_set.all %}
-                                {{ employees_list.id }}
-                            {% endfor %}
-                            name ==> 
-                            {% for employees_list in g.user_set.all %}
-                                {{ employees_list }}
+                            • {{ employees_list.employee.full_name }}
                             {% endfor %}
                         </td>
                     </tr>

@@ -9,5 +9,10 @@
     table-layout: fixed;
     word-break: break-all;
 }
+.employee-permission-table .collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
 
 
