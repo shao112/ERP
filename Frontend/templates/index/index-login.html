@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="container shadow-sm mt-4">
-        <div class="row text-center">
+        <div class="row">
             <div class="col-12 col-md-6  border-right">
                 <div class="font-weight-bold" style="min-height: 150px;">
                     個人積分點數版
@@ -68,19 +68,65 @@
             </div>
             <div class=" col-12 col-md-6">
                 <div class="font-weight-bold mb-2">公司最新資訊 </div>
-                {% for n in news %}
                 <div class="news container">
-                    <a href="">
+                    {% for n in news %}
+                    <a href="" data-toggle="modal" data-target="#news-modal-{{ n.id }}" data-content="{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.title }}">
                         <div class="row">
                             <div class="col-3 border-right">{{ n.get_category_display }}</div>
                             <div class="col-3 border-right">{{ n.get_type_display }}</div>
                             <div class="col-6">{{ n.title }}</div>
                         </div>
                     </a>
+                    <div class="news-modal modal fade" id="news-modal-{{ n.id }}" tabindex="-1" >
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="department-label">{{ n.title }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <h5>
+                                            <span class="badge badge-dark">{{ n.get_category_display }}</span>
+                                            <span class="badge badge-dark">{{ n.get_type_display }}</span>
+                                            <span class="badge badge-dark">重要度：{{ n.get_level_display }}</span>
+                                            {{ n.created_date }}
+                                        </h5>
+                                        <div class="content">
+                                            內容
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
+    
 </div>
+<!-- <script>
+    $(document).ready(function () {
+        $('#news-modal').on('show.bs.modal', function (event) {
+            var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
+            var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值
+
+            // 將資料解析為陣列
+            var dataArr = content.split('|');
+
+            // 將詳細資料填充到 modal 中
+            var modalBody = $(this).find('.modal-body');
+            modalBody.find('#news-modal').html(`
+                <p>類別: ${dataArr[0]}</p>
+                <p>類型: ${dataArr[1]}</p>
+                <p>標題: ${dataArr[2]}</p>
+            `);
+        });
+    });
+</script> -->
+
 {% endblock %}

@@ -12,9 +12,10 @@
     font-size: 14px;
 }
 .bootstrap-table .fixed-table-container .table thead th {
-    padding: 0 7px 4px 7px;
+    padding: 0 10px 6px 10px;
 }
-.filter-control input{
+.filter-control input, .filter-control select{
+    font-size: 12px;
     height: 1.5rem;
     padding: 0.25rem 0.5rem;
     font-size: .875rem;

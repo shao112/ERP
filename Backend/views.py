@@ -58,6 +58,8 @@ class New_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(News, id=id)
         data = model_to_dict(data)
+        print("dict_data")
+        print(data)
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 
 
