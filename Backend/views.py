@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
+from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse
 import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
@@ -340,3 +340,29 @@ class Job_Assign_View(View):
                 data['attachment'] = None            
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 
+class ExcelExportView(View):
+   def get(self, request):
+        project_confirmation_list = Project_Confirmation.objects.all()
+        wb = openpyxl.Workbook()
+        ws = wb.active
+
+        field_names = [field.name for field in Project_Confirmation._meta.get_fields()]
+        print(field_names)
+        ws.append(field_names)
+        
+        # 要排除掉特殊欄位
+        # for article in project_confirmation_list:
+        #     row_data = [getattr(article, field) for field in field_names]
+        #     ws.append(row_data)
+        # 将所有文章数据写入Excel
+        for project_confirmation in project_confirmation_list:
+            ws.append([project_confirmation.project_confirmation_id, project_confirmation.quotation_id, project_confirmation.project_name])
+
+        # 设置响应头，指定导出文件的类型和名称
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response['Content-Disposition'] = 'attachment; filename=articles.xlsx'
+
+        # 将Excel数据保存到响应中
+        wb.save(response)
+
+        return response

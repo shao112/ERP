@@ -43,6 +43,7 @@ class Index(View):
                     # print(session)
                     session.save()
                 return HttpResponseRedirect('/')
+        # verified用來判斷是否帳號密碼錯誤，要顯示資訊欄
         verified = False
         context = {
             'verified':verified,
@@ -83,6 +84,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         
