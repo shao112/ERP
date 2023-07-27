@@ -198,6 +198,7 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
+                        <th data-force-hide="true" data-field="state" data-checkbox="true"></th>
                         <th data-force-hide="true"></th>
                         <th data-force-hide="true"></th>
                         <th>工派單編號</th>
@@ -218,6 +219,7 @@
                 <tbody style="font-size: 14px;">
                     {% for j in job_assign %}
                     <tr>
+                        <td ></td>
                         <td>
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_get btn btn-sm btn-warning" data-toggle="modal"

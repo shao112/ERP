@@ -280,25 +280,23 @@ class Job_Assign_View(View):
         dict_data = convent_dict(request.body)  
         form = ProjectJobAssignForm(dict_data)
         if form.is_valid():
-            employee_key =("support_employee","work_employee","lead_employee")
             getObject = Project_Job_Assign.objects.get(id=dict_data['id'])
+            process_key =("support_employee","work_employee","lead_employee","project_confirmation")
 
-            for key in employee_key:
+            for key in process_key:#處理特別key
                 if key in dict_data:
-                    field = getattr(getObject, key)
-                    field.set(dict_data[key])
-                else:#沒有對應的name，代表沒有被選，代表取消所有勾選資料
-                    field = getattr(getObject, key)
-                    field.set([])
-                    
-            for key in employee_key:
+                    if key == "project_confirmation":
+                        confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
+                        getObject.project_confirmation = confirmation_instance
+                    # dict_data.pop(key)                
+                    # del dict_data["project_confirmation"]
+                    else:
+                        field = getattr(getObject, key)
+                        field.set(dict_data[key])
+
+            for key in process_key:#刪除處理完的key
                 if key in dict_data:
                     del dict_data[key]
-                
-                if key =="project_confirmation":
-                    confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
-                    getObject.project_confirmation = confirmation_instance
-                del dict_data["project_confirmation"]
 
             getObject.update_fields_and_save(**dict_data)
 

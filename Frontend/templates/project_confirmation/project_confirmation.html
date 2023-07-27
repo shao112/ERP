@@ -187,10 +187,9 @@
 
 
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-toolbar="#toolbar"
-            data-search="true" data-show-columns="true" data-filter-strict-search="true"
-            data-show-columns-toggle-all="true" data-show-fullscreen="true" data-checkbox="true"
-            data-filter-control="true" data-export-types="['excel', 'json', 'csv', 'txt']"
+            data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
+            data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true"
+            data-checkbox="true" data-filter-control="true" data-export-types="['excel', 'json', 'csv', 'txt']"
             data-export-options='{"fileName": "工程確認單"}'>
 
             <div id="toolbar">
@@ -217,10 +216,10 @@
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-field="state" data-checkbox="true"></th>
+                    <th data-force-hide="true" data-field="state" data-checkbox="true" ></th>
                     <th data-force-hide="true"></th>
                     <th data-force-hide="true"></th>
-                    <th data-sortable="true" data-filter-control="input" data-field="quotation_id" >報價單號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_name">工程名稱</th>
@@ -243,13 +242,13 @@
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                            data-target="#project-confirmation-modal" onclick="GET_handleClick(event)" >
+                            data-target="#project-confirmation-modal" onclick="GET_handleClick(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)" >
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
@@ -279,21 +278,21 @@
         </table>
         <div class="pagination">
             <span class="step-links">
-              {% if page_obj.has_previous %}
+                {% if page_obj.has_previous %}
                 <a href="?page=1">&laquo; « 第一頁</a>
                 <a href="?page={{ page_obj.previous_page_number }}">上一頁</a>
-              {% endif %}
-          
-              <span class="current">
-                目前第 {{ page_obj.number }} 頁，總共 {{ page_obj.paginator.num_pages }}.
-              </span>
-          
-              {% if page_obj.has_next %}
+                {% endif %}
+
+                <span class="current">
+                    目前第 {{ page_obj.number }} 頁，總共 {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}">下一頁</a>
                 <a href="?page={{ page_obj.paginator.num_pages }}">最後一頁 »&raquo;</a>
-              {% endif %}
+                {% endif %}
             </span>
-          </div>
+        </div>
     </div>
 </div>
 
