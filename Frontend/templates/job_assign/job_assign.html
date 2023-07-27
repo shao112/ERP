@@ -223,7 +223,8 @@
                 <tbody style="font-size: 14px;">
                     {% for j in job_assign %}
                     <tr>
-                        <td> <input type="checkbox" name="importcheckd" value="{{ j.id }}" /> </td>
+                        <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                                value="{{ j.id }}" /> </td>
                         <td>
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -268,27 +269,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var script = document.createElement('script');
-        script.src = "{% static 'js/fuc/restful.js' %}";
-        var job_assign_script = document.createElement('script');
-        job_assign_script.src = "{% static 'js/job-assign/job-assign.js' %}";
-        document.body.appendChild(script);
-        document.body.appendChild(job_assign_script);
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/bootstrap-table/checked_row.js' %}"
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
     });
 
-    // 假如自己選可以用這個fuc 知道id
-    function getSelectedValues() {
-        var checkboxes = document.getElementsByName("importcheckd");
-        var selectedValues = [];
 
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                selectedValues.push(checkboxes[i].value);
-            }
-        }
-        console.log(selectedValues)
-        // return selectedValues;
-    }
+
 
 </script>
 
