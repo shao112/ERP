@@ -186,7 +186,7 @@
 
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
-            data-filter-strict-search="true" data-show-columns-toggle-all="true" data-show-fullscreen="true"
+            data-filter-strict-search="true" data-show-columns-toggle-all="true"
             data-checkbox="true" data-filter-control="true" data-export-types="['excel', 'json', 'csv', 'txt']"
             data-export-options='{"fileName": "工程確認單"}'>
 
@@ -204,7 +204,7 @@
                     <a href="/media/file_form_template/工程確認單樣板.xlsx" class="font-weight-bold" download="">
                         <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                     </a>
-                    <a href="{% url 'excel_export' %}" download="">匯出excel</a>
+                    <a href="{% url 'excel_export' 'project-confirmation' %}" download="">匯出excel</a>
                     <select class="form-control form-control-sm mt-2">
                         <option value="">請先選擇輸出範圍</option>
                         <option value="all">輸出全部資料</option>

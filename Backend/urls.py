@@ -29,6 +29,6 @@ urlpatterns = [
     path('group', views.Groups_View.as_view(), name="groups_view_api"),
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('new', views.New_View.as_view(), name="news_view_api"),
-    path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
+    path('excel_export/<str:model>', views.ExcelExportView.as_view(), name='excel_export'),
 
 ]

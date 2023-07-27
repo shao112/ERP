@@ -4,6 +4,8 @@ import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
 from django.db import models
+from django.db.models.fields.files import FieldFile
+from django.db.models.fields.related import ManyToManyField
 
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock
 from django.contrib.auth.models import User,Group
@@ -340,7 +342,9 @@ class Job_Assign_View(View):
         return JsonResponse({"data":data,"status":200}, status=200,safe = False)
 
 class ExcelExportView(View):
-   def get(self, request):
+   def get(self, request, *args, **kwargs):
+        modelstr = self.kwargs['model']
+        match_excel_content(modelstr)
         project_confirmation_list = Project_Confirmation.objects.all()
         wb = openpyxl.Workbook()
         ws = wb.active
@@ -356,16 +360,39 @@ class ExcelExportView(View):
         header_rows = []
         for field_name, verbose_name in fields_with_verbose_names.items():
             header_rows.append(verbose_name)
-
         ws.append(header_rows)
         
         # 要排除掉特殊欄位
         # for article in project_confirmation_list:
-        #     row_data = [getattr(article, field) for field in field_names]
+        #     # row_data = [getattr(article, field) for field in field_names]
+        #     row_data = [getattr(article, field).name if isinstance(getattr(article, field), FieldFile) else getattr(article, field) for field in field_names]
+
+        #     print(row_data)
         #     ws.append(row_data)
         # 将所有文章数据写入Excel
-        for project_confirmation in project_confirmation_list:
-            ws.append([project_confirmation.project_confirmation_id, project_confirmation.quotation_id, project_confirmation.project_name])
+        # for project_confirmation in project_confirmation_list:
+        #     ws.append([project_confirmation.project_confirmation_id, project_confirmation.quotation_id, project_confirmation.project_name])
+        for article in project_confirmation_list:
+            row_data = []
+            for field_name in field_names:
+                field = Project_Confirmation._meta.get_field(field_name)
+                if isinstance(field, ManyToManyField):
+                    # 处理多对多关系的字段，拼接为一个字符串
+                    related_objects = getattr(article, field_name).all()
+                    field_value = ', '.join(str(obj) for obj in related_objects)
+                else:
+                    # 处理其他普通字段
+                    field_value = getattr(article, field_name)
+                    if isinstance(field_value, FieldFile):
+                        field_value = field_value.url if field_value else ''
+                print(field_value)
+                row_data.append(field_value)
+                # field_value = getattr(article, field_name)
+                # if not isinstance(field_value, (FieldFile,ManyToManyField)):
+                #     row_data.append(field_value)
+
+                #     print(row_data)
+            ws.append(row_data)
 
         # 设置响应头，指定导出文件的类型和名称
         response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
