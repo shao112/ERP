@@ -3,6 +3,7 @@ from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
+from django.db import models
 
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock
 from django.contrib.auth.models import User,Group
@@ -12,7 +13,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee,convent_excel_dict
+from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content
 import datetime
 import openpyxl
 from django.db.utils import IntegrityError
@@ -343,10 +344,20 @@ class ExcelExportView(View):
         project_confirmation_list = Project_Confirmation.objects.all()
         wb = openpyxl.Workbook()
         ws = wb.active
+        # 1.排除掉不要的欄位
+        exclude_fields = ['project','id','author','modified_by','created_date','update_date']
+        # 2.取得原欄位名
+        field_names = [field.name for field in Project_Confirmation._meta.get_fields() if isinstance(field, models.Field) and field.name not in exclude_fields]
+        # 3.透過原欄位名取得欄位名的verbose name
+        fields_with_verbose_names = {
+            field_name: Project_Confirmation._meta.get_field(field_name).verbose_name for field_name in field_names
+        }
+        # 4.fields_with_verbose_names是dict，要轉成[]才能ws.append()
+        header_rows = []
+        for field_name, verbose_name in fields_with_verbose_names.items():
+            header_rows.append(verbose_name)
 
-        field_names = [field.name for field in Project_Confirmation._meta.get_fields()]
-        print(field_names)
-        ws.append(field_names)
+        ws.append(header_rows)
         
         # 要排除掉特殊欄位
         # for article in project_confirmation_list:

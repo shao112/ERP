@@ -90,7 +90,6 @@
                     <th></th>
                     <th></th>
                     <th data-field="category" data-sortable="true">公告標題</th>
-                    <th data-field="content" data-sortable="true">內容</th>
                     <th data-field="type" data-sortable="true">公告類別</th>
                     <th data-field="title" data-sortable="true">類別</th>
                     <th data-field="level" data-sortable="true">重要性</th>
@@ -111,13 +110,6 @@
                     </td>
 
                     <td>{{ new.title }}</td>
-                    <td>
-                        {% if new.editor_content|length > 10 %}
-                            {{ new.editor_content|safe|slice:":10" }} …
-                        {% else %}
-                            {{ new.editor_content|safe }}
-                        {% endif %}
-                    </td>
                     <td>{{ new.get_category_display }}</td>
                     <td>{{ new.get_type_display }}</td>
                     <td>{{ new.get_level_display }}</td>

@@ -20,19 +20,17 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="project-confirmation-label">工程確認單</h5>
-                    <a href="#" onclick="exportToPDF()">下載pdf</a>
-
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="modal-download_pdf">
+                <div class="modal-body">
                     <div class="container shadow-sm">
                         <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
                             data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
-                            <div class="form-row my-2">
+                            <div class="form-row my-2" id="modal-download_pdf">
                                 <div class="col-12 col-md-6">
                                     <h5 style="font-size: 1.2rem;">
                                         <kbd>確認單描述</kbd>
@@ -223,8 +221,8 @@
                     <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_name">工程名稱</th>
-                    <th data-sortable="true">客戶簡稱</th>
-                    <th data-sortable="true">請購單位</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="client">客戶簡稱</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="requisition">請購單位</th>
                     <th data-sortable="true">訂單編號</th>
                     <th data-sortable="true">成交金額</th>
                     <th data-sortable="true">完工狀態</th>
@@ -253,7 +251,7 @@
                         </a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
-                    <td>{{ p.c_a }}</td>
+                    {% if p.c_a %}<td>{{ p.c_a }}</td>{% else %}<td></td>{% endif %}
                     {% if p.project_confirmation_id %}<td>{{ p.project_confirmation_id }}</td>{% else %}<td></td>
                     {% endif %}
                     <td>{{ p.project_name }}</td>

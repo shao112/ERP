@@ -145,7 +145,7 @@ class Department(ModifiedModel):
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
     project_confirmation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="工確單編號")
-    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號") # 唯一
+    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
     project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')

@@ -11,7 +11,7 @@ function exportToPDF() {
         var pdf = new jsPDF('p', 'mm', 'a4');
 
         // 添加圖像數據到PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, 210, 150);
+        pdf.addImage(imgData, 'PNG', 5, 20, 200, 100);
 
         // 下載PDF文件
         pdf.save('工程確認單.pdf');
