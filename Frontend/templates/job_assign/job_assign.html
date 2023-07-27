@@ -41,7 +41,7 @@
                                                 <select class="form-control form-control-sm" name="project_confirmation"
                                                     id="project_confirmation_id">
                                                     <option value="-1">
-                                                       請選擇</option>
+                                                        請選擇</option>
                                                     {% for project_confirmation in project_confirmation_list %}
                                                     <option value="{{ project_confirmation.pk }}">
                                                         {{project_confirmation.project_confirmation_id }}</option>
@@ -55,15 +55,15 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" id="project_name"
-                                                readonly      id="project_name_control"></input>
+                                                <input class="form-control form-control-sm" id="project_name" readonly
+                                                    id="project_name_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="c_a_control">母案編號</label>
-                                                <input class="form-control form-control-sm" id="c_a"
-                                                readonly   id="c_a_control"></input>
+                                                <input class="form-control form-control-sm" id="c_a" readonly
+                                                    id="c_a_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -136,8 +136,8 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="support_employee_select2">支援人力</label>
-                                                <select class="select2" data-placeholder="選擇帶班人員" name="support_employee"
-                                                    id="support_employee_select2" multiple>
+                                                <select class="select2" data-placeholder="選擇帶班人員"
+                                                    name="support_employee" id="support_employee_select2" multiple>
                                                     {% for employee in employees_list %}
                                                     <option value="{{ employee.id }}">{{ employee.user__username }}
                                                     </option>
@@ -181,10 +181,11 @@
         </div>
     </div>
     <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-       data-search="true" data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true"
-       data-show-fullscreen="true" data-export-types="['excel', 'json', 'csv', 'txt']"data-export-options='{"fileName": "派工單"}'>
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-toolbar="#toolbar" data-pagination="true" data-height="520"
+            data-sticky-header="true" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-show-fullscreen="true"
+            data-export-types="['excel', 'json', 'csv', 'txt']" data-export-options='{"fileName": "派工單"}'>
             <div id="toolbar">
                 <div class="job_assign-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
@@ -194,11 +195,14 @@
                     <br>
                     <a href="" class="font-weight-bold" id="">
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+
                     </a>
+                    <button onclick="getSelectedValues()">匯出</button>
+
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-field="state" data-checkbox="true"></th>
+                        <th data-force-hide="true" data-field="state">匯出</th>
                         <th data-force-hide="true"></th>
                         <th data-force-hide="true"></th>
                         <th>工派單編號</th>
@@ -219,7 +223,7 @@
                 <tbody style="font-size: 14px;">
                     {% for j in job_assign %}
                     <tr>
-                        <td ></td>
+                        <td> <input type="checkbox" name="importcheckd" value="{{ j.id }}" /> </td>
                         <td>
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -272,6 +276,19 @@
         document.body.appendChild(job_assign_script);
     });
 
+    // 假如自己選可以用這個fuc 知道id
+    function getSelectedValues() {
+        var checkboxes = document.getElementsByName("importcheckd");
+        var selectedValues = [];
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedValues.push(checkboxes[i].value);
+            }
+        }
+        console.log(selectedValues)
+        // return selectedValues;
+    }
 
 </script>
 

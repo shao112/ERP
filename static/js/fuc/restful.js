@@ -49,7 +49,7 @@ $("#sys_new").on("click", function () {
 //  獲取資料並帶入
 
 document.querySelectorAll('.sys_get').forEach(element => {
-    console.log("ee")
+    // console.log("ee")
     element.addEventListener('click', GET_handleClick.bind(element));
 });
 
