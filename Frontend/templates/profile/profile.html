@@ -17,18 +17,25 @@
         </span>
     </div>
     <div class="container shadow-sm">
-        <div class="row my-4">
+        <div class="row my-4 py-4">
+            <div class="col-6 col-md-3 text-center">
+                {% if user.employee.profile_image %}
+                    有照片
+                {% else %}
+                <div class="profile_img w-50 mx-auto mb-2">
+                    <img class="img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload">
+                </div>
+                <span>上傳照片</span>
+                <form class="dropzone" id="dropzone-form" method="post" enctype="multipart/form-data"></form>
+                {% endif %}
+            </div>
             <div class="col-6 col-md-3">
                 <div class="form-group">
                     員工名稱：{{ user.employee.full_name }}
                 </div>
-            </div>
-            <div class="col-6 col-md-3">
                 <div class="form-group">
                     所屬部門：{{ user.employee.departments }}
                 </div>
-            </div>
-            <div class="col-6 col-md-3">
                 <div class="form-group">
                     職稱：OOO
                 </div>
@@ -37,8 +44,6 @@
                 <div class="form-group">
                     員工編號：OO
                 </div>
-            </div>
-            <div class="col-6 col-md-3">
                 <div class="form-group">
                     目前年資：OO
                 </div>
@@ -88,7 +93,26 @@
 
     </div>
 </div>
-
+<script>
+    // $(".dropzone").dropzone({
+    //     url: "handle-upload.php",
+    //     maxFiles: 1,
+    //     maxFilesize: 512,//MB
+    //     acceptedFiles: ".png,.jpg,.jpeg,.gif",
+    // });
+    $(document).ready(function () {
+        // 初始化 Dropzone 物件
+        var myDropzone = new Dropzone("#dropzone-form", {
+            url: "/your-upload-endpoint",
+            maxFiles: 1,
+            maxFilesize: 512,//MB
+            acceptedFiles: ".png,.jpg,.jpeg,.gif",
+            success: function(file, response){
+                swal({title:"訊息",text:"成功!",type:"success"})
+            }
+        });
+    });
+</script>
 <script>
     console.log("eee")
     $("form").on("submit", function (event) {
