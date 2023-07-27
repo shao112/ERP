@@ -25,7 +25,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
+                            data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-2">
@@ -34,19 +35,22 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="equipment_id_control">資產標籤</label>
-                                                <input class="form-control form-control-sm" name="equipment_id" id="equipment_id_control" required></input>
+                                                <input class="form-control form-control-sm" name="equipment_id"
+                                                    id="equipment_id_control" required>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="order_id_control">序號</label>
-                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control" required></input>
+                                                <input class="form-control form-control-sm" name="order_id"
+                                                    id="order_id_control" required>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="equipment_category_control">資產種類別</label>
-                                                <input class="form-control form-control-sm" name="equipment_category" id="equipment_category_control"></input>
+                                                <input class="form-control form-control-sm" name="equipment_category"
+                                                    id="equipment_category_control">
                                             </div>
                                         </div>
                                     </div>
@@ -54,48 +58,287 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="equipment_type_control">中類</label>
-                                                <input class="form-control form-control-sm" name="equipment_type" id="equipment_type_control"></input>
+                                                <input class="form-control form-control-sm" name="equipment_type"
+                                                    id="equipment_type_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="equipment_name_control">品名</label>
-                                                <input class="form-control" name="equipment_name" id="equipment_name_control"></input>
+                                                <input class="form-control" name="equipment_name"
+                                                    id="equipment_name_control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="product_model_control">廠牌/型號</label>
+                                                <input class="form-control form-control-sm" name="product_model"
+                                                    id="product_model_control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="manufacturing_numbe_control">製造序號</label>
+                                                <input class="form-control form-control-sm" name="manufacturing_numbe"
+                                                    id="manufacturing_numbe_control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="supplier_control">供應商</label>
+                                                <input class="form-control" name="supplier" id="supplier_control">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="invoice_control">發票號碼</label>
+                                                <input class="form-control" name="invoice" id="invoice_control">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
-                            
-                            <div class=" d-flex justify-content-between">
-                                <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
-                                    style="color: #fff;background: #1E3050;">送出</button>
-                                <button type="button" class="btn border border-dark rounded w-50 mx-4 "
-                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
 
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="date_of_purchase_control">購入日期</label>
+                                        <input class="form-control form-control-sm" name="date_of_purchase"
+                                            id="date_of_purchase_control" type="date">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="cost_including_tax_control">購入成本(含稅)</label>
+                                        <input class="form-control form-control-sm" name="cost_including_tax"
+                                            id="cost_including_tax_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="buyer_control">採購人</label>
+                                        <input class="form-control" name="buyer" id="buyer_control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="user_control">使用人</label>
+                                        <input class="form-control form-control-sm" name="user" id="user_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="custodian_control">保管人</label>
+                                        <input class="form-control form-control-sm" name="custodian"
+                                            id="custodian_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="abnormal_condition_control">異常狀態</label>
+                                        <input class="form-control" name="abnormal_condition"
+                                            id="abnormal_condition_control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="abnormal_condition_description_control">狀態說明</label>
+                                        <input class="form-control form-control-sm"
+                                            name="abnormal_condition_description"
+                                            id="abnormal_condition_description_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="normal_or_abnormal_control">正常/異常</label>
+                                        <input class="form-control form-control-sm" name="normal_or_abnormal"
+                                            id="normal_or_abnormal_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="abnormal_description_control">異常說明</label>
+                                        <input class="form-control" name="abnormal_description"
+                                            id="abnormal_description_control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="abnormal_img_control">異常照片</label>
+                                        <input class="form-control form-control-sm" name="abnormal_img"
+                                            id="abnormal_img_control" type="file">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="inventory_control">盤點</label>
+                                        <input class="form-control form-control-sm" name="inventory"
+                                            id="inventory_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="produced_stickers_control">需補產編貼紙</label>
+                                        <input class="form-control" name="produced_stickers"
+                                            id="produced_stickers_control" type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="transmitter_control">發報器大小</label>
+                                        <select class="form-control form-control-sm" name="transmitter"
+                                            id="transmitter_control">
+                                            <option value="1">大</option>
+                                            <option value="2">小</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="storage_location_control">庫存地點</label>
+                                        <input class="form-control" name="storage_location"
+                                            id="storage_location_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="detailed_location_control">位置</label>
+                                        <input class="form-control" name="detailed_location"
+                                            id="detailed_location_control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="warranty_control">保固期</label>
+                                        <input class="form-control form-control-sm" name="warranty"
+                                            id="warranty_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="warranty_period_control">保固期間</label>
+                                        <input class="form-control form-control-sm" name="warranty_period"
+                                            id="warranty_period_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="is_check_control">校驗類別</label>
+                                        <input class="form-control" name="is_check" id="is_check_control"
+                                            type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="latest_check_date_control">最近一次校驗日</label>
+                                        <input class="form-control form-control-sm" name="latest_check_date"
+                                            id="latest_check_date_control" type="date">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="check_order_id_control">校驗報告編碼</label>
+                                        <input class="form-control form-control-sm" name="check_order_id"
+                                            id="check_order_id_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="check_remark_control">校驗註記</label>
+                                        <input class="form-control form-control-sm" name="check_remark"
+                                            id="check_remark_control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="maintenance_status_control">維修狀態</label>
+                                        <input class="form-control" name="maintenance_status"
+                                            id="maintenance_status_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="repair_date_control">送修日</label>
+                                        <input class="form-control form-control-sm" name="repair_date"
+                                            id="repair_date_control" type="date">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="repair_finished_date_control">完成日</label>
+                                        <input class="form-control form-control-sm" name="repair_finished_date"
+                                            id="repair_finished_date_control" type="date">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="number_of_repairs_control">維修累計次數</label>
+                                        <input class="form-control form-control-sm" name="number_of_repairs"
+                                            id="number_of_repairs_control">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="accruing_amounts_control">維修累計金額</label>
+                                        <input class="form-control form-control-sm" name="accruing_amounts"
+                                            id="accruing_amounts_control">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ... (continue with the rest of the form fields) ... -->
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="equipment-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
-        <div id="toolbar">
-            <div class="equipment-header container-fluid">
-                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#equipment-modal">
-                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增固定資產
-                </a>
-                <br>
-                <a href="" class="font-weight-bold" id="" >
-                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                </a>
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-toolbar="#toolbar" data-pagination="true" data-height="520"
+            data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="equipment-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#equipment-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增固定資產
+                    </a>
+                    <br>
+                    <a href="" class="font-weight-bold" id="">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    </a>
+                </div>
             </div>
-          </div>            
             <thead class="thead-light">
                 <tr class="text-nowrap">
                     <th></th>
@@ -136,7 +379,7 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
+            height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
     });
