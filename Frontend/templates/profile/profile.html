@@ -34,7 +34,11 @@
                 <a href="" class="text-decoration-none" data-toggle="collapse" data-target="#dropzone-form-collapse" style="color: black;">上傳照片</a>
                 <!-- <a href=""class="dropzone_submit">確定</a> -->
                 <div class="dropzone-form-container collapse" id="dropzone-form-collapse">
-                    <form action="{% url 'profile_view_api' %}" class="dropzone" id="dropzone-form" method="put" enctype="multipart/form-data">{% csrf_token %}</form>
+                    <form action="{% url 'profile_view_api' %}" method="put" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" class="form-control-file" name="profile_image">
+                        <button type="submit" class="btn btn-primary">確定</button>
+                    </form>
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -104,7 +108,7 @@
 <!-- 引入 dropzone.js -->
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.js" integrity="sha512-newCjW7Rcrz+YKyzmMzDjgBCHcy4KElNHTPszcsNGpkTv/K5YWJhQgCngiWl+ktD1TVror+msGiCa6FXkUHloA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js" integrity="sha512-jytq61HY3/eCNwWirBhRofDxujTCMFEiQeTe+kHR4eYLNTXrUq7kY2qQDKOUnsVAKN5XGBJjQ3TvNkIkW/itGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
+<!-- <script>
     $(document).ready(function () {
         // 5.5.1版本的寫法
         Dropzone.autoDiscover = false;
@@ -151,9 +155,10 @@
         });
         
     });
-</script>
+</script> -->
 <script>
     console.log("eee")
+    
     $("#profileform").on("submit", function (event) {
         event.preventDefault();
         // console.log(jsonData)
