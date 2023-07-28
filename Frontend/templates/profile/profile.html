@@ -4,8 +4,10 @@
 
 {% block import %}
 <!-- dropzone css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.css" integrity="sha512-zoIoZAaHj0iHEOwZZeQnGqpU8Ph4ki9ptyHZFPe+BmILwqAksvwm27hR9dYH4WXjYY/4/mz8YDBCgVqzc2+BJA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/basic.min.css" integrity="sha512-8k0lsWpVPSg08/yrT3eSlr/HG5mxRghr8Uh6gkOaj2KOi8chn6nws1ytLlo99CKVzKE6JuCopJHh0RbUfWGMBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/basic.min.css" integrity="sha512-8k0lsWpVPSg08/yrT3eSlr/HG5mxRghr8Uh6gkOaj2KOi8chn6nws1ytLlo99CKVzKE6JuCopJHh0RbUfWGMBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.css" integrity="sha512-zoIoZAaHj0iHEOwZZeQnGqpU8Ph4ki9ptyHZFPe+BmILwqAksvwm27hR9dYH4WXjYY/4/mz8YDBCgVqzc2+BJA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css" integrity="sha512-8k0lsWpVPSg08/yrT3eSlr/HG5mxRghr8Uh6gkOaj2KOi8chn6nws1ytLlo99CKVzKE6JuCopJHh0RbUfWGMBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" integrity="sha512-zoIoZAaHj0iHEOwZZeQnGqpU8Ph4ki9ptyHZFPe+BmILwqAksvwm27hR9dYH4WXjYY/4/mz8YDBCgVqzc2+BJA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/profile/profile.css' %}">
 
@@ -22,17 +24,18 @@
     <div class="container shadow-sm">
         <div class="row my-4 py-4">
             <div class="col-6 col-md-3 text-center">
-                {% if user.employee.profile_image %}
-                    有照片
-                {% else %}
                 <div class="profile_img w-50 mx-auto mb-2">
-                    <img class="img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload">
+                    {% if user.employee.profile_image %}
+                        <img class="img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload">
+                    {% else %}
+                        <img class="img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload">
+                    {% endif %}
                 </div>
                 <a href="" class="text-decoration-none" data-toggle="collapse" data-target="#dropzone-form-collapse" style="color: black;">上傳照片</a>
+                <!-- <a href=""class="dropzone_submit">確定</a> -->
                 <div class="dropzone-form-container collapse" id="dropzone-form-collapse">
-                    <form class="dropzone" id="dropzone-form" method="post" enctype="multipart/form-data"></form>
+                    <form action="{% url 'profile_view_api' %}" class="dropzone" id="dropzone-form" method="put" enctype="multipart/form-data">{% csrf_token %}</form>
                 </div>
-                {% endif %}
             </div>
             <div class="col-6 col-md-3">
                 <div class="form-group">
@@ -99,30 +102,59 @@
     </div>
 </div>
 <!-- 引入 dropzone.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.js" integrity="sha512-newCjW7Rcrz+YKyzmMzDjgBCHcy4KElNHTPszcsNGpkTv/K5YWJhQgCngiWl+ktD1TVror+msGiCa6FXkUHloA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.js" integrity="sha512-newCjW7Rcrz+YKyzmMzDjgBCHcy4KElNHTPszcsNGpkTv/K5YWJhQgCngiWl+ktD1TVror+msGiCa6FXkUHloA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js" integrity="sha512-jytq61HY3/eCNwWirBhRofDxujTCMFEiQeTe+kHR4eYLNTXrUq7kY2qQDKOUnsVAKN5XGBJjQ3TvNkIkW/itGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    // $(".dropzone").dropzone({
-    //     url: "handle-upload.php",
-    //     maxFiles: 1,
-    //     maxFilesize: 512,//MB
-    //     acceptedFiles: ".png,.jpg,.jpeg,.gif",
-    // });
     $(document).ready(function () {
-        // 初始化 Dropzone 物件
+        // 5.5.1版本的寫法
+        Dropzone.autoDiscover = false;
+        csrfToken = $('[name="csrfmiddlewaretoken"]').val();
         var myDropzone = new Dropzone("#dropzone-form", {
-            url: "/your-upload-endpoint",
+            url: "{% url 'profile_view_api' %}",
+            method:"put",
+            headers: {
+                "X-CSRFToken": csrfToken
+            },
+            maxFilesize: 16,
+            paramName: "file",
+            // paramName: function(){
+            //     return "file";
+            // },
             maxFiles: 1,
-            maxFilesize: 512,//MB
-            acceptedFiles: ".png,.jpg,.jpeg,.gif",
+            addRemoveLinks: true,
+            uploadMultiple:false,
+            acceptedFiles: ".jpg,.JPG.jpeg,.JPEG,.PNG,.png,.gif",
+            dictDefaultMessage: "拖拉/點擊 上傳照片<br>支援 jpg jpeg png gif 檔",
+            dictRemoveLinks: "删除",
+            dictCancelUpload: "取消",
+            dictRemoveFile: "移除",
+            dictFallbackMessage: '您的瀏覽器不支援拖放檔案上傳',
+            dictFallbackText: '您的瀏覽器不支援拖放檔案上傳',
+            dictFileTooBig: '檔案大小限制：{{maxFilesize}}MB, 檔案太大 ({{filesize}}MB)',
+            dictInvalidFileType: '您可以上傳 jpg jpeg png gif 圖檔',
+            dictMaxFilesExceeded:"最多只能上傳一個檔案",
+            dictResponseError: '文件上傳失敗!',
+
+
             success: function(file, response){
-                swal({title:"訊息",text:"成功!",type:"success"})
-            }
+                console.log("成功")
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log("失敗")
+                console.log(xhr.status)
+            },
+            // accept: function(file, done) {
+            //     alert(file.name) //有成功抓到檔案名稱
+            // },
+
+
         });
+        
     });
 </script>
 <script>
     console.log("eee")
-    $("form").on("submit", function (event) {
+    $("#profileform").on("submit", function (event) {
         event.preventDefault();
         // console.log(jsonData)
 
