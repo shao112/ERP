@@ -156,24 +156,14 @@ class Profile_View(View):
         
     def put(self,request):
         print("put")
-        # print(request.FILES.items())
-        # for filename, file in request.FILES.items():
-        #     print(filename, file)
-        try:
-            uploaded_image = request.FILES.get('file') #回傳none
-            # uploaded_image = request.FILES.getlist('file')
-            print(uploaded_image)
-            if uploaded_image:
-                # employee = Employee.objects.get(pk=request.user.id)
-                # employee.profile_image = uploaded_image
-                # employee.save()
-                return JsonResponse({'message': '員工資料更新成功'}, status=200)
-            else:
-                return JsonResponse({'error': '找不到上傳的檔案'}, status=400)
-        except Employee.DoesNotExist:
-            return JsonResponse({'error': '找不到該員工'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+        uploaded_image = request.FILES.get('profile_image')
+        print(uploaded_image)
+        if uploaded_image:
+            # employee = Employee.objects.filter(pk=request.user.id).update(profile_image=uploaded_image)
+            # employee.save()
+            return JsonResponse(status=200)
+        else:
+            return JsonResponse({"data":"errors"}, status=400)
 
 
 class Check(View):

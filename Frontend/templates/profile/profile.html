@@ -34,10 +34,10 @@
                 <a href="" class="text-decoration-none" data-toggle="collapse" data-target="#dropzone-form-collapse" style="color: black;">上傳照片</a>
                 <!-- <a href=""class="dropzone_submit">確定</a> -->
                 <div class="dropzone-form-container collapse" id="dropzone-form-collapse">
-                    <form action="{% url 'profile_view_api' %}" method="put" enctype="multipart/form-data">
+                    <form id="profileImageForm" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="file" class="form-control-file" name="profile_image">
-                        <button type="submit" class="btn btn-primary">確定</button>
+                        <input id="profileImageInput" type="file" class="form-control-file" name="profile_image">
+                        <input type="submit" class="btn" value="確定">
                     </form>
                 </div>
             </div>
@@ -167,10 +167,6 @@
         var formData = form.serialize();
         // var jsonData = JSON.stringify(formData);
         // console.log(jsonData)
-
-
-
-
         $.ajax({
             type: "post",
             url: "{% url 'profile_view_api' %}",
@@ -209,6 +205,54 @@
                 }
             }
         });
+
+    });
+    $("#profileImageForm").on("submit", function (event) {
+        event.preventDefault();
+        console.log("put")
+        // var profileImageFile = $("#profileImageInput")[0].files[0];
+        // var formData = new FormData();
+        // formData.append('profile_image', profileImageFile);
+        var form = $("#profileImageForm")[0];
+        var formData = new FormData(form);
+            $.ajax({
+                type: "put",
+                url: "{% url 'profile_view_api' %}",
+                data: formData,
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                success: function (response) {
+                    alert("操作成功");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    if (xhr.status === 400) {
+                        // 處理400錯誤，顯示伺服器返回的錯誤訊息
+                        var errorMessage = xhr.responseJSON.data;
+                        console.log(errorMessage)
+                        console.log(errorMessage[0])
+                        var errorMessageHTML = "<ul>";
+                        Object.entries(errorMessage).map(([key, errors]) => {
+                            errors.forEach(error => {
+                                errorMessageHTML += "<li><strong>" + key + ":</strong> " + error + "</li>";
+                            });
+                        });
+                        errorMessageHTML += "</ul>";
+                        console.log(errorMessageHTML)
+
+
+                        Swal.fire({
+                            title: '更新失敗',
+                            html: errorMessageHTML,
+                            icon: 'error',
+                            confirmButtonText: '確定',
+                        })
+                    } else {
+                        // 其他錯誤處理
+                        alert("系統發生錯誤");
+                    }
+                }
+            });
 
     });
 
