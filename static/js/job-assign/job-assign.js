@@ -15,6 +15,14 @@ function getcsrftoken() {
 }
 
 
+$("#attendance_date_select2").select2({
+    tags: true,
+    tokenSeparators: [',', ' ']
+})
+
+
+
+
 var projectConfirmationIdControl = document.getElementById('project_confirmation_id');
 
 projectConfirmationIdControl.addEventListener('change', function () {
@@ -41,20 +49,6 @@ projectConfirmationIdControl.addEventListener('change', function () {
                 jsonData = response.data
                 document.getElementById("project_name").value = jsonData["project_name"];
                 document.getElementById("c_a").value = jsonData["c_a"];
-                // for (var key in jsonData) {
-                //     var input = document.getElementsByName(key)[0];
-                //     if (input) {
-                //         let get_value = jsonData[key];
-
-                //         input.value = jsonData[key];
-                //     } else {
-                //         console.log("Input not found for key:", key);
-                //     }
-                // }
-                // var input = document.getElementsByName(key)[0];
-                // input.value = jsonData[key];
-
-
 
             } else {
                 $("#error-message").text(response.error);

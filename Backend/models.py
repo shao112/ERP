@@ -177,7 +177,7 @@ class Project_Confirmation(ModifiedModel):
 # 工作派任計畫
 class Project_Job_Assign(ModifiedModel):
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.DO_NOTHING,related_name='project',null=True, blank=True, verbose_name="工程確認單") # 連帶帶出來的資料可重複
-    attendance_date = models.DateField(null=True, blank=True, verbose_name="出勤日期")
+    attendance_date =models.JSONField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
     support_employee = models.ManyToManyField('Employee', related_name='projects_support_employee', blank=True,verbose_name='支援人力')

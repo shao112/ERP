@@ -70,9 +70,7 @@
                                     <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="attendance_date_control">出勤日期</label>
-                                                <input type="date" class="form-control form-control-sm"
-                                                    name="attendance_date" id="attendance_date_control"></input>
+
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -103,13 +101,13 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="xdda">出勤日期</label>
-                                                <select class="select2" data-placeholder="出勤日期" name="xdda"
-                                                    id="xdda_select2" multiple>
-                                                    <option value="1">20230728 </option>
-                                                    <option value="2">20230729 </option>
-                                                    <option value="3">20230731 </option>
-                                                    <option value="4">20230801 </option>
+                                                <label for="xdda">出勤日期(請使用yyyymmdd格式新增)</label>
+                                                <select  data-placeholder="出勤日期" name="attendance_date"
+                                                    id="attendance_date_select2" multiple>
+                                                    <option value="20230728">20230728 </option>
+                                                    <option value="20230729">20230729 </option>
+                                                    <option value="20230731">20230731 </option>
+                                                    <option value="20230801">20230801 </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -218,7 +216,6 @@
                         <th data-force-hide="true"></th>
                         <th>工派單編號</th>
                         <th>工程名稱</th>
-                        <th>出勤日期</th>
                         <th>母案編號</th>
                         <th>出勤日期</th>
                         <th>工作人員</th>
@@ -250,9 +247,6 @@
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
                         <td>{{ j.attendance_date }}
-                            2023/7/25
-                            2023/7/26
-
                         </td>
                         <td>
                             {% for employees_list in j.work_employee.all %}

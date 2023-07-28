@@ -91,6 +91,8 @@ function MyCustomUploadAdapterPlugin(editor) {
 
 
 ClassicEditor.create(document.querySelector('#ckeditor5'), {
+    toolbar: {
+    },
     extraPlugins: [MyCustomUploadAdapterPlugin],
     // "name": "content",
     fontColor: {
@@ -172,6 +174,7 @@ ClassicEditor.create(document.querySelector('#ckeditor5'), {
             }
         ]
     },
+    
 })
     .then(editor => {
 

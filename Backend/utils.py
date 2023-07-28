@@ -43,14 +43,17 @@ def convent_dict(data):
     print("convent")
     if "csrfmiddlewaretoken" in dict_data:
         del dict_data["csrfmiddlewaretoken"]
-        
+
+
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
         employee_key =("support_employee","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
         if key in employee_key: #處理員工多對多陣列        
             new_dict_data[key] =  [int(num) for num in  value]
-        else:
+        elif key=="attendance_date":
+            new_dict_data[key] =  [num for num in  value]
+        else:            
             match  value[0]:
                 case "true":
                     new_dict_data[key] = True

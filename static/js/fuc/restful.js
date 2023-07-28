@@ -15,12 +15,12 @@ function getcsrftoken() {
     return cookieValue;
 }
 
-function showSwal(title, text, icon) {
+function showSwal(title, text, icon, showCancelButton = true) {
     return Swal.fire({
         title: title,
-        text: text,
+        html: text,
         icon: icon,
-        showCancelButton: true,
+        showCancelButton: showCancelButton,
         confirmButtonText: '確定',
         cancelButtonText: '取消',
     });
@@ -131,6 +131,7 @@ function GET_handleClick(event) {
 
         },
         error: function (xhr, textStatus, errorThrown) {
+
             console.log("get error");
         }
     });
@@ -166,10 +167,24 @@ $("form").on("submit", function (event) {
             }
         },
         error: function (xhr, textStatus, errorThrown) {
-            // 根據xhr.status 處理
-            if (xhr.status === 400) { }
-            alert("系統發生錯誤");
-            console.log(errorThrown)
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                console.log(errorMessage)
+                var errorMessageHTML = "<ul>";
+                Object.entries(errorMessage).map(([key, errors]) => {
+                    errors.forEach(error => {
+                        errorMessageHTML += "<li>"+ error + "</li>";
+                    });
+                });
+                errorMessageHTML += "</ul>";
+                console.log(errorMessageHTML)
+
+
+                showSwal('操作失敗', errorMessageHTML, 'error', false)
+            } else {
+                alert("系統發生錯誤");
+                console.log(errorThrown)
+            }
         }
     });
 

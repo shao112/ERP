@@ -60,6 +60,7 @@ class  GroupForm(BaseModelForm):
         fields = '__all__'
 
 # 工作派任計畫
+
 class ProjectJobAssignForm(BaseModelForm):
 
     class Meta:
@@ -68,9 +69,30 @@ class ProjectJobAssignForm(BaseModelForm):
     def clean(self):
         cleaned_data = super().clean()
         project_confirmation = cleaned_data.get('project_confirmation')
+        attendance_date = cleaned_data.get('attendance_date')
+        print(attendance_date)
+        errors = {}
+        for date_str in attendance_date:
+            if len(date_str) != 8:
+                errors.setdefault('attendance_date', []).append(
+                    f"日期 {date_str} ，請使用yyyymmdd格式(ex:20230707)。"
+                )
+            else:
+                year = int(date_str[:4])
+                month = int(date_str[4:6])
+                day = int(date_str[6:8])
+                if not (1 <= month <= 12) or not (1 <= day <= 31):
+                    errors.setdefault('attendance_date', []).append(
+                        f"日期 {date_str} ，請確認日期數字在合理數字範圍。"
+                    )
+                    
 
         if project_confirmation == -1:
-            raise forms.ValidationError("請選擇有效的工程確認單。")
+            errors.setdefault('project_confirmation', []).append("請選擇有效的工程確認單。")
+
+
+        if errors:
+            raise forms.ValidationError(errors)
 
         return cleaned_data
 

@@ -303,10 +303,9 @@ class Job_Assign_View(View):
 
             getObject.update_fields_and_save(**dict_data)
 
-            return JsonResponse({'status': 200})
+            return JsonResponse({'status': 200},status=200)
         else:
-            error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({'status': 400,"error":form.errors},status= 400)
 
     
     def delete(self,request):
