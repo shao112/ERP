@@ -78,7 +78,17 @@ function GET_handleClick(event) {
                     if (input) {
                         let get_value = jsonData[key];
 
-                        if (typeof (jsonData[key]) == "object" && get_value != null) {
+                        if (key == "attendance_date") {
+                            for (var i = 0; i < get_value.length; i++) {
+                                var dateStr = get_value[i];
+                                var option = new Option(dateStr, dateStr,true,true); 
+                                input.appendChild(option); 
+                            }
+                            $('#attendance_date_select').select2();
+                            continue;
+                        }
+
+                        if (typeof (jsonData[key]) == "object" && get_value != null && get_value.length != 0) {
                             // 如果是陣列，先取得對應的options，以及select2的欄位
                             const options = input.options;
                             selectname = `#${key}_select2`
@@ -95,15 +105,12 @@ function GET_handleClick(event) {
                                 console.log(containsValue)
                                 if (matchedItem || containsValue) {
                                     option.selected = true;
-                                    console.log("c")
                                 }
                             }
                             $(selectname).trigger('change');
-
-
                         } else {
                             input.value = jsonData[key];
-                            console.log(input.value)
+                            console.log("帶資料:"+input.value);
                         }
 
                         if (key == "editor_content") { //觸發change事件
@@ -173,7 +180,7 @@ $("form").on("submit", function (event) {
                 var errorMessageHTML = "<ul>";
                 Object.entries(errorMessage).map(([key, errors]) => {
                     errors.forEach(error => {
-                        errorMessageHTML += "<li>"+ error + "</li>";
+                        errorMessageHTML += "<li>" + error + "</li>";
                     });
                 });
                 errorMessageHTML += "</ul>";
