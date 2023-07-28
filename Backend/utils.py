@@ -32,7 +32,13 @@ def get_weekly_clock_data(userid):
 def convent_employee(employees):
     employee_ary=[]
     for get_employee in employees:
-        employee_ary.append(model_to_dict(get_employee))
+        employee_dict = model_to_dict(get_employee)
+        if "profile_image" in employee_dict:
+            if  employee_dict['profile_image']:
+                employee_dict['profile_image'] = employee_dict["profile_image"]["url"]
+            else:
+                employee_dict['profile_image'] = None       
+        employee_ary.append(employee_dict)
     return employee_ary
 
 

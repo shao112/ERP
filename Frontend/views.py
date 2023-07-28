@@ -5,8 +5,6 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-import openpyxl
-
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
@@ -20,6 +18,7 @@ from django.views.defaults import permission_denied
 
 def custom_permission_denied(request, exception=None,template_name='403.html'):
     return permission_denied(request, exception, template_name='403.html')
+from datetime import datetime
 
 
 
@@ -64,9 +63,23 @@ class Index(View):
             news = News.objects.all()
             employeeid = request.user.employee
             clock_inout = get_weekly_clock_data(employeeid)
+            related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(    work_employee__in=[employeeid]        )
+            related_projects = related_projects.distinct()
+
+            print(related_projects)
+
+            #排序            
+            for project in related_projects:
+                if project.attendance_date:
+                    project.attendance_date = sorted(
+                        project.attendance_date, 
+                        key=lambda date: datetime.strptime(date, '%Y%m%d')
+                    )
+
             context = {
                 'clock_inout':clock_inout,
-                'news':news
+                'news':news,
+                "related_projects":related_projects,
             }
             return render(request, 'index/index-login.html', context)
         else:

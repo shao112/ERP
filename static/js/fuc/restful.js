@@ -79,16 +79,19 @@ function GET_handleClick(event) {
                         let get_value = jsonData[key];
 
                         if (key == "attendance_date") {
+                            if (jsonData[key] == null) {
+                                continue;
+                            }
                             for (var i = 0; i < get_value.length; i++) {
                                 var dateStr = get_value[i];
-                                var option = new Option(dateStr, dateStr,true,true); 
-                                input.appendChild(option); 
+                                var option = new Option(dateStr, dateStr, true, true);
+                                input.appendChild(option);
                             }
                             $('#attendance_date_select').select2();
                             continue;
                         }
 
-                        if (typeof (jsonData[key]) == "object" && get_value != null && get_value.length != 0) {
+                        if (typeof (jsonData[key]) == "object" && get_value != null) {
                             // 如果是陣列，先取得對應的options，以及select2的欄位
                             const options = input.options;
                             selectname = `#${key}_select2`
@@ -110,7 +113,7 @@ function GET_handleClick(event) {
                             $(selectname).trigger('change');
                         } else {
                             input.value = jsonData[key];
-                            console.log("帶資料:"+input.value);
+                            console.log("帶資料:" + input.value);
                         }
 
                         if (key == "editor_content") { //觸發change事件

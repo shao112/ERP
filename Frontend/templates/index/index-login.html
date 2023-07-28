@@ -8,6 +8,8 @@
 
 {% endblock %}
 
+{% load custom_tags %}
+
 
 {% block main %}
 <div class="main">
@@ -63,14 +65,28 @@
         <div class="row text-center">
             <div class="col-12 col-md-6  border-right">
                 <div class="font-weight-bold" style="min-height: 150px;">
-                    個人積分點數版
+                    行程安排
+                </div>
+                <div>
+                    {% for project in related_projects %}
+                    {{ project.project_confirmation.project_confirmation_id }}
+
+                    {% for data in project.attendance_date %}
+
+                    {{ data|highlight_date|safe }}
+
+
+                    {% endfor %}
+                    <br>
+                    {% endfor %}
                 </div>
             </div>
             <div class=" col-12 col-md-6">
                 <div class="font-weight-bold mb-2">公司最新資訊 </div>
                 <div class="news container">
                     {% for n in news %}
-                    <a href="" data-toggle="modal" data-target="#news-modal" data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}">
+                    <a href="" data-toggle="modal" data-target="#news-modal"
+                        data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}">
                         <div class="row">
                             <div class="col-3 border-right">{{ n.get_category_display }}</div>
                             <div class="col-3 border-right">{{ n.get_type_display }}</div>
@@ -81,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="news-modal modal fade" id="news-modal" tabindex="-1" >
+        <div class="news-modal modal fade" id="news-modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -99,7 +115,7 @@
                                 <span class="created-date-badge"></span>
                             </h5>
                             <div class="content">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -107,7 +123,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 <script>
     $(document).ready(function () {

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.css" integrity="sha512-zoIoZAaHj0iHEOwZZeQnGqpU8Ph4ki9ptyHZFPe+BmILwqAksvwm27hR9dYH4WXjYY/4/mz8YDBCgVqzc2+BJA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/basic.min.css" integrity="sha512-8k0lsWpVPSg08/yrT3eSlr/HG5mxRghr8Uh6gkOaj2KOi8chn6nws1ytLlo99CKVzKE6JuCopJHh0RbUfWGMBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% load static%}
+<link rel="stylesheet" href="{% static 'css/profile/profile.css' %}">
 
 {% endblock %}
 
@@ -27,8 +28,10 @@
                 <div class="profile_img w-50 mx-auto mb-2">
                     <img class="img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload">
                 </div>
-                <span>上傳照片</span>
-                <form class="dropzone" id="dropzone-form" method="post" enctype="multipart/form-data"></form>
+                <a href="" class="text-decoration-none" data-toggle="collapse" data-target="#dropzone-form-collapse" style="color: black;">上傳照片</a>
+                <div class="dropzone-form-container collapse" id="dropzone-form-collapse">
+                    <form class="dropzone" id="dropzone-form" method="post" enctype="multipart/form-data"></form>
+                </div>
                 {% endif %}
             </div>
             <div class="col-6 col-md-3">

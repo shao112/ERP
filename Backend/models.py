@@ -180,7 +180,7 @@ class Project_Job_Assign(ModifiedModel):
     attendance_date =models.JSONField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
-    support_employee = models.ManyToManyField('Employee', related_name='projects_support_employee', blank=True,verbose_name='支援人力')
+    # support_employee = models.ManyToManyField('Employee', related_name='projects_support_employee', blank=True,verbose_name='支援人力')
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
