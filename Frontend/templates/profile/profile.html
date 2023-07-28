@@ -3,7 +3,9 @@
 {% block title %}艾力克電機{% endblock %}
 
 {% block import %}
-
+<!-- dropzone css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.css" integrity="sha512-zoIoZAaHj0iHEOwZZeQnGqpU8Ph4ki9ptyHZFPe+BmILwqAksvwm27hR9dYH4WXjYY/4/mz8YDBCgVqzc2+BJA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/basic.min.css" integrity="sha512-8k0lsWpVPSg08/yrT3eSlr/HG5mxRghr8Uh6gkOaj2KOi8chn6nws1ytLlo99CKVzKE6JuCopJHh0RbUfWGMBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% load static%}
 
 {% endblock %}
@@ -93,6 +95,8 @@
 
     </div>
 </div>
+<!-- 引入 dropzone.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.0.0/min/dropzone.min.js" integrity="sha512-newCjW7Rcrz+YKyzmMzDjgBCHcy4KElNHTPszcsNGpkTv/K5YWJhQgCngiWl+ktD1TVror+msGiCa6FXkUHloA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     // $(".dropzone").dropzone({
     //     url: "handle-upload.php",

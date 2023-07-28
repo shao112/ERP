@@ -245,6 +245,7 @@ class News(ModifiedModel):
     type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
     editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
+    attachment = models.FileField(upload_to="news_attachment", null=True, blank=True, verbose_name="公告附件")
 
     class Meta:
         verbose_name = "最新消息"   # 單數
