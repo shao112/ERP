@@ -155,15 +155,15 @@ class Profile_View(View):
             return JsonResponse({"data":form.errors}, status=400,safe=False)
         
     def put(self,request):
-        print("put")
+        print("views.py put")
         uploaded_image = request.FILES.get('profile_image')
         print(uploaded_image)
-        if uploaded_image:
+        if uploaded_image == None:
+             return JsonResponse({'error': '請上傳檔案'}, status=400)
+        else:
             # employee = Employee.objects.filter(pk=request.user.id).update(profile_image=uploaded_image)
             # employee.save()
             return JsonResponse(status=200)
-        else:
-            return JsonResponse({"data":"errors"}, status=400)
 
 
 class Check(View):

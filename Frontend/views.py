@@ -96,7 +96,6 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
     context_object_name = 'project_confirmation'
-    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         

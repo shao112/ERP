@@ -31,20 +31,20 @@
                             <div class="form-row my-2">
                                 <div class="col-12 col-md-6">
                                     <div class="form-row">
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="full_name_control">員工名稱</label>
                                                 <input class="form-control form-control-sm" name="full_name"
                                                     id="full_name_control" required></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="position">職稱</label>
                                                 <input class="form-control form-control-sm" name="position" id="position"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="departments">部門</label>
                                                 <select class="form-control form-control-sm" data-placeholder="選擇部門"
@@ -58,20 +58,20 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="employee_id_control">員工ID</label>
                                                 <input class="form-control form-control-sm" name="employee_id"
                                                     id="employee_id_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="gender_control">性別</label>
                                                 {{ employee_form.gender }}
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="start_date_control">到職日期</label>
                                                 <input type="date" class="form-control form-control-sm"
@@ -80,20 +80,20 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="id_number_control">身份證字號</label>
                                                 <input class="form-control form-control-sm" name="id_number"
                                                     id="id_number_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="blood_type_control">血型</label>
                                                 {{ employee_form.blood_type }}
                                             </div>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="birthday_control">出生日期</label>
                                                 <input type="date" class="form-control form-control-sm" name="birthday"
@@ -185,14 +185,14 @@
                                                     id="current_address_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_control">緊急聯絡人1</label>
                                                 <input class="form-control form-control-sm" name="emergency_contact"
                                                     id="emergency_contact_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_relations_control">關係1</label>
                                                 <input class="form-control form-control-sm"
@@ -200,7 +200,7 @@
                                                     id="emergency_contact_relations_control"></input>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-4">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="emergency_contact_phone_control">聯絡人電話1</label>
                                                 <input class="form-control form-control-sm"
@@ -253,7 +253,6 @@
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
-                    <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -272,7 +271,6 @@
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
                     <td>{{ p.departments.department_name }}</td>
-                    <td>{{ p.created_date }}</td>
                 </tr>
                 {% endif %}
                 {% endfor %}
