@@ -68,16 +68,18 @@
                     行程安排
                 </div>
                 <div>
-                    {% for project in related_projects %}
-                    {{ project.project_confirmation.project_confirmation_id }}
+                    {% for date, projects in grouped_projects.items %}
+                    {{ date|highlight_date|safe }}
+                    {% for project in projects %}
 
-                    {% for data in project.attendance_date %}
-
-                    {{ data|highlight_date|safe }}
-
-
-                    {% endfor %}
+                    <a href="" data-toggle="modal" data-target="#job-assign-modal"
+                        data-content="{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}">
+                        <div class="row">
+                            {{ project.project_confirmation.project_confirmation_id }}
+                        </div>
+                    </a>
                     <br>
+                    {% endfor %}
                     {% endfor %}
                 </div>
             </div>
@@ -122,12 +124,40 @@
                 </div>
             </div>
         </div>
+        <div class="job-assign-modal modal fade" id="job-assign-modal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <h5 class="mb-4" id="badge-row">
+                                工程確認單
+                            </h5>
+                            <div class="content">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 <script>
     $(document).ready(function () {
         // 監聽 modal 顯示事件
+        $('#job-assign-modal').on('show.bs.modal', function (event) {
+            var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
+            var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值
+            var dataArr = content.split('|');
+            console.log(dataArr)
+        });
         $('#news-modal').on('show.bs.modal', function (event) {
             var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
             var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值

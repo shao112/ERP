@@ -66,20 +66,20 @@ class Index(View):
             related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(    work_employee__in=[employeeid]        )
             related_projects = related_projects.distinct()
 
-            print(related_projects)
-
-            #排序            
+            grouped_projects = {}
             for project in related_projects:
                 if project.attendance_date:
-                    project.attendance_date = sorted(
-                        project.attendance_date, 
-                        key=lambda date: datetime.strptime(date, '%Y%m%d')
-                    )
+                    for date_str in project.attendance_date:
+                        if date_str in grouped_projects:
+                            grouped_projects[date_str].append(project)
+                        else:
+                            grouped_projects[date_str] = [project]
+            print(grouped_projects)
 
             context = {
                 'clock_inout':clock_inout,
                 'news':news,
-                "related_projects":related_projects,
+                "grouped_projects":grouped_projects,
             }
             return render(request, 'index/index-login.html', context)
         else:
