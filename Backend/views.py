@@ -6,6 +6,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.db import models
 from django.db.models.fields.files import FieldFile
 from django.db.models.fields.related import ManyToManyField
+from django.core.exceptions import ObjectDoesNotExist
 
 from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock
 from django.contrib.auth.models import User,Group
@@ -36,23 +37,29 @@ class New_View(View):
             News.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
             # News.objects.filter(id=dict_data['id']).update(**dict_data)
 
-            return JsonResponse({'status': 200},status=200)
+            return JsonResponse({'data': "修改成功"},status=200)
         else:
             error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages},status=400)
+            return JsonResponse({"error":error_messages},status=400)
 
     
     def delete(self,request):
-        dict_data = convent_dict(request.body)  
-        News.objects.get(id=dict_data['id']).delete()
-        return JsonResponse({"status":200},status=200)
+        try:
+            dict_data = convent_dict(request.body)  
+            News.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            return JsonResponse({"error":str(e)},status=500)
+
 
     def post(self,request):
         form = NewsForm(request.POST)
 
         if form.is_valid():
             form.save()
-            return JsonResponse({"data":"刪除成功"},status=200)
+            return JsonResponse({"data":"新增成功"},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -65,7 +72,7 @@ class New_View(View):
         data = model_to_dict(data)
         print("dict_data")
         print(data)
-        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 
 
@@ -83,7 +90,7 @@ class IMGUploadView(View):
 
             return JsonResponse({"url":f"/media/news_uploads/{new_file_name}"},status=200)
 
-        return JsonResponse(status=500)
+        return HttpResponse(status=500)
 
 
 
@@ -109,30 +116,20 @@ class FileUploadView(View):
                 error_str=f"第{i+1}欄資料錯誤\n"
 
         if error_str=="":
-            return JsonResponse({'message': '上傳成功'})
+            return JsonResponse({'message': '上傳成功'},status=200)
         else:
             return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
 
 
 
 class Groups_View(View):
-
-    def delete(self,request):
-        pass
-
-
     def put(self,request):
         dict_data = convent_dict(request.body)
         group = Group.objects.get(id=dict_data['id'])
         user_ids= dict_data["user_set"]
         users = User.objects.filter(id__in=user_ids)       
-        group.user_set.set(users)
-   
-        return JsonResponse({'status': 200})
-
-
-    def post(self,request):
-        return JsonResponse({"data": "data", "status": 200}, status=200)
+        group.user_set.set(users)   
+        return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):
         id = request.GET.get('id')
@@ -141,7 +138,7 @@ class Groups_View(View):
         users = [user.id for user in groups_employee]
         data={"user_set":users,"id":data.id,"group_name":data.name}
 
-        return JsonResponse({"data": data, "status": 200}, status=200)
+        return JsonResponse({"data": data}, status=200)
 
 class Profile_View(View):
 
@@ -180,7 +177,7 @@ class Check(View):
             clock_GPS=gps
         )
 
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'success'},status=200)
 
     def get(self,request):        
        return HttpResponseNotAllowed(['only POST'])
@@ -201,18 +198,24 @@ class Employee_View(View):
                 getObject.departments = None
 
             getObject.update_fields_and_save(**dict_data)
-            return JsonResponse({'status': 200})
+            return JsonResponse({'data': "完成新增"},status=200)
         else:
             error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({"error":error_messages},status=400)
 
     
     def delete(self,request):
-        dict_data = convent_dict(request.body)  
-        empolyee = Employee.objects.get(id=dict_data['id'])
-        empolyee.user.is_active =False
-        empolyee.user.save()
-        return JsonResponse({'status': 200})
+        try:
+            dict_data = convent_dict(request.body)  
+            empolyee = Employee.objects.get(id=dict_data['id'])
+            empolyee.user.is_active =False
+            empolyee.user.save()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            return JsonResponse({"error":str(e)},status=500)
+
 
     def post(self,request):
         form = EmployeeForm(request.POST)
@@ -224,17 +227,17 @@ class Employee_View(View):
             employee = form.save(commit=False)
             employee.user = user
             employee.save()
-            return JsonResponse({'status': 200})
+            return JsonResponse({'data': "完成新增"},status=200)
         else:
             error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({"error":error_messages},status=400)
 
 
     def get(self,request):        
         id = request.GET.get('id')
         data = get_object_or_404(Employee, id=id)
         data = model_to_dict(data)
-        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 
 
@@ -247,34 +250,41 @@ class Project_Confirmation_View(View):
         form = ProjectConfirmationForm(dict_data)
         if form.is_valid():
             getObject = Project_Confirmation.objects.get(id=dict_data['id'])
-            get_completion_report_employee = dict_data["completion_report_employee"]
-            del dict_data["completion_report_employee"]
-            getObject.completion_report_employee.set(get_completion_report_employee)
+            if "completion_report_employee" in dict_data:
+                get_completion_report_employee = dict_data["completion_report_employee"]
+                del dict_data["completion_report_employee"]
+                getObject.completion_report_employee.set(get_completion_report_employee)
+
             getObject.update_fields_and_save(**dict_data)
 
-            return JsonResponse({'status': 200})
+            return JsonResponse({'data': "完成修改"},status=200)
         else:
             error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({"error":error_messages},status=400)
 
     
     def delete(self,request):
-        dict_data = convent_dict(request.body)  
-        Project_Confirmation.objects.get(id=dict_data['id']).delete()
-
-        return JsonResponse({'status': 200})
+        try:
+            dict_data = convent_dict(request.body)  
+            Project_Confirmation.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
 
     def post(self,request):
         form = ProjectConfirmationForm(request.POST)
 
         if form.is_valid():
             form.save() 
-            return JsonResponse({'status': 200})
+            return JsonResponse({'data': "完成新增"},status=200)
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()
             print(error_messages)
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({"error":error_messages},status=400)
 
 
     def get(self,request):        
@@ -286,7 +296,7 @@ class Project_Confirmation_View(View):
             data['reassignment_attachment'] = data['reassignment_attachment'].url
         else:
             data['reassignment_attachment'] = None            
-        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 class Job_Assign_View(View):
 
@@ -301,9 +311,7 @@ class Job_Assign_View(View):
                 if key in dict_data:
                     if key == "project_confirmation":
                         confirmation_instance = Project_Confirmation.objects.get(pk=int(dict_data["project_confirmation"]))
-                        getObject.project_confirmation = confirmation_instance
-                    # dict_data.pop(key)                
-                    # del dict_data["project_confirmation"]
+                        getObject.project_confirmation = confirmation_instance                   
                     else:
                         field = getattr(getObject, key)
                         field.set(dict_data[key])
@@ -314,27 +322,31 @@ class Job_Assign_View(View):
 
             getObject.update_fields_and_save(**dict_data)
 
-            return JsonResponse({'status': 200},status=200)
+            return JsonResponse({'data': "完成修改"},status=200)
         else:
-            return JsonResponse({'status': 400,"error":form.errors},status= 400)
+            return JsonResponse({"error":form.errors},status=400)
 
     
     def delete(self,request):
-        dict_data = convent_dict(request.body)  
-        Project_Job_Assign.objects.get(id=dict_data['id']).delete()
-
-
-        return JsonResponse({'status': 200})
+        try:
+            dict_data = convent_dict(request.body)  
+            Project_Job_Assign.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
 
     def post(self,request):
         form = ProjectJobAssignForm(request.POST)
 
         if form.is_valid():
             form.save() 
-            return JsonResponse({'status': 200})
+            return JsonResponse({'data':"完成新增"},status=200)
         else:
             error_messages = form.get_error_messages()
-            return JsonResponse({'status': 400,"error":error_messages})
+            return JsonResponse({"error":error_messages},status=400)
 
     def get(self,request):        
         id = request.GET.get('id')
@@ -342,14 +354,15 @@ class Job_Assign_View(View):
         data = model_to_dict(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
-        # data["support_employee"] = convent_employee(data["support_employee"])
 
         if  "attachment" in data:
             if  data['attachment']:
                 data['attachment'] = data["attachment"]["url"]
             else:
                 data['attachment'] = None            
-        return JsonResponse({"data":data,"status":200}, status=200,safe = False)
+        return JsonResponse({"data":data}, status=200,safe = False)
+
+
 
 class ExcelExportView(View):
    def get(self, request, *args, **kwargs):

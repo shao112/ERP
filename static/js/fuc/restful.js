@@ -15,15 +15,21 @@ function getcsrftoken() {
     return cookieValue;
 }
 
-function showSwal(title, text, icon, showCancelButton = true) {
-    return Swal.fire({
+function showSwal(title, text, icon, showCancelButton) {
+    setting_dict = {
         title: title,
         html: text,
         icon: icon,
-        showCancelButton: showCancelButton,
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
-    });
+    }
+    console.log(showCancelButton)
+    if (showCancelButton) {
+        setting_dict.showCloseButton = true;
+        setting_dict.showCancelButton = true;
+        setting_dict.confirmButtonText = "確認";
+        setting_dict.cancelButtonText = "取消";
+    }
+    console.log(setting_dict)
+    return Swal.fire(setting_dict);
 }
 
 
@@ -71,78 +77,79 @@ function GET_handleClick(event) {
         data: formData,
         success: function (response) {
 
-            if (response.status == 200) {
-                jsonData = response.data
-                for (var key in jsonData) {
-                    var input = document.getElementsByName(key)[0];
-                    if (input) {
-                        let get_value = jsonData[key];
+            jsonData = response.data
+            for (var key in jsonData) {
+                var input = document.getElementsByName(key)[0];
+                if (input) {
+                    let get_value = jsonData[key];
 
-                        if (key == "attendance_date") {
-                            if (jsonData[key] == null) {
-                                continue;
-                            }
-                            for (var i = 0; i < get_value.length; i++) {
-                                var dateStr = get_value[i];
-                                var option = new Option(dateStr, dateStr, true, true);
-                                input.appendChild(option);
-                            }
-                            $('#attendance_date_select').select2();
+                    if (key == "attendance_date") {
+                        if (jsonData[key] == null) {
                             continue;
                         }
-
-                        if (typeof (jsonData[key]) == "object" && get_value != null) {
-                            // 如果是陣列，先取得對應的options，以及select2的欄位
-                            const options = input.options;
-                            selectname = `#${key}_select2`
-                            console.log("GET_" + key + "=> " + selectname);
-                            console.log(get_value)
-                            for (let i = 0; i < options.length; i++) {
-                                //取出單一optons的id，在get_value比對id是不是匹配
-                                const option = options[i];
-                                const option_id = option.value;
-                                console.log(option_id)
-                                const matchedItem = get_value.find(item => item.id == option_id);
-                                const containsValue = get_value.find(item => item == option_id);
-                                console.log(matchedItem)
-                                console.log(containsValue)
-                                if (matchedItem || containsValue) {
-                                    option.selected = true;
-                                }
-                            }
-                            $(selectname).trigger('change');
-                        } else {
-                            input.value = jsonData[key];
-                            console.log("帶資料:" + input.value);
+                        for (var i = 0; i < get_value.length; i++) {
+                            var dateStr = get_value[i];
+                            var option = new Option(dateStr, dateStr, true, true);
+                            input.appendChild(option);
                         }
-
-                        if (key == "editor_content") { //觸發change事件
-                            editor.setData(jsonData[key]);
-                        }
-
-                        if (key == "project_confirmation") { //觸發change事件
-                            const event = new Event("change");
-                            input.dispatchEvent(event);
-                        }
-
-                    } else {
-                        console.log("Input not found for key:", key);
+                        $('#attendance_date_select').select2();
+                        continue;
                     }
+
+                    if (typeof (jsonData[key]) == "object" && get_value != null) {
+                        // 如果是陣列，先取得對應的options，以及select2的欄位
+                        const options = input.options;
+                        selectname = `#${key}_select2`
+                        console.log("GET_" + key + "=> " + selectname);
+                        console.log(get_value)
+                        for (let i = 0; i < options.length; i++) {
+                            //取出單一optons的id，在get_value比對id是不是匹配
+                            const option = options[i];
+                            const option_id = option.value;
+                            console.log(option_id)
+                            const matchedItem = get_value.find(item => item.id == option_id);
+                            const containsValue = get_value.find(item => item == option_id);
+                            console.log(matchedItem)
+                            console.log(containsValue)
+                            if (matchedItem || containsValue) {
+                                option.selected = true;
+                            }
+                        }
+                        $(selectname).trigger('change');
+                    } else {
+                        input.value = jsonData[key];
+                        console.log("帶資料:" + input.value);
+                    }
+
+                    if (key == "editor_content") { //觸發change事件
+                        editor.setData(jsonData[key]);
+                    }
+
+                    if (key == "project_confirmation") { //觸發change事件
+                        const event = new Event("change");
+                        input.dispatchEvent(event);
+                    }
+
+                } else {
+                    console.log("Input not found for key:", key);
                 }
-
-                //   更改form method
-                $("#form").attr("data-method", "put");
-                $("#form").attr("data-id", id);
-
-
-            } else {
-                $("#error-message").text(response.error);
             }
+
+            $("#form").attr("data-method", "put");
+            $("#form").attr("data-id", id);
+
+
 
         },
         error: function (xhr, textStatus, errorThrown) {
-
-            console.log("get error");
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                console.log(errorMessage)
+                showSwal('操作失敗', errorMessage, 'error', false)
+            } else {
+                alert("系統發生錯誤");
+                console.log(errorThrown)
+            }
         }
     });
 
@@ -151,7 +158,6 @@ function GET_handleClick(event) {
 $("form").on("submit", function (event) {
     console.log("新增 or 修改")
     event.preventDefault();
-
 
     var form = $(this);
     var url = form.attr("action");
@@ -170,11 +176,11 @@ $("form").on("submit", function (event) {
             'X-CSRFToken': getcsrftoken()
         },
         success: function (response) {
-            if (response.status == 200) {
-                alert("操作成功");
-            } else {
-                $("#error-message").text(response.error);
-            }
+            jsonData = response.data
+
+            showSwal('操作說明', jsonData, 'success', false).then(() => {
+                location.reload();
+            })
         },
         error: function (xhr, textStatus, errorThrown) {
             if (xhr.status === 400) {
@@ -209,7 +215,7 @@ document.querySelectorAll('.sys_del').forEach(element => {
 
 
 async function DELETE_handleClick(event) {
-    const result = await showSwal('確認刪除', '你確定要刪除該項目嗎？', 'warning');
+    const result = await showSwal('確認刪除', '你確定要刪除該項目嗎？', 'warning', true);
 
     if (!result.isConfirmed) {
         return;
@@ -232,18 +238,17 @@ async function DELETE_handleClick(event) {
         },
         data: formData,
         success: function (response) {
-            if (response.status == 200) {
-                alert("成功刪除");
-                location.reload();
-            } else {
-                alert(response.error);
-                // $("#error-message").text(response.error); // 在错误消息显示区域显示错误消息
-            }
-
+            showSwal('操作說明', "成功刪除", 'success', false)
+            location.reload();
         },
         error: function (xhr, textStatus, errorThrown) {
-            // var errorMessage = form.get_error_messages(); // 获取后端返回的错误消息
-            alert("系統發生錯誤"); // 在错误消息显示区域显示错误消息
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                showSwal('操作失敗', errorMessage, 'error', false)
+            } else {
+                alert("系統發生錯誤"+ xhr.responseJSON.error);
+                console.log(errorThrown)
+            }
         }
     });
 

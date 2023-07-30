@@ -62,11 +62,6 @@ class ModifiedModel(models.Model):
         self.save()
 
 
-
-
-
-
-
 # Create your models here.
 # 員工（以內建 User 擴增）
 # admin:admin IT0000:itadmin000

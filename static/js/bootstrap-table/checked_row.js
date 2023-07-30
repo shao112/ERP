@@ -24,9 +24,9 @@ function syncCheckedRowsWithArray() {
         const checkbox = checkboxes[i];
         checkbox.checked = checked.includes(checkbox.value);
 
-        console.log(checkboxes)
-        console.log(checkbox.value)
-        console.log(checked.includes(checkbox.value))
+        // console.log(checkboxes)
+        // console.log(checkbox.value)
+        // console.log(checked.includes(checkbox.value))
 
     }
 }
