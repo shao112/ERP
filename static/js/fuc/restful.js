@@ -96,6 +96,8 @@ function GET_handleClick(event) {
                         continue;
                     }
 
+                    console.log(get_value)
+
                     if (typeof (jsonData[key]) == "object" && get_value != null) {
                         // 如果是陣列，先取得對應的options，以及select2的欄位
                         const options = input.options;
@@ -106,11 +108,9 @@ function GET_handleClick(event) {
                             //取出單一optons的id，在get_value比對id是不是匹配
                             const option = options[i];
                             const option_id = option.value;
-                            console.log(option_id)
+                            // console.log(option_id)
                             const matchedItem = get_value.find(item => item.id == option_id);
                             const containsValue = get_value.find(item => item == option_id);
-                            console.log(matchedItem)
-                            console.log(containsValue)
                             if (matchedItem || containsValue) {
                                 option.selected = true;
                             }
@@ -118,7 +118,7 @@ function GET_handleClick(event) {
                         $(selectname).trigger('change');
                     } else {
                         input.value = jsonData[key];
-                        console.log("帶資料:" + input.value);
+                        // console.log("帶資料:" + input.value);
                     }
 
                     if (key == "editor_content") { //觸發change事件
