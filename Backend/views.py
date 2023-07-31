@@ -17,10 +17,10 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
 from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content
-import datetime
 import openpyxl
 from django.db.utils import IntegrityError
 import random
+import os
 from  django.conf import settings
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -141,26 +141,40 @@ class Groups_View(View):
         return JsonResponse({"data": data}, status=200)
 
 class Profile_View(View):
-
+    # 同一個post要處理更新照片以及更新密碼
     def post(self,request):
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return JsonResponse(status=200)
+        print("Profile_View")
+        if 'profile_image' in request.FILES:
+            uploaded_image = request.FILES.get('profile_image')
+            employee = get_object_or_404(Employee, id=request.user.employee.id)
+            print(employee.profile_image.path)
+            print(employee)
+            now = datetime.now()
+            date_time_string = now.strftime("%Y%m%d_%H%M%S")
+            file_extension = os.path.splitext(uploaded_image.name)[1]
+            new_file_name = f"{date_time_string}{file_extension}"
+            employee.profile_image.save(new_file_name, uploaded_image)
+            print("成功")
+            return JsonResponse({'status': 'success'},status=200)
         else:
-            return JsonResponse({"data":form.errors}, status=400,safe=False)
+            form = PasswordChangeForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                return JsonResponse({'status': 'success'},status=200)
+            else:
+                return JsonResponse({"data":form.errors}, status=400,safe=False)
         
-    def put(self,request):
-        print("views.py put")
-        uploaded_image = request.FILES.get('profile_image')
-        print(uploaded_image)
-        if uploaded_image == None:
-             return JsonResponse({'error': '請上傳檔案'}, status=400)
-        else:
+    # def put(self,request):
+    #     print("views.py put")
+    #     uploaded_image = request.FILES.get('profile_image')
+    #     print(uploaded_image)
+    #     if uploaded_image == None:
+    #          return JsonResponse({'error': '請上傳檔案'}, status=400)
+    #     else:
             # employee = Employee.objects.filter(pk=request.user.id).update(profile_image=uploaded_image)
             # employee.save()
-            return JsonResponse(status=200)
+            # return JsonResponse(status=200)
 
 
 class Check(View):

@@ -23,9 +23,9 @@
             <div class="col-6 col-md-3 text-center">
                 <div class="profile_img w-50 mx-auto mb-2">
                     {% if user.employee.profile_image %}
-                        <img class="img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload">
+                        <img class="h-100 img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload" style="object-fit: cover;">
                     {% else %}
-                        <img class="img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload">
+                        <img class="h-100 img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload" style="object-fit: cover;">
                     {% endif %}
                 </div>
                 <form id="profileImageForm" enctype="multipart/form-data">
@@ -103,30 +103,19 @@
 </div>
 
 <script>
-    // 共用事件
-    function getcsrftoken() {
-        var name = "csrftoken";
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
     console.log("eee")
     
-    $("#profileform").on("submit", function (event) {
+    $("form").on("submit", function (event) {
         event.preventDefault();
-        // console.log(jsonData)
-
-        var form = $(this);
-        var formData = form.serialize();
+        var profileImageFile = $("#profileImageInput")[0].files[0];
+        if(profileImageFile){
+            console.log("profileImageFile is true")
+            var formData = new FormData($("#profileImageForm")[0]); 
+        }else{
+            console.log("profileImageFile is false")
+            var form = $(this);
+            var formData = form.serialize();
+        }
         // var jsonData = JSON.stringify(formData);
         // console.log(jsonData)
         $.ajax({
@@ -136,6 +125,9 @@
             headers: {
                 'X-CSRFToken': csrftoken
             },
+            cache: false, 
+            processData: false,
+            contentType: false,
             success: function (response) {
                 alert("操作成功");
             },
@@ -169,62 +161,62 @@
         });
 
     });
-    $("#profileImageForm").on("submit", function (event) {
-        event.preventDefault();
-        console.log("put")
-        /*上網查的各種做法*/
-        var profileImageFile = $("#profileImageInput")[0].files[0];
-        // console.log(profileImageFile)
-        // 以下兩個方式都可以抓到表單DOM
-        // console.log($("#profileImageForm").eq(0)[0])
-        // console.log($("#profileImageForm")[0])
-        // var formData = new FormData($("#profileImageForm").eq(0)[0]); //單純用jQuery $("#profileImageForm")取得的是數組，不是DOM，會報錯
-        // formData.append('profile_image', profileImageFile);
-        // var formData = new FormData($( "#profileImageForm" )[0]); 
-        // var formData = new FormData(form);
+//     $("#profileImageForm").on("submit", function (event) {
+//         event.preventDefault();
+//         console.log("put")
+//         /*上網查的各種做法*/
+//         var profileImageFile = $("#profileImageInput")[0].files[0];
+//         // console.log(profileImageFile)
+//         // 以下兩個方式都可以抓到表單DOM
+//         // console.log($("#profileImageForm").eq(0)[0])
+//         // console.log($("#profileImageForm")[0])
+//         // var formData = new FormData($("#profileImageForm").eq(0)[0]); //單純用jQuery $("#profileImageForm")取得的是數組，不是DOM，會報錯
+//         // formData.append('profile_image', profileImageFile);
+//         // var formData = new FormData($( "#profileImageForm" )[0]); 
+//         // var formData = new FormData(form);
 
-        /*看restful.js的作法*/
-        // var form = $(this);
-        // var formData = form.serialize();
+//         /*看restful.js的作法*/
+//         // var form = $(this);
+//         // var formData = form.serialize();
 
-        /*自己塞formData*/
-        var formData = {"profile_image":profileImageFile}
-        console.log(formData)
-            $.ajax({
-                type: "put",
-                url: "{% url 'profile_view_api' %}",
-                data: formData,
-                async: false, 
-                cache: false, 
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRFToken': getcsrftoken()
-                },
-                success: function (response) {
-                    alert("操作成功");
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    if (xhr.status === 400) {
-                        // 處理400錯誤，顯示伺服器返回的錯誤訊息
-                        var errorMessage = xhr.responseJSON.data;
-                        console.log(errorMessage)
-                        console.log(errorMessage[0])
-                        Swal.fire({
-                            title: '更新失敗',
-                            html: errorMessageHTML,
-                            icon: 'error',
-                            confirmButtonText: '確定',
-                        })
-                    } else {
-                        // 其他錯誤處理
-                        alert("系統發生錯誤");
-                    }
-                }
-            });
+//         /*自己塞formData*/
+//         var formData = {"profile_image":profileImageFile}
+//         console.log(formData)
+//             $.ajax({
+//                 type: "put",
+//                 url: "{% url 'profile_view_api' %}",
+//                 data: formData,
+//                 async: false, 
+//                 cache: false, 
+//                 processData: false,
+//                 contentType: false,
+//                 headers: {
+//                     'X-CSRFToken': getcsrftoken()
+//                 },
+//                 success: function (response) {
+//                     alert("操作成功");
+//                 },
+//                 error: function (xhr, textStatus, errorThrown) {
+//                     if (xhr.status === 400) {
+//                         // 處理400錯誤，顯示伺服器返回的錯誤訊息
+//                         var errorMessage = xhr.responseJSON.data;
+//                         console.log(errorMessage)
+//                         console.log(errorMessage[0])
+//                         Swal.fire({
+//                             title: '更新失敗',
+//                             html: errorMessageHTML,
+//                             icon: 'error',
+//                             confirmButtonText: '確定',
+//                         })
+//                     } else {
+//                         // 其他錯誤處理
+//                         alert("系統發生錯誤");
+//                     }
+//                 }
+//             });
 
-    });
+//     });
 
-</script>
+// </script>
 
 {% endblock %}
