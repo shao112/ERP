@@ -45,17 +45,14 @@ projectConfirmationIdControl.addEventListener('change', function () {
         data: formData,
         success: function (response) {
 
-            if (response.status == 200) {
                 jsonData = response.data
                 document.getElementById("project_name").value = jsonData["project_name"];
                 document.getElementById("c_a").value = jsonData["c_a"];
 
-            } else {
-                $("#error-message").text(response.error);
-            }
-
+                
         },
         error: function (xhr, textStatus, errorThrown) {
+            alert("job_assign js error")
             console.log("get error");
         }
     });
