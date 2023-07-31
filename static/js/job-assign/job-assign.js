@@ -45,21 +45,18 @@ projectConfirmationIdControl.addEventListener('change', function () {
         data: formData,
         success: function (response) {
 
+            if (response.status == 200) {
                 jsonData = response.data
                 document.getElementById("project_name").value = jsonData["project_name"];
                 document.getElementById("c_a").value = jsonData["c_a"];
-                
-                
-            },
-            error: function (xhr, textStatus, errorThrown) {
-            // $("#error-message").text(response.error);
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                console.log(errorMessage)
-                alert("操作失敗",errorMessage);
+
             } else {
-                alert("系統發生錯誤");
+                $("#error-message").text(response.error);
             }
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log("get error");
         }
     });
 

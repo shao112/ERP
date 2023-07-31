@@ -53,8 +53,7 @@ class ModifiedModel(models.Model):
         # print("xxx save")
         # Get the current authenticated user
         user = get_current_authenticated_user()
-        if user!=None:
-            self.modified_by = user.employee
+        self.modified_by = user.employee
         super().save(*args, **kwargs)
 
     def update_fields_and_save(self, **kwargs):
