@@ -4,17 +4,17 @@ from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
 #取得當周日期
-def get_weekdays():
+def get_weekdays(to_week):
     weekdays = []
     today = date.today()
     current_date = today - timedelta(days=today.weekday())
-    while current_date.weekday() < 5:
+    while current_date.weekday() < to_week:
         weekdays.append(current_date)
         current_date += timedelta(days=1)
-    return weekdays
+    return weekdays 
 
 def get_weekly_clock_data(userid):
-    weekdays = get_weekdays()
+    weekdays = get_weekdays(5)
     weekly_clock_data = []
     for weekday in weekdays:
         clock_records = Clock.objects.filter(created_date=weekday).filter(employee_id=userid).order_by('clock_time')

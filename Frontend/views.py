@@ -9,18 +9,15 @@ from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
-from Backend.utils import get_weekly_clock_data
+from Backend.utils import get_weekly_clock_data,get_weekdays
 
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import UserPassesTestMixin
-
+from datetime import date
 from django.views.defaults import permission_denied
 
 def custom_permission_denied(request, exception=None,template_name='403.html'):
     return permission_denied(request, exception, template_name='403.html')
-from datetime import datetime
-
-
 
 # 首頁
 class Index(View):
@@ -59,7 +56,6 @@ class Index(View):
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
-
             news = News.objects.all()
             employeeid = request.user.employee
             clock_inout = get_weekly_clock_data(employeeid)
@@ -70,15 +66,20 @@ class Index(View):
             for project in related_projects:
                 if project.attendance_date:
                     for date_str in project.attendance_date:
-                        if date_str in grouped_projects:
-                            grouped_projects[date_str].append(project)
-                        else:
-                            grouped_projects[date_str] = [project]
+                        date_obj = date.fromisoformat(date_str)
+                        print(date_obj)
+                        print( date.today())
+                        if date_obj >= date.today():
+                            if date_str in grouped_projects:
+                                grouped_projects[date_str].append(project)
+                            else:
+                                grouped_projects[date_str] = [project]
+            sorted_grouped_projects = dict(sorted(grouped_projects.items()))
 
             context = {
                 'clock_inout':clock_inout,
                 'news':news,
-                "grouped_projects":grouped_projects,
+                "grouped_projects":sorted_grouped_projects,
             }
             return render(request, 'index/index-login.html', context)
         else:
