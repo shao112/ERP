@@ -70,10 +70,10 @@
                     {{ date|highlight_date|safe }}
                     {% for project in projects %}
 
-                    <a href="" data-toggle="modal" data-target="#job-assign-modal"
-                        data-content="{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}">
+                    <li href=""
+                        onclick="showjobassign('{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}|{{ project.project_confirmation.order_id}}')">
                         {{ project.project_confirmation.project_confirmation_id }}
-                    </a>
+                    </li>
                     <br>
                     {% endfor %}
                     {% endfor %}
@@ -95,31 +95,7 @@
                 </div>
             </div>
         </div>
-        <div class="news-modal modal fade" id="news-modal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <h5 class="mb-4" id="badge-row">
-                                <span class="category-badge badge badge-dark"></span>
-                                <span class="type-badge badge badge-dark"></span>
-                                <span class="level-badge badge badge-dark"></span>
-                                <span class="created-date-badge"></span>
-                            </h5>
-                            <div class="content">
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="job-assign-modal modal fade" id="job-assign-modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -146,14 +122,26 @@
 
 </div>
 <script>
+
+    function showjobassign(content) {
+        var dataArr = content.split('|');
+        console.log(dataArr)
+        var project_confirmation_id = dataArr[0];
+        var listHTML = "";
+        for (var i = 0; i < dataArr.length; i++) {
+            listHTML += "<li>" + dataArr[i] + "</li>";
+        }
+        Swal.fire({
+            icon: 'info',
+            title: project_confirmation_id,
+            html: listHTML
+        })
+
+    }
+
     $(document).ready(function () {
         // 監聽 modal 顯示事件
-        $('#job-assign-modal').on('show.bs.modal', function (event) {
-            var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
-            var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值
-            var dataArr = content.split('|');
-            console.log(dataArr)
-        });
+
         $('#news-modal').on('show.bs.modal', function (event) {
             var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
             var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值

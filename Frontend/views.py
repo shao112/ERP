@@ -74,7 +74,6 @@ class Index(View):
                             grouped_projects[date_str].append(project)
                         else:
                             grouped_projects[date_str] = [project]
-            print(grouped_projects)
 
             context = {
                 'clock_inout':clock_inout,
@@ -106,11 +105,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     def test_func(self):
         return self.request.user.groups.filter(name='工程部總管理').exists()    
     
-    # 在 ListView 傳送 form
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['form'] = ProjectConfirmationForm()
-    #     return context
+
 
 # 工作派任計畫
 class Job_Assign_ListView(ListView):
