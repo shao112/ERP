@@ -422,6 +422,24 @@ class Job_Assign_View(View):
 
 
 class ExcelExportView(View):
+   def post(self,request):
+        json_data = json.loads(request.body)
+        headers = json_data['headers']
+        table_data = json_data['data']
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.append(headers)
+        for row_data in table_data:
+            row = [row_data.get(header, '') for header in headers]
+            ws.append(row)
+
+        # 生成Excel文件
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=表格数据.xlsx'
+        wb.save(response)
+
+        return response
+   
    def get(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']
         match_excel_content(modelstr)
