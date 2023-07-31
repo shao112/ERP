@@ -371,7 +371,7 @@ class Job_Assign_View(View):
 
         if  "attachment" in data:
             if  data['attachment']:
-                data['attachment'] = data["attachment"]["url"]
+                data['attachment'] = data["attachment"].url
             else:
                 data['attachment'] = None            
         return JsonResponse({"data":data}, status=200,safe = False)
