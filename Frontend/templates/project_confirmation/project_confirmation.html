@@ -183,11 +183,9 @@
 
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-toolbar="#toolbar" data-search="true" data-show-columns="true"
-            data-filter-strict-search="true" data-show-columns-toggle-all="true"  data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
-            data-filter-control="true" data-export-types="['excel', 'json', 'csv', 'txt']"
-            data-export-options='{"fileName": "工程確認單"}'>
-
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
+            data-show-columns-toggle-all="true"  data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
+            data-filter-control="true">
             <div id="toolbar">
                 <div class="project-confirmation-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
@@ -202,12 +200,8 @@
                     <a href="/media/file_form_template/工程確認單樣板.xlsx" class="font-weight-bold" download="">
                         <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                     </a>
-                    <button onclick="exportToExcel()"data-export-url="{% url 'excel_export' %}">匯出Excel</button>
-                    <select class="form-control form-control-sm mt-2">
-                        <option value="">請先選擇輸出範圍</option>
-                        <option value="all">輸出全部資料</option>
-                        <option value="selected">輸出選擇資料</option>
-                    </select>
+                    <button onclick="exportAllOptionToExcel()"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportSelectedOptionToExcel()">匯出已選資料</button>
                 </div>
             </div>
             <thead class="thead-light" style="font-size: 14px;">
@@ -233,7 +227,7 @@
             <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
                 {% for p in project_confirmation %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ j.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ p.id }}"></td>
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -270,33 +264,20 @@
         </table>
     </div>
 </div>
-
 <script>
-    var $table = $('#table');
-    $(function () {
-        $('#toolbar').find('select').change(function () {
-            $table.bootstrapTable('refreshOptions', {
-                exportDataType: $(this).val()
-            });
-            console.log($(this).val())
-        });
-    })
-</script>
-<script>
-    function exportToExcel() {
+    function exportAllOptionToExcel() {
         var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        console.log(exportUrl)
         var tableData = [];
         var rows = document.getElementById("table").rows;
         var headers = [];
-        for (var i = 0; i < rows[0].cells.length; i++) {
+        for (var i = 3; i < rows[0].cells.length; i++) {
             headers.push(rows[0].cells[i].innerText);
         }
         
         for (var i = 1; i < rows.length; i++) {
             var rowData = {};
-            for (var j = 0; j < headers.length; j++) {
-            rowData[headers[j]] = rows[i].cells[j].innerText;
+            for (var j = 0, k = 3; j < headers.length; j++,k++) {
+            rowData[headers[j]] = rows[i].cells[k].innerText;
             }
             tableData.push(rowData);
         }
@@ -317,7 +298,56 @@
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = '表格数据.xlsx';
+            a.download = '工程確認單.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+<script>
+    function exportSelectedOptionToExcel() {
+        console.log(getSelectedValues())
+        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
+        var tableData = [];
+        var rows = document.getElementById("table").rows;
+        var headers = [];
+        for (var i = 3; i < rows[0].cells.length; i++) {
+            headers.push(rows[0].cells[i].innerText);
+        }
+        
+        for (var i = 1; i < rows.length; i++) {
+            var checkbox = rows[i].querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                console.log(checkbox.value)
+                var rowData = {};
+                for (var j = 0, k = 3; j < headers.length; j++,k++) {
+                    rowData[headers[j]] = rows[i].cells[k].innerText;
+                }
+                tableData.push(rowData);
+            }
+        }
+        console.log(headers)
+        console.log(tableData)
+        fetch(exportUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken, 
+            },
+            body: JSON.stringify({
+                headers: headers,
+                data: tableData,
+            }),
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = '工程確認單.xlsx';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
