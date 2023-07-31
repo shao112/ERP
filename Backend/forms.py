@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News
+from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News,Project_Employee_Assign
 
 from django.contrib.auth.models import Group
 
@@ -51,6 +51,13 @@ class ProjectConfirmationForm(BaseModelForm):
 
     class Meta:
         model = Project_Confirmation
+        fields = '__all__'
+
+# 派工單
+class Project_Employee_AssignForm(BaseModelForm):
+
+    class Meta:
+        model = Project_Employee_Assign
         fields = '__all__'
 
 class  GroupForm(BaseModelForm):

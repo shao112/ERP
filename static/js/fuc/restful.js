@@ -125,7 +125,7 @@ function GET_handleClick(event) {
                         editor.setData(jsonData[key]);
                     }
 
-                    if (key == "project_confirmation") { //觸發change事件
+                    if (key == "project_confirmation"|| key=="project_job_assign")  { //觸發change事件
                         const event = new Event("change");
                         input.dispatchEvent(event);
                     }

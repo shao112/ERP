@@ -40,7 +40,7 @@ projectConfirmationIdControl.addEventListener('change', function () {
         type: "GET",
         url: url,
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         data: formData,
         success: function (response) {

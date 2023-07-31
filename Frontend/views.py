@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
-from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation, Employee, News, Equipment
+from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
 from Backend.utils import get_weekly_clock_data,get_weekdays
@@ -100,7 +100,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =employees = Employee.objects.values('id','user__username')
+        context["employees_list"] = Employee.objects.values('id','user__username')
         return context
 
     def test_func(self):
@@ -121,8 +121,16 @@ class Job_Assign_ListView(ListView):
 
 # 派工單
 class Employee_Assign_ListView(ListView):
-    model = Project_Job_Assign
+    model = Project_Employee_Assign
     template_name = 'employee_assign/employee_assign.html'
+    context_object_name = 'Project_Employee_Assign'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
+        return context
+
+
     
 
 # 員工

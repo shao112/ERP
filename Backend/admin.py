@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News
+from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News,Project_Employee_Assign
 
 # Register your models here.
 class EmployeeInline(admin.StackedInline):
@@ -26,7 +26,7 @@ class ProjectConfirmationAdmin(admin.ModelAdmin):
 # 工作派任計畫
 class ProjectJobAssignAdmin(admin.ModelAdmin):
     # list_display = ('project_confirmation', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'display_work_employee', 'display_lead_employee','vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
-    list_display = ('project_confirmation',  'display_work_employee', 'display_lead_employee','attendance_date','vehicle', 'location', 'project_type', 'remark', 'display_support_employee', 'attachment', 'created_date', 'update_date')
+    list_display = ('project_confirmation',  'display_work_employee', 'display_lead_employee','attendance_date','vehicle', 'location', 'project_type', 'remark', 'attachment', 'created_date', 'update_date')
     # ManyToMany不能在list_display顯示
     def display_work_employee(self, obj):
         return ', '.join([str(item) for item in obj.work_employee.all()])
@@ -34,9 +34,6 @@ class ProjectJobAssignAdmin(admin.ModelAdmin):
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
     display_lead_employee.short_description = '多對多_帶班人員'
-    def display_support_employee(self, obj):
-        return ', '.join([str(item) for item in obj.support_employee.all()])
-    display_support_employee.short_description = '多對多_支援人員'
 
 # 派工單
 class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
@@ -59,6 +56,7 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
+admin.site.register(Project_Employee_Assign)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Project_Confirmation, ProjectConfirmationAdmin)

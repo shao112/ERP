@@ -200,7 +200,7 @@ class Project_Job_Assign(ModifiedModel):
 # 派工單
 class Project_Employee_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱、請購單位）
-    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project_employee_assign',null=True, blank=True, verbose_name="工程確認單")
+    project_job_assign= models.ForeignKey(Project_Job_Assign,on_delete=models.CASCADE,related_name='project_employee_assign',null=True, blank=True, verbose_name="工程確認單")
     construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
     completion_date = models.DateField(null=True, blank=True, verbose_name="完工日期")
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)

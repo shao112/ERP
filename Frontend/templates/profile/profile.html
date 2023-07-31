@@ -103,7 +103,6 @@
 </div>
 
 <script>
-    console.log("eee")
     
     $("form").on("submit", function (event) {
         event.preventDefault();
@@ -116,6 +115,7 @@
             var form = $(this);
             var formData = form.serialize();
         }
+        console.log(csrftoken)
         // var jsonData = JSON.stringify(formData);
         // console.log(jsonData)
         $.ajax({

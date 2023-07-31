@@ -8,9 +8,9 @@ from django.db.models.fields.files import FieldFile
 from django.db.models.fields.related import ManyToManyField
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock
+from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewsForm
+from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -26,7 +26,62 @@ from  django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+class Project_Employee_Assign_View(View):
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = Project_Employee_AssignForm(dict_data)
+        if form.is_valid():
+            get_Project_Employee_Assign =Project_Employee_Assign.objects.get(id=dict_data['id'])
 
+            if "project_job_assign" in dict_data:
+                project_job_assign_instance = Project_Job_Assign.objects.get(pk=int(dict_data["project_job_assign"]))
+                get_Project_Employee_Assign.project_job_assign = project_job_assign_instance            
+                del dict_data["project_job_assign"]
+
+            get_Project_Employee_Assign.update_fields_and_save(**dict_data)
+
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+    
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)  
+            Project_Employee_Assign.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            return JsonResponse({"error":str(e)},status=500)
+
+
+    def post(self,request):
+        form = Project_Employee_AssignForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"data":"新增成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):        
+        id = request.GET.get('id')
+        data = get_object_or_404(Project_Employee_Assign, id=id)
+        data = model_to_dict(data)
+        data["inspector"] = convent_employee(data["inspector"])
+        print(data)
+        if  data['enterprise_signature']:
+            data['enterprise_signature'] = data['enterprise_signature'].url
+        else:
+            data['enterprise_signature'] = None            
+        print("dict_data")
+        print(data)
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 class New_View(View):
 
@@ -35,8 +90,6 @@ class New_View(View):
         form = NewsForm(dict_data)
         if form.is_valid():
             News.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
-            # News.objects.filter(id=dict_data['id']).update(**dict_data)
-
             return JsonResponse({'data': "修改成功"},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -177,25 +230,6 @@ class Profile_View(View):
             # return JsonResponse(status=200)
 
 
-class Check(View):
-    def post(self,request):
-        data = json.loads(request.body)
-        gps = data.get('gps')
-        clock_in_or_out = data.get('clock_in_or_out')
-        clock_time = datetime.datetime.now()
-
-        Clock.objects.create(
-            employee_id=request.user.employee,
-            clock_time=clock_time,
-            clock_in_or_out=clock_in_or_out,
-            clock_GPS=gps
-        )
-
-        return JsonResponse({'status': 'success'},status=200)
-
-    def get(self,request):        
-       return HttpResponseNotAllowed(['only POST'])
-    
 
 class Employee_View(View):
 
@@ -365,16 +399,25 @@ class Job_Assign_View(View):
     def get(self,request):        
         id = request.GET.get('id')
         data = get_object_or_404(Project_Job_Assign, id=id)
+        print(data)
+
+
+        #渲染關聯
+        selected_fields = ['quotation_id', 'project_name', 'client', 'requisition']
+        project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
+
         data = model_to_dict(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
+
+        data['project_confirmation'] = project_confirmation_dict
 
         if  "attachment" in data:
             if  data['attachment']:
                 data['attachment'] = data["attachment"].url
             else:
                 data['attachment'] = None            
-        return JsonResponse({"data":data}, status=200,safe = False)
+        return JsonResponse({"data":data,"project_confirmation":project_confirmation_dict}, status=200,safe = False)
 
 
 
@@ -439,3 +482,24 @@ class ExcelExportView(View):
         wb.save(response)
 
         return response
+   
+
+class Check(View):
+    def post(self,request):
+        data = json.loads(request.body)
+        gps = data.get('gps')
+        clock_in_or_out = data.get('clock_in_or_out')
+        clock_time = datetime.datetime.now()
+
+        Clock.objects.create(
+            employee_id=request.user.employee,
+            clock_time=clock_time,
+            clock_in_or_out=clock_in_or_out,
+            clock_GPS=gps
+        )
+
+        return JsonResponse({'status': 'success'},status=200)
+
+    def get(self,request):        
+       return HttpResponseNotAllowed(['only POST'])
+    
