@@ -207,7 +207,6 @@
                         data-target="#employee-assign-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增派工單
                     </a>
-                    <br>
                     <a href="" class="font-weight-bold" id="">
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
                     </a>
@@ -216,8 +215,9 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true"></th>
-                        <th data-force-hide="true"></th>
+                        <th data-force-hide="true" data-field="state">匯出</th>
+                        <th data-force-hide="true">編輯</th>
+                        <th data-force-hide="true">刪除</th>
                         <th data-field="quotation_id" data-sortable="true">報價單號</th>
                         <th data-field="project_name" data-sortable="true">工程名稱</th>
                         <th data-field="construction_date" data-sortable="true">施工日期</th>
@@ -239,6 +239,8 @@
                 <tbody style="font-size: 14px;">
                     {% for p in Project_Employee_Assign %}
                     <tr>
+                        <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ p.id }}" /> </td>
                         <td>
                             <a type="button" data-url="project_employee_assign" data-id="{{p.id}}"
                                 class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"

@@ -67,15 +67,20 @@
                 <div class="font-weight-bold mb-2">行程安排</div>
                 <div class="schedule container">
                     {% for date, projects in grouped_projects.items %}
-                    {{ date|highlight_date|safe }}
-                    {% for project in projects %}
-
-                    <li href=""
-                        onclick="showjobassign('{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}|{{ project.project_confirmation.order_id}}')">
-                        {{ project.project_confirmation.project_confirmation_id }}
-                    </li>
-                    <br>
-                    {% endfor %}
+                    <div class="row">
+                        <div class="col-6">
+                            {{ date|highlight_date|safe }}
+                        </div>
+                        <div class="col-6">
+                            {% for project in projects %}
+                            <li href=""
+                                onclick="showjobassign('{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}|{{ project.project_confirmation.order_id}}')">
+                                {{ project.project_confirmation.project_confirmation_id }}
+                            </li>
+                            <br>
+                            {% endfor %}
+                        </div>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -86,7 +91,7 @@
                     <a href="" data-toggle="modal" data-target="#news-modal"
                         data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}">
                         <div class="row">
-                            <div class="col-3 border-right">{{ n.get_category_display }}</div>
+                            <div class="col-3 border-right">{{ n.get_category_display| truncatechars_html:6|safe }}</div>
                             <div class="col-3 border-right">{{ n.get_type_display }}</div>
                             <div class="col-6">{{ n.title }}</div>
                         </div>
@@ -95,7 +100,30 @@
                 </div>
             </div>
         </div>
-
+        <div class="news-modal modal fade" id="news-modal" tabindex="-1" >
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="department-label"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <h5 id="badge-row">
+                                <span class="category-badge badge badge-dark"></span>
+                                <span class="type-badge badge badge-dark"></span>
+                                <span class="level-badge badge badge-dark"></span>
+                                <span class="created-date-badge"></span>
+                            </h5>
+                            <div class="content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="job-assign-modal modal fade" id="job-assign-modal" tabindex="-1">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -167,8 +195,6 @@
             modalBadgeRow.find('.created-date-badge').html(`
                  ${dataArr[4]}
             `);
-
-            // modal content 放內容
             var modalContent = $(this).find('.modal-body');
             modalContent.find('.content').html(`
                 ${dataArr[5]}
