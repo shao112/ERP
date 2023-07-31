@@ -188,7 +188,7 @@
     </div>
     <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-toolbar="#toolbar" data-pagination="true" data-search="true"
+            data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
             data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="job_assign-header container-fluid">
@@ -201,7 +201,8 @@
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
 
                     </a>
-                    <button onclick="getSelectedValues()">匯出</button>
+                    <button onclick="exportAllOptionToExcel()"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportSelectedOptionToExcel()">匯出已選資料</button>
 
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
@@ -271,7 +272,97 @@
     </div>
 </div>
 
-
+<script>
+    function exportAllOptionToExcel() {
+        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
+        var tableData = [];
+        var rows = document.getElementById("table").rows;
+        var headers = [];
+        for (var i = 3; i < rows[0].cells.length; i++) {
+            headers.push(rows[0].cells[i].innerText);
+        }
+        
+        for (var i = 1; i < rows.length; i++) {
+            var rowData = {};
+            for (var j = 0, k = 3; j < headers.length; j++,k++) {
+            rowData[headers[j]] = rows[i].cells[k].innerText;
+            }
+            tableData.push(rowData);
+        }
+        fetch(exportUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken, 
+            },
+            body: JSON.stringify({
+                headers: headers,
+                data: tableData,
+            }),
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = '工作派任計畫.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+<script>
+    function exportSelectedOptionToExcel() {
+        console.log(getSelectedValues())
+        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
+        var tableData = [];
+        var rows = document.getElementById("table").rows;
+        var headers = [];
+        for (var i = 3; i < rows[0].cells.length; i++) {
+            headers.push(rows[0].cells[i].innerText);
+        }
+        
+        for (var i = 1; i < rows.length; i++) {
+            var checkbox = rows[i].querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+                console.log(checkbox.value)
+                var rowData = {};
+                for (var j = 0, k = 3; j < headers.length; j++,k++) {
+                    rowData[headers[j]] = rows[i].cells[k].innerText;
+                }
+                tableData.push(rowData);
+            }
+        }
+        console.log(headers)
+        console.log(tableData)
+        fetch(exportUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken, 
+            },
+            body: JSON.stringify({
+                headers: headers,
+                data: tableData,
+            }),
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = '工作派任計畫.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [

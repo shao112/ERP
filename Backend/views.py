@@ -433,70 +433,8 @@ class ExcelExportView(View):
             row = [row_data.get(header, '') for header in headers]
             ws.append(row)
 
-        # 生成Excel文件
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=表格数据.xlsx'
-        wb.save(response)
-
-        return response
-   
-   def get(self, request, *args, **kwargs):
-        modelstr = self.kwargs['model']
-        match_excel_content(modelstr)
-        project_confirmation_list = Project_Confirmation.objects.all()
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        # 1.排除掉不要的欄位
-        exclude_fields = ['project','id','author','modified_by','created_date','update_date']
-        # 2.取得原欄位名
-        field_names = [field.name for field in Project_Confirmation._meta.get_fields() if isinstance(field, models.Field) and field.name not in exclude_fields]
-        # 3.透過原欄位名取得欄位名的verbose name
-        fields_with_verbose_names = {
-            field_name: Project_Confirmation._meta.get_field(field_name).verbose_name for field_name in field_names
-        }
-        # 4.fields_with_verbose_names是dict，要轉成[]才能ws.append()
-        header_rows = []
-        for field_name, verbose_name in fields_with_verbose_names.items():
-            header_rows.append(verbose_name)
-        ws.append(header_rows)
-        
-        # 要排除掉特殊欄位
-        # for article in project_confirmation_list:
-        #     # row_data = [getattr(article, field) for field in field_names]
-        #     row_data = [getattr(article, field).name if isinstance(getattr(article, field), FieldFile) else getattr(article, field) for field in field_names]
-
-        #     print(row_data)
-        #     ws.append(row_data)
-        # 将所有文章数据写入Excel
-        # for project_confirmation in project_confirmation_list:
-        #     ws.append([project_confirmation.project_confirmation_id, project_confirmation.quotation_id, project_confirmation.project_name])
-        for article in project_confirmation_list:
-            row_data = []
-            for field_name in field_names:
-                field = Project_Confirmation._meta.get_field(field_name)
-                if isinstance(field, ManyToManyField):
-                    # 处理多对多关系的字段，拼接为一个字符串
-                    related_objects = getattr(article, field_name).all()
-                    field_value = ', '.join(str(obj) for obj in related_objects)
-                else:
-                    # 处理其他普通字段
-                    field_value = getattr(article, field_name)
-                    if isinstance(field_value, FieldFile):
-                        field_value = field_value.url if field_value else ''
-                print(field_value)
-                row_data.append(field_value)
-                # field_value = getattr(article, field_name)
-                # if not isinstance(field_value, (FieldFile,ManyToManyField)):
-                #     row_data.append(field_value)
-
-                #     print(row_data)
-            ws.append(row_data)
-
-        # 设置响应头，指定导出文件的类型和名称
-        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response['Content-Disposition'] = 'attachment; filename=articles.xlsx'
-
-        # 将Excel数据保存到响应中
         wb.save(response)
 
         return response
