@@ -244,6 +244,7 @@ class Employee_View(View):
             return JsonResponse({'data': "完成新增"},status=200)
         else:
             error_messages = form.get_error_messages()
+            print(error_messages)
             return JsonResponse({"error":error_messages},status=400)
 
 

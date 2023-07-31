@@ -104,7 +104,8 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        return self.request.user.groups.filter(name='工程部總管理').exists()    
+        return True 
+        # return self.request.user.groups.filter(name='工程部總管理').exists()    
     
     # 在 ListView 傳送 form
     # def get_context_data(self, **kwargs):
