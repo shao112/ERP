@@ -321,3 +321,15 @@ class Equipment(ModifiedModel):
         verbose_name = "固定資產管理"   # 單數
         verbose_name_plural = verbose_name   #複數
         
+# 車輛
+class Vehicle(ModifiedModel):
+    VEHICLE_TYPE = (
+        ('R', '一般用車'),
+        ('M', '經理配車'),
+    )
+    vehicle_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="車牌號碼")
+    vehicle_type = models.CharField(max_length=1, choices=VEHICLE_TYPE, blank=True, null=True, verbose_name="車輛類型")
+
+    class Meta:
+        verbose_name = "車輛"   # 單數
+        verbose_name_plural = verbose_name   #複數

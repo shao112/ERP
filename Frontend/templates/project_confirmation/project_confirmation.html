@@ -200,28 +200,28 @@
                     <a href="/media/file_form_template/工程確認單樣板.xlsx" class="font-weight-bold" download="">
                         <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                     </a>
-                    <button onclick="exportAllOptionToExcel()"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button onclick="exportSelectedOptionToExcel()">匯出已選資料</button>
+                    <button onclick="exportAllOptionToExcel('工程確認單.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportSelectedOptionToExcel('工程確認單.xlsx')">匯出已選資料</button>
                 </div>
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-field="edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-field="delete">刪除</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="project_name">工程名稱</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="client">客戶簡稱</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="requisition">請購單位</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="order_id">訂單編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="turnover">成交金額</th>
-                    <th data-sortable="true">完工狀態</th>
-                    <th data-sortable="true">完工回報人</th>
-                    <th data-sortable="true">完工回報日期</th>
-                    <th data-sortable="true">備註</th>
-                    <th data-sortable="true">完工重派附件</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="pc_checkbox">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="pc_edit">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="pc_delete">刪除</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_quotation_id">報價單號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_c_a">母案編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_project_confirmation_id">工確單編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_project_name">工程名稱</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_client">客戶簡稱</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_requisition">請購單位</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_order_id">訂單編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="pc_turnover">成交金額</th>
+                    <th data-sortable="true" data-field="is_completed">完工狀態</th>
+                    <th data-sortable="true" data-field="completion_report_employee">完工回報人</th>
+                    <th data-sortable="true" data-field="completion_report_date">完工回報日期</th>
+                    <th data-sortable="true" data-field="remark">備註</th>
+                    <th data-sortable="true" data-field="reassignment_attachment">完工重派附件</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -265,102 +265,13 @@
     </div>
 </div>
 <script>
-    function exportAllOptionToExcel() {
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var rowData = {};
-            for (var j = 0, k = 3; j < headers.length; j++,k++) {
-            rowData[headers[j]] = rows[i].cells[k].innerText;
-            }
-            tableData.push(rowData);
-        }
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '工程確認單.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-<script>
-    function exportSelectedOptionToExcel() {
-        console.log(getSelectedValues())
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var checkbox = rows[i].querySelector('input[type="checkbox"]');
-            if (checkbox.checked) {
-                console.log(checkbox.value)
-                var rowData = {};
-                for (var j = 0, k = 3; j < headers.length; j++,k++) {
-                    rowData[headers[j]] = rows[i].cells[k].innerText;
-                }
-                tableData.push(rowData);
-            }
-        }
-        console.log(headers)
-        console.log(tableData)
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '工程確認單.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-<script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/fileimport.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
             "{% static 'js/fuc/modaltopdf.js' %}"
         ];
 

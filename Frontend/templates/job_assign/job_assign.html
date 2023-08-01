@@ -200,27 +200,26 @@
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
 
                     </a>
-                    <button onclick="exportAllOptionToExcel()"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button onclick="exportSelectedOptionToExcel()">匯出已選資料</button>
+                    <button onclick="exportAllOptionToExcel('工作派任計畫.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportSelectedOptionToExcel('工作派任計畫.xlsx')">匯出已選資料</button>
 
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">編輯</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">刪除</th>
-                        <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
-                        <th>工程名稱</th>
-                        <th>母案編號</th>
-                        <th>出勤日期</th>
-                        <th>工作人員</th>
-                        <th>帶班人員</th>
-                        <th>使用車輛</th>
-                        <th>工作地點</th>
-                        <th>工作類型</th>
-                        <th>備註</th>
-                        <th>支援人力</th>
-                        <th>工確單附件</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ja_checkbox">匯出</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ja_edit">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ja_delete">刪除</th>
+                        <th data-sortable="true" data-filter-control="input" data-field="ja_job_assign_id">工派單編號</th>
+                        <th data-sortable="true" data-field="ja_project_name">工程名稱</th>
+                        <th data-sortable="true" data-field="ja_c_a">母案編號</th>
+                        <th data-sortable="true" data-field="ja_attendance_date">出勤日期</th>
+                        <th data-sortable="true" data-field="ja_work_employee">工作人員</th>
+                        <th data-sortable="true" data-field="ja_lead_employee">帶班人員</th>
+                        <th data-sortable="true" data-field="ja_vehicle">使用車輛</th>
+                        <th data-sortable="true" data-field="ja_location">工作地點</th>
+                        <th data-sortable="true" data-field="ja_project_type">工作類型</th>
+                        <th data-sortable="true" data-field="ja_remark">備註</th>
+                        <th data-sortable="true" data-field="ja_attachment">工確單附件</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px;">
@@ -239,8 +238,7 @@
                         <td>{{ j.project_confirmation.project_confirmation_id }}</td>
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
-                        <td>{{ j.attendance_date }}
-                        </td>
+                        <td>{{ j.attendance_date }}</td>
                         <td>
                             {% for employees_list in j.work_employee.all %}
                             {{ employees_list.full_name }}
@@ -255,11 +253,6 @@
                         <td>{{ j.location }}</td>
                         <td>{{ j.project_type }}</td>
                         <td>{{ j.remark }}</td>
-                        <td>
-                            {% for employees_list in j.support_employee.all %}
-                            {{ employees_list.full_name }}
-                            {% endfor %}
-                        </td>
                         <td>{{ j.attachment_link }}</td>
                     </tr>
                     {% endfor %}
@@ -267,103 +260,13 @@
         </table>
     </div>
 </div>
-
-<script>
-    function exportAllOptionToExcel() {
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var rowData = {};
-            for (var j = 0, k = 3; j < headers.length; j++,k++) {
-            rowData[headers[j]] = rows[i].cells[k].innerText;
-            }
-            tableData.push(rowData);
-        }
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '工作派任計畫.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-<script>
-    function exportSelectedOptionToExcel() {
-        console.log(getSelectedValues())
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var checkbox = rows[i].querySelector('input[type="checkbox"]');
-            if (checkbox.checked) {
-                console.log(checkbox.value)
-                var rowData = {};
-                for (var j = 0, k = 3; j < headers.length; j++,k++) {
-                    rowData[headers[j]] = rows[i].cells[k].innerText;
-                }
-                tableData.push(rowData);
-            }
-        }
-        console.log(headers)
-        console.log(tableData)
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '工作派任計畫.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
             "{% static 'js/job-assign/job-assign.js' %}"
         ];
 
@@ -373,10 +276,6 @@
             document.body.appendChild(script);
         });
     });
-
-
-
-
 </script>
 
 

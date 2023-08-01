@@ -199,8 +199,8 @@
     </div>
     <div class="employee-assign-table container-fluid shadow-sm table-responsive">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
-            data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
+        data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
+        data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="employee-assign-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
@@ -210,28 +210,28 @@
                     <a href="" class="font-weight-bold" id="">
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
                     </a>
-                    <button onclick="exportAllOptionToExcel()"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button onclick="exportSelectedOptionToExcel()">匯出已選資料</button>
+                    <button onclick="exportAllOptionToExcel('派工單.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportSelectedOptionToExcel('派工單.xlsx')">匯出已選資料</button>
                 </div>
+            </div> 
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">編輯</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">刪除</th>
-                        <th data-field="quotation_id" data-sortable="true">報價單號</th>
-                        <th data-field="project_name" data-sortable="true">工程名稱</th>
-                        <th data-field="construction_date" data-sortable="true">施工日期</th>
-                        <th data-field="completion_date" data-sortable="true">完工日期</th>
-                        <th data-field="is_completed" data-sortable="true">是否完工</th>
-                        <th data-field="client" data-sortable="true">客戶名稱</th>
-                        <th data-field="requisition" data-sortable="true">請購單位</th>
-                        <th data-field="created_date" data-sortable="true">施工地點</th>
-                        <th data-field="created_date" data-sortable="true">檢測人員</th>
-                        <th data-field="created_date" data-sortable="true">使用車輛</th>
-                        <th data-field="created_date" data-sortable="true">手稿預計回傳日</th>
-                        <th data-field="created_date" data-sortable="true">帶班主管</th>
-                        <th data-field="created_date" data-sortable="true">業主簽名</th>
-                        <th data-field="created_date" data-sortable="true">建立日期</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ea_checkbox">匯出</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ea_edid">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="ea_delete">刪除</th>
+                        <th data-field="ea_quotation_id" data-sortable="true">報價單號</th>
+                        <th data-field="ea_project_name" data-sortable="true">工程名稱</th>
+                        <th data-field="ea_construction_date" data-sortable="true">施工日期</th>
+                        <th data-field="ea_completion_date" data-sortable="true">完工日期</th>
+                        <th data-field="ea_is_completed" data-sortable="true">是否完工</th>
+                        <th data-field="ea_client" data-sortable="true">客戶名稱</th>
+                        <th data-field="ea_requisition" data-sortable="true">請購單位</th>
+                        <th data-field="ea_construction_location" data-sortable="true">施工地點</th>
+                        <th data-field="ea_inspector" data-sortable="true">檢測人員</th>
+                        <th data-field="ea_vehicle" data-sortable="true">使用車輛</th>
+                        <th data-field="ea_manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
+                        <th data-field="ea_lead_employee" data-sortable="true">帶班主管</th>
+                        <th data-field="ea_enterprise_signature" data-sortable="true">業主簽名</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px;">
@@ -255,16 +255,14 @@
                         <td>{{ p.construction_date }}</td>
                         <td>{{ p.completion_date }}</td>
                         <td>{{ p.is_completed }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{ p.client }}</td>
+                        <td>{{ p.requisition }}</td>
+                        <td>{{ p.construction_location }}</td>
+                        <td>{{ p.inspector }}</td>
+                        <td>{{ p.vehicle }}</td>
+                        <td>{{ p.manuscript_return_date }}</td>
+                        <td>{{ p.lead_employee }}</td>
+                        <td>{{ p.enterprise_signature }}</td>
                     </tr>
                     {% empty %}
 
@@ -293,104 +291,15 @@
         height: 100%;
     }
 </style>
-<script>
-    function exportAllOptionToExcel() {
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var rowData = {};
-            for (var j = 0, k = 3; j < headers.length; j++,k++) {
-            rowData[headers[j]] = rows[i].cells[k].innerText;
-            }
-            tableData.push(rowData);
-        }
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '派工單.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-<script>
-    function exportSelectedOptionToExcel() {
-        console.log(getSelectedValues())
-        var exportUrl = document.querySelector('button[data-export-url]').getAttribute('data-export-url');
-        var tableData = [];
-        var rows = document.getElementById("table").rows;
-        var headers = [];
-        for (var i = 3; i < rows[0].cells.length; i++) {
-            headers.push(rows[0].cells[i].innerText);
-        }
-        
-        for (var i = 1; i < rows.length; i++) {
-            var checkbox = rows[i].querySelector('input[type="checkbox"]');
-            if (checkbox.checked) {
-                console.log(checkbox.value)
-                var rowData = {};
-                for (var j = 0, k = 3; j < headers.length; j++,k++) {
-                    rowData[headers[j]] = rows[i].cells[k].innerText;
-                }
-                tableData.push(rowData);
-            }
-        }
-        console.log(headers)
-        console.log(tableData)
-        fetch(exportUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken, 
-            },
-            body: JSON.stringify({
-                headers: headers,
-                data: tableData,
-            }),
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(new Blob([blob]));
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = '派工單.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
-<script>
 
-
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
+            "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
         ];
 
         scripts.forEach(function (src) {
