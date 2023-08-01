@@ -96,7 +96,7 @@ function GET_handleClick(event) {
                         continue;
                     }
 
-                    console.log(get_value)
+                    // console.log(get_value)
 
                     if (typeof (jsonData[key]) == "object" && get_value != null) {
                         // 如果是陣列，先取得對應的options，以及select2的欄位
