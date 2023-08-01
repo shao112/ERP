@@ -9,17 +9,33 @@ from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment
 from django.views.generic import ListView, DeleteView
 
-from Backend.utils import get_weekly_clock_data,get_weekdays
 
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import date
 from django.views.defaults import permission_denied
+from Backend.utils import convent_employee,get_weekly_clock_data
 
 def custom_permission_denied(request, exception=None,template_name='403.html'):
     return permission_denied(request, exception, template_name='403.html')
 
+from django.db.models import Q
+
 # 首頁
+class Director_Index(View):
+    def get(self,request):
+            current_employee = request.user.employee
+            
+            other_employees = current_employee.departments.employees.exclude(id=current_employee.id)
+            other_employees = convent_employee(other_employees)
+            for employee in other_employees:
+                employee['clock_data'] = get_weekly_clock_data(employee['id'])
+
+            print(other_employees)
+            # print(other_employees[0].get_weekly_clock_data())
+            context= {"other_employees":other_employees}
+            return render(request, 'index/director_Index.html',context)    
+
 class Index(View):
 
     def post(self,request):

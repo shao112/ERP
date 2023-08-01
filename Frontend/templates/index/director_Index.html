@@ -1,0 +1,110 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+{% load custom_tags %}
+
+
+{% block main %}
+<div class="main">
+    <div class="container shadow-sm">
+        <div class="row text-center">
+           
+        </div>
+    </div>
+    <div class="container shadow-sm mt-4">
+        <div class="row text-center">
+            <div class="col-12" style="min-height: 150px;">
+                <div class="container table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr class="text-nowrap">
+                                <th>我的員工</th>
+                                <th>當周簽退</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in other_employees %}
+                            <tr>
+                                <td>{{ e.full_name }}</td>
+                                <td>
+                                    {% for date in e.clock_data %}
+                                    {{ date.day }}  {{ date.checkin }}/{{date.checkout}}
+                                    <br>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container shadow-sm mt-4">
+      
+     
+    </div>
+
+</div>
+<script>
+
+    function showjobassign(content) {
+        var dataArr = content.split('|');
+        console.log(dataArr)
+        var project_confirmation_id = dataArr[0];
+        var listHTML = "";
+        for (var i = 0; i < dataArr.length; i++) {
+            listHTML += "<li>" + dataArr[i] + "</li>";
+        }
+        Swal.fire({
+            icon: 'info',
+            title: project_confirmation_id,
+            html: listHTML
+        })
+
+    }
+
+    $(document).ready(function () {
+        // 監聽 modal 顯示事件
+
+        $('#news-modal').on('show.bs.modal', function (event) {
+            var triggerLink = $(event.relatedTarget); // 獲取點擊的 <a> 元素
+            var content = triggerLink.data('content'); // 獲取點擊的 <a> 元素的 data-content 屬性值
+
+            // 將資料解析為陣列
+            var dataArr = content.split('|');
+            // modal header放標題
+            var modalBody = $(this).find('.modal-header');
+            modalBody.find('.modal-title').html(`
+                ${dataArr[0]}
+            `);
+            // modal badge row 放小資訊
+            var modalBadgeRow = $(this).find('#badge-row');
+            modalBadgeRow.find('.category-badge').html(`
+                 ${dataArr[1]}
+            `);
+            modalBadgeRow.find('.type-badge').html(`
+                 ${dataArr[2]}
+            `);
+            modalBadgeRow.find('.level-badge').html(`
+                重要度： ${dataArr[3]}
+            `);
+            modalBadgeRow.find('.created-date-badge').html(`
+                 ${dataArr[4]}
+            `);
+            var modalContent = $(this).find('.modal-body');
+            modalContent.find('.content').html(`
+                ${dataArr[5]}
+            `);
+        });
+    });
+</script>
+
+{% endblock %}

@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
 
 
+
 class Approval(models.Model):
     finish = models.BooleanField(default=False, verbose_name='完成')
     class Meta:
@@ -63,6 +64,19 @@ class ModifiedModel(models.Model):
         self.save()
 
 
+class Clock(models.Model):
+    employee_id = models.ForeignKey("Employee", on_delete=models.CASCADE)
+    clock_in_or_out = models.BooleanField()
+    clock_time = models.TimeField()
+    clock_GPS = models.CharField(max_length=255)
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+
+    class Meta:
+        verbose_name = "打卡紀錄"   # 單數
+        verbose_name_plural = verbose_name   #複數
+
+
 # Create your models here.
 # 員工（以內建 User 擴增）
 # admin:admin IT0000:itadmin000
@@ -113,7 +127,7 @@ class Employee(ModifiedModel):
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
     emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
-  
+
 
     class Meta:
         verbose_name = "員工"   # 單數
@@ -252,17 +266,6 @@ class News(ModifiedModel):
         super().save(*args, **kwargs)
 
 
-class Clock(models.Model):
-    employee_id = models.ForeignKey(Employee, on_delete=models.DO_NOTHING)
-    clock_in_or_out = models.BooleanField()
-    clock_time = models.TimeField()
-    clock_GPS = models.CharField(max_length=255)
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
-
-    class Meta:
-        verbose_name = "打卡紀錄"   # 單數
-        verbose_name_plural = verbose_name   #複數
 
 # 固定資產管理
 class Equipment(ModifiedModel):

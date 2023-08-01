@@ -22,7 +22,7 @@ def get_weekly_clock_data(userid):
         check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
             # check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records else ''
         daily_data = {
-            'day': weekday.strftime('%m/%d'),
+            'day': weekday.strftime('%m%d'),
             'checkin': check_in,
             'checkout': check_out
         }
