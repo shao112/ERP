@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News,Project_Employee_Assign
+from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle
 
 from django.contrib.auth.models import Group
 
@@ -123,4 +123,13 @@ class EmployeeForm(BaseModelForm):
             'blood_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'marital_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'military_status': forms.Select(attrs={'class': 'form-control form-control-sm'})
+        }
+# 員工
+class VehicleForm(BaseModelForm):
+
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+        widgets = {
+            'vehicle_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }

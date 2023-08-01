@@ -327,7 +327,7 @@ class Vehicle(ModifiedModel):
         ('R', '一般用車'),
         ('M', '經理配車'),
     )
-    vehicle_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="車牌號碼")
+    vehicle_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="車牌編號")
     vehicle_type = models.CharField(max_length=1, choices=VEHICLE_TYPE, blank=True, null=True, verbose_name="車輛類型")
 
     class Meta:

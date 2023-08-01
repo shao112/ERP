@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News,Project_Employee_Assign
+from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign, Vehicle
 
 # Register your models here.
 class EmployeeInline(admin.StackedInline):
@@ -48,14 +48,18 @@ class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
 # 打卡
 class ClockAdmin(admin.ModelAdmin):
     list_display = ('employee_id', 'clock_in_or_out', 'clock_time', 'clock_GPS',"created_date")
+# 公告
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'modified_by')
-
+# 車輛
+class VehicleAdmin(admin.ModelAdmin):
+    list_display = ('vehicle_id', 'vehicle_type', 'created_date', 'update_date')
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
+admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(Project_Employee_Assign)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)
