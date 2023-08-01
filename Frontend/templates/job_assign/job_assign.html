@@ -186,7 +186,7 @@
             </div>
         </div>
     </div>
-    <div class="job_assign-table container-fluid shadow-sm table-responsive-lg">
+    <div class="job_assign-table container-fluid shadow-sm table-responsive">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
             data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
@@ -206,10 +206,10 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-field="state">匯出</th>
-                        <th data-force-hide="true">編輯</th>
-                        <th data-force-hide="true">刪除</th>
-                        <th>工派單編號</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">刪除</th>
+                        <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
                         <th>工程名稱</th>
                         <th>母案編號</th>
                         <th>出勤日期</th>
@@ -221,14 +221,12 @@
                         <th>備註</th>
                         <th>支援人力</th>
                         <th>工確單附件</th>
-                        <th>建立日期</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 14px;">
                     {% for j in job_assign %}
                     <tr>
-                        <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
-                                value="{{ j.id }}" /> </td>
+                        <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)" value="{{ j.id }}" /></td>
                         <td>
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -263,7 +261,6 @@
                             {% endfor %}
                         </td>
                         <td>{{ j.attachment_link }}</td>
-                        <td>{{ j.created_date }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

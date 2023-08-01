@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
-
+from datetime import date
 
 
 class Approval(models.Model):
@@ -132,6 +132,14 @@ class Employee(ModifiedModel):
     class Meta:
         verbose_name = "員工"   # 單數
         verbose_name_plural = verbose_name   #複數
+
+    def calSeniority(self):
+        # current_date = date.today()
+        # seniority = current_date.year - self.start_date.year
+        # if (self.start_date.month, self.start_date.day) > (current_date.month, current_date.day):
+        #     seniority -= 1
+        # return round(seniority, 1)
+        return 0
 
     # def __str__(self):
     #     return self.user.username

@@ -184,7 +184,7 @@
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
-            data-show-columns-toggle-all="true"  data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
             data-filter-control="true">
             <div id="toolbar">
                 <div class="project-confirmation-header container-fluid">
@@ -206,9 +206,9 @@
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-field="state">匯出</th>
-                    <th data-force-hide="true">編輯</th>
-                    <th data-force-hide="true">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="edit">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="delete">刪除</th>
                     <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
@@ -224,7 +224,7 @@
                     <th data-sortable="true">完工重派附件</th>
                 </tr>
             </thead>
-            <tbody class="text-nowrap" style="font-size: 14px;background: #f4f4f3;">
+            <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in project_confirmation %}
                 <tr>
                     <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ p.id }}"></td>

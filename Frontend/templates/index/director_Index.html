@@ -13,43 +13,33 @@
 
 {% block main %}
 <div class="main">
-    <div class="container shadow-sm">
-        <div class="row text-center">
-           
-        </div>
-    </div>
-    <div class="container shadow-sm mt-4">
-        <div class="row text-center">
-            <div class="col-12" style="min-height: 150px;">
-                <div class="container table-responsive">
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr class="text-nowrap">
-                                <th>我的員工</th>
-                                <th>當周簽退</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for e in other_employees %}
-                            <tr>
-                                <td>{{ e.full_name }}</td>
-                                <td>
-                                    {% for date in e.clock_data %}
-                                    {{ date.day }}  {{ date.checkin }}/{{date.checkout}}
-                                    <br>
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container shadow-sm mt-4">
-      
-     
+    <div class="container font-weight-bold mb-4">當週員工出勤紀錄</div>
+    <div class="container shadow-sm table-responsiv">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr class="text-nowrap">
+                    <th>我的員工</th>
+                    {% for e in other_employees %}
+                        {% for date in e.clock_data %}
+                            <th>{{ date.day }}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in other_employees %}
+                <tr>
+                    <td>{{ e.full_name }}</td>
+                    {% for date in e.clock_data %}
+                    <td>
+                        簽到：{{ date.checkin }}<br>
+                        簽退：{{date.checkout}}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 </div>

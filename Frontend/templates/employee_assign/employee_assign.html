@@ -197,7 +197,7 @@
             </div>
         </div>
     </div>
-    <div class="employee-assign-table container-fluid shadow-sm table-responsive-lg">
+    <div class="employee-assign-table container-fluid shadow-sm table-responsive">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
             data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
@@ -215,9 +215,9 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-field="state">匯出</th>
-                        <th data-force-hide="true">編輯</th>
-                        <th data-force-hide="true">刪除</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-field="checkbox">刪除</th>
                         <th data-field="quotation_id" data-sortable="true">報價單號</th>
                         <th data-field="project_name" data-sortable="true">工程名稱</th>
                         <th data-field="construction_date" data-sortable="true">施工日期</th>
