@@ -133,9 +133,11 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="vehicle_control">使用車輛</label>
-                                                <select class="form-control form-control-sm" name="vehicle"
-                                                    id="vehicle_control">
-                                                    <option value="車輛1">車輛1</option>
+                                                <select class="select2" name="vehicle"
+                                                    id="vehicle__select2" multiple>
+                                                    {% for v in vehicle %}
+                                                    <option value="{{ v.vehicle_id }}">{{ v.vehicle_id }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>

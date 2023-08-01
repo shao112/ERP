@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
-from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment
+from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle
 from django.views.generic import ListView, DeleteView
 
 
@@ -133,6 +133,7 @@ class Job_Assign_ListView(ListView):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
+        context['vehicle'] = Vehicle.objects.all()
         return context
 
 # 派工單
