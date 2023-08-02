@@ -177,7 +177,7 @@ class Project_Confirmation(ModifiedModel):
     completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    reassignment_attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
+    attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
 
     class Meta:
         verbose_name = "工程確認單"   # 單數
@@ -187,8 +187,8 @@ class Project_Confirmation(ModifiedModel):
     #     return self.project_name
     
     def reassignment_attachment_link(self):
-        if self.reassignment_attachment:
-            download_link = "<a href='{}' download>下載</a>".format(self.reassignment_attachment.url)
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
             return mark_safe(download_link)
         else:
             return "無"

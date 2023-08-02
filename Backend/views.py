@@ -24,7 +24,7 @@ from  django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
-
+from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
 class Department_View(View):
@@ -286,6 +286,35 @@ class FileUploadView(View):
         else:
             return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
 
+class FormUploadFileView(View):
+   def post(self, request):
+        getname = request.POST.get("name")
+        getmodal = request.POST.get("modal")
+        print("getmodel:", getmodal)
+        print("getname:", getname) # 得到"attachment"，但不能使用 convert_model_instance.getname
+        getid = request.POST.get("id")
+        uploaded_file = request.FILES.get('uploaded_file')
+        if(uploaded_file):
+            match getmodal:
+                case "project_confirmation":
+                    model=Project_Confirmation.objects.get(id=getid)
+                case "job_assign":
+                    model=Project_Job_Assign.objects.get(id=getid)
+                case "employee_assign":
+                    model=Project_Employee_Assign.objects.get(id=getid)
+                case _:
+                    return "error"
+
+            # convert_model_instance = convert_model.objects.get(id=getid)
+            now = datetime.now()
+            date_time_string = now.strftime("%Y%m%d_%H%M%S")
+            file_extension = os.path.splitext(uploaded_file.name)[1]
+            original_filename = os.path.splitext(uploaded_file.name)[0]
+            new_file_name = f"{date_time_string}_{get_valid_filename(original_filename)}{file_extension}"
+            model.attachment.save(new_file_name, uploaded_file)
+            return JsonResponse({'status': 'success'},status=200)
+        else:
+            return JsonResponse({"data":"error"}, status=400,safe=False)
 
 
 class Groups_View(View):
@@ -459,10 +488,10 @@ class Project_Confirmation_View(View):
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data)
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
-        if  data['reassignment_attachment']:
-            data['reassignment_attachment'] = data['reassignment_attachment'].url
+        if  data['attachment']:
+            data['attachment'] = data['attachment'].url
         else:
-            data['reassignment_attachment'] = None
+            data['attachment'] = None
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class Job_Assign_View(View):

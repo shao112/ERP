@@ -69,22 +69,19 @@
     </div>
     <div class="department-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
-            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
-            data-show-columns="true" data-show-columns-toggle-all="true">
+        data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
+        data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
+        data-filter-control="true">
             <div id="toolbar">
                 <div class="department-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
                         data-target="#department-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增部門
                     </a>
-                    <br>
-                    <a href="" class="font-weight-bold" id="">
-                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                    </a>
                 </div>
                 <thead class="thead-light">
                     <tr>
+                        <th></th>
                         <th></th>
                         <th data-field="parent_department" data-sortable="true">上級部門</th>
                         <th data-field="department_name" data-sortable="true">部門名稱</th>
@@ -99,10 +96,12 @@
                             <a type="button" data-url="department" data-id="{{ d.id }}"
                                 class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
                                 data-target="#department-modal"><i class="fas fa-edit"></i></a>
-                            <a data-url="department" data-id="{{ d.id }}" type="button"
-                                class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                         </td>
-                        {% if d.parent_department %}<td>{{ d.parent_department.department_name }}</td>{% else %}<td>無
+                        <td>
+                            <a data-url="department" data-id="{{ d.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                        <td>{% if d.parent_department %}{{ d.parent_department.department_name }}{% else %}無</td>
                         </td>{% endif %}
                         <td>{{ d.department_name }}</td>
                         <td>{{ d.department_id }}</td>
@@ -113,20 +112,6 @@
         </table>
     </div>
 </div>
-<script>
-    // 更美化 file input
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-    // Bootstrap-Table
-    $(document).ready(function () {
-        $('#table').bootstrapTable({
-            height: $(window).height() * 0.85,
-            toolbar: "#toolbar"
-        });
-    });
-</script>
 
 <script>
         document.addEventListener('DOMContentLoaded', function () {

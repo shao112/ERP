@@ -13,7 +13,7 @@
 
 {% block main %}
 <div class="main">
-    <div class="container font-weight-bold mb-4">{{ request.user.employee.departments }}部門 當週員工出勤紀錄</div>
+    <div class="container font-weight-bold mb-4">{{ request.user.employee.departments.department_name }}部門 當週員工出勤紀錄</div>
     <div class="container shadow-sm table-responsiv">
         <table class="table table-sm table-hover">
             <thead>

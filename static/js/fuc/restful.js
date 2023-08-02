@@ -186,15 +186,33 @@ $("form").on("submit", function (event) {
         var inputType = inputElement.attr("type");
         var inputName = inputElement.attr("name");
         if (inputType === "file") {
-            var fileInput = inputElement[0]; // 获取原生的 input 元素
-            var modal = inputElement.data("modal"); // 获取 data-file-id 属性的值
+            var fileInput = inputElement[0];
+            var modal = inputElement.data("modal");
+            var idValue = form.find('input[name="id"]').val()
             var formData = new FormData();
-            formData.append("file", fileInput.files[0]);
+            formData.append("uploaded_file", fileInput.files[0]);
             formData.append("name", inputName);
             formData.append("modal", modal);
+            formData.append("id", idValue);
             for (var pair of formData.entries()) {
                 console.log(pair[0] + ': ' + pair[1]);
             }
+            $.ajax({
+                type: "POST",
+                url: "/restful/formuploadfile",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRFToken': getcsrftoken()
+                },
+                success: function(response){
+                    console.log("上傳成功",response)
+                },
+                error: function(xhr, status, error){
+                    console.log("上傳失敗",error)
+                }
+            })
         }
     });
 
@@ -206,7 +224,7 @@ $("form").on("submit", function (event) {
         url: url,
         data: formData,
         headers: {
-            'X-CSRFToken': csrftoken
+            'X-CSRFToken': getcsrftoken()
         },
         success: function (response) {
             jsonData = response.data

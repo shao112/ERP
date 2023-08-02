@@ -117,16 +117,21 @@
                                         <kbd>完工狀態</kbd>
                                     </h5>
                                     <div class="form-row">
-                                        <div class="col-12 my-4">
-                                            <div class="form-check-inline">
-                                                <label class="form-check-label" for="is_completed_y"></label>
-                                                <input type="radio" class="form-check-input" id="is_completed_y"
-                                                    name="is_completed" value="true" required>完成</label>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="is_completed">是否完工</label>
+                                                <select class="form-control form-control-sm" name="is_completed"
+                                                    id="is_completed" required>
+                                                    <option value="true">是</option>
+                                                    <option value="false">否</option>
+                                                </select>
                                             </div>
-                                            <div class="form-check-inline">
-                                                <label class="form-check-label" for="is_completed_n"></label>
-                                                <input type="radio" class="form-check-input" id="is_completed_n"
-                                                    name="is_completed" value="false" required checked>尚未完成</label>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="completion_report_date_control">完工回報日期</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="completion_report_date" id="completion_report_date_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -144,23 +149,15 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="completion_report_date_control">完工回報日期</label>
-                                                <input type="date" class="form-control form-control-sm"
-                                                    name="completion_report_date" id="completion_report_date_control"
-                                                    :disabled="status == 'false'"></input>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12">
                                             <label>完工重派附件</label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input"  data-modal="project_confirmation"
-                                                    name="reassignment_attachment" id="reassignment_attachment_control">
-                                                <label class="custom-file-label"
-                                                    for="reassignment_attachment_control"  >Choose file</label>
+                                                    name="attachment" id="reassignment_attachment_control">
+                                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
                                             </div>
                                         </div>
                                     </div>
@@ -217,11 +214,11 @@
                     <th data-sortable="true" data-filter-control="input" data-field="pc_requisition">請購單位</th>
                     <th data-sortable="true" data-filter-control="input" data-field="pc_order_id">訂單編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="pc_turnover">成交金額</th>
-                    <th data-sortable="true" data-field="is_completed">完工狀態</th>
-                    <th data-sortable="true" data-field="completion_report_employee">完工回報人</th>
-                    <th data-sortable="true" data-field="completion_report_date">完工回報日期</th>
-                    <th data-sortable="true" data-field="remark">備註</th>
-                    <th data-sortable="true" data-field="reassignment_attachment">完工重派附件</th>
+                    <th data-sortable="true" data-field="pc_is_completed">完工狀態</th>
+                    <th data-sortable="true" data-field="pc_completion_report_employee">完工回報人</th>
+                    <th data-sortable="true" data-field="pc_completion_report_date">完工回報日期</th>
+                    <th data-sortable="true" data-field="pc_remark">備註</th>
+                    <th data-sortable="true" data-field="pc_attachment">完工重派附件</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -242,22 +239,22 @@
                         </a>
                     </td>
                     <td>{{ p.quotation_id }}</td>
-                    {% if p.c_a %}<td>{{ p.c_a }}</td>{% else %}<td></td>{% endif %}
+                    <td>{% if p.c_a %}{{ p.c_a }}{% else %}{% endif %}</td>
                     {% if p.project_confirmation_id %}<td>{{ p.project_confirmation_id }}</td>{% else %}<td></td>{% endif %}
                     {% if p.project_name %}<td>{{ p.project_name }}</td>{% else %}<td></td>{% endif %}
                     {% if p.client %}<td>{{ p.client }}</td>{% else %}<td></td>{% endif %}
                     {% if p.requisition %}<td>{{ p.requisition }}</td>{% else %}<td></td>{% endif %}
                     {% if p.order_id %}<td>{{ p.order_id }}</td>{% else %}<td></td>{% endif %}
                     {% if p.turnover %}<td>{{ p.turnover }}</td>{% else %}<td></td>{% endif %}
-                    {% if p.is_completed %}<td>是</td>{% else %}<td>否</td>{% endif %}
+                    <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>
                         {% for employees_list in p.completion_report_employee.all %}
                         {{ employees_list.full_name }}
                         {% endfor %}
                     </td>
-                    {% if p.completion_report_date %}<td>{{ p.completion_report_date }}</td>{% else %}<td></td>{% endif %}
-                    {% if p.remark %}<td>{{ p.remark }}</td>{% else %}<td></td>{% endif %}
-                    {% if p.reassignment_attachment_link %}<td>{{ p.reassignment_attachment_link }}</td>{% else %}<td></td>{% endif %}
+                    <td>{% if p.completion_report_date %}{{ p.completion_report_date }}{% else %}{% endif %}</td>
+                    <td>{% if p.remark %}{{ p.remark }}{% else %}{% endif %}</td>
+                    <td>{% if p.reassignment_attachment_link %}{{ p.reassignment_attachment_link }}{% else %}{% endif %}</td>
                 </tr>
                 {% endfor %}
             </tbody>
