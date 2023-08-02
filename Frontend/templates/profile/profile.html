@@ -165,62 +165,6 @@
         });
 
     });
-//     $("#profileImageForm").on("submit", function (event) {
-//         event.preventDefault();
-//         console.log("put")
-//         /*上網查的各種做法*/
-//         var profileImageFile = $("#profileImageInput")[0].files[0];
-//         // console.log(profileImageFile)
-//         // 以下兩個方式都可以抓到表單DOM
-//         // console.log($("#profileImageForm").eq(0)[0])
-//         // console.log($("#profileImageForm")[0])
-//         // var formData = new FormData($("#profileImageForm").eq(0)[0]); //單純用jQuery $("#profileImageForm")取得的是數組，不是DOM，會報錯
-//         // formData.append('profile_image', profileImageFile);
-//         // var formData = new FormData($( "#profileImageForm" )[0]); 
-//         // var formData = new FormData(form);
-
-//         /*看restful.js的作法*/
-//         // var form = $(this);
-//         // var formData = form.serialize();
-
-//         /*自己塞formData*/
-//         var formData = {"profile_image":profileImageFile}
-//         console.log(formData)
-//             $.ajax({
-//                 type: "put",
-//                 url: "{% url 'profile_view_api' %}",
-//                 data: formData,
-//                 async: false, 
-//                 cache: false, 
-//                 processData: false,
-//                 contentType: false,
-//                 headers: {
-//                     'X-CSRFToken': getcsrftoken()
-//                 },
-//                 success: function (response) {
-//                     alert("操作成功");
-//                 },
-//                 error: function (xhr, textStatus, errorThrown) {
-//                     if (xhr.status === 400) {
-//                         // 處理400錯誤，顯示伺服器返回的錯誤訊息
-//                         var errorMessage = xhr.responseJSON.data;
-//                         console.log(errorMessage)
-//                         console.log(errorMessage[0])
-//                         Swal.fire({
-//                             title: '更新失敗',
-//                             html: errorMessageHTML,
-//                             icon: 'error',
-//                             confirmButtonText: '確定',
-//                         })
-//                     } else {
-//                         // 其他錯誤處理
-//                         alert("系統發生錯誤");
-//                     }
-//                 }
-//             });
-
-//     });
-
-// </script>
+</script>
 
 {% endblock %}

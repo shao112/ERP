@@ -23,6 +23,7 @@ handler403 = views.custom_permission_denied
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
+    path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),

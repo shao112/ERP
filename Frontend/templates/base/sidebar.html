@@ -4,10 +4,22 @@
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#managerCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+                <i class="fa-solid fa-user-pen" style="color: #ffffff;"></i> 個人管理
+            </a>
+            <div class="collapse" id="calendarCollapse">
+                <ul class="nav flex-column ml-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'calendar' %}">行程表</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-target="#directorCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
                 <i class="fa-solid fa-user-tie" style="color: #ffffff;"></i> 主管管理
             </a>
-            <div class="collapse" id="managerCollapse">
+            <div class="collapse" id="directorCollapse">
                 <ul class="nav flex-column ml-4">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'director_Index' %}">部門員工</a>

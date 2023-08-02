@@ -38,7 +38,7 @@ class Director_Index(View):
 
 class Index(View):
 
-    def post(self,rIest):
+    def post(self,request):
         if request.method == "POST":
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
@@ -222,3 +222,8 @@ class News_ListView(ListView):
         context = super().get_context_data(**kwargs)
         context['news_form'] = NewsForm()
         return context
+# 最新消息
+class Calendar(ListView):
+    model = Employee
+    template_name = 'calendar/calendar.html'
+    context_object_name = 'employee'

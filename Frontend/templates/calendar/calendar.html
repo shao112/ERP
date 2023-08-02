@@ -1,0 +1,53 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+{% load custom_tags %}
+
+
+{% block main %}
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-8 mx-auto">
+                <div id='calendar'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/fullcalendar/index.global.min.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale:'zh-tw',
+            events:[
+              {
+                title:"工作派任計畫01",
+                start:"2023-08-02",
+                end:"2023-08-04"
+              },
+              {
+                title:"工作派任計畫03",
+                start:"2023-08-02",
+                end:"2023-08-04"
+              },
+              {
+                title:"工作派任計畫02",
+                start:"2023-08-01",
+              },
+            ]
+        });
+        calendar.render();
+    });
+
+  </script>
+{% endblock %}
