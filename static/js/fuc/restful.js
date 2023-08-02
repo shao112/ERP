@@ -15,6 +15,9 @@ function getcsrftoken() {
     return cookieValue;
 }
 
+
+
+
 function showSwal(title, text, icon, showCancelButton) {
     setting_dict = {
         title: title,
@@ -72,7 +75,7 @@ function GET_handleClick(event) {
         type: "GET",
         url: url,
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         data: formData,
         success: function (response) {
@@ -96,7 +99,6 @@ function GET_handleClick(event) {
                         continue;
                     }
 
-                    // console.log(get_value)
 
                     if (typeof (jsonData[key]) == "object" && get_value != null) {
                         // 如果是陣列，先取得對應的options，以及select2的欄位
@@ -177,7 +179,24 @@ $("form").on("submit", function (event) {
     var url = form.attr("action");
     var formData = form.serialize();
     console.log("add form");
-    console.log(formData);
+
+
+    form.find(":input").each(function () {
+        var inputElement = $(this);
+        var inputType = inputElement.attr("type");
+        var inputName = inputElement.attr("name");
+        if (inputType === "file") {
+            var fileInput = inputElement[0]; // 获取原生的 input 元素
+            var modal = inputElement.data("modal"); // 获取 data-file-id 属性的值
+            var formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("name", inputName);
+            formData.append("modal", modal);
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+        }
+    });
 
     var method = form.data("method");
 
@@ -187,13 +206,13 @@ $("form").on("submit", function (event) {
         url: url,
         data: formData,
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         success: function (response) {
             jsonData = response.data
 
             showSwal('操作說明', jsonData, 'success', false).then(() => {
-                location.reload();
+                // location.reload();
             })
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -248,7 +267,7 @@ async function DELETE_handleClick(event) {
         type: "DELETE",
         url: url,
         headers: {
-            'X-CSRFToken': getcsrftoken()  // 在請求標頭中包含 CSRF token
+            'X-CSRFToken': csrftoken  // 在請求標頭中包含 CSRF token
         },
         data: formData,
         success: function (response) {
