@@ -240,7 +240,11 @@
                         <td>{{ j.project_confirmation.project_confirmation_id }}</td>
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
-                        <td>{{ j.attendance_date }}</td>
+                        <td>
+                            {% for date in j.attendance_date %}
+                            {{date}}
+                            {% endfor %}
+                        </td>
                         <td>
                             {% for employees_list in j.work_employee.all %}
                             {{ employees_list.full_name }}

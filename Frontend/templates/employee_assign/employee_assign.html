@@ -258,10 +258,21 @@
                         <td>{{ p.client }}</td>
                         <td>{{ p.requisition }}</td>
                         <td>{{ p.construction_location }}</td>
-                        <td>{{ p.inspector }}</td>
+                        <td>
+                            
+                            {% for employees_list in p.inspector.all %}
+                            {{ employees_list.full_name }}<br>
+                            {% endfor %}
+                        
+                        </td>
                         <td>{{ p.vehicle }}</td>
                         <td>{{ p.manuscript_return_date }}</td>
-                        <td>{{ p.lead_employee }}</td>
+                        <td>
+                            {% for employees_list in p.lead_employee.all %}
+                            {{ employees_list.full_name }}<br>
+                            {% endfor %}
+
+                        </td>
                         <td>{{ p.enterprise_signature }}</td>
                     </tr>
                     {% empty %}

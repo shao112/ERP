@@ -25,8 +25,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_confirmation" id="form" method="POST" class="pb-4"
-                            data-method="post">
+                        <form action="/restful/equipment" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="row my-2">
@@ -43,7 +42,7 @@
                                             <div class="form-group">
                                                 <label for="order_id_control">序號</label>
                                                 <input class="form-control form-control-sm" name="order_id"
-                                                    id="order_id_control" required>
+                                                    id="order_id_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
@@ -350,20 +349,23 @@
                 </tr>
             </thead>
             <tbody>
+                {% for e in equipment %}
+
                 <tr>
                     <td>
-                        <a type="button" data-url="project_confirmation" data-id=""
+                        <a type="button" data-url="equipment" data-id="{{e.id}}"
                             class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#project-confirmation-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="" type="button"
+                            data-target="#equipment-modal"><i class="fas fa-edit"></i></a>
+                        <a data-url="equipment" data-id="{{e.pk}}" type="button"
                             class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td> {{ e.equipment_id}} </td>
+                    <td>{{e.order_id}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

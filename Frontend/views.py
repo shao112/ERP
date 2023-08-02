@@ -38,7 +38,7 @@ class Director_Index(View):
 
 class Index(View):
 
-    def post(self,request):
+    def post(self,rIest):
         if request.method == "POST":
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')

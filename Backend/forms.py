@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project_Job_Assign, Department, Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle
+from .models import Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle
 
 from django.contrib.auth.models import Group
 
@@ -45,6 +45,13 @@ class NewsForm(BaseModelForm):
             'level': forms.Select(attrs={'class': 'form-control form-control-sm'})
         }
 
+
+# 工程確認單
+class EquipmentForm(BaseModelForm):
+
+    class Meta:
+        model = Equipment
+        fields = '__all__'
 
 # 工程確認單
 class ProjectConfirmationForm(BaseModelForm):

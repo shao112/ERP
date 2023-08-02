@@ -3,14 +3,12 @@ from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
-from django.db import models
-from django.db.models.fields.files import FieldFile
-from django.db.models.fields.related import ManyToManyField
+
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Equipment, Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm, GroupForm, EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.forms import  ProjectConfirmationForm,EquipmentForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -25,6 +23,56 @@ from  django.conf import settings
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+
+
+
+class Equipment_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = EquipmentForm(dict_data)
+        if form.is_valid():
+            Equipment.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+    
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)  
+            Equipment.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:        
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:        
+            return JsonResponse({"error":str(e)},status=500)
+
+
+    def post(self,request):
+        form = EquipmentForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"data":"新增成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):        
+        id = request.GET.get('id')
+        data = get_object_or_404(Equipment, id=id)
+        data = model_to_dict(data)
+        if  data['abnormal_img']:
+            data['abnormal_img'] = data['abnormal_img'].url
+        else:
+            data['abnormal_img'] = None      
+        print("dict_data")
+        print(data)
+        return JsonResponse({"data":data}, status=200,safe = False)
+
 
 class Project_Employee_Assign_View(View):
     def put(self,request):
