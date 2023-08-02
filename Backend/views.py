@@ -587,6 +587,19 @@ class ExcelExportView(View):
 
         return response
 
+class Calendar_View(View):
+   def get(self,request):
+        employeeid = request.user.employee
+        related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
+        data = []
+        for project in related_projects:
+            data.append({
+                'title': project.project_confirmation.project_confirmation_id,
+                'start': "2023-08-02",
+                # 'start': project.attendance_date.strftime('%Y-%m-%d'),
+                # 'end': event.end_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            })
+        return JsonResponse(data, safe=False)
 
 class Check(View):
     def post(self,request):

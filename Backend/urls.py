@@ -34,5 +34,6 @@ urlpatterns = [
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('new', views.New_View.as_view(), name="news_view_api"),
     path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
+    path('calendar', views.Calendar_View.as_view(), name="calendar"),
 
 ]
