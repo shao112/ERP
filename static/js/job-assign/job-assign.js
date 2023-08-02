@@ -23,7 +23,7 @@ $("#attendance_date_select2").select2({
 
 
 
-var projectConfirmationIdControl = document.getElementById('project_confirmation_id');
+var projectConfirmationIdControl = document.getElementById('project_confirmation_select2');
 
 projectConfirmationIdControl.addEventListener('change', function () {
 
