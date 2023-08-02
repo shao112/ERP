@@ -39,7 +39,7 @@
                                             <div class="form-group">
                                                 <label for="project_confirmation">工程確認單編號</label>
                                                 <select class="form-control form-control-sm" name="project_confirmation"
-                                                    id="project_confirmation_id">
+                                                    id="project_confirmation_select2">
                                                     <option value="-1">
                                                         請選擇</option>
                                                     {% for project_confirmation in project_confirmation_list %}
@@ -134,7 +134,7 @@
                                             <div class="form-group">
                                                 <label for="vehicle_control">使用車輛</label>
                                                 <select class="select2" name="vehicle"
-                                                    id="vehicle__select2" multiple>
+                                                    id="vehicle_select2" multiple>
                                                     {% for v in vehicle %}
                                                     <option value="{{ v.vehicle_id }}">{{ v.vehicle_id }}</option>
                                                     {% endfor %}

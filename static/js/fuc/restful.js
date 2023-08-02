@@ -33,12 +33,7 @@ function showSwal(title, text, icon, showCancelButton) {
 }
 
 
-
-// 新增表單時使用post
-$("#sys_new").on("click", function () {
-
-
-    //清除select2的資訊
+function cleanform() {
     $("[id*='_select2']").each(function () {
         var id = $(this).attr("id");
         if (id.endsWith("_select2")) {
@@ -47,7 +42,11 @@ $("#sys_new").on("click", function () {
     });
     $("#form")[0].reset();
     $("#form").attr("data-method", "POST");
+}
 
+// 新增表單時使用post
+$("#sys_new").on("click", function () {
+    cleanform()
 });
 
 
@@ -60,6 +59,7 @@ document.querySelectorAll('.sys_get').forEach(element => {
 });
 
 function GET_handleClick(event) {
+    cleanform()
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
@@ -92,7 +92,7 @@ function GET_handleClick(event) {
                             var option = new Option(dateStr, dateStr, true, true);
                             input.appendChild(option);
                         }
-                        $('#attendance_date_select').select2();
+                        $('#attendance_date_select2').select2();
                         continue;
                     }
 
@@ -104,14 +104,25 @@ function GET_handleClick(event) {
                         selectname = `#${key}_select2`
                         console.log("GET_" + key + "=> " + selectname);
                         console.log(get_value)
+                        get_value = Object.values(get_value);
+                        console.log(get_value)
                         for (let i = 0; i < options.length; i++) {
-                            //取出單一optons的id，在get_value比對id是不是匹配
                             const option = options[i];
                             const option_id = option.value;
-                            // console.log(option_id)
-                            const matchedItem = get_value.find(item => item.id == option_id);
-                            const containsValue = get_value.find(item => item == option_id);
-                            if (matchedItem || containsValue) {
+
+                            var containsValue = false;
+                            // = get_value.find(item => item == option_id);
+                            console.log(typeof (get_value[0]))
+                            if (typeof (get_value[0]) == "object") {
+
+                                containsValue = get_value.find(item => item.id == option_id);
+                            } else {
+                                containsValue = get_value.find(item => item == option_id);
+                            }
+                            console.log(get_value)
+                            console.log(option_id)
+                            console.log(containsValue)
+                            if (containsValue) {
                                 option.selected = true;
                             }
                         }
@@ -125,7 +136,10 @@ function GET_handleClick(event) {
                         editor.setData(jsonData[key]);
                     }
 
-                    if (key == "project_confirmation"|| key=="project_job_assign")  { //觸發change事件
+                    const select2_change_key = ["project_confirmation", "project_job_assign", "vehicle"];
+
+
+                    if (select2_change_key.includes(key)) { //觸發change事件
                         const event = new Event("change");
                         input.dispatchEvent(event);
                     }
@@ -246,7 +260,7 @@ async function DELETE_handleClick(event) {
                 var errorMessage = xhr.responseJSON.error;
                 showSwal('操作失敗', errorMessage, 'error', false)
             } else {
-                alert("系統發生錯誤"+ xhr.responseJSON.error);
+                alert("系統發生錯誤" + xhr.responseJSON.error);
                 console.log(errorThrown)
             }
         }

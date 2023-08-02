@@ -49,6 +49,18 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-group">
+                                                <label for="lead_employee">帶班主管</label>
+                                                <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
+                                                    id="lead_employee_select2" multiple>
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-6">
@@ -86,14 +98,14 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="equipment_type_control">施工日期</label>
-                                                <input  type="date" class="form-control form-control-sm" name="construction_date"
-                                                    id="construction_date_control"></input>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="construction_date" id="construction_date_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="equipment_name_control">完工日期</label>
-                                                <input  type="date" class="form-control" name="completion_date"
+                                                <input type="date" class="form-control" name="completion_date"
                                                     id="completion_date"></input>
                                             </div>
                                         </div>
@@ -147,8 +159,8 @@
                                         <div class="col-12 col-md-6">
                                             <div class="form-group">
                                                 <label for="manuscript_return_date">手稿預計回傳日</label>
-                                                <input class="form-control" name="manuscript_return_date"
-                                                type="date"   id="manuscript_return_date"></input>
+                                                <input class="form-control" name="manuscript_return_date" type="date"
+                                                    id="manuscript_return_date"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -159,8 +171,8 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="equipment_type_control">業主簽名</label>
-                                                    <input class="form-control form-control-sm" name="enterprise_signature"
-                                                        id="enterprise_signature"></input>
+                                                    <input class="form-control form-control-sm"
+                                                        name="enterprise_signature" id="enterprise_signature"></input>
                                                 </div>
                                             </div>
                                         </div>
@@ -199,8 +211,9 @@
     </div>
     <div class="employee-assign-table container-fluid shadow-sm table-responsive">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-        data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-search="true"
-        data-show-columns="true" data-filter-strict-search="true" data-show-columns-toggle-all="true">
+            data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="employee-assign-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
@@ -210,79 +223,81 @@
                     <a href="" class="font-weight-bold" id="">
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
                     </a>
-                    <button onclick="exportAllOptionToExcel('派工單.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportAllOptionToExcel('派工單.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button onclick="exportSelectedOptionToExcel('派工單.xlsx')">匯出已選資料</button>
                 </div>
-            </div> 
-                <thead class="thead-light" style="font-size: 14px;">
-                    <tr class="text-nowrap">
-                        <th data-force-hide="true" data-switchable="false" data-field="ea_checkbox">匯出</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="ea_edid">編輯</th>
-                        <th data-force-hide="true" data-switchable="false" data-field="ea_delete">刪除</th>
-                        <th data-field="ea_quotation_id" data-sortable="true">報價單號</th>
-                        <th data-field="ea_project_name" data-sortable="true">工程名稱</th>
-                        <th data-field="ea_construction_date" data-sortable="true">施工日期</th>
-                        <th data-field="ea_completion_date" data-sortable="true">完工日期</th>
-                        <th data-field="ea_is_completed" data-sortable="true">是否完工</th>
-                        <th data-field="ea_client" data-sortable="true">客戶名稱</th>
-                        <th data-field="ea_requisition" data-sortable="true">請購單位</th>
-                        <th data-field="ea_construction_location" data-sortable="true">施工地點</th>
-                        <th data-field="ea_inspector" data-sortable="true">檢測人員</th>
-                        <th data-field="ea_vehicle" data-sortable="true">使用車輛</th>
-                        <th data-field="ea_manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
-                        <th data-field="ea_lead_employee" data-sortable="true">帶班主管</th>
-                        <th data-field="ea_enterprise_signature" data-sortable="true">業主簽名</th>
-                    </tr>
-                </thead>
-                <tbody style="font-size: 14px;">
-                    {% for p in Project_Employee_Assign %}
-                    <tr>
-                        <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+            </div>
+            <thead class="thead-light" style="font-size: 14px;">
+                <tr class="text-nowrap">
+                    <th data-force-hide="true" data-switchable="false" data-field="ea_checkbox">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="ea_edid">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="ea_delete">刪除</th>
+                    <th data-field="ea_quotation_id" data-sortable="true">報價單號</th>
+                    <th data-field="ea_project_name" data-sortable="true">工程名稱</th>
+                    <th data-field="ea_lead_employee" data-sortable="true">帶班主管</th>
+                    <th data-field="ea_construction_date" data-sortable="true">施工日期</th>
+                    <th data-field="ea_completion_date" data-sortable="true">完工日期</th>
+                    <th data-field="ea_is_completed" data-sortable="true">是否完工</th>
+                    <th data-field="ea_client" data-sortable="true">客戶名稱</th>
+                    <th data-field="ea_requisition" data-sortable="true">請購單位</th>
+                    <th data-field="ea_construction_location" data-sortable="true">施工地點</th>
+                    <th data-field="ea_inspector" data-sortable="true">檢測人員</th>
+                    <th data-field="ea_vehicle" data-sortable="true">使用車輛</th>
+                    <th data-field="ea_manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
+                    <th data-field="ea_enterprise_signature" data-sortable="true">業主簽名</th>
+                </tr>
+            </thead>
+            <tbody style="font-size: 14px;">
+                {% for p in Project_Employee_Assign %}
+                <tr>
+                    <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
                             value="{{ p.id }}" /> </td>
-                        <td>
-                            <a type="button" data-url="project_employee_assign" data-id="{{p.id}}"
-                                class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                                data-target="#employee-assign-modal"><i class="fas fa-sm fa-edit"></i></a>
-                        </td>
-                        <td>
-                            <a data-url="project_employee_assign" data-id="{{p.id}}" type="button"
-                                class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i
-                                    class="far fa-sm fa-trash-alt"></i></a>
-                        </td>
+                    <td>
+                        <a type="button" data-url="project_employee_assign" data-id="{{p.id}}"
+                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            data-target="#employee-assign-modal"><i class="fas fa-sm fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a data-url="project_employee_assign" data-id="{{p.id}}" type="button"
+                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i
+                                class="far fa-sm fa-trash-alt"></i></a>
+                    </td>
 
-                        <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
-                        <td>{{ p.project_job_assign.project_confirmation.project_name }}</td>
-                        <td>{{ p.construction_date }}</td>
-                        <td>{{ p.completion_date }}</td>
-                        <td>{{ p.is_completed }}</td>
-                        <td>{{ p.client }}</td>
-                        <td>{{ p.requisition }}</td>
-                        <td>{{ p.construction_location }}</td>
-                        <td>
-                            
-                            {% for employees_list in p.inspector.all %}
-                            {{ employees_list.full_name }}<br>
-                            {% endfor %}
-                        
-                        </td>
-                        <td>{{ p.vehicle }}</td>
-                        <td>{{ p.manuscript_return_date }}</td>
-                        <td>
-                            {% for employees_list in p.lead_employee.all %}
-                            {{ employees_list.full_name }}<br>
-                            {% endfor %}
+                    <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
+                    <td>{{ p.project_job_assign.project_confirmation.project_name }}</td>
+                    <td>
+                        {% for employees_list in p.lead_employee.all %}
+                        {{ employees_list.full_name }}<br>
+                        {% endfor %}
 
-                        </td>
-                        <td>{{ p.enterprise_signature }}</td>
-                    </tr>
-                    {% empty %}
+                    </td>
+                    <td>{{ p.construction_date }}</td>
+                    <td>{{ p.completion_date }}</td>
+                    <td>{{ p.is_completed }}</td>
+                    <td>{{ p.client }}</td>
+                    <td>{{ p.requisition }}</td>
+                    <td>{{ p.construction_location }}</td>
+                    <td>
 
-                    <h2>
-                        目前無資料
-                    </h2>
-                    {% endfor %}
+                        {% for employees_list in p.inspector.all %}
+                        {{ employees_list.full_name }}<br>
+                        {% endfor %}
 
-                </tbody>
+                    </td>
+                    <td>{{ p.vehicle }}</td>
+                    <td>{{ p.manuscript_return_date }}</td>
+                 
+                    <td>{{ p.enterprise_signature }}</td>
+                </tr>
+                {% empty %}
+
+                <h2>
+                    目前無資料
+                </h2>
+                {% endfor %}
+
+            </tbody>
         </table>
     </div>
 </div>

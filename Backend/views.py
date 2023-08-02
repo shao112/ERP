@@ -141,6 +141,17 @@ class Project_Employee_Assign_View(View):
                 get_Project_Employee_Assign.project_job_assign = project_job_assign_instance
                 del dict_data["project_job_assign"]
 
+            if "lead_employee" in dict_data:
+                get_completion_report_employee = dict_data["lead_employee"]
+                del dict_data["lead_employee"]
+                get_Project_Employee_Assign.lead_employee.set(get_completion_report_employee)
+
+            if "inspector" in dict_data:
+                get_completion_report_employee = dict_data["inspector"]
+                del dict_data["inspector"]
+                get_Project_Employee_Assign.inspector.set(get_completion_report_employee)
+
+
             get_Project_Employee_Assign.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "修改成功"},status=200)
@@ -177,13 +188,12 @@ class Project_Employee_Assign_View(View):
         data = get_object_or_404(Project_Employee_Assign, id=id)
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
-        print(data)
+        data["lead_employee"] = convent_employee(data["lead_employee"])
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
         else:
             data['enterprise_signature'] = None
         print("dict_data")
-        print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class New_View(View):
@@ -512,13 +522,13 @@ class Job_Assign_View(View):
 
 
         #渲染關聯
-        selected_fields = ['quotation_id', 'project_name', 'client', 'requisition']
+        selected_fields = ['id','quotation_id', 'project_name', 'client', 'requisition']
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
 
         data = model_to_dict(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
-
+        #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
 
         if  "attachment" in data:
@@ -526,7 +536,7 @@ class Job_Assign_View(View):
                 data['attachment'] = data["attachment"].url
             else:
                 data['attachment'] = None
-        return JsonResponse({"data":data,"project_confirmation":project_confirmation_dict}, status=200,safe = False)
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 
 
