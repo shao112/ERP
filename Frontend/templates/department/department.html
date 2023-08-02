@@ -13,7 +13,8 @@
 {% block main %}
 <div class="main px-3 px-md-5">
     <div id="error-message"></div>
-    <div class="department modal fade" id="department-modal" tabindex="-1" aria-labelledby="department" aria-hidden="true">
+    <div class="department modal fade" id="department-modal" tabindex="-1" aria-labelledby="department"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -24,36 +25,39 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action=""  id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/department" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
+                            <input name="id" hidden/>
                             <div class="row my-4">
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="parent_department_control">上層部門</label>
-                                                <select class="form-control form-control-sm" id="parent_department_control" name="parent_department">
-                                                    <option value="a">a</option>
-                                                    <option value="b">b</option>
-                                                    <option value="c">c</option>
+                                                <select class="form-control form-control-sm" id="parent_department"
+                                                    name="parent_department">
+                                                    {% for d in department %}
+                                                    <option value="{{d.pk}}">{{d.department_name}}</option>
+                                                    {% endfor %}
                                                 </select>
-                                              </div>
+                                            </div>
                                         </div>
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="department_id_control">部門編號</label>
-                                                <input class="form-control form-control-sm" id="department_id_control" name="department_id"></input>
+                                                <input class="form-control form-control-sm" id="department_id_control"
+                                                    name="department_id"></input>
                                             </div>
                                         </div>
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="department_name_control">部門名稱</label>
-                                                <input class="form-control form-control-sm" id="department_name_control" name="department_name"></input>
+                                                <input class="form-control form-control-sm" id="department_name_control"
+                                                    name="department_name"></input>
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+
                                 </div>
                             </div>
                             <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
@@ -64,44 +68,48 @@
         </div>
     </div>
     <div class="department-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table"  data-toggle="table" data-sortable="true" data-show-export="true"
-        data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"  data-pagination="true" data-height="520" data-sticky-header="true"
-        data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
-        <div id="toolbar">
-            <div class="department-header container-fluid">
-                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#department-modal">
-                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增部門
-                </a>
-                <br>
-                <a href="" class="font-weight-bold" id="" >
-                    <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
-                </a>
-            </div>
-            <thead class="thead-light">
-                <tr>
-                    <th></th>
-                    <th data-field="parent_department" data-sortable="true">上級部門</th>
-                    <th data-field="department_name" data-sortable="true">部門名稱</th>
-                    <th data-field="department_id" data-sortable="true">部門編號</th>
-                    <th data-field="headcount" data-sortable="true">部門人數</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for d in department %}
-                <tr>
-                    <td>
-                        <a type="button" data-url="project_confirmation" data-id="{{ d.id }}" class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
-                            data-target="#department-modal"><i class="fas fa-edit"></i></a>
-                        <a data-url="project_confirmation" data-id="{{ d.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
-                    </td>
-                    {% if d.parent_department %}<td>{{ d.parent_department }}</td>{% else %}<td>無</td>{% endif %}
-                    <td>{{ d.department_name }}</td>
-                    <td>{{ d.department_id }}</td>
-                    <td>{{ d.employees.all.count }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-show-export="true" data-export-options='{"ignoreColumn": [0]}' data-toolbar="#toolbar"
+            data-pagination="true" data-height="520" data-sticky-header="true" data-search="true"
+            data-show-columns="true" data-show-columns-toggle-all="true">
+            <div id="toolbar">
+                <div class="department-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
+                        data-target="#department-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增部門
+                    </a>
+                    <br>
+                    <a href="" class="font-weight-bold" id="">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i> 匯入
+                    </a>
+                </div>
+                <thead class="thead-light">
+                    <tr>
+                        <th></th>
+                        <th data-field="parent_department" data-sortable="true">上級部門</th>
+                        <th data-field="department_name" data-sortable="true">部門名稱</th>
+                        <th data-field="department_id" data-sortable="true">部門編號</th>
+                        <th data-field="headcount" data-sortable="true">部門人數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in department %}
+                    <tr>
+                        <td>
+                            <a type="button" data-url="department" data-id="{{ d.id }}"
+                                class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                                data-target="#department-modal"><i class="fas fa-edit"></i></a>
+                            <a data-url="department" data-id="{{ d.id }}" type="button"
+                                class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                        </td>
+                        {% if d.parent_department %}<td>{{ d.parent_department.department_name }}</td>{% else %}<td>無
+                        </td>{% endif %}
+                        <td>{{ d.department_name }}</td>
+                        <td>{{ d.department_id }}</td>
+                        <td>{{ d.employees.all.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
         </table>
     </div>
 </div>
@@ -114,28 +122,25 @@
     // Bootstrap-Table
     $(document).ready(function () {
         $('#table').bootstrapTable({
-            height: $(window).height()*0.85,
+            height: $(window).height() * 0.85,
             toolbar: "#toolbar"
         });
     });
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('DOMContentLoaded', function () {
             var scripts = [
                 "{% static 'js/fuc/restful.js' %}",
-                "{% static 'js/fuc/fileimport.js' %}",
                 "{% static 'js/fuc/modaltopdf.js' %}"
             ];
-    
+
             scripts.forEach(function (src) {
                 var script = document.createElement('script');
                 script.src = src;
                 document.body.appendChild(script);
             });
         });
-    });
 
 </script>
 {% endblock %}

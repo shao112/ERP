@@ -56,6 +56,8 @@ class ModifiedModel(models.Model):
         user = get_current_authenticated_user()
         if user !=None:
             self.modified_by = user.employee
+
+
         super().save(*args, **kwargs)
 
     def update_fields_and_save(self, **kwargs):
@@ -155,10 +157,10 @@ class Department(ModifiedModel):
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-    def __str__(self):
-        if self.parent_department:
-            return f"{self.department_name} ({self.parent_department.department_name})"
-        return self.department_name
+    # def __str__(self):
+    #     if self.parent_department:
+    #         return f"{self.department_name} ({self.parent_department.department_name})"
+    #     return self.department_name
 
 
 # 工程確認單

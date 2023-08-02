@@ -46,7 +46,7 @@ class NewsForm(BaseModelForm):
         }
 
 
-# 工程確認單
+# 資產確認單
 class EquipmentForm(BaseModelForm):
 
     class Meta:
@@ -67,11 +67,8 @@ class Project_Employee_AssignForm(BaseModelForm):
         model = Project_Employee_Assign
         fields = '__all__'
 
-class  GroupForm(BaseModelForm):
 
-    class Meta:
-        model = Group
-        fields = '__all__'
+
 
 # 工作派任計畫
 
@@ -112,9 +109,11 @@ class ProjectJobAssignForm(BaseModelForm):
         return cleaned_data
 
 
-# 工作派任計畫
+# 部門
 class DepartmentForm(BaseModelForm):
-
+    def clean(self):
+        cleaned_data = super().clean()
+#            raise forms.ValidationError("上層部門不能與自己相同。")
     class Meta:
         model = Department
         fields = '__all__'
