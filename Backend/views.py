@@ -599,7 +599,7 @@ class Calendar_View(View):
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),
                 # 'end': event.end_date.strftime('%Y-%m-%dT%H:%M:%S'),
             })
-        return JsonResponse(data, safe=False)
+        return JsonResponse(data, status=200,safe = False)
 
 class Check(View):
     def post(self,request):

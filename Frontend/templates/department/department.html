@@ -15,7 +15,7 @@
     <div id="error-message"></div>
     <div class="department modal fade" id="department-modal" tabindex="-1" aria-labelledby="department"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="department-label">部門管理</h5>
@@ -29,36 +29,32 @@
                             {% csrf_token %}
                             <input name="id" hidden/>
                             <div class="row my-4">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="parent_department_control">上層部門</label>
-                                                <select class="form-control form-control-sm" id="parent_department"
-                                                    name="parent_department">
-                                                    {% for d in department %}
-                                                    <option value="{{d.pk}}">{{d.department_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="department_id_control">部門編號</label>
-                                                <input class="form-control form-control-sm" id="department_id_control"
-                                                    name="department_id"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="department_name_control">部門名稱</label>
-                                                <input class="form-control form-control-sm" id="department_name_control"
-                                                    name="department_name"></input>
-                                            </div>
-                                        </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="parent_department_control">上層部門</label>
+                                        <select class="form-control form-control-sm" id="parent_department"
+                                            name="parent_department">
+                                            {% for d in department %}
+                                            <option value="{{d.pk}}">{{d.department_name}}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
-
                                 </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="department_id_control">部門編號</label>
+                                        <input class="form-control form-control-sm" id="department_id_control"
+                                            name="department_id"></input>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="department_name_control">部門名稱</label>
+                                        <input class="form-control form-control-sm" id="department_name_control"
+                                            name="department_name"></input>
+                                    </div>
+                                </div>
+                                        
                             </div>
                             <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
                         </form>

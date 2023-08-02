@@ -21,7 +21,16 @@
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employee-assign-label">派工單</h5>
+                    <h5 class="modal-title" id="employee-assign-label">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" data-target="#none_equipment_tab">派工單</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-target="#equipment_tab">固定資產</a>
+                            </li>
+                        </ul>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -29,173 +38,181 @@
                 <div class="modal-body">
                     <div class="container shadow-sm">
                         <form action="/restful/project_employee_assign" id="form" method="POST" class="pb-4"
-                            data-method="post">
+                        data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden />
-                            <div class="form-row my-2">
-                                <div class="col-12 col-md-6">
-                                    <div class="form-row">
+                            
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active"id="none_equipment_tab">
+                                    <input name="id" hidden />
+                                    <div class="form-row my-2">
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="project_confirmation_control">工程確認單</label>
-                                                <select class="form-control form-control-sm" name="project_job_assign"
-                                                    id="project_job_assign_id">
-                                                    <option value="-1">請選擇工作派任計畫</option>
-                                                    {% for job_assign in all_project_job_assign %}
-                                                    <option value="{{ job_assign.id }}">
-                                                        {{job_assign.project_confirmation__project_confirmation_id }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
+                                            <div class="form-row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="project_confirmation_control">工程確認單</label>
+                                                        <select class="form-control form-control-sm" name="project_job_assign"
+                                                            id="project_job_assign_id">
+                                                            <option value="-1">請選擇工作派任計畫</option>
+                                                            {% for job_assign in all_project_job_assign %}
+                                                            <option value="{{ job_assign.id }}">
+                                                                {{job_assign.project_confirmation__project_confirmation_id }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lead_employee">帶班主管</label>
+                                                        <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
+                                                            id="lead_employee_select2" multiple>
+                                                            {% for employee in employees_list %}
+                                                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="quotation_id_control">報價單號</label>
+                                                        <input class="form-control form-control-sm" readonly
+                                                            id="quotation_id"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="project_name_control">工程名稱</label>
+                                                        <input class="form-control form-control-sm" readonly
+                                                            id="project_name"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="client_control">客戶名稱</label>
+                                                        <input class="form-control form-control-sm" readonly
+                                                            id="client"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="requisition_control">請購單位</label>
+                                                        <input class="form-control form-control-sm" readonly
+                                                            id="requisition"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="equipment_type_control">施工日期</label>
+                                                        <input type="date" class="form-control form-control-sm"
+                                                            name="construction_date" id="construction_date_control"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="equipment_name_control">完工日期</label>
+                                                        <input type="date" class="form-control" name="completion_date"
+                                                            id="completion_date"></input>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="lead_employee">帶班主管</label>
-                                                <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
-                                                    id="lead_employee_select2" multiple>
-                                                    {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
+                                            <div class="form-row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="is_completed">是否完工</label>
+                                                        <select class="form-control form-control-sm" name="is_completed"
+                                                            id="is_completed" required>
+                                                            <option value="true">是</option>
+                                                            <option value="false">否</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="construction_location">施工地點</label>
+                                                        <input class="form-control form-control-sm" name="construction_location"
+                                                            id="construction_location" required></input>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <div class="form-row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="inspector_select2">檢測人員</label>
+                                                        <select class="select2" data-placeholder="選擇工作人員" name="inspector"
+                                                            id="inspector_select2" multiple>
+                                                            {% for employee in employees_list %}
+                                                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="vehicle_select2">使用車輛</label>
+                                                        <select class="select2" data-placeholder="選擇車輛" name="vehicle"
+                                                            id="vehicle_select2" multiple>
+                                                            <option value="1">1</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+        
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="manuscript_return_date">手稿預計回傳日</label>
+                                                        <input class="form-control" name="manuscript_return_date" type="date"
+                                                            id="manuscript_return_date"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+        
+        
+                                                <div class="form-row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="equipment_type_control">業主簽名</label>
+                                                            <input class="form-control form-control-sm"
+                                                                name="enterprise_signature" id="enterprise_signature"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--
+                                            <div class="form-row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+        
+                                                        <label for="equipment_type_control">業主簽名</label>
+                                                        <div id="signature-pad">
+                                                            <canvas></canvas>
+                                                        </div>
+        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        -->
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="quotation_id_control">報價單號</label>
-                                                <input class="form-control form-control-sm" readonly
-                                                    id="quotation_id"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="project_name_control">工程名稱</label>
-                                                <input class="form-control form-control-sm" readonly
-                                                    id="project_name"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="client_control">客戶名稱</label>
-                                                <input class="form-control form-control-sm" readonly
-                                                    id="client"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="requisition_control">請購單位</label>
-                                                <input class="form-control form-control-sm" readonly
-                                                    id="requisition"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="equipment_type_control">施工日期</label>
-                                                <input type="date" class="form-control form-control-sm"
-                                                    name="construction_date" id="construction_date_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="equipment_name_control">完工日期</label>
-                                                <input type="date" class="form-control" name="completion_date"
-                                                    id="completion_date"></input>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="form-row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="is_completed">是否完工</label>
-                                                <select class="form-control form-control-sm" name="is_completed"
-                                                    id="is_completed" required>
-                                                    <option value="true">是</option>
-                                                    <option value="false">否</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="construction_location">施工地點</label>
-                                                <input class="form-control form-control-sm" name="construction_location"
-                                                    id="construction_location" required></input>
-                                            </div>
-                                        </div>
+                                <div class="tab-pane fade"id="equipment_tab">
+                                    <div class="form-row my-2">
+                                        固定資產表單
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="inspector_select2">檢測人員</label>
-                                                <select class="select2" data-placeholder="選擇工作人員" name="inspector"
-                                                    id="inspector_select2" multiple>
-                                                    {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="vehicle_select2">使用車輛</label>
-                                                <select class="select2" data-placeholder="選擇車輛" name="vehicle"
-                                                    id="vehicle_select2" multiple>
-                                                    <option value="1">1</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-group">
-                                                <label for="manuscript_return_date">手稿預計回傳日</label>
-                                                <input class="form-control" name="manuscript_return_date" type="date"
-                                                    id="manuscript_return_date"></input>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-
-
-                                        <div class="form-row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label for="equipment_type_control">業主簽名</label>
-                                                    <input class="form-control form-control-sm"
-                                                        name="enterprise_signature" id="enterprise_signature"></input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--
-                                    <div class="form-row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-
-                                                <label for="equipment_type_control">業主簽名</label>
-                                                <div id="signature-pad">
-                                                    <canvas></canvas>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                -->
                                 </div>
                             </div>
-
-
-
                             <div class=" d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
                                     style="color: #fff;background: #1E3050;">送出</button>
@@ -248,7 +265,7 @@
                     <th data-field="ea_enterprise_signature" data-sortable="true">業主簽名</th>
                 </tr>
             </thead>
-            <tbody style="font-size: 14px;">
+            <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in Project_Employee_Assign %}
                 <tr>
                     <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"

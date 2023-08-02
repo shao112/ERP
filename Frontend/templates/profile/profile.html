@@ -21,7 +21,7 @@
     <div class="container shadow-sm">
         <div class="row my-4 py-4">
             <div class="col-6 col-md-3 text-center">
-                <div class="profile_img w-50 mx-auto mb-2">
+                <div class="profile_img h-50 w-50 mx-auto mb-2">
                     {% if user.employee.profile_image %}
                         <img class="h-100 img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload" style="object-fit: cover;">
                     {% else %}

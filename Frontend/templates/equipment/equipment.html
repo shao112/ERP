@@ -325,8 +325,9 @@
     </div>
     <div class="equipment-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-show-export="true" data-toolbar="#toolbar" data-pagination="true" data-height="520"
-            data-sticky-header="true" data-search="true" data-show-columns="true" data-show-columns-toggle-all="true">
+        data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+        data-search="true" data-show-columns="true" data-filter-strict-search="true"
+        data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="equipment-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#equipment-modal">
@@ -371,21 +372,6 @@
     </div>
 </div>
 
-
-<script>
-    // 更美化 file input
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-    // Bootstrap-Table
-    $(document).ready(function () {
-        $('#table').bootstrapTable({
-            height: $(window).height() * 0.85,
-            toolbar: "#toolbar"
-        });
-    });
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

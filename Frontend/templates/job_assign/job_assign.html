@@ -69,22 +69,25 @@
                                     <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
-
+                                                <label for="location_control">工作地點</label>
+                                                <input class="form-control form-control-sm" name="location"
+                                                    id="location_control"></input>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="work_employee_select2">工作人員</label>
-                                                <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
-                                                    id="work_employee_select2" multiple>
-                                                    {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
+                                                <label for="project_type_control">工作類型</label>
+                                                <input class="form-control form-control-sm" name="project_type"
+                                                    id="project_type_control"></input>
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <h5 style="font-size:1.2rem;">
+                                        <kbd>人力跟資源</kbd>
+                                    </h5>
                                     <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
@@ -100,34 +103,18 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="xdda">出勤日期(請使用yyyymmdd格式新增)</label>
-                                                <select  data-placeholder="出勤日期" name="attendance_date"
-                                                    id="attendance_date_select2" multiple>
+                                                <label for="work_employee_select2">工作人員</label>
+                                                <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
+                                                    id="work_employee_select2" multiple>
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                    </option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <h5 style="font-size:1.2rem;">
-                                        <kbd>人力跟資源</kbd>
-                                    </h5>
-                                    <div class="form-row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="location_control">工作地點</label>
-                                                <input class="form-control form-control-sm" name="location"
-                                                    id="location_control"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="project_type_control">工作類型</label>
-                                                <input class="form-control form-control-sm" name="project_type"
-                                                    id="project_type_control"></input>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
@@ -140,22 +127,20 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="support_employee_select2">支援人力</label>
-                                                <select class="select2" data-placeholder="選擇帶班人員"
-                                                    name="support_employee" id="support_employee_select2" multiple>
-                                                    {% for employee in employees_list %}
-                                                    <option value="{{ employee.id }}">{{ employee.user__username }}
-                                                    </option>
-                                                    {% endfor %}
+                                                <label for="xdda">出勤日期<br>(請使用yyyymmdd格式新增)</label>
+                                                <select  data-placeholder="出勤日期" name="attendance_date"
+                                                    id="attendance_date_select2" multiple>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12">
-                                            <label>完工重派附件</label>
+                                            <label>工確單附件</label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input"
                                                     name="reassignment_attachment" id="reassignment_attachment_control">
@@ -223,7 +208,7 @@
                         <th data-sortable="true" data-field="ja_attachment">工確單附件</th>
                     </tr>
                 </thead>
-                <tbody style="font-size: 14px;">
+                <tbody class="text-nowrap" style="font-size: 14px;">
                     {% for j in job_assign %}
                     <tr>
                         <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)" value="{{ j.id }}" /></td>

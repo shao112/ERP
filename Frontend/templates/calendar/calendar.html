@@ -34,7 +34,7 @@
             locale:'zh-tw',
             events: function(fetchInfo, successCallback, failureCallback) {
                 $.ajax({
-                    url: '/restful/calendar', // 使用實際的URL來替換這裡
+                    url: '/restful/calendar',
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -46,7 +46,7 @@
                         console.log('Error fetching events:', error);
                     }
                 });
-            },//function(event, jsEvent, view) 
+            },
             eventClick: function(event, jsEvent, view) {
                 console.log(event)
                 console.log(jsEvent)
