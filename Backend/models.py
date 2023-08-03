@@ -191,7 +191,7 @@ class Project_Confirmation(ModifiedModel):
             download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
             return mark_safe(download_link)
         else:
-            return "無"
+            return ""
 
 
 # 工作派任計畫

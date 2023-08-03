@@ -203,22 +203,22 @@
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-switchable="false" data-field="pc_checkbox">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-field="pc_edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-field="pc_delete">刪除</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_quotation_id">報價單號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_c_a">母案編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_project_confirmation_id">工確單編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_project_name">工程名稱</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_client">客戶簡稱</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_requisition">請購單位</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_order_id">訂單編號</th>
-                    <th data-sortable="true" data-filter-control="input" data-field="pc_turnover">成交金額</th>
-                    <th data-sortable="true" data-field="pc_is_completed">完工狀態</th>
-                    <th data-sortable="true" data-field="pc_completion_report_employee">完工回報人</th>
-                    <th data-sortable="true" data-field="pc_completion_report_date">完工回報日期</th>
-                    <th data-sortable="true" data-field="pc_remark">備註</th>
-                    <th data-sortable="true" data-field="pc_attachment">完工重派附件</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="checkbox">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="edit">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="delete">刪除</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="project_name">工程名稱</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="client">客戶簡稱</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="requisition">請購單位</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="order_id">訂單編號</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="turnover">成交金額</th>
+                    <th data-sortable="true" data-field="is_completed">完工狀態</th>
+                    <th data-sortable="true" data-field="completion_report_employee">完工回報人</th>
+                    <th data-sortable="true" data-field="completion_report_date">完工回報日期</th>
+                    <th data-sortable="true" data-field="remark">備註</th>
+                    <th data-sortable="true" data-field="attachment">完工重派附件</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -238,14 +238,14 @@
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
-                    <td>{{ p.quotation_id }}</td>
+                    <td>{% if p.quotation_id %}{{ p.quotation_id }}{% else %}{% endif %}</td>
                     <td>{% if p.c_a %}{{ p.c_a }}{% else %}{% endif %}</td>
                     {% if p.project_confirmation_id %}<td>{{ p.project_confirmation_id }}</td>{% else %}<td></td>{% endif %}
                     {% if p.project_name %}<td>{{ p.project_name }}</td>{% else %}<td></td>{% endif %}
                     {% if p.client %}<td>{{ p.client }}</td>{% else %}<td></td>{% endif %}
                     {% if p.requisition %}<td>{{ p.requisition }}</td>{% else %}<td></td>{% endif %}
                     {% if p.order_id %}<td>{{ p.order_id }}</td>{% else %}<td></td>{% endif %}
-                    {% if p.turnover %}<td>{{ p.turnover }}</td>{% else %}<td></td>{% endif %}
+                    <td>{% if p.turnover %}{{ p.turnover }}{% else %}{% endif %}</td>
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>
                         {% for employees_list in p.completion_report_employee.all %}
@@ -269,7 +269,7 @@
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
-            "{% static 'js/fuc/modaltopdf.js' %}"
+            "{% static 'js/fuc/modaltopdf.js' %}" // 目前沒用下載pdf，之後可拿掉
         ];
 
         scripts.forEach(function (src) {

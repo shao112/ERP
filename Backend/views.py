@@ -291,7 +291,7 @@ class FormUploadFileView(View):
         getname = request.POST.get("name")
         getmodal = request.POST.get("modal")
         print("getmodel:", getmodal)
-        print("getname:", getname) # 得到"attachment"，但不能使用 convert_model_instance.getname
+        print("getname:", getname)
         getid = request.POST.get("id")
         uploaded_file = request.FILES.get('uploaded_file')
         if(uploaded_file):
@@ -575,6 +575,7 @@ class ExcelExportView(View):
         json_data = json.loads(request.body)
         headers = json_data['headers']
         table_data = json_data['data']
+        # print(table_data) # table_data是[{表頭名:資料內容}]
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.append(headers)

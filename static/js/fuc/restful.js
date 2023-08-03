@@ -164,8 +164,9 @@ $("form").on("submit", function (event) {
         var inputElement = $(this);
         var inputType = inputElement.attr("type");
         var inputName = inputElement.attr("name");
-        if (inputType === "file") {
+        if ( (inputType === "file") && (inputElement[0] != undefined)) {
             var fileInput = inputElement[0];
+            console.log(fileInput)
             var modal = inputElement.data("modal");
             var idValue = form.find('input[name="id"]').val()
             var formData = new FormData();
