@@ -164,19 +164,21 @@
                                                     id="abnormal_description_control">
                                             </div>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>
+                                                    <input id="abnormal_img" type="file" name="abnormal_img" style="display: none;">
+                                                    點此上傳異常照片
+                                                </label>
+                                            </div>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     
                                     
                                     <div class="form-row">
-                                        <div class="col-12 col-md-4">
-                                            <div class="form-group">
-                                                <label for="abnormal_img_control">異常照片</label>
-                                                <input class="form-control form-control-sm" name="abnormal_img"
-                                                    id="abnormal_img_control" type="file">
-                                            </div>
-                                        </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="inventory_control">盤點</label>
@@ -187,38 +189,39 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="produced_stickers_control">需補產編貼紙</label>
-                                                <input class="form-control" name="produced_stickers"
-                                                    id="produced_stickers_control" type="checkbox">
+                                                <select class="form-control form-control-sm" name="produced_stickers"
+                                                    id="produced_stickers_control" required>
+                                                    <option value="true">是</option>
+                                                    <option value="false">否</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <div class="form-group">
+                                                <label for="transmitter_control">發報器大小</label>
+                                                <select class="form-control form-control-sm" name="transmitter"
+                                                    id="transmitter_control">
+                                                    <option value="大">大</option>
+                                                    <option value="小">小</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
-                                                <label for="transmitter_control">發報器大小</label>
-                                                <select class="form-control form-control-sm" name="transmitter"
-                                                    id="transmitter_control">
-                                                    <option value="1">大</option>
-                                                    <option value="2">小</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-4">
-                                            <div class="form-group">
                                                 <label for="storage_location_control">庫存地點</label>
-                                                <input class="form-control" name="storage_location"
+                                                <input class="form-control form-control-sm" name="storage_location"
                                                     id="storage_location_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="detailed_location_control">位置</label>
-                                                <input class="form-control" name="detailed_location"
+                                                <input class="form-control form-control-sm" name="detailed_location"
                                                     id="detailed_location_control">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="warranty_control">保固期</label>
@@ -226,6 +229,8 @@
                                                     id="warranty_control">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="warranty_period_control">保固期間</label>
@@ -236,12 +241,13 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="is_check_control">校驗類別</label>
-                                                <input class="form-control" name="is_check" id="is_check_control"
-                                                    type="checkbox">
+                                                <select class="form-control form-control-sm" name="is_check"
+                                                    id="is_check_control" required>
+                                                    <option value="true">是</option>
+                                                    <option value="false">否</option>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="latest_check_date_control">最近一次校驗日</label>
@@ -249,6 +255,8 @@
                                                     id="latest_check_date_control" type="date">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="check_order_id_control">校驗報告編碼</label>
@@ -263,15 +271,15 @@
                                                     id="check_remark_control">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="maintenance_status_control">維修狀態</label>
-                                                <input class="form-control" name="maintenance_status"
+                                                <input class="form-control form-control-sm" name="maintenance_status"
                                                     id="maintenance_status_control">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="repair_date_control">送修日</label>
