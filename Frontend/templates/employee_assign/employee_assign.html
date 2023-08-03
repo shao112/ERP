@@ -38,11 +38,11 @@
                 <div class="modal-body">
                     <div class="container shadow-sm">
                         <form action="/restful/project_employee_assign" id="form" method="POST" class="pb-4"
-                        data-method="post">
+                            data-method="post">
                             {% csrf_token %}
-                            
+
                             <div class="tab-content">
-                                <div class="tab-pane fade show active"id="none_equipment_tab">
+                                <div class="tab-pane fade show active" id="none_equipment_tab">
                                     <input name="id" hidden />
                                     <div class="form-row my-2">
                                         <div class="col-12 col-md-6">
@@ -50,12 +50,12 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="project_confirmation_control">工程確認單</label>
-                                                        <select class="form-control form-control-sm" name="project_job_assign"
-                                                            id="project_job_assign_id">
+                                                        <select class="form-control form-control-sm"
+                                                            name="project_job_assign" id="project_job_assign_id">
                                                             <option value="-1">請選擇工作派任計畫</option>
                                                             {% for job_assign in all_project_job_assign %}
                                                             <option value="{{ job_assign.id }}">
-                                                                {{job_assign.project_confirmation__project_confirmation_id }}
+                                                                {{job_assign.project_confirmation__project_confirmation_id}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -64,10 +64,11 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="lead_employee">帶班主管</label>
-                                                        <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
-                                                            id="lead_employee_select2" multiple>
+                                                        <select class="select2" data-placeholder="選擇帶班主管"
+                                                            name="lead_employee" id="lead_employee_select2" multiple>
                                                             {% for employee in employees_list %}
-                                                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                            <option value="{{ employee.id }}">{{
+                                                                employee.user__username}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -111,7 +112,8 @@
                                                     <div class="form-group">
                                                         <label for="equipment_type_control">施工日期</label>
                                                         <input type="date" class="form-control form-control-sm"
-                                                            name="construction_date" id="construction_date_control"></input>
+                                                            name="construction_date"
+                                                            id="construction_date_control"></input>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 col-md-6">
@@ -138,8 +140,9 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="construction_location">施工地點</label>
-                                                        <input class="form-control form-control-sm" name="construction_location"
-                                                            id="construction_location" required></input>
+                                                        <input class="form-control form-control-sm"
+                                                            name="construction_location" id="construction_location"
+                                                            required></input>
                                                     </div>
                                                 </div>
                                             </div>
@@ -147,10 +150,11 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="inspector_select2">檢測人員</label>
-                                                        <select class="select2" data-placeholder="選擇工作人員" name="inspector"
-                                                            id="inspector_select2" multiple>
+                                                        <select class="select2" data-placeholder="選擇工作人員"
+                                                            name="inspector" id="inspector_select2" multiple>
                                                             {% for employee in employees_list %}
-                                                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                                                            <option value="{{ employee.id }}">{{
+                                                                employee.user__username}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -167,24 +171,25 @@
                                                 </div>
                                             </div>
                                             <div class="form-row">
-        
+
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="manuscript_return_date">手稿預計回傳日</label>
-                                                        <input class="form-control" name="manuscript_return_date" type="date"
-                                                            id="manuscript_return_date"></input>
+                                                        <input class="form-control" name="manuscript_return_date"
+                                                            type="date" id="manuscript_return_date"></input>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
-        
-        
+
+
                                                 <div class="form-row">
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <label for="equipment_type_control">業主簽名</label>
                                                             <input class="form-control form-control-sm"
-                                                                name="enterprise_signature" id="enterprise_signature"></input>
+                                                                name="enterprise_signature"
+                                                                id="enterprise_signature"></input>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -207,9 +212,43 @@
                                     </div>
 
                                 </div>
-                                <div class="tab-pane fade"id="equipment_tab">
+                                <div class="tab-pane fade" id="equipment_tab">
                                     <div class="form-row my-2">
-                                        固定資產表單
+
+
+                                        <table id="Equipment_table" data-toggle="tabledata-toggle=" table"
+                                            data-sortable="true" data-toolbar="#toolbar" data-search="true"
+                                            data-show-columns="true" data-filter-strict-search="true"
+                                            data-show-columns-toggle-all="true" data-pagination="true"
+                                            data-page-size="25" data-page-list="[25, All]" data-filter-control="true">
+
+                                            <thead class="thead-light">
+                                                <tr class="text-nowrap">
+                                                    <th>攜帶</th>
+                                                    <th  data-field="equipment_id" data-sortable="true">資產標籤</th>
+                                                    <th  data-field="order_id" data-sortable="true">序號</th>
+                                                    <th  data-field="equipment_category" data-sortable="true">資產種類別</th>
+                                                    <th  data-field="equipment_type" data-sortable="true">中類</th>
+                                                    <th  data-field="equipment_name" data-sortable="true">品名</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for e in all_Equipment %}
+
+                                                <tr>
+                                                    <td> <input type="checkbox" name="importcheckd"
+                                                            onclick="update_all_Equipment_checkedArray(this)"
+                                                            value="{{ e.id }}" /> </td>
+                                                    <td> {{ e.equipment_id}} </td>
+                                                    <td>{{e.order_id}}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -304,7 +343,7 @@
                     </td>
                     <td>{{ p.vehicle }}</td>
                     <td>{{ p.manuscript_return_date }}</td>
-                 
+
                     <td>{{ p.enterprise_signature }}</td>
                 </tr>
                 {% empty %}
@@ -340,7 +379,7 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
-            "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/employee_assign/choose_Equipment.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
         ];
@@ -350,6 +389,17 @@
             script.src = src;
             document.body.appendChild(script);
         });
+    });
+
+    $(document).ready(function () {
+
+        $('#Equipment_table').bootstrapTable({
+            // height: $(window).height()*0.7,
+            toolbar: "#toolbar",
+
+        });
+
+
     });
 </script>
 

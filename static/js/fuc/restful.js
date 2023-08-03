@@ -1,23 +1,3 @@
-// 共用事件
-function getcsrftoken() {
-    var name = "csrftoken";
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-
-
-
 function showSwal(title, text, icon, showCancelButton) {
     setting_dict = {
         title: title,
@@ -180,7 +160,6 @@ $("form").on("submit", function (event) {
     var formData = form.serialize();
     console.log("add form");
 
-
     form.find(":input").each(function () {
         var inputElement = $(this);
         var inputType = inputElement.attr("type");
@@ -192,6 +171,7 @@ $("form").on("submit", function (event) {
             var formData = new FormData();
             formData.append("uploaded_file", fileInput.files[0]);
             formData.append("name", inputName);
+            formData.append("id", idValue);
             formData.append("modal", modal);
             formData.append("id", idValue);
             for (var pair of formData.entries()) {
@@ -204,7 +184,7 @@ $("form").on("submit", function (event) {
                 processData: false,
                 contentType: false,
                 headers: {
-                    'X-CSRFToken': getcsrftoken()
+                    'X-CSRFToken': csrftoken
                 },
                 success: function(response){
                     console.log("上傳成功",response)
@@ -224,7 +204,7 @@ $("form").on("submit", function (event) {
         url: url,
         data: formData,
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         success: function (response) {
             jsonData = response.data

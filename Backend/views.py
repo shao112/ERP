@@ -311,6 +311,7 @@ class FormUploadFileView(View):
             file_extension = os.path.splitext(uploaded_file.name)[1]
             original_filename = os.path.splitext(uploaded_file.name)[0]
             new_file_name = f"{date_time_string}_{get_valid_filename(original_filename)}{file_extension}"
+            
             model.attachment.save(new_file_name, uploaded_file)
             return JsonResponse({'status': 'success'},status=200)
         else:
