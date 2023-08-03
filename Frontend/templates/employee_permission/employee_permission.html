@@ -100,9 +100,13 @@
                     <tr class="collapse" id="sub-row-{{ g.id }}">
                         <td></td>
                         <td>
-                            {% for employees_list in g.user_set.all %}
-                            • {{ employees_list.employee.full_name }}
-                            {% endfor %}
+                            {% if g.user_set.all %}
+                                {% for employees_list in g.user_set.all %}
+                                <span class="text-muted">• {{ employees_list.employee.full_name }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">目前無員工</span>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

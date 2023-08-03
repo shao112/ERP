@@ -9,6 +9,17 @@
     table-layout: fixed;
     word-break: break-all;
 }
+thead th:first-child,
+tbody td:first-child{
+    width: 30%;
+}
+thead th:last-child,
+tbody td:last-child{
+    width: 70%;
+}
+tbody td:last-child:hover{
+    cursor: pointer;
+}
 .employee-permission-table .collapsing {
     -webkit-transition: none;
     transition: none;
