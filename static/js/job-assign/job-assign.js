@@ -44,10 +44,10 @@ projectConfirmationIdControl.addEventListener('change', function () {
         },
         data: formData,
         success: function (response) {
-
                 jsonData = response.data
-                document.getElementById("project_name").value = jsonData["project_name"];
-                document.getElementById("c_a").value = jsonData["c_a"];
+                console.log(jsonData["project_name"],jsonData["c_a"])
+                document.getElementsByName("project_name")[0].value = jsonData["project_name"];
+                document.getElementsByName("c_a")[0].value = jsonData["c_a"];
 
                 
         },

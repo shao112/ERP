@@ -75,7 +75,7 @@
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增部門
                     </a>
                 </div>
-                <thead class="thead-light">
+                <thead class="thead-light" style="font-size: 14px;">
                     <tr>
                         <th></th>
                         <th></th>
@@ -85,17 +85,17 @@
                         <th data-field="headcount" data-sortable="true">部門人數</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size: 14px;">
                     {% for d in department %}
                     <tr>
                         <td>
                             <a type="button" data-url="department" data-id="{{ d.id }}"
-                                class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                                class="sys_get btn btn-sm btn-warning" data-toggle="modal"
                                 data-target="#department-modal"><i class="fas fa-edit"></i></a>
                         </td>
                         <td>
                             <a data-url="department" data-id="{{ d.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i class="far fa-trash-alt"></i></a>
+                            class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                         </td>
                         <td>{% if d.parent_department %}{{ d.parent_department.department_name }}{% else %}無</td>
                         </td>{% endif %}

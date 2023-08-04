@@ -196,7 +196,8 @@ class Project_Confirmation(ModifiedModel):
 
 # 工作派任計畫
 class Project_Job_Assign(ModifiedModel):
-    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單") # 連帶帶出來的資料可重複
+    project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
+    job_assign_id = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
     attendance_date =models.JSONField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
@@ -215,9 +216,9 @@ class Project_Job_Assign(ModifiedModel):
 
     def attachment_link(self):
         if self.attachment:
-            return format_html("<a href='%s' download>下載</a>" % (self.attachment.url,))
+            return format_html("<a href='%s' download>下載</a>" % (self.project_confirmation.attachment.url,))
         else:
-            return "無"
+            return ""
     # 告訴admin這個包含HTML代碼，要幫忙解析
     attachment_link.allow_tags = True
 
