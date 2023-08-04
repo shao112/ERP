@@ -302,6 +302,8 @@ class FormUploadFileView(View):
                     model=Project_Job_Assign.objects.get(id=getid)
                 case "employee_assign":
                     model=Project_Employee_Assign.objects.get(id=getid)
+                case "news":
+                    model=News.objects.get(id=getid)
                 case _:
                     return "error"
 

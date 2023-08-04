@@ -269,8 +269,8 @@ class News(ModifiedModel):
     attachment = models.FileField(upload_to="news_attachment", null=True, blank=True, verbose_name="公告附件")
 
     class Meta:
-        verbose_name = "最新消息"   # 單數
-        verbose_name_plural = verbose_name   #複數
+        verbose_name = "最新消息"
+        verbose_name_plural = verbose_name
     
     def save(self, *args, **kwargs):
         # Call the save method of the parent class (ModifiedModel) using super()
@@ -321,8 +321,8 @@ class Equipment(ModifiedModel):
     accruing_amounts = models.CharField(max_length=100, blank=True, null=True, verbose_name="維修累計金額")
 
     class Meta:
-        verbose_name = "固定資產管理"   # 單數
-        verbose_name_plural = verbose_name   #複數
+        verbose_name = "固定資產管理"
+        verbose_name_plural = verbose_name
         
 # 車輛
 class Vehicle(ModifiedModel):
@@ -334,5 +334,5 @@ class Vehicle(ModifiedModel):
     vehicle_type = models.CharField(max_length=1, choices=VEHICLE_TYPE, blank=True, null=True, verbose_name="車輛類型")
 
     class Meta:
-        verbose_name = "車輛"   # 單數
-        verbose_name_plural = verbose_name   #複數
+        verbose_name = "車輛"
+        verbose_name_plural = verbose_name

@@ -23,7 +23,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/new" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/news" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden/>
                             <div class="row my-4">
@@ -43,6 +43,12 @@
                                     <div class="form-group">
                                         <label for="level_control">重要性</label>
                                         {{ news_form.level }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="attachment" id="attachment_control" data-modal="news">
+                                        <label class="custom-file-label" for="attachment_control">Choose file</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
