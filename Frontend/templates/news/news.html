@@ -25,6 +25,7 @@
                     <div class="container shadow-sm">
                         <form action="/restful/news" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
+                            <!-- 裡面沒資料 -->
                             <input name="id" hidden/>
                             <div class="row my-4">
                                 <div class="col-12 col-md-4">
@@ -49,6 +50,12 @@
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="attachment" id="attachment_control" data-modal="news">
                                         <label class="custom-file-label" for="attachment_control">Choose file</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="attachment_download">下載</label>
+                                        <!-- 下載 -->
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -107,7 +114,7 @@
 
                 <tr>
                     <td>
-                        <a type="button" data-url="new" data-id="{{ new.id }}" class="sys_get btn btn-sm btn-warning"
+                        <a type="button" data-url="news" data-id="{{ new.id }}" class="sys_get btn btn-sm btn-warning"
                             data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>

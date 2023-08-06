@@ -164,6 +164,7 @@ $("form").on("submit", function (event) {
         var inputElement = $(this);
         var inputType = inputElement.attr("type");
         var inputName = inputElement.attr("name");
+        // inputType === "file"，inputName === "attachment"
         if ( (inputType === "file") && (inputElement[0] != undefined)) {
             var fileInput = inputElement[0];
             console.log(fileInput)
