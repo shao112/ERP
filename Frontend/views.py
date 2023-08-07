@@ -24,39 +24,56 @@ def custom_permission_denied(request, exception=None,template_name='403.html'):
 
 
 def testpdf(request):
+    def link_callback(uri):
+        from django.conf import settings
+        import os
+        if uri.startswith(settings.MEDIA_URL):
+            path = os.path.join(settings.MEDIA_ROOT,
+                                uri.replace(settings.MEDIA_URL, ""))
+        elif uri.startswith(settings.STATIC_URL):
+            path = os.path.join(settings.STATIC_ROOT,
+                                uri.replace(settings.STATIC_URL, ""))
+        else:
+            return uri
+
+        # 确保本地文件存在
+        if not os.path.isfile(path):
+            raise Exception(
+                "Media URI 必须以以下格式开头"
+                f"'{settings.MEDIA_URL}' or '{settings.STATIC_URL}'")
+
+        return path
+
     def generate_pdf(project_employee_assign_id):
         from xhtml2pdf import pisa
-        from django.template.loader import get_template
+        from django.template.loader import get_template,render_to_string
         from django.http import HttpResponse
         from io import BytesIO  # 導入 BytesIO 類別
 
 
         project_employee_assign = Project_Employee_Assign.objects.get(pk=project_employee_assign_id)
         template_path = 'pdf/Equipment_pdf.html' 
-        result = BytesIO()
-
         context = {'project_employee_assign': project_employee_assign}
 
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="project_assignment_{project_employee_assign_id}.pdf"'
 
-        template = get_template(template_path)
-        html = template.render(context)
-        # print(html)
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
-        
+        # result = BytesIO()
+        html = render_to_string(template_path,context)
+        # html = template.render(context)
+
+        pdf = pisa.pisaDocument(html, dest=response)
         if pdf.err:
             return HttpResponse("轉換為 PDF 時出現錯誤")
-        
+
         return response
 
     return generate_pdf(3)
-
-    # project_employee_assign = Project_Employee_Assign.objects.get(id=2)
-    # context={
-    #     "project_employee_assign":project_employee_assign,
-    # }
-    # return render(request, 'pdf/Equipment_pdf.html',context)    
+    project_employee_assign = Project_Employee_Assign.objects.get(id=2)
+    context={
+        "project_employee_assign":project_employee_assign,
+    }
+    return render(request, 'pdf/Equipment_pdf.html',context)    
 
 # 首頁
 class Director_Index(View):
