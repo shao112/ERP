@@ -84,7 +84,6 @@ class Equipment_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
 
-      
         form = EquipmentForm(dict_data)
         if form.is_valid():
             Equipment.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
@@ -109,6 +108,7 @@ class Equipment_View(View):
 
         if form.is_valid():
             form.save()
+
             return JsonResponse({"data":"新增成功"},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -141,10 +141,19 @@ class Project_Employee_Assign_View(View):
                 get_Project_Employee_Assign.project_job_assign = project_job_assign_instance
                 del dict_data["project_job_assign"]
 
+            if "carry_equipments" in dict_data:
+                print("cccc")
+                print("cccc")
+                get_carry_equipments = dict_data["carry_equipments"]
+                get_carry_equipments = [int(item) for item in get_carry_equipments]
+                print(get_carry_equipments)
+                del dict_data["carry_equipments"]
+                get_Project_Employee_Assign.lead_employee.set(get_carry_equipments)
+
             if "lead_employee" in dict_data:
                 get_completion_report_employee = dict_data["lead_employee"]
                 del dict_data["lead_employee"]
-                get_Project_Employee_Assign.lead_employee.set(get_completion_report_employee)
+                get_Project_Employee_Assign.carry_equipments.set(get_completion_report_employee)
 
             if "inspector" in dict_data:
                 get_completion_report_employee = dict_data["inspector"]
@@ -189,6 +198,10 @@ class Project_Employee_Assign_View(View):
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
         data["lead_employee"] = convent_employee(data["lead_employee"])
+        carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
+        data["carry_equipments"] = list(carry_equipments_ids)
+        
+
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
         else:

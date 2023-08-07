@@ -54,7 +54,7 @@ def convent_dict(data):
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
-        process_key =("inspector","support_employee","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
+        process_key =("inspector","support_employee","carry_equipments","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
         if key in process_key: #處理員工多對多陣列        
             new_dict_data[key] =  [int(num) for num in  value]
         elif key=="attendance_date":
