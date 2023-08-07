@@ -15,11 +15,48 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import date
 from django.views.defaults import permission_denied
 from Backend.utils import convent_employee,get_weekly_clock_data
+from django.db.models import Q
 
 def custom_permission_denied(request, exception=None,template_name='403.html'):
     return permission_denied(request, exception, template_name='403.html')
 
-from django.db.models import Q
+
+
+
+def testpdf(request):
+    def generate_pdf(project_employee_assign_id):
+        from xhtml2pdf import pisa
+        from django.template.loader import get_template
+        from django.http import HttpResponse
+        from io import BytesIO  # 導入 BytesIO 類別
+
+
+        project_employee_assign = Project_Employee_Assign.objects.get(pk=project_employee_assign_id)
+        template_path = 'pdf/Equipment_pdf.html' 
+        result = BytesIO()
+
+        context = {'project_employee_assign': project_employee_assign}
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="project_assignment_{project_employee_assign_id}.pdf"'
+
+        template = get_template(template_path)
+        html = template.render(context)
+        # print(html)
+        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), result)
+        
+        if pdf.err:
+            return HttpResponse("轉換為 PDF 時出現錯誤")
+        
+        return response
+
+    return generate_pdf(3)
+
+    # project_employee_assign = Project_Employee_Assign.objects.get(id=2)
+    # context={
+    #     "project_employee_assign":project_employee_assign,
+    # }
+    # return render(request, 'pdf/Equipment_pdf.html',context)    
 
 # 首頁
 class Director_Index(View):
