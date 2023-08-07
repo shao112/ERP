@@ -3,6 +3,8 @@ from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
+import base64
+from django.core.files.base import ContentFile
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -19,6 +21,8 @@ import openpyxl
 from django.db.utils import IntegrityError
 import random
 import os
+import re
+
 from  django.conf import settings
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -184,7 +188,7 @@ class Project_Employee_Assign_View(View):
         form = Project_Employee_AssignForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            # form.save()
             return JsonResponse({"data":"新增成功"},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -299,14 +303,37 @@ class FileUploadView(View):
         else:
             return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
 
+
+
+class Employee_assign_update_signature(View):
+   def post(self, request):
+        getid = request.POST.get("id")
+        uploaded_file = request.POST.get("enterprise_signature")
+        print("getid:", getid)
+        if(uploaded_file):
+            model=Project_Employee_Assign.objects.get(id=getid)
+
+            format, imgstr = uploaded_file.split(';base64,') 
+            ext = format.split('/')[-1] 
+            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+            filename = f"signature_{getid}.{ext}"
+            model.enterprise_signature.save(filename,data, save=True)
+            return JsonResponse({'status': 'success'},status=200)
+        else:
+            return JsonResponse({"data":"error"}, status=400,safe=False)
+
+
+
 class FormUploadFileView(View):
    def post(self, request):
         getname = request.POST.get("name")
         getmodal = request.POST.get("modal")
+        getid = request.POST.get("id")
+        uploaded_file = request.FILES.get(getname)
         print("getmodel:", getmodal)
         print("getname:", getname)
-        getid = request.POST.get("id")
-        uploaded_file = request.FILES.get('uploaded_file')
+        print("getid:", getid)
+        print("uploaded_file:", uploaded_file)
         if(uploaded_file):
             match getmodal:
                 case "project_confirmation":
@@ -327,7 +354,9 @@ class FormUploadFileView(View):
             original_filename = os.path.splitext(uploaded_file.name)[0]
             new_file_name = f"{date_time_string}_{get_valid_filename(original_filename)}{file_extension}"
             
-            model.attachment.save(new_file_name, uploaded_file)
+            # model.attachment.save(new_file_name, uploaded_file)
+            setattr(model, getname, uploaded_file)
+            model.save()
             return JsonResponse({'status': 'success'},status=200)
         else:
             return JsonResponse({"data":"error"}, status=400,safe=False)

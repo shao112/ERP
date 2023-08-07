@@ -43,10 +43,13 @@ document.querySelectorAll('.sys_get').forEach(element => {
 
 function GET_handleClick(event) {
     cleanform()
+    
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
-
+    
+    $("#form").attr("data-method", "put");
+    $("#form").attr("data-id", id);
     console.log(`URL: ${url}, ID: ${id}`);
 
     formData = { id: id, };
@@ -121,7 +124,7 @@ function GET_handleClick(event) {
                         $(selectname).trigger('change');
                     } else {
                         input.value = jsonData[key];
-                        // console.log("帶資料:" + input.value);
+                        console.log("key "+key+" 帶資料:" + input.value);
                     }
 
                     if (key == "editor_content") { //觸發change事件
@@ -141,8 +144,7 @@ function GET_handleClick(event) {
                 }
             }
 
-            $("#form").attr("data-method", "put");
-            $("#form").attr("data-id", id);
+       
 
 
 
@@ -186,7 +188,7 @@ $("form").on("submit", function (event) {
             var modal = inputElement.data("modal");
             var idValue = form.find('input[name="id"]').val()
             var formData = new FormData();
-            formData.append("uploaded_file", fileInput.files[0]);
+            formData.append(inputName, fileInput.files[0]);
             formData.append("name", inputName);
             formData.append("id", idValue);
             formData.append("modal", modal);
