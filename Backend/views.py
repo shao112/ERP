@@ -5,7 +5,6 @@ from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
 import base64
 from django.core.files.base import ContentFile
-
 from django.core.exceptions import ObjectDoesNotExist
 
 from Backend.models import  Equipment, Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign

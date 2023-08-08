@@ -2,18 +2,19 @@
 <html>
 
 <head>
+   
     <title>專案派任詳情</title>
 
     {% load static %}
 
     <style>
-        @import url('https://fonts.cdnfonts.com/css/strong');
+        /* @import url('https://fonts.cdnfonts.com/css/strong'); */
+        /* @import url('{% static ' fonts/stsong.ttf' %}');
 
         body {
-            /* font-family: Arial, sans-serif; */
+            font-family: STSong-FONT;
             margin: 20px;
-            /* 添加整體邊界 */
-        }
+        } */
 
         h1 {
             text-align: center;
@@ -50,9 +51,17 @@
             max-height: 100%;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 
-<body>
+<body id="download_pdf">
+
+
+
     <h1>派任單詳情</h1>
     <div class="assignment-details">
         <p>施工日期：{{ project_employee_assign.construction_date }}</p>
@@ -99,5 +108,36 @@
         </div>
     </div>
 </body>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 在 DOMContentLoaded 事件中觸發 PDF 匯出
+        // exportToPDF();
+    });
+
+    function exportToPDF() {
+        var modalContent = document.getElementById('download_pdf');
+        console.log(modalContent);
+        window.jsPDF = window.jspdf.jsPDF;
+
+        var doc = new jsPDF();
+    
+        html2canvas(modalContent).then(function (canvas) {
+            // 獲取canvas的圖像數據URL
+            var imgData = canvas.toDataURL('image/png');
+    
+            // 設置PDF的尺寸，這裡使用A4尺寸，也可以自行調整
+            var pdf = new jsPDF('p', 'mm', 'a4');
+    
+            // 添加圖像數據到PDF
+            pdf.addImage(imgData, 'PNG', 0, 0);
+    
+            // 下載PDF文件
+            pdf.save('派工單.pdf');
+        });
+    }
+
+</script>
 
 </html>
