@@ -125,9 +125,11 @@ document.getElementById('convertToImage').addEventListener('click', function () 
       'X-CSRFToken': csrftoken
     },
     success: function (response) {
+      alert("電子檔案上傳成功")
       console.log("上傳成功", response)
     },
     error: function (xhr, status, error) {
+      alert("電子檔案上傳失敗")
       console.log("上傳失敗", error)
     }
   })
