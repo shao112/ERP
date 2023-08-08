@@ -240,8 +240,8 @@ class New_View(View):
         form = NewsForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return JsonResponse({"data":"新增成功"},status=200)
+            newobj =form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
