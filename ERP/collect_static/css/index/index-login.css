@@ -1,0 +1,116 @@
+/* index-login.css 包含 sidebar.html 跟 header.html 的修改 */
+
+/* Vue.js transition */
+.modal-body .clock-in {
+    animation: fade-in;
+    animation-duration: 0.5s; 
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.modal-body .clock-out {
+    animation: fade-in-two;
+    animation-duration: 0.5s; 
+}
+@keyframes fade-in-two {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+/* Vue.js transition */
+
+.news .row{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.modal-body a:hover{
+    color: #fff;
+    background: #f0f0f0;
+}
+
+.sidebar{
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--theme-black);
+    position: fixed;
+    overflow: hidden;
+    z-index: 2;
+}
+.sidebar.collapsing {
+    width: 0;
+    transition-property: width;
+    height: 100vh;
+    white-space: nowrap;
+}
+.sidebar a{
+    color: #fff;
+    font-size: 1rem;
+}
+.sidebar .nav-link[data-toggle].collapsed:after {
+    content: "\25BE";
+    /* content: " ▾"; */
+}
+.sidebar .nav-link[data-toggle]:not(.collapsed):after {
+    content: "\25C2";
+    /* content: " ◂"; */
+}
+.sidebar-logo{
+    height: 100px;
+}
+
+.main{
+    width: calc(100vw - var(--sidebar-width) - 20px);
+    position: relative;
+    left: var(--sidebar-width);
+    top: 100px;
+}
+header{
+    width: calc(100vw - var(--sidebar-width));
+    /* width: calc(100vw - 240px); */
+    height: 100px;
+    background: var(--theme-white);
+    position: fixed;
+    left: var(--sidebar-width);
+    z-index: 1;
+}
+header button{
+    width: 105px;
+    height: 35px;
+}
+
+.clock-inout .modal-footer a{
+    color: #fff;
+    background: #1E3050;
+}
+.clock-inout .modal-footer a:hover{
+    color: #fff;
+    background: #1d2c46;
+}
+@media(max-width:767px) {
+    .main{
+        width: 100vw;
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+    header{
+        width: 100vw;
+        margin-left: calc(-1 * var(--sidebar-width));
+    }
+    header .navbar-toggler{
+        display: inline-block;
+    }
+    header button {
+        font-size: 0.9rem;
+        width: 90px;
+        height: 30px;
+    }
+}

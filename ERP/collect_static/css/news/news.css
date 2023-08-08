@@ -1,0 +1,7 @@
+.news-header a{
+    text-decoration: none;
+    color: black;
+}
+.news-table td{
+    vertical-align: middle;
+}

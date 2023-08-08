@@ -1,0 +1,11 @@
+:root{
+    --sidebar-width: 180px;
+    --theme-black: #252320;
+    --theme-white: #f4f4f3;
+}
+body{
+    background: var(--theme-white);
+}
+a{
+    color: #0d4c91;
+}

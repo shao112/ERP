@@ -1,0 +1,29 @@
+.employee-permission-header a{
+    text-decoration: none;
+    color: black;
+}
+.employee-permission-table td{
+    vertical-align: middle;
+}
+.employee-permission-table table{
+    table-layout: fixed;
+    word-break: break-all;
+}
+thead th:first-child,
+tbody td:first-child{
+    width: 30%;
+}
+thead th:last-child,
+tbody td:last-child{
+    width: 70%;
+}
+tbody td:last-child:hover{
+    cursor: pointer;
+}
+.employee-permission-table .collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
+

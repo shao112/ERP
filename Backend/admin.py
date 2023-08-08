@@ -1,7 +1,12 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign, Vehicle
+
+admin.site.site_header = "艾力克電機後台管理"
+admin.site.site_title = "艾力克電機後台"
 
 # Register your models here.
 class EmployeeInline(admin.StackedInline):
@@ -14,7 +19,7 @@ class MyUserAdmin(UserAdmin):
 
 
 # 部門
-class DepartmentAdmin(admin.ModelAdmin):
+class DepartmentAdmin(ImportExportModelAdmin):
     list_display = ('parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
 # 工程確認單
 class ProjectConfirmationAdmin(admin.ModelAdmin):

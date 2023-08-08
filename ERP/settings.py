@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # 指令 python manage.py collectstatic 會把這裡使用到的靜態檔案放在底下 STATIC_ROOT 路徑
 
 INSTALLED_APPS = [
+    'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +45,9 @@ INSTALLED_APPS = [
     'Backend',
     # 套件
     'django_cleanup',
+    
 ]
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

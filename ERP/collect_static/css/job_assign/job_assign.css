@@ -1,0 +1,10 @@
+.job_assign-header a{
+    text-decoration: none;
+    color: black;
+}
+.job_assign-table td{
+    vertical-align: middle;
+}
+.select2-container {
+    font-size: 14px;
+}
