@@ -252,11 +252,10 @@ class Employee_Attendance_list(ListView):
     template_name = 'employee_attendance/employee_attendance.html'
     context_object_name = 'employees'
     
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["department_list"] = Department.objects.values('id','department_name')
-    #     context['employee_form'] = EmployeeForm()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["departments"] = Department.objects.all()
+        return context
 
 # 固定資產管理
 class Equipment_ListView(ListView):

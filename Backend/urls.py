@@ -30,6 +30,7 @@ urlpatterns = [
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
     path('employee_assign', views.Job_Assign_View.as_view(), name="employee_assign_api"),
     path('employee', views.Employee_View.as_view(), name="project_confirmation_api"),
+    path('employee_attendance', views.Employee_Attendance_View.as_view(), name="employee_attendance_api"),
     path('group', views.Groups_View.as_view(), name="groups_view_api"),
     path('project_employee_assign', views.Project_Employee_Assign_View.as_view(), name='project_employee_assign_api'),
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),

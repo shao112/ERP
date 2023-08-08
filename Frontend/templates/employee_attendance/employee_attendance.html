@@ -12,25 +12,24 @@
 {% block main %}
 <div class="main">
     <div class="container font-weight-bold mb-4">
-        <form>
+        <form action="/restful/employee_attendance" id="form" method="get" data-method="get">
+            {% csrf_token %}
             <div class="row">
                 <div class="col-6 col-md-2">
-                    <label for="">部門</label>
-                    <select class="form-control form-control-sm" name="" id="">
-                        <option value=""></option>
+                    <label for="department_control">部門</label>
+                    <select class="form-control form-control-sm" name="department" id="department_control">
+                        {% for department in departments %}
+                        <option value="{{ department.id }}">{{ department.department_name }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-6 col-md-2">
-                    <label for="">編號</label>
-                    <input class="form-control form-control-sm" name="" id=""></input>
+                    <label for="employee_id_control">員工編號</label>
+                    <input class="form-control form-control-sm" name="employee_id" id="employee_id_control"></input>
                 </div>
                 <div class="col-6 col-md-2">
-                    <label for="">員工</label>
-                    <input class="form-control form-control-sm" name="" id=""></input>
-                </div>
-                <div class="col-6 col-md-2">
-                    <label for="_control">日期</label>
-                    <input type="date" class="form-control form-control-sm" name="" id="_control"></input>
+                    <label for="clock_time_date_control">日期</label>
+                    <input type="date" class="form-control form-control-sm" name="clock_time_date" id="clock_time_date_control"></input>
                 </div>
                 <div class="col-6 col-md-2" style="margin-top: 30px;">
                     <button type="submit">送出</button>
@@ -51,16 +50,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
-                <tr></tr>
             </tbody>
         </table>
     </div>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+        ];
 
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
+    });
+
+</script>
 {% endblock %}

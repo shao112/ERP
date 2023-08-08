@@ -478,8 +478,26 @@ class Employee_View(View):
                 data['profile_image'] = None
 
         return JsonResponse({"data":data}, status=200,safe = False)
+# 員工出勤
+class Employee_Attendance_View(View):
+    def get(self,request):
+        department = request.GET.get('department') # 回傳department的id
+        employee_id = request.GET.get('employee_id')
+        clock_time_date = request.GET.get('clock_time_date')
 
+        employees = Employee.objects.filter(departments__in=[department])
+        data = []
+        for employee in employees:
+            print(employee.full_name)
+            data.append({
+                'department': employee.departments.department_name,
+                'employee_id': employee.departments.department_name,
+                'full_name': employee.departments.department_name,
+                'clock_time_date': employee.departments.department_name,
+            })
+        
 
+        return JsonResponse({"data":data}, status=200,safe = False)
 
 
 
