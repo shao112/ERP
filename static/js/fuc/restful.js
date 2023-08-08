@@ -175,6 +175,51 @@ $("form").on("submit", function (event) {
     console.log(method);
 
 
+    
+    
+    var idValue = form.find('input[name="id"]').val();
+
+    $.ajax({
+        type: method,
+        url: url,
+        data: formData,
+        async: false,
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        success: function (response) {
+            jsonData = response.data
+            
+            if(method=="POST"){
+                idValue=response.id;
+            }
+
+            showSwal('操作說明', jsonData, 'success', false).then(() => {
+                // location.reload();
+            })
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                console.log(errorMessage)
+                var errorMessageHTML = "<ul>";
+                Object.entries(errorMessage).map(([key, errors]) => {
+                    errors.forEach(error => {
+                        errorMessageHTML += "<li>" + error + "</li>";
+                    });
+                });
+                errorMessageHTML += "</ul>";
+                console.log(errorMessageHTML)
+
+
+                showSwal('操作失敗', errorMessageHTML, 'error', false)
+            } else {
+                alert("系統發生錯誤");
+                console.log(errorThrown)
+            }
+        }
+    });
+
     form.find(":input").each(function () {
         var inputElement = $(this);
         var inputType = inputElement.attr("type");
@@ -184,7 +229,6 @@ $("form").on("submit", function (event) {
             var fileInput = inputElement[0];
             console.log(fileInput)
             var modal = inputElement.data("modal");
-            var idValue = form.find('input[name="id"]').val()
             console.log("idValue: " + idValue)
             var formData = new FormData();
             formData.append(inputName, fileInput.files[0]);
@@ -214,43 +258,8 @@ $("form").on("submit", function (event) {
     });
 
 
-    $.ajax({
-        type: method,
-        url: url,
-        data: formData,
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        success: function (response) {
-            jsonData = response.data
-
-            showSwal('操作說明', jsonData, 'success', false).then(() => {
-                // location.reload();
-            })
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                console.log(errorMessage)
-                var errorMessageHTML = "<ul>";
-                Object.entries(errorMessage).map(([key, errors]) => {
-                    errors.forEach(error => {
-                        errorMessageHTML += "<li>" + error + "</li>";
-                    });
-                });
-                errorMessageHTML += "</ul>";
-                console.log(errorMessageHTML)
-
-
-                showSwal('操作失敗', errorMessageHTML, 'error', false)
-            } else {
-                alert("系統發生錯誤");
-                console.log(errorThrown)
-            }
-        }
-    });
-
 });
+
 
 // 刪除
 

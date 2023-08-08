@@ -66,8 +66,8 @@ class Department_View(View):
         form = DepartmentForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return JsonResponse({"data":"新增成功"},status=200)
+            newobj =form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -110,9 +110,9 @@ class Equipment_View(View):
         form = EquipmentForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            newobj =form.save()
 
-            return JsonResponse({"data":"新增成功"},status=200)
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -187,8 +187,8 @@ class Project_Employee_Assign_View(View):
         form = Project_Employee_AssignForm(request.POST)
 
         if form.is_valid():
-            # form.save()
-            return JsonResponse({"data":"新增成功"},status=200)
+            # newobj =form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -240,8 +240,8 @@ class New_View(View):
         form = NewsForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return JsonResponse({"data":"新增成功"},status=200)
+            newobj = form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             print(error_messages)
@@ -398,7 +398,7 @@ class Profile_View(View):
         else:
             form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
-                form.save()
+                newobj =form.save()
                 update_session_auth_hash(request, form.user)
                 return JsonResponse({'status': 'success'},status=200)
             else:
@@ -432,7 +432,7 @@ class Employee_View(View):
                 getObject.departments = None
 
             getObject.update_fields_and_save(**dict_data)
-            return JsonResponse({'data': "完成新增"},status=200)
+            return JsonResponse({'data': "完成修改"},status=200)
         else:
             error_messages = form.get_error_messages()
             return JsonResponse({"error":error_messages},status=400)
@@ -461,7 +461,7 @@ class Employee_View(View):
             employee = form.save(commit=False)
             employee.user = user
             employee.save()
-            return JsonResponse({'data': "完成新增"},status=200)
+            return JsonResponse({'data': "完成新增","id":employee.id},status=200)
         else:
             error_messages = form.get_error_messages()
             return JsonResponse({"error":error_messages},status=400)
@@ -518,8 +518,8 @@ class Project_Confirmation_View(View):
         form = ProjectConfirmationForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return JsonResponse({'data': "完成新增"},status=200)
+            newobj =form.save()
+            return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()
@@ -582,8 +582,8 @@ class Job_Assign_View(View):
         form = ProjectJobAssignForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return JsonResponse({'data':"完成新增"},status=200)
+            newobj =form.save()
+            return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
             return JsonResponse({"error":error_messages},status=400)
