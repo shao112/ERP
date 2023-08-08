@@ -26,13 +26,13 @@
                             <label for="password">密碼</label>
                             <input class="form-control" type="password" id="password" name="password">
                         </div>
+                        <p class="text-muted mt-2">若忘記密碼，請聯繫相關資訊人員重設密碼</p>
                         <input class="btn w-100" type="submit" value="登入">
                     </form>
                     {% if verified == False %}
                     <div class="verified-false alert alert-danger w-50 mx-auto mt-4 text-center">
                         帳號或密碼錯誤
                     </div>
-                        
                     {% endif %}
                 </div>
             </div>

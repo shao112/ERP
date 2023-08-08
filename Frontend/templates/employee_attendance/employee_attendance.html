@@ -1,0 +1,66 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main">
+    <div class="container font-weight-bold mb-4">
+        <form>
+            <div class="row">
+                <div class="col-6 col-md-2">
+                    <label for="">部門</label>
+                    <select class="form-control form-control-sm" name="" id="">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-2">
+                    <label for="">編號</label>
+                    <input class="form-control form-control-sm" name="" id=""></input>
+                </div>
+                <div class="col-6 col-md-2">
+                    <label for="">員工</label>
+                    <input class="form-control form-control-sm" name="" id=""></input>
+                </div>
+                <div class="col-6 col-md-2">
+                    <label for="_control">日期</label>
+                    <input type="date" class="form-control form-control-sm" name="" id="_control"></input>
+                </div>
+                <div class="col-6 col-md-2" style="margin-top: 30px;">
+                    <button type="submit">送出</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container shadow-sm table-responsiv">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr class="text-nowrap">
+                    <th>部門</th>
+                    <th>編號</th>
+                    <th>員工</th>
+                    <th>簽到</th>
+                    <th>簽退</th>
+                    <th>位置</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

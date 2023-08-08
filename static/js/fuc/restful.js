@@ -187,6 +187,7 @@ $("form").on("submit", function (event) {
             console.log(fileInput)
             var modal = inputElement.data("modal");
             var idValue = form.find('input[name="id"]').val()
+            console.log("idValue: " + idValue)
             var formData = new FormData();
             formData.append(inputName, fileInput.files[0]);
             formData.append("name", inputName);
@@ -286,7 +287,6 @@ async function DELETE_handleClick(event) {
         data: formData,
         success: function (response) {
             showSwal('操作說明', "成功刪除", 'success', false)
-            location.reload();
         },
         error: function (xhr, textStatus, errorThrown) {
             if (xhr.status === 400) {

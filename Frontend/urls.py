@@ -35,6 +35,7 @@ urlpatterns = [
     path('department/', login_required(views.Department_list.as_view()), name='department'),
     path('equipment/', login_required(views.Equipment_ListView.as_view()), name='equipment'), 
     path('employee/', views.Employee_list.as_view(), name='employee_list'),
+    path('employee_attendance/', views.Employee_Attendance_list.as_view(), name='employee_attendance'),
     path('employee_permission/', views.Employee_Permission_list.as_view(), name='employee_permission_list'),
     path('job-assign/', login_required(views.Job_Assign_ListView.as_view()), name='project'),
     path('employee_assign/', login_required(views.Employee_Assign_ListView.as_view()), name='employee_assign'),
