@@ -14,6 +14,33 @@
 
 
 {% block main %}
+
+<div class="modal fade" id="signatureModal" tabindex="-1" role="dialog" aria-labelledby="signatureModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signatureModalLabel">電子簽名</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <canvas id="mycanvas" style="width: 100%;"  height="400"></canvas>
+                <div id="image"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="clear">清除</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="convertToImage">保存簽名</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="main px-3">
     <div id="error-message"></div>
     <div class="employee-assign modal fade" id="employee-assign-modal" tabindex="-1" aria-labelledby="employee-assign"
@@ -44,6 +71,13 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="none_equipment_tab">
                                     <input name="id" hidden />
+                                    <select multiple id="carry_equipments_select2" style="display: none;"
+                                        name="carry_equipments">
+                                        {% for e in all_Equipment %}
+                                        <option value="{{ e.id }}">{{e.id}}</option>
+                                        {% endfor %}
+                                    </select>
+
                                     <div class="form-row my-2">
                                         <div class="col-12 col-md-6">
                                             <div class="form-row">
@@ -67,8 +101,8 @@
                                                         <select class="select2" data-placeholder="選擇帶班主管"
                                                             name="lead_employee" id="lead_employee_select2" multiple>
                                                             {% for employee in employees_list %}
-                                                            <option value="{{ employee.id }}">{{
-                                                                employee.user__username}}
+                                                            <option value="{{ employee.id }}">
+                                                                {{employee.user__username}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -153,8 +187,8 @@
                                                         <select class="select2" data-placeholder="選擇工作人員"
                                                             name="inspector" id="inspector_select2" multiple>
                                                             {% for employee in employees_list %}
-                                                            <option value="{{ employee.id }}">{{
-                                                                employee.user__username}}
+                                                            <option value="{{ employee.id }}">
+                                                                {{employee.user__username}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -180,47 +214,32 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label for="equipment_type_control">業主簽名</label>
-                                                        <input class="form-control form-control-sm"
-                                                            name="enterprise_signature"
-                                                            id="enterprise_signature"></input>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--
-                                            <div class="form-row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-        
-                                                        <label for="equipment_type_control">業主簽名</label>
-                                                        <div id="signature-pad">
-                                                            <canvas></canvas>
-                                                        </div>
-        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        -->
+                                     
+
                                         </div>
                                     </div>
 
                                 </div>
                                 <div class="tab-pane fade" id="equipment_tab">
-                                    <div class="project-confirmation-table container-fluid shadow-sm table-responsive" style="min-height: 400px;">
-                                        <table id="Equipment_table" class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-                                        data-toolbar="#toolbar" data-filter-strict-search="true" data-filter-control="true">
+                                    <div class="project-confirmation-table container-fluid shadow-sm table-responsive"
+                                        style="min-height: 400px;">
+                                        <table id="Equipment_table" class="table table-sm table-hover text-center"
+                                            id="table" data-toggle="table" data-sortable="true" data-toolbar="#toolbar"
+                                            data-filter-strict-search="true" data-filter-control="true">
 
                                             <thead class="thead-light" style="font-size: 14px;">
                                                 <tr class="text-nowrap">
                                                     <th>攜帶</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_id" data-sortable="true">資產標籤</th>
-                                                    <th data-filter-control="input" data-field="es_order_id" data-sortable="true">序號</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_category" data-sortable="true">資產種類別</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_type" data-sortable="true">中類</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_name" data-sortable="true">品名</th>
+                                                    <th data-filter-control="input" data-field="es_equipment_id"
+                                                        data-sortable="true">資產標籤</th>
+                                                    <th data-filter-control="input" data-field="es_order_id"
+                                                        data-sortable="true">序號</th>
+                                                    <th data-filter-control="input" data-field="es_equipment_category"
+                                                        data-sortable="true">資產種類別</th>
+                                                    <th data-filter-control="input" data-field="es_equipment_type"
+                                                        data-sortable="true">中類</th>
+                                                    <th data-filter-control="input" data-field="es_equipment_name"
+                                                        data-sortable="true">品名</th>
                                                 </tr>
                                             </thead style="font-size: 14px;">
                                             <tbody>
@@ -240,7 +259,7 @@
                                             </tbody>
 
                                         </table>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                             <div class=" d-flex justify-content-between">
@@ -280,6 +299,7 @@
                     <th data-force-hide="true" data-switchable="false" data-field="ea_checkbox">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-field="ea_edid">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-field="ea_delete">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-field="ea_naelete">簽名</th>
                     <th data-field="ea_quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="ea_project_name" data-sortable="true">工程名稱</th>
                     <th data-field="ea_lead_employee" data-sortable="true">帶班主管</th>
@@ -298,8 +318,7 @@
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in Project_Employee_Assign %}
                 <tr>
-                    <td> <input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
-                            value="{{ p.id }}" /> </td>
+                    <td> <input type="checkbox" value="{{ p.id }}" /> </td>
                     <td>
                         <a type="button" data-url="project_employee_assign" data-id="{{p.id}}"
                             class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
@@ -309,6 +328,11 @@
                         <a data-url="project_employee_assign" data-id="{{p.id}}" type="button"
                             class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i
                                 class="far fa-sm fa-trash-alt"></i></a>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary"  onclick="setSettingId('{{ p.id }}')"  data-toggle="modal" data-target="#signatureModal">
+                            業主簽名
+                        </button>
                     </td>
 
                     <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
@@ -350,18 +374,18 @@
 </div>
 
 
+
 <style>
-    /* 設定簽名板的寬度和高度，並添加邊框 */
-    #signature-pad {
-        width: 400px;
-        height: 200px;
-        border: 2px solid #ccc;
+    canvas {
+        background: #eee;
     }
 
-    /* 設定簽名板內 canvas 的寬度和高度，使其填滿整個簽名板 */
-    #signature-pad canvas {
-        width: 100%;
-        height: 100%;
+    #image {
+        img {
+            display: block;
+            width: 100%;
+            height: 200px;
+        }
     }
 </style>
 
@@ -371,6 +395,7 @@
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
             "{% static 'js/employee_assign/choose_Equipment.js' %}",
+            "{% static 'js/employee_assign/name.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
         ];

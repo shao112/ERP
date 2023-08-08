@@ -94,6 +94,11 @@ DATABASES = {
     }
 }
 
+XHTML2PDF = {
+    'DEFAULT_FONT': r'fonts/stsong.ttf',  # 指定你的字型文件的路徑
+    # 其他 xhtml2pdf 設定...
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

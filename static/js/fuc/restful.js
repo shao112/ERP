@@ -4,7 +4,7 @@ function showSwal(title, text, icon, showCancelButton) {
         html: text,
         icon: icon,
     }
-    console.log(showCancelButton)
+    // console.log(showCancelButton)
     if (showCancelButton) {
         setting_dict.showCloseButton = true;
         setting_dict.showCancelButton = true;
@@ -43,10 +43,13 @@ document.querySelectorAll('.sys_get').forEach(element => {
 
 function GET_handleClick(event) {
     cleanform()
+    
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
-
+    
+    $("#form").attr("data-method", "put");
+    $("#form").attr("data-id", id);
     console.log(`URL: ${url}, ID: ${id}`);
 
     formData = { id: id, };
@@ -77,6 +80,16 @@ function GET_handleClick(event) {
                         }
                         $('#attendance_date_select2').select2();
                         continue;
+                    }
+
+                    if (key == "carry_equipments") {
+                        console.log("xxxx")
+                        console.log("xxxxget_value = Object.values(get_value);")
+                        get_value = Object.values(get_value);
+                        console.log(get_value)
+                        all_Equipment_checked = get_value;
+                        console.log(all_Equipment_checked)
+                        syncall_Equipment_checkedRowsWithArray();
                     }
 
 
@@ -111,7 +124,7 @@ function GET_handleClick(event) {
                         $(selectname).trigger('change');
                     } else {
                         input.value = jsonData[key];
-                        // console.log("帶資料:" + input.value);
+                        console.log("key "+key+" 帶資料:" + input.value);
                     }
 
                     if (key == "editor_content") { //觸發change事件
@@ -131,8 +144,7 @@ function GET_handleClick(event) {
                 }
             }
 
-            $("#form").attr("data-method", "put");
-            $("#form").attr("data-id", id);
+       
 
 
 
@@ -158,20 +170,25 @@ $("form").on("submit", function (event) {
     var form = $(this);
     var url = form.attr("action");
     var formData = form.serialize();
-    console.log("add form");
+    var method = form.data("method");
+
+    console.log("form data");
+    console.log(formData);
+    console.log(method);
+
 
     form.find(":input").each(function () {
         var inputElement = $(this);
         var inputType = inputElement.attr("type");
         var inputName = inputElement.attr("name");
         // inputType === "file"，inputName === "attachment"
-        if ( (inputType === "file") && (inputElement[0] != undefined)) {
+        if ((inputType === "file") && (inputElement[0] != undefined)) {
             var fileInput = inputElement[0];
             console.log(fileInput)
             var modal = inputElement.data("modal");
             var idValue = form.find('input[name="id"]').val()
             var formData = new FormData();
-            formData.append("uploaded_file", fileInput.files[0]);
+            formData.append(inputName, fileInput.files[0]);
             formData.append("name", inputName);
             formData.append("id", idValue);
             formData.append("modal", modal);
@@ -187,17 +204,15 @@ $("form").on("submit", function (event) {
                 headers: {
                     'X-CSRFToken': csrftoken
                 },
-                success: function(response){
-                    console.log("上傳成功",response)
+                success: function (response) {
+                    console.log("上傳成功", response)
                 },
-                error: function(xhr, status, error){
-                    console.log("上傳失敗",error)
+                error: function (xhr, status, error) {
+                    console.log("上傳失敗", error)
                 }
             })
         }
     });
-
-    var method = form.data("method");
 
 
     $.ajax({

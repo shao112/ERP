@@ -235,8 +235,8 @@ class Project_Employee_Assign(ModifiedModel):
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
-    enterprise_signature = models.ImageField(null=True, blank=True, verbose_name='業主簽名')
-    carry_equipments = models.ManyToManyField('Equipment', related_name='carry_equipment', blank=True, verbose_name='攜帶資產')
+    enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
+    carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     class Meta:
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數

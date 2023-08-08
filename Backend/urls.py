@@ -25,6 +25,7 @@ urlpatterns = [
     path('department',  views.Department_View.as_view(), name="department_api"),
     path('<str:model>/file', views.FileUploadView.as_view(), name='file_upload'),
     path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
+    path('project_employee_assign_update_signature', views.Employee_assign_update_signature.as_view(), name='formuploadfile'),
     path('saveimg', views.IMGUploadView.as_view(), name='saveimg'),
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
     path('employee_assign', views.Job_Assign_View.as_view(), name="employee_assign_api"),

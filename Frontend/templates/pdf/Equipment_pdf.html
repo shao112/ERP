@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   
+    <title>專案派任詳情</title>
+
+    {% load static %}
+
+    <style>
+        /* @import url('https://fonts.cdnfonts.com/css/strong'); */
+        /* @import url('{% static ' fonts/stsong.ttf' %}');
+
+        body {
+            font-family: STSong-FONT;
+            margin: 20px;
+        } */
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            /* 添加表格下方邊界 */
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .signature-box {
+            border: 2px solid black;
+            width: 200px;
+            height: 150px;
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signature-img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+
+<body id="download_pdf">
+
+
+
+    <h1>派任單詳情</h1>
+    <div class="assignment-details">
+        <p>施工日期：{{ project_employee_assign.construction_date }}</p>
+        <p>完工日期：{{ project_employee_assign.completion_date }}</p>
+        <p>完工狀態：{% if project_employee_assign.is_completed %}已完工{% else %}未完工{% endif %}</p>
+        <p>施工地點：{{ project_employee_assign.construction_location }}</p>
+        <p>使用車輛：{{ project_employee_assign.vehicle }}</p>
+
+        <h2>帶班主管</h2>
+        <ul>
+            {% for lead in project_employee_assign.lead_employee.all %}
+            <li>{{ lead.full_name }} (員工編號：{{ lead.employee_id }})</li>
+            {% endfor %}
+        </ul>
+
+        <h2>攜帶資產</h2>
+        <table>
+            <tr>
+                <th>資產標籤</th>
+                <th>序號</th>
+                <th>資產種類別</th>
+                <th>中類</th>
+                <th>品名</th>
+                <th>廠牌/型號</th>
+                <th>製造序號</th>
+            </tr>
+            {% for equipment in project_employee_assign.carry_equipments.all %}
+            <tr>
+                <td>{{ equipment.equipment_id }}</td>
+                <td>{{ equipment.order_id }}</td>
+                <td>{{ equipment.equipment_category }}</td>
+                <td>{{ equipment.equipment_type }}</td>
+                <td>{{ equipment.equipment_name }}</td>
+                <td>{{ equipment.product_model }}</td>
+                <td>{{ equipment.manufacturing_number }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div class="signature-box">
+            {% if project_employee_assign.enterprise_signature %}
+            <img class="signature-img" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 在 DOMContentLoaded 事件中觸發 PDF 匯出
+        // exportToPDF();
+    });
+
+    function exportToPDF() {
+        var modalContent = document.getElementById('download_pdf');
+        console.log(modalContent);
+        window.jsPDF = window.jspdf.jsPDF;
+
+        var doc = new jsPDF();
+    
+        html2canvas(modalContent).then(function (canvas) {
+            // 獲取canvas的圖像數據URL
+            var imgData = canvas.toDataURL('image/png');
+    
+            // 設置PDF的尺寸，這裡使用A4尺寸，也可以自行調整
+            var pdf = new jsPDF('p', 'mm', 'a4');
+    
+            // 添加圖像數據到PDF
+            pdf.addImage(imgData, 'PNG', 0, 0);
+    
+            // 下載PDF文件
+            pdf.save('派工單.pdf');
+        });
+    }
+
+</script>
+
+</html>

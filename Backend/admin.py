@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign, Vehicle
+from .models import Employee,Equipment, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign, Vehicle
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -64,6 +64,7 @@ class VehicleAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
+admin.site.register(Equipment)
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(Project_Employee_Assign)
 admin.site.register(Employee)

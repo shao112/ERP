@@ -3,7 +3,8 @@ from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect
 import json
 from datetime import datetime
 from django.contrib.auth import update_session_auth_hash
-
+import base64
+from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
 from Backend.models import  Equipment, Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
@@ -19,6 +20,8 @@ import openpyxl
 from django.db.utils import IntegrityError
 import random
 import os
+import re
+
 from  django.conf import settings
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -84,7 +87,6 @@ class Equipment_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
 
-      
         form = EquipmentForm(dict_data)
         if form.is_valid():
             Equipment.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
@@ -109,6 +111,7 @@ class Equipment_View(View):
 
         if form.is_valid():
             form.save()
+
             return JsonResponse({"data":"新增成功"},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -141,10 +144,19 @@ class Project_Employee_Assign_View(View):
                 get_Project_Employee_Assign.project_job_assign = project_job_assign_instance
                 del dict_data["project_job_assign"]
 
+            if "carry_equipments" in dict_data:
+                print("cccc")
+                print("cccc")
+                get_carry_equipments = dict_data["carry_equipments"]
+                get_carry_equipments = [int(item) for item in get_carry_equipments]
+                print(get_carry_equipments)
+                del dict_data["carry_equipments"]
+                get_Project_Employee_Assign.lead_employee.set(get_carry_equipments)
+
             if "lead_employee" in dict_data:
                 get_completion_report_employee = dict_data["lead_employee"]
                 del dict_data["lead_employee"]
-                get_Project_Employee_Assign.lead_employee.set(get_completion_report_employee)
+                get_Project_Employee_Assign.carry_equipments.set(get_completion_report_employee)
 
             if "inspector" in dict_data:
                 get_completion_report_employee = dict_data["inspector"]
@@ -175,7 +187,7 @@ class Project_Employee_Assign_View(View):
         form = Project_Employee_AssignForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            # form.save()
             return JsonResponse({"data":"新增成功"},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -189,6 +201,10 @@ class Project_Employee_Assign_View(View):
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
         data["lead_employee"] = convent_employee(data["lead_employee"])
+        carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
+        data["carry_equipments"] = list(carry_equipments_ids)
+        
+
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
         else:
@@ -286,14 +302,37 @@ class FileUploadView(View):
         else:
             return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
 
+
+
+class Employee_assign_update_signature(View):
+   def post(self, request):
+        getid = request.POST.get("id")
+        uploaded_file = request.POST.get("enterprise_signature")
+        print("getid:", getid)
+        if(uploaded_file):
+            model=Project_Employee_Assign.objects.get(id=getid)
+
+            format, imgstr = uploaded_file.split(';base64,') 
+            ext = format.split('/')[-1] 
+            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+            filename = f"signature_{getid}.{ext}"
+            model.enterprise_signature.save(filename,data, save=True)
+            return JsonResponse({'status': 'success'},status=200)
+        else:
+            return JsonResponse({"data":"error"}, status=400,safe=False)
+
+
+
 class FormUploadFileView(View):
    def post(self, request):
         getname = request.POST.get("name")
         getmodal = request.POST.get("modal")
+        getid = request.POST.get("id")
+        uploaded_file = request.FILES.get(getname)
         print("getmodel:", getmodal)
         print("getname:", getname)
-        getid = request.POST.get("id")
-        uploaded_file = request.FILES.get('uploaded_file')
+        print("getid:", getid)
+        print("uploaded_file:", uploaded_file)
         if(uploaded_file):
             match getmodal:
                 case "project_confirmation":
@@ -314,7 +353,9 @@ class FormUploadFileView(View):
             original_filename = os.path.splitext(uploaded_file.name)[0]
             new_file_name = f"{date_time_string}_{get_valid_filename(original_filename)}{file_extension}"
             
-            model.attachment.save(new_file_name, uploaded_file)
+            # model.attachment.save(new_file_name, uploaded_file)
+            setattr(model, getname, uploaded_file)
+            model.save()
             return JsonResponse({'status': 'success'},status=200)
         else:
             return JsonResponse({"data":"error"}, status=400,safe=False)
