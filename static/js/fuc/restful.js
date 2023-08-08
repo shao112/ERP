@@ -64,6 +64,7 @@ function GET_handleClick(event) {
         success: function (response) {
 
             jsonData = response.data
+          
             for (var key in jsonData) {
                 var input = document.getElementsByName(key)[0];
                 if (input) {
@@ -83,12 +84,9 @@ function GET_handleClick(event) {
                     }
 
                     if (key == "carry_equipments") {
-                        console.log("xxxx")
                         console.log("xxxxget_value = Object.values(get_value);")
                         get_value = Object.values(get_value);
-                        console.log(get_value)
                         all_Equipment_checked = get_value;
-                        console.log(all_Equipment_checked)
                         syncall_Equipment_checkedRowsWithArray();
                     }
 
