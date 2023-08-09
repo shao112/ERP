@@ -22,6 +22,9 @@ from django.db.models import Q
 def custom_403(request, exception):
     return render(request, 'httpstatus/403.html', status=403)
 
+def custom_404(request, exception):
+    return render(request, 'httpstatus/404.html', status=404)
+
 
 def testpdf1(request):  
     import pdfkit

@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-8su&88t&mwf&_r25(qxnmnw8os58s=&7usp4ny47b*%%r(o+%l
 DEBUG = True
 
 #方便測試URL
-PASS_TEST_FUNC=True
+PASS_TEST_FUNC=False
+# PASS_TEST_FUNC=True
 
 ALLOWED_HOSTS = ["*"]
 

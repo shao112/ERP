@@ -43,4 +43,8 @@ urlpatterns = [
     path('accounts/logout/', views.signout, name='logout'),
 ]
 
-handler403 = 'Frontend.views.custom_403'
+from Frontend.views import custom_403,custom_404
+
+# handler403 =custom_403
+# handler404 =custom_403
+# handler404 = 'Frontend.views.custom_403'
