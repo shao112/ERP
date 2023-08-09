@@ -18,7 +18,7 @@ from . import views
 from django.contrib.auth.decorators import login_required, permission_required
 
 
-handler403 = views.custom_permission_denied
+
 
 
 urlpatterns = [
@@ -42,3 +42,5 @@ urlpatterns = [
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('accounts/logout/', views.signout, name='logout'),
 ]
+
+handler403 = 'Frontend.views.custom_403'

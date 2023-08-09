@@ -365,7 +365,7 @@ class Groups_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
         group = Group.objects.get(id=dict_data['id'])
-        user_ids= dict_data["user_set"]
+        user_ids= dict_data.get("user_set",[])
         users = User.objects.filter(id__in=user_ids)
         group.user_set.set(users)
         return JsonResponse({'data': "修改成功"},status=200)

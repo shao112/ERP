@@ -17,9 +17,9 @@ from django.views.defaults import permission_denied
 from Backend.utils import convent_employee,get_weekly_clock_data
 from django.db.models import Q
 
-def custom_permission_denied(request, exception=None,template_name='403.html'):
-    return permission_denied(request, exception, template_name='403.html')
 
+def custom_403(request, exception):
+    return render(request, 'httpstatus/403.html', status=403)
 
 
 def testpdf1(request):  
@@ -205,12 +205,12 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        return self.request.user.groups.filter(name='工程部總管理').exists()    
+        return self.request.user.groups.filter(name__icontains='工程確認單').exists()    
     
 
 
 # 工作派任計畫
-class Job_Assign_ListView(ListView):
+class Job_Assign_ListView(UserPassesTestMixin,ListView):
     model = Project_Job_Assign
     template_name = 'job_assign/job_assign.html'
     context_object_name = 'job_assign'
@@ -221,8 +221,11 @@ class Job_Assign_ListView(ListView):
         context['vehicle'] = Vehicle.objects.all()
         return context
 
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='工程派任計畫').exists()    
+
 # 派工單
-class Employee_Assign_ListView(ListView):
+class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     model = Project_Employee_Assign
     template_name = 'employee_assign/employee_assign.html'
     context_object_name = 'Project_Employee_Assign'
@@ -233,11 +236,13 @@ class Employee_Assign_ListView(ListView):
         context["all_Equipment"] = Equipment.objects.all()
         return context
 
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='工程派工單').exists()    
 
     
 
 # 員工
-class Employee_list(ListView):
+class Employee_list(UserPassesTestMixin,ListView):
     model = Employee
     template_name = 'employee/employee.html'
     context_object_name = 'employee'
@@ -247,9 +252,12 @@ class Employee_list(ListView):
         context["department_list"] = Department.objects.values('id','department_name')
         context['employee_form'] = EmployeeForm()
         return context
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+
 
 # 員工出勤
-class Employee_Attendance_list(ListView):
+class Employee_Attendance_list(UserPassesTestMixin,ListView):
     model = Employee
     template_name = 'employee_attendance/employee_attendance.html'
     context_object_name = 'employees'
@@ -258,32 +266,46 @@ class Employee_Attendance_list(ListView):
         context = super().get_context_data(**kwargs)
         context["departments"] = Department.objects.all()
         return context
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+
 
 # 固定資產管理
-class Equipment_ListView(ListView):
+class Equipment_ListView(UserPassesTestMixin,ListView):
     model = Equipment
     template_name = 'equipment/equipment.html'
     context_object_name = 'equipment'
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
 
     
 
 
 from django.contrib.auth.models import Group
 # 員工權限
-class Employee_Permission_list(ListView):
+class Employee_Permission_list(UserPassesTestMixin,ListView):
     model = Employee
     template_name = 'employee_permission/employee_permission.html'
     context_object_name = 'employees'
     def get_context_data(self, **kwargs):
-        Groups = Group.objects.all()
+        groups = Group.objects.all()
+        supervisor_group = groups.filter(name='主管')
+        approval_group = groups.filter(name='簽核權')
+        other_groups = groups.exclude(name__in=['主管', '簽核權']).order_by('name')
+        
+        sorted_groups = list(supervisor_group) + list(approval_group) + list(other_groups)
+       
+        Groups = Group.objects.all().order_by('name')
         context = super().get_context_data(**kwargs)
         context["employees_list"] =  Employee.objects.values('user__id','user__username')
-        context['groups'] = Groups
+        context['groups'] = sorted_groups
         return context
-    
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='管理部權限管理').exists()    
 
 
-class Department_list(ListView):
+
+class Department_list(UserPassesTestMixin,ListView):
     model = Department
     template_name = 'department/department.html'
     context_object_name = 'department'
@@ -293,12 +315,10 @@ class Department_list(ListView):
            
         }
         return render(request, 'department/department.html', context)
-    
-    # CBV 要取得物件好像要使用 ListView，ListView 就不判斷 get、post，加上 get 會影響吃不到上面寫的 model
-    # def get(self,request):
-    #     context = {
-    #     }
-    #     return render(request, 'department/department.html', context)
+    def test_func(self):
+        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+
+
 
 # 基本資料(無法使用別人的id)
 class Profile(DeleteView):
@@ -309,6 +329,7 @@ class Profile(DeleteView):
         # 從request.user中獲取當前用戶的id，然後返回相應的User物件
         return self.request.user
 
+
 # 最新消息
 class News_ListView(ListView):
     model = News
@@ -318,8 +339,13 @@ class News_ListView(ListView):
         context = super().get_context_data(**kwargs)
         context['news_form'] = NewsForm()
         return context
-# 最新消息
-class Calendar(ListView):
+
+# 行事曆
+class Calendar(UserPassesTestMixin,ListView):
     model = Employee
     template_name = 'calendar/calendar.html'
     context_object_name = 'employee'
+
+    def test_func(self):
+        return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+    
