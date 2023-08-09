@@ -24,10 +24,6 @@
                     </select>
                 </div>
                 <div class="col-6 col-md-2">
-                    <label for="employee_id_control">員工編號</label>
-                    <input class="form-control form-control-sm" name="employee_id" id="employee_id_control"></input>
-                </div>
-                <div class="col-6 col-md-2">
                     <label for="clock_time_date_control">日期</label>
                     <input type="date" class="form-control form-control-sm" name="clock_time_date" id="clock_time_date_control"></input>
                 </div>
@@ -56,17 +52,66 @@
 
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var scripts = [
-            "{% static 'js/fuc/restful.js' %}",
-        ];
+    
+    $("form").on("submit", function (event) {
+        event.preventDefault();
+        var form = $(this);
+        var formData = form.serialize();
+        console.log("formData: "+formData)
+        $.ajax({
+            type: "get",
+            url: "{% url 'employee_attendance_api' %}",
+            data: formData,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (response) {
+                document.querySelector("tbody").innerHTML = ""; // 清除 tr
+                jsonData = response.data // jsonData 為陣列
+                // alert("操作成功");
+                // 第一個迴圈遍歷Employee建tr，第二個遍歷要的資料建td
+                for (let i = 0; i < jsonData.length; i++) {
+                    const tr = document.createElement("tr");
+                    console.log("jsonData[i]: " + jsonData[i])
+                    for (const key in jsonData[i]) {
+                        console.log(key)
+                        const td = document.createElement("td");
+                        console.log("jsonData[i].key: "+ jsonData[i][key])
+                        td.innerText = jsonData[i][key];
+                        tr.appendChild(td);
+                    }
+                    document.querySelector("tbody").appendChild(tr);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (xhr.status === 400) {
+                    // 處理400錯誤，顯示伺服器返回的錯誤訊息
+                    var errorMessage = xhr.responseJSON.data;
+                    console.log(errorMessage)
+                    console.log(errorMessage[0])
+                    var errorMessageHTML = "<ul>";
+                    Object.entries(errorMessage).map(([key, errors]) => {
+                        errors.forEach(error => {
+                            errorMessageHTML += "<li><strong>" + key + ":</strong> " + error + "</li>";
+                        });
+                    });
+                    errorMessageHTML += "</ul>";
+                    console.log(errorMessageHTML)
 
-        scripts.forEach(function (src) {
-            var script = document.createElement('script');
-            script.src = src;
-            document.body.appendChild(script);
+
+                    Swal.fire({
+                        title: '更新失敗',
+                        html: errorMessageHTML,
+                        icon: 'error',
+                        confirmButtonText: '確定',
+                    })
+                } else {
+                    // 其他錯誤處理
+                    alert("系統發生錯誤");
+                }
+            }
         });
-    });
 
+    });
 </script>
 {% endblock %}

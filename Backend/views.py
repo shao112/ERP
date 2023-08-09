@@ -482,18 +482,23 @@ class Employee_View(View):
 class Employee_Attendance_View(View):
     def get(self,request):
         department = request.GET.get('department') # 回傳department的id
-        employee_id = request.GET.get('employee_id')
         clock_time_date = request.GET.get('clock_time_date')
-
+# &Employee.objects.filter(employee_id__contains=[employee_id])
         employees = Employee.objects.filter(departments__in=[department])
+        if clock_time_date:
+            print(clock_time_date)
+            print(employee.clock.all())
+            # T是簽到F是簽退
+            # clock_time_date = employee.clock.filter(created_date__in=[clock_time_date])
         data = []
         for employee in employees:
             print(employee.full_name)
+            
             data.append({
                 'department': employee.departments.department_name,
-                'employee_id': employee.departments.department_name,
-                'full_name': employee.departments.department_name,
-                'clock_time_date': employee.departments.department_name,
+                'employee_id': employee.employee_id,
+                'full_name': employee.full_name,
+                'clock_time_date': clock_time_date,
             })
         
 

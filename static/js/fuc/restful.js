@@ -197,13 +197,6 @@ $("form").on("submit", function (event) {
             showSwal('操作說明', jsonData, 'success', false).then(() => {
                 // location.reload();
             })
-            // 處理出勤篩選頁面，第一個迴圈遍歷Employee建tr，第二個遍歷要得資料建td
-            for (const key in jsonData) {
-                const tr = document.createElement("tr");
-                const td = document.createElement("td");
-                td.innerText = jsonData[key];
-                document.querySelector("tbody").appendChild(td);
-            }
         },
         error: function (xhr, textStatus, errorThrown) {
             if (xhr.status === 400) {
