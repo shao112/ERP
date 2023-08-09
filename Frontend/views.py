@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
-from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle
+from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView
 
 
@@ -200,6 +200,8 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         
         context = super().get_context_data(**kwargs)
         context["employees_list"] = Employee.objects.values('id','user__username')
+        context['client_list'] = Client.objects.all()
+        context['requisition_list'] = Requisition.objects.all()
         return context
 
     def test_func(self):

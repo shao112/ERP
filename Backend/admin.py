@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee,Equipment, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign, Vehicle
+from .models import Employee,Equipment, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -59,6 +59,12 @@ class NewsAdmin(admin.ModelAdmin):
 # 車輛
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ('vehicle_id', 'vehicle_type', 'created_date', 'update_date')
+# 客戶
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('client_name', 'created_date', 'update_date')
+# 請購單位
+class RequisitionAdmin(admin.ModelAdmin):
+    list_display = ('requisition_name', 'created_date', 'update_date')
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
@@ -73,3 +79,5 @@ admin.site.register(Project_Confirmation, ProjectConfirmationAdmin)
 # admin.site.register(Data_Management, admin.ModelAdmin)
 admin.site.register(Project_Job_Assign, ProjectJobAssignAdmin)
 admin.site.register(Clock, ClockAdmin)
+admin.site.register(Client, ClientAdmin)
+admin.site.register(Requisition, RequisitionAdmin)

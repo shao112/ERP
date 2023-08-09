@@ -196,7 +196,7 @@ class Project_Confirmation(ModifiedModel):
 
 # 工作派任計畫
 class Project_Job_Assign(ModifiedModel):
-    # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱、請購單位）
+    # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
     job_assign_id = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
     attendance_date =models.JSONField(null=True, blank=True, verbose_name="出勤日期")
@@ -336,4 +336,18 @@ class Vehicle(ModifiedModel):
 
     class Meta:
         verbose_name = "車輛"
+        verbose_name_plural = verbose_name
+# 客戶
+class Client(ModifiedModel):
+    client_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶簡稱")
+
+    class Meta:
+        verbose_name = "客戶簡稱"
+        verbose_name_plural = verbose_name
+# 請購單位
+class Requisition(ModifiedModel):
+    requisition_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="請購單位")
+
+    class Meta:
+        verbose_name = "請購單位"
         verbose_name_plural = verbose_name

@@ -74,8 +74,12 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="client_control">客戶簡稱</label>
-                                                <input class="form-control form-control-sm" name="client"
-                                                    id="client_control"></input>
+                                                <select class="form-control form-control-sm" name="client" id="client_control">
+                                                    <option value="">請選擇客戶簡稱</option>
+                                                    {% for client in client_list %}
+                                                    <option value="{{ client.client_name }}">{{ client.client_name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -90,8 +94,12 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label for="requisition_control">請購單位</label>
-                                                <input class="form-control form-control-sm" name="requisition"
-                                                    id="requisition_control"></input>
+                                                <select class="form-control form-control-sm" name="requisition" id="requisition_control">
+                                                    <option value="">請選擇請購單位</option>
+                                                    {% for requisition in requisition_list %}
+                                                    <option value="{{ requisition.requisition_name }}">{{ requisition.requisition_name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-6">
