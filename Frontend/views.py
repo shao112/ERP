@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView
+from django.conf import settings
 
 
 from django.contrib.auth.models import AnonymousUser
@@ -205,6 +206,8 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='工程確認單').exists()    
     
 
@@ -222,6 +225,8 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='工程派任計畫').exists()    
 
 # 派工單
@@ -237,6 +242,8 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='工程派工單').exists()    
 
     
@@ -253,6 +260,8 @@ class Employee_list(UserPassesTestMixin,ListView):
         context['employee_form'] = EmployeeForm()
         return context
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
 
 
@@ -267,6 +276,8 @@ class Employee_Attendance_list(UserPassesTestMixin,ListView):
         context["departments"] = Department.objects.all()
         return context
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
 
 
@@ -276,6 +287,8 @@ class Equipment_ListView(UserPassesTestMixin,ListView):
     template_name = 'equipment/equipment.html'
     context_object_name = 'equipment'
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
 
     
@@ -301,6 +314,8 @@ class Employee_Permission_list(UserPassesTestMixin,ListView):
         context['groups'] = sorted_groups
         return context
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='管理部權限管理').exists()    
 
 
@@ -316,6 +331,8 @@ class Department_list(UserPassesTestMixin,ListView):
         }
         return render(request, 'department/department.html', context)
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
 
 
@@ -347,5 +364,7 @@ class Calendar(UserPassesTestMixin,ListView):
     context_object_name = 'employee'
 
     def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
         return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
     
