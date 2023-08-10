@@ -29,6 +29,7 @@
                 </div>
                 <div class="col-6 col-md-2" style="margin-top: 30px;">
                     <button type="submit">送出</button>
+                    <span class="ml-2 ml-md-4" id="Data_Not_Found" style="display: none;">查無資料</span>
                 </div>
             </div>
         </form>
@@ -37,6 +38,7 @@
         <table class="table table-sm table-hover">
             <thead>
                 <tr class="text-nowrap">
+                    <th>日期</th>
                     <th>部門</th>
                     <th>編號</th>
                     <th>員工</th>
@@ -68,20 +70,34 @@
             success: function (response) {
                 document.querySelector("tbody").innerHTML = ""; // 清除 tr
                 jsonData = response.data // jsonData 為陣列
-                // alert("操作成功");
                 // 第一個迴圈遍歷Employee建tr，第二個遍歷要的資料建td
-                for (let i = 0; i < jsonData.length; i++) {
-                    const tr = document.createElement("tr");
-                    console.log("jsonData[i]: " + jsonData[i])
-                    for (const key in jsonData[i]) {
-                        console.log(key)
-                        const td = document.createElement("td");
-                        console.log("jsonData[i].key: "+ jsonData[i][key])
-                        td.innerText = jsonData[i][key];
-                        tr.appendChild(td);
+                if(jsonData[0]){
+                    for (let i = 0; i < jsonData.length; i++) {
+                        const tr = document.createElement("tr");
+                        // console.log("jsonData[i]: " + jsonData[i])
+                        for (const key in jsonData[i]) {
+                            // console.log(key)
+                            const td = document.createElement("td");
+                            if(key === "clock_GPS"){
+                                const link = document.createElement("a");
+                                link.href = "https://www.google.com/maps?q=" + jsonData[i][key] + "&hl=zh-TW&label=Custom%20Marker";
+                                link.innerText = "地圖";
+                                link.target = "_blank";
+                                td.appendChild(link);
+                            }else{
+                                td.innerText = jsonData[i][key];
+                                // console.log("jsonData[i].key: "+ jsonData[i][key])
+                            }
+                            tr.appendChild(td);
+                        }
+                        document.querySelector("tbody").appendChild(tr);
                     }
-                    document.querySelector("tbody").appendChild(tr);
+                }else{
+                    console.log(jsonData)
+                    console.log("data not found")
+                    document.querySelector("#Data_Not_Found").style = "display:inline-block;"
                 }
+                
             },
             error: function (xhr, textStatus, errorThrown) {
                 if (xhr.status === 400) {

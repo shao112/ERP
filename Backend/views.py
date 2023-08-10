@@ -485,21 +485,24 @@ class Employee_Attendance_View(View):
         clock_time_date = request.GET.get('clock_time_date')
 # &Employee.objects.filter(employee_id__contains=[employee_id])
         employees = Employee.objects.filter(departments__in=[department])
-        if clock_time_date:
-            print(clock_time_date)
-            print("employee.clock.all(): ",employee.clock.all())
+        # if clock_time_date:
+        #     print(clock_time_date)
             # T是簽到F是簽退
             # clock_time_date = employee.clock.filter(created_date__in=[clock_time_date])
         data = []
         for employee in employees:
-            print(employee.full_name)
-            
-            data.append({
-                'department': employee.departments.department_name,
-                'employee_id': employee.employee_id,
-                'full_name': employee.full_name,
-                'clock_time_date': clock_time_date,
-            })
+            # print(employee.full_name)
+            for clock in employee.clock.all():
+                # print("employee.clock.all(): ",clock.created_date)
+                data.append({
+                    'clock_date':clock.created_date,
+                    'department': employee.departments.department_name,
+                    'employee_id': employee.employee_id,
+                    'full_name': employee.full_name,
+                    'clock_in': clock.clock_time,
+                    'clock_out': clock.clock_time,
+                    'clock_GPS': clock.clock_GPS,
+                })
         
 
         return JsonResponse({"data":data}, status=200,safe = False)
