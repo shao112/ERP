@@ -28,7 +28,7 @@ DEBUG = True
 # DEBUG = False
 
 #方便測試URL
-PASS_TEST_FUNC=False
+PASS_TEST_FUNC=True
 # PASS_TEST_FUNC=True
 
 ALLOWED_HOSTS = ["*"]
