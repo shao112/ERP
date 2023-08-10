@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse
 import json
-from datetime import datetime
+import datetime
 from django.contrib.auth import update_session_auth_hash
 import base64
 from django.core.files.base import ContentFile
@@ -487,7 +487,7 @@ class Employee_Attendance_View(View):
         employees = Employee.objects.filter(departments__in=[department])
         if clock_time_date:
             print(clock_time_date)
-            print(employee.clock.all())
+            print("employee.clock.all(): ",employee.clock.all())
             # T是簽到F是簽退
             # clock_time_date = employee.clock.filter(created_date__in=[clock_time_date])
         data = []
