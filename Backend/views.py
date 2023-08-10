@@ -482,24 +482,26 @@ class Employee_View(View):
 class Employee_Attendance_View(View):
     def get(self,request):
         department = request.GET.get('department') # 回傳department的id
+        full_name = request.GET.get('full_name')
+        clock_inout = request.GET.get('clock_inout')
         clock_time_date = request.GET.get('clock_time_date')
-# &Employee.objects.filter(employee_id__contains=[employee_id])
-        employees = Employee.objects.filter(departments__in=[department])
+        # 篩選部門以及名稱有包含
+        employees = Employee.objects.filter(departments__in=[department]).filter(full_name__icontains=full_name)
         # if clock_time_date:
         #     print(clock_time_date)
             # T是簽到F是簽退
             # clock_time_date = employee.clock.filter(created_date__in=[clock_time_date])
         data = []
         for employee in employees:
-            # print(employee.full_name)
-            for clock in employee.clock.all():
-                # print("employee.clock.all(): ",clock.created_date)
+            print(employee.full_name)
+            # 篩選簽到還是簽退以及有無包含過來的日期
+            for clock in employee.clock.filter(clock_in_or_out__in=[clock_inout]).filter(created_date__icontains=clock_time_date):
                 data.append({
                     'clock_date':clock.created_date,
                     'department': employee.departments.department_name,
                     'employee_id': employee.employee_id,
                     'full_name': employee.full_name,
-                    'clock_in': clock.clock_time,
+                    'clock_inout': clock_inout,
                     'clock_out': clock.clock_time,
                     'clock_GPS': clock.clock_GPS,
                 })
