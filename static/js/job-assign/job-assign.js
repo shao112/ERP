@@ -15,11 +15,6 @@ function getcsrftoken() {
 }
 
 
-$("#attendance_date_select2").select2({
-    tags: true,
-    tokenSeparators: [',', ' ']
-})
-
 
 
 

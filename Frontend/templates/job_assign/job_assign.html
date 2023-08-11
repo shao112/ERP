@@ -157,10 +157,10 @@
                                     <div class="form-row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="xdda">出勤日期<br>(請使用yyyymmdd格式新增)</label>
-                                                <select  data-placeholder="出勤日期" name="attendance_date"
-                                                    id="attendance_date_select2" multiple>
-                                                </select>
+                                                <label for="attendance_date">出勤日期</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                name="attendance_date"
+                                                id="attendance_date"/>
                                             </div>
                                         </div>
                                     </div>
@@ -243,9 +243,7 @@
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
                         <td>
-                            {% for date in j.attendance_date %}
-                            {{date}}
-                            {% endfor %}
+                            {{ j.attendance_date }}
                         </td>
                         <td>
                             {% for employees_list in j.work_employee.all %}

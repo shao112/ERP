@@ -70,19 +70,6 @@ function GET_handleClick(event) {
                 if (input) {
                     let get_value = jsonData[key];
 
-                    if (key == "attendance_date") {
-                        if (jsonData[key] == null) {
-                            continue;
-                        }
-                        for (var i = 0; i < get_value.length; i++) {
-                            var dateStr = get_value[i];
-                            var option = new Option(dateStr, dateStr, true, true);
-                            input.appendChild(option);
-                        }
-                        $('#attendance_date_select2').select2();
-                        continue;
-                    }
-
                     if (key == "carry_equipments") {
                         console.log("xxxxget_value = Object.values(get_value);")
                         get_value = Object.values(get_value);
