@@ -304,6 +304,7 @@ class Equipment(ModifiedModel):
     normal_or_abnormal = models.CharField(max_length=100,blank=True, null=True, verbose_name="正常/異常")
     abnormal_description = models.CharField(max_length=100,blank=True, null=True, verbose_name="異常說明")
     abnormal_img = models.ImageField(upload_to='equipment_abnormal_img/', blank=True, null=True, verbose_name="異常照片")
+    buy_img = models.ImageField(upload_to='buy_img/', blank=True, null=True, verbose_name="買進照片")
     inventory = models.CharField(max_length=100, blank=True, null=True, verbose_name="盤點")
     produced_stickers = models.BooleanField(blank=True, default=True, verbose_name="需補產編貼紙")
     transmitter = models.CharField(max_length=1, choices=TRANSMITTER_SIZE, blank=True, null=True, verbose_name="發報器大小")

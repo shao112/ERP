@@ -166,10 +166,18 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label>
-                                                    <input id="abnormal_img" type="file" name="abnormal_img" style="display: none;">
-                                                    點此上傳異常照片
-                                                </label>
+                                                <label>點此上傳異常照片</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input"  data-modal="Equipment"
+                                                        name="abnormal_img" id="reassignment_attachment_control">
+                                                    <label class="custom-file-label" for="abnormal_img">Choose file</label>
+                                                </div>
+                                                <label>點此上傳買進照片</label>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input"  data-modal="Equipment"
+                                                        name="buy_img" id="reassignment_buy_img_control">
+                                                    <label class="custom-file-label" for="buy_img">Choose file</label>
+                                                </div>
                                             </div>
                                             
                                         </div>
@@ -389,10 +397,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var script = document.createElement('script');
-        script.src = "{% static 'js/fuc/restful.js' %}";
-        document.body.appendChild(script);
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
     });
+
 
 </script>
 

@@ -123,10 +123,8 @@ class Equipment_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Equipment, id=id)
         data = model_to_dict(data)
-        if  data['abnormal_img']:
-            data['abnormal_img'] = data['abnormal_img'].url
-        else:
-            data['abnormal_img'] = None
+        data['abnormal_img'] = data['abnormal_img'].url if data['abnormal_img']   else ''
+        data['buy_img'] = data['buy_img'].url if data['buy_img']  else ''
         print("dict_data")
         print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
@@ -343,17 +341,11 @@ class FormUploadFileView(View):
                     model=Project_Employee_Assign.objects.get(id=getid)
                 case "news":
                     model=News.objects.get(id=getid)
+                case "Equipment":
+                    model=Equipment.objects.get(id=getid)
                 case _:
-                    return "error"
+                    return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
-            # convert_model_instance = convert_model.objects.get(id=getid)
-            now = datetime.now()
-            date_time_string = now.strftime("%Y%m%d_%H%M%S")
-            file_extension = os.path.splitext(uploaded_file.name)[1]
-            original_filename = os.path.splitext(uploaded_file.name)[0]
-            new_file_name = f"{date_time_string}_{get_valid_filename(original_filename)}{file_extension}"
-            
-            # model.attachment.save(new_file_name, uploaded_file)
             setattr(model, getname, uploaded_file)
             model.save()
             return JsonResponse({'status': 'success'},status=200)
