@@ -659,12 +659,13 @@ class Calendar_View(View):
         related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
         data = []
         for project in related_projects:
+            if project.attendance_date is None:
+                continue
             print(project.attendance_date)
             data.append({
                 'title': project.project_confirmation.project_confirmation_id,
-                'start': project.attendance_date[0],
+                'start': project.attendance_date,
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),
-                'end': project.attendance_date[-1],
             })
         return JsonResponse(data, status=200,safe = False)
 

@@ -21,6 +21,7 @@
             <div class="col-12 col-md-4 border p-4 p-md-2">
                 <h5 class="font-weight-bold">點擊行程 顯示詳細內容</h5>
                 <div id="calendar-title"></div>
+                <div id="calendar-date"></div>
                 <div id="calendar-location"></div>
           </div>
         </div>
@@ -51,8 +52,11 @@
             },
             eventClick: function(info) {
                 var title = info.event.title
+                var date = moment(info.event.start).format('YYYY-MM-DD')
                 console.log(info.event.start)
+                console.log(date)
                 document.getElementById('calendar-title').innerHTML = title;
+                document.getElementById('calendar-date').innerHTML = "日期: " + date;
             },
         });
         calendar.render();

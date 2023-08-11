@@ -6,11 +6,12 @@ register = template.Library()
 @register.filter(name='highlight_date')
 def highlight_date(date_str):
     try:
+        print(date_str)
         date_obj = datetime.strptime(date_str, '%Y%m%d')
         today_date = datetime.now().date()
         
         # 如果日期是今天，则返回带有红色样式的 <p> 元素
-        if date_obj.date() == today_date:
+        if date_obj.date()  == today_date:
             return f'<p style="color: red;">{date_str}</p>'
         else:
             return f'<p>{date_str}</p>'
