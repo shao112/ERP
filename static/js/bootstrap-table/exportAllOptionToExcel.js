@@ -19,11 +19,17 @@ function exportAllOptionToExcel(fileName) {
     });
     // console.log("篩選過欄位的所有值: " + JSON.stringify(filteredData))
 
+    // 把表頭存起來，排除掉有 data-no-print 屬性的
     var tableData = [];
     var rows = document.getElementById("table").rows;
     var headers = [];
-    for (var i = 3; i < rows[0].cells.length; i++) {
-        headers.push(rows[0].cells[i].innerText);
+    for (var i = 0; i < rows[0].cells.length; i++) {
+        // console.log("rows[0].cells[i]: "+rows[0].cells[i].getAttribute("data-no-print"))
+        // headers.push(rows[0].cells[i].innerText);
+        var cell = rows[0].cells[i];
+        if (!cell.getAttribute("data-no-print")) {
+            headers.push(cell.innerText);
+        }
     }
     // 3. 重新包裝 JSON 數據，透過 headers 將英文欄位名稱轉換為中文欄位名稱
     var translatedData = filteredData.map(function(row) {
