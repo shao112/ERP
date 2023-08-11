@@ -12,6 +12,8 @@
 
 
 {% block main %}
+{% load custom_tags %}
+
 <div class="main px-3">
     <div id="error-message"></div>
     <div class="job_assign modal fade" id="job_assign-modal" tabindex="-1" aria-labelledby="job_assign"
@@ -50,8 +52,8 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label for="job_assign_id_control">工派單編號</label>
-                                                <input class="form-control form-control-sm" name="job_assign_id" id="job_assign_id_control"></input>
+                                                <label for="job_assign_id_control">工派單編號(系統產生)</label>
+                                                <input class="form-control form-control-sm" name="job_assign_id" readonly id="job_assign_id_control"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -214,6 +216,7 @@
                         <th data-force-hide="true" data-switchable="false" data-field="ja_edit">編輯</th>
                         <th data-force-hide="true" data-switchable="false" data-field="ja_delete">刪除</th>
                         <th data-sortable="true" data-filter-control="input" data-field="ja_job_assign_id">工確單編號</th>
+                        <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
                         <th data-sortable="true" data-field="ja_project_name">工程名稱</th>
                         <th data-sortable="true" data-field="ja_c_a">母案編號</th>
                         <th data-sortable="true" data-field="ja_attendance_date">出勤日期</th>
@@ -240,6 +243,9 @@
                                 class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
                         </td>
                         <td>{{ j.project_confirmation.project_confirmation_id }}</td>
+                        <td>
+                            公派-{{ j.id|format_with_zeros:5 }}
+                        </td>
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
                         <td>

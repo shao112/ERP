@@ -91,10 +91,8 @@ function GET_handleClick(event) {
                             const option_id = option.value;
 
                             var containsValue = false;
-                            // = get_value.find(item => item == option_id);
                             console.log(typeof (get_value[0]))
                             if (typeof (get_value[0]) == "object") {
-
                                 containsValue = get_value.find(item => item.id == option_id);
                             } else {
                                 containsValue = get_value.find(item => item == option_id);

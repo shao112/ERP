@@ -17,3 +17,8 @@ def highlight_date(date_str):
     except ValueError:
         # 如果日期字符串格式不正确，返回原始字符串
         return date_str
+    
+
+@register.filter
+def format_with_zeros(value, width):
+    return str(value).zfill(width)

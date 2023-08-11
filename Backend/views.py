@@ -631,6 +631,7 @@ class Job_Assign_View(View):
         data["work_employee"] = convent_employee(data["work_employee"])
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
+        data['job_assign_id'] = "公派-" +str(data["id"]).zfill(5)
 
         if  "attachment" in data:
             if  data['attachment']:
