@@ -236,7 +236,6 @@ class Project_Employee_Assign(ModifiedModel):
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     construction_location = models.CharField(max_length=100,null=True, blank=True, verbose_name='施工地點')
     inspector = models.ManyToManyField('Employee', related_name='employee_assign_work_employee', blank=True, verbose_name='檢測人員')
-    vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
