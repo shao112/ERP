@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
 from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
 
@@ -20,87 +20,12 @@ from django.db.models import Q
 
 
 
-def testpdf1(request):  
-    import pdfkit
-    from django.http import HttpResponse
+class Project_employee_assign_View(DetailView):
+    model = Project_Employee_Assign
+    template_name = 'pdf/Equipment_pdf.html'
+    context_object_name = 'project_employee_assign'
+    pk_url_kwarg = 'id'  # This is where the 'id' parameter is mapped
 
-
-
-    url = "http://localhost:8000/watch"  # Replace with the actual URL
-    pdf_file_path = "output.pdf"
-
-    # Generate PDF from the URL
-    # pdfkit.from_string('Thanks for reading!', 'out3.pdf')
-    # pdf = HTML(url).write_pdf()
-    # print("xxxx")
-    # from pyhtml2pdf import converter
-    # converter.convert("https://en.wikipedia.org/wiki/Elon_Musk", pdf_file_path)
-    import pdfkit 
-    pdfkit.from_url('https://www.google.com/',pdf_file_path) 
-    print("xxxx")
-    print("xxxx")
-
-    with open(pdf_file_path, 'rb') as pdf_file:
-        response = HttpResponse(pdf_file.read(), content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="output.pdf"'
-
-    return response    
-
-def testpdf(request):
-
-    def fetch_resources(uri, rel):
-        from django.conf import settings
-        path = settings.BASE_DIR + uri
-        return path
-    
-    def link_callback(uri):
-        from django.conf import settings
-        import os
-        if uri.startswith(settings.MEDIA_URL):
-            path = os.path.join(settings.MEDIA_ROOT,
-                                uri.replace(settings.MEDIA_URL, ""))
-        elif uri.startswith(settings.STATIC_URL):
-            path = os.path.join(settings.STATIC_ROOT,
-                                uri.replace(settings.STATIC_URL, ""))
-        else:
-            return uri
-
-        # 确保本地文件存在
-        if not os.path.isfile(path):
-            raise Exception(
-                "Media URI 必须以以下格式开头"
-                f"'{settings.MEDIA_URL}' or '{settings.STATIC_URL}'")
-
-        return path
-    
-        # from xhtml2pdf import pisa
-
-    def generate_pdf(project_employee_assign_id):
-        from django.template.loader import get_template,render_to_string
-        from django.http import HttpResponse
-        from io import BytesIO  # 導入 BytesIO 類別
-        from xhtml2pdf import pisa
-
-        project_employee_assign = Project_Employee_Assign.objects.get(pk=project_employee_assign_id)
-        template_path = 'pdf/Equipment_pdf.html' 
-        context = {'project_employee_assign': project_employee_assign}
-
-
-        pdf_buffer = BytesIO()
-        htmltemplate = render_to_string(template_path,context)
-        pdf = pisa.CreatePDF(htmltemplate, pdf_buffer,link_callback=fetch_resources, encoding='utf-8')
-
-
-        response = HttpResponse(pdf_buffer.getvalue(), content_type='application/pdf')
-        response['Content-Disposition'] = f'attachment; filename="project_assignment_{project_employee_assign_id}.pdf"'
-        return response
-
-    # return generate_pdf(3)
-    project_employee_assign = Project_Employee_Assign.objects.get(id=2)
-    context={
-        "project_employee_assign":project_employee_assign,
-    }
-    return render(request, 'pdf/Equipment_pdf.html',context)    
 
 # 首頁
 class Director_Index(View):

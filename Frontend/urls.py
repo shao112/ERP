@@ -23,10 +23,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
-# pdf
-    path('watch', views.testpdf, name="ixxndexx"),
-    path('watch11', views.testpdf1, name="ixxndexx"),
-# pdf
+
+    path('project_employee_assign_View/<int:id>/', views.Project_employee_assign_View.as_view(), name='project_employee_assign_View'),
 
     path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),
