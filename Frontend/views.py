@@ -87,15 +87,12 @@ class Index(View):
             grouped_projects = {}
             for project in related_projects:
                 if project.attendance_date:
-                    for date_str in project.attendance_date:
-                        date_obj = date.fromisoformat(date_str)
-                        print(date_obj)
-                        print( date.today())
-                        if date_obj >= date.today():
-                            if date_str in grouped_projects:
-                                grouped_projects[date_str].append(project)
-                            else:
-                                grouped_projects[date_str] = [project]
+                    date_str = project.attendance_date
+                    if date_str >= date.today():
+                        if date_str in grouped_projects:
+                            grouped_projects[date_str].append(project)
+                        else:
+                            grouped_projects[date_str] = [project]
             sorted_grouped_projects = dict(sorted(grouped_projects.items()))
 
             context = {
