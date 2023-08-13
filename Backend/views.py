@@ -661,10 +661,13 @@ class Calendar_View(View):
         for project in related_projects:
             if project.attendance_date is None:
                 continue
-            print(project.attendance_date)
+            if project.location is None:
+                project.location = "暫無"
+            print(project.location)
             data.append({
                 'title': project.project_confirmation.project_confirmation_id,
                 'start': project.attendance_date,
+                'location': project.location
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),
             })
         return JsonResponse(data, status=200,safe = False)

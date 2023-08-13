@@ -51,12 +51,14 @@
                 });
             },
             eventClick: function(info) {
+                // fullcalendar 主要傳送 start、end、title，若有其他資料傳送，這裡要用 .extendedProps 抓額外資料
                 var title = info.event.title
                 var date = moment(info.event.start).format('YYYY-MM-DD')
-                console.log(info.event.start)
-                console.log(date)
+                var location = info.event.extendedProps.location
+                console.log(location)
                 document.getElementById('calendar-title').innerHTML = title;
                 document.getElementById('calendar-date').innerHTML = "日期: " + date;
+                document.getElementById('calendar-location').innerHTML = "地點: " + location;
             },
         });
         calendar.render();
