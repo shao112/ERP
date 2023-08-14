@@ -86,17 +86,17 @@ async function GET_handleClick(event, bringdata=true) {
                     var input = document.getElementsByName(key)[0];
                     if (input) {
                         let get_value = jsonData[key];
-                        if (input.type == 'file') {
+                        if (input.type == 'file') { 
                             continue
                         }
 
-                        if (typeof (jsonData[key]) == "object" && get_value != null) {
+                        if (typeof (jsonData[key]) == "object" && get_value != null) {//判斷是不是陣列
                             SetSelect2(input, key, get_value);
                             continue
                         }
 
-                        input.value = jsonData[key];
-                        console.log("key " + key + " 帶資料:" + input.value);
+                        input.value = get_value;
+                        console.log("key " + key + " 帶資料:" + get_value);
 
                     } else {
                         console.log("Input not found for key:", key);
