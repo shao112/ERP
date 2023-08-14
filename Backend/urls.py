@@ -24,13 +24,13 @@ urlpatterns = [
 #處理檔案
     path('<str:model>/file', views.FileUploadView.as_view(), name='file_upload'),
     path('saveimg', views.IMGUploadView.as_view(), name='saveimg'),
+    path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
     path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
+    path('project_employee_assign_update_signature', views.Employee_assign_update_signature.as_view(), name='formuploadfile'),
 #CRUD
     path('project_confirmation',  views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),
     path('equipment',  views.Equipment_View.as_view(), name="equipment_api"),
     path('department',  views.Department_View.as_view(), name="department_api"),
-    path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
-    path('project_employee_assign_update_signature', views.Employee_assign_update_signature.as_view(), name='formuploadfile'),
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
     path('employee', views.Employee_View.as_view(), name="project_employee_api"),
     path('employee_attendance', views.Employee_Attendance_View.as_view(), name="employee_attendance_api"),
