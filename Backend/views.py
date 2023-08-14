@@ -463,13 +463,9 @@ class Employee_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Employee, id=id)
         data = model_to_dict(data)
-        if "profile_image" in data:
-            if  data['profile_image']:
-                data['profile_image'] = data["profile_image"].url
-            else:
-                data['profile_image'] = None
-
+        data['profile_image'] = data['profile_image'].url if data['profile_image']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
+
 # 員工出勤
 class Employee_Attendance_View(View):
     def get(self,request):
