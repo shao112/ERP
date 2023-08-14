@@ -314,7 +314,7 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edid">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="naelete">簽名</th>
-                    <th data-force-hide="true" data-sortable="true" data-no-print="true" data-field="process">列印</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">列印/下載pdf</th>
 
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="project_name" data-sortable="true">工程名稱</th>
@@ -346,11 +346,9 @@
                                 class="far fa-sm fa-trash-alt"></i></a>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary"  onclick="setSettingId('{{ p.id }}')"  data-toggle="modal" data-target="#signatureModal">
-                            業主簽名
-                        </button>
+                        <a href="" onclick="setSettingId('{{ p.id }}')"  data-toggle="modal" data-target="#signatureModal">業主簽名</a>
                     </td>
-                    <td><a target="_blank" href="{% url 'project_employee_assign_View' id=p.id %}">列印</a></td>
+                    <td><a target="_blank" href="{% url 'project_employee_assign_View' id=p.id %}">點擊</a></td>
 
                     
                     <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
