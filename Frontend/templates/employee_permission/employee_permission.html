@@ -142,9 +142,16 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var script = document.createElement('script');
-        script.src = "{% static 'js/fuc/restful.js' %}";
-        document.body.appendChild(script);
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
     });
 
 </script>

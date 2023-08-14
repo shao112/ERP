@@ -113,8 +113,8 @@
 
                 <tr>
                     <td>
-                        <a type="button" data-url="news" data-id="{{ new.id }}" class="sys_get btn btn-sm btn-warning"
-                            data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" data-url="news" data-id="{{ new.id }}" class="btn btn-sm btn-warning"
+                        onclick="LoadData(event)"   data-toggle="modal" data-target="#news-modal"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
                         <a data-url="news" data-id="{{ new.id }}" type="button" class="sys_del btn btn-sm btn-danger"><i
@@ -160,6 +160,13 @@
             document.body.appendChild(script);
         });
     });
+
+    async function LoadData(event){
+        console.log("load")
+        getdata = await GET_handleClick(event,true);
+        editor.setData(getdata["editor_content"]);
+
+    }
 
 </script>
 

@@ -143,18 +143,16 @@ class Project_Employee_Assign_View(View):
                 del dict_data["project_job_assign"]
 
             if "carry_equipments" in dict_data:
-                print("cccc")
-                print("cccc")
                 get_carry_equipments = dict_data["carry_equipments"]
                 get_carry_equipments = [int(item) for item in get_carry_equipments]
                 print(get_carry_equipments)
                 del dict_data["carry_equipments"]
-                get_Project_Employee_Assign.lead_employee.set(get_carry_equipments)
+                get_Project_Employee_Assign.carry_equipments.set(get_carry_equipments)
 
             if "lead_employee" in dict_data:
                 get_completion_report_employee = dict_data["lead_employee"]
                 del dict_data["lead_employee"]
-                get_Project_Employee_Assign.carry_equipments.set(get_completion_report_employee)
+                get_Project_Employee_Assign.lead_employee.set(get_completion_report_employee)
 
             if "inspector" in dict_data:
                 get_completion_report_employee = dict_data["inspector"]
@@ -252,6 +250,8 @@ class New_View(View):
         data = model_to_dict(data)
         print("dict_data")
         print(data)
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
+
         return JsonResponse({"data":data}, status=200,safe = False)
 
 

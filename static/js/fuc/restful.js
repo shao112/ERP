@@ -34,6 +34,7 @@ $("#sys_new").on("click", function () {
 
 
 
+
 //  獲取資料並帶入
 
 document.querySelectorAll('.sys_get').forEach(element => {
@@ -41,108 +42,82 @@ document.querySelectorAll('.sys_get').forEach(element => {
     element.addEventListener('click', GET_handleClick.bind(element));
 });
 
-function GET_handleClick(event) {
+
+/**
+ * 说明
+ * @param {event} param1 - 點擊的btn event
+ * @param {bringdata} param2 - true由該事件帶入表單，false 不由GET_handleClick處理(目前沒使用到，但保留彈性)
+ * @returns {type} 會回傳取得的data
+ */
+async function GET_handleClick(event, bringdata=true) {
+
     cleanform()
-    
+
     const clickedElement = event.target.closest('[data-id]');
     const url = "/restful/" + clickedElement.getAttribute('data-url');
     const id = clickedElement.getAttribute('data-id');
-    
+
     $("#form").attr("data-method", "put");
     $("#form").attr("data-id", id);
     console.log(`URL: ${url}, ID: ${id}`);
 
     formData = { id: id, };
+    return new Promise((resolve, reject) => {
 
-    $.ajax({
-        type: "GET",
-        url: url,
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        data: formData,
-        success: function (response) {
 
-            jsonData = response.data
-          
-            for (var key in jsonData) {
+        $.ajax({
+            type: "GET",
+            url: url,
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            data: formData,
+            success: function (response) {
+                jsonData = response.data
+                delete jsonData.created_date;
+                delete jsonData.modified_by;
+ 
+                resolve(jsonData); //設定回傳資料
+
                 var input = document.getElementsByName(key)[0];
-                if (input) {
-                    let get_value = jsonData[key];
-
-                    if (key == "carry_equipments") {
-                        console.log("xxxxget_value = Object.values(get_value);")
-                        get_value = Object.values(get_value);
-                        all_Equipment_checked = get_value;
-                        syncall_Equipment_checkedRowsWithArray();
-                    }
 
 
-                    if (typeof (jsonData[key]) == "object" && get_value != null) {
-                        // 如果是陣列，先取得對應的options，以及select2的欄位
-                        const options = input.options;
-                        selectname = `#${key}_select2`
-                        console.log("GET_" + key + "=> " + selectname);
-                        console.log(get_value)
-                        get_value = Object.values(get_value);
-                        console.log(get_value)
-                        for (let i = 0; i < options.length; i++) {
-                            const option = options[i];
-                            const option_id = option.value;
-
-                            var containsValue = false;
-                            console.log(typeof (get_value[0]))
-                            if (typeof (get_value[0]) == "object") {
-                                containsValue = get_value.find(item => item.id == option_id);
-                            } else {
-                                containsValue = get_value.find(item => item == option_id);
-                            }
-                            console.log(get_value)
-                            console.log(option_id)
-                            console.log(containsValue)
-                            if (containsValue) {
-                                option.selected = true;
-                            }
+                for (var key in jsonData) {
+                    var input = document.getElementsByName(key)[0];
+                    if (input) {
+                        let get_value = jsonData[key];
+                        if (input.type == 'file') {
+                            continue
                         }
-                        $(selectname).trigger('change');
-                    } else {
+
+                        if (typeof (jsonData[key]) == "object" && get_value != null) {
+                            SetSelect2(input, key, get_value);
+                            continue
+                        }
+
                         input.value = jsonData[key];
-                        console.log("key "+key+" 帶資料:" + input.value);
+                        console.log("key " + key + " 帶資料:" + input.value);
+
+                    } else {
+                        console.log("Input not found for key:", key);
                     }
+                }
 
-                    if (key == "editor_content") { //觸發change事件
-                        editor.setData(jsonData[key]);
-                    }
-
-                    const select2_change_key = ["project_confirmation", "project_job_assign", "vehicle"];
-
-
-                    if (select2_change_key.includes(key)) { //觸發change事件
-                        const event = new Event("change");
-                        input.dispatchEvent(event);
-                    }
-
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (xhr.status === 400) {
+                    var errorMessage = xhr.responseJSON.error;
+                    console.log(errorMessage)
+                    showSwal('操作失敗', errorMessage, 'error', false)
                 } else {
-                    console.log("Input not found for key:", key);
+                    alert("系統發生錯誤");
+                    console.log(errorThrown)
                 }
             }
+        });
 
-       
+    })
 
-
-
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                console.log(errorMessage)
-                showSwal('操作失敗', errorMessage, 'error', false)
-            } else {
-                alert("系統發生錯誤");
-                console.log(errorThrown)
-            }
-        }
-    });
 
 }
 
@@ -160,8 +135,8 @@ $("form").on("submit", function (event) {
     console.log(method);
 
 
-    
-    
+
+
     var idValue = form.find('input[name="id"]').val();
 
     $.ajax({
@@ -174,9 +149,9 @@ $("form").on("submit", function (event) {
         },
         success: function (response) {
             jsonData = response.data
-            
-            if(method=="POST"){
-                idValue=response.id;
+
+            if (method == "POST") {
+                idValue = response.id;
             }
 
             showSwal('操作說明', jsonData, 'success', false).then(() => {

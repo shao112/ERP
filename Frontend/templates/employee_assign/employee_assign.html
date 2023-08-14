@@ -337,7 +337,7 @@
                     <td> <input type="checkbox" value="{{ p.id }}" /> </td>
                     <td>
                         <a type="button" data-url="project_employee_assign" data-id="{{p.id}}"
-                            class="sys_get btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"
+                            class="btn btn-sm btn-warning my-2 mx-md-2" data-toggle="modal"  onclick="LoadData(event)"
                             data-target="#employee-assign-modal"><i class="fas fa-sm fa-edit"></i></a>
                     </td>
                     <td>
@@ -397,6 +397,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
             "{% static 'js/employee_assign/choose_Equipment.js' %}",
             "{% static 'js/employee_assign/signature_name.js' %}",
@@ -419,8 +420,21 @@
 
         });
 
-
     });
+
+    async function LoadData(event){
+        console.log("load")
+        getdata = await GET_handleClick(event,true);
+        get_value = Object.values(getdata["carry_equipments"]);
+        all_Equipment_checked = get_value;
+        syncall_Equipment_checkedRowsWithArray();
+
+        var choose_input = document.getElementById("project_job_assign_id");
+        const change_event = new Event("change");
+        choose_input.dispatchEvent(change_event);     
+
+
+    }
 </script>
 
 
