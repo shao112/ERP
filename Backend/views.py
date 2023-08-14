@@ -552,10 +552,7 @@ class Project_Confirmation_View(View):
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data)
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
-        if  data['attachment']:
-            data['attachment'] = data['attachment'].url
-        else:
-            data['attachment'] = None
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class Job_Assign_View(View):
@@ -624,12 +621,8 @@ class Job_Assign_View(View):
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
         data['job_assign_id'] = "公派-" +str(data["id"]).zfill(5)
-
-        if  "attachment" in data:
-            if  data['attachment']:
-                data['attachment'] = data["attachment"].url
-            else:
-                data['attachment'] = None
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
+    
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
