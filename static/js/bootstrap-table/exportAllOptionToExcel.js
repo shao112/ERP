@@ -66,8 +66,8 @@ function exportAllOptionToExcel(fileName) {
         },
         body: JSON.stringify({
             headers: headers,
-            // data: tableData,
             data: translatedData,
+            // data: tableData,
         }),
     })
     .then(response => response.blob())

@@ -213,21 +213,22 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr class="text-nowrap">
-                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="ja_checkbox">匯出</th>
-                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="ja_edit">編輯</th>
-                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="ja_delete">刪除</th>
-                        <th data-sortable="true" data-filter-control="input" data-field="ja_job_assign_id">工確單編號</th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox">匯出</th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                        
+                        <th data-sortable="true" data-filter-control="input" data-field="job_confirmation_id">工確單編號</th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
-                        <th data-sortable="true" data-field="ja_project_name">工程名稱</th>
-                        <th data-sortable="true" data-field="ja_c_a">母案編號</th>
-                        <th data-sortable="true" data-field="ja_attendance_date">出勤日期</th>
-                        <th data-sortable="true" data-field="ja_work_employee">工作人員</th>
-                        <th data-sortable="true" data-field="ja_lead_employee">帶班人員</th>
-                        <th data-sortable="true" data-field="ja_vehicle">使用車輛</th>
-                        <th data-sortable="true" data-field="ja_location">工作地點</th>
-                        <th data-sortable="true" data-field="ja_project_type">工作類型</th>
-                        <th data-sortable="true" data-field="ja_remark">備註</th>
-                        <th data-sortable="true" data-field="ja_attachment">工確單附件</th>
+                        <th data-sortable="true" data-field="project_name">工程名稱</th>
+                        <th data-sortable="true" data-field="c_a">母案編號</th>
+                        <th data-sortable="true" data-field="attendance_date">出勤日期</th>
+                        <th data-sortable="true" data-field="work_employee">工作人員</th>
+                        <th data-sortable="true" data-field="lead_employee">帶班人員</th>
+                        <th data-sortable="true" data-field="vehicle">使用車輛</th>
+                        <th data-sortable="true" data-field="location">工作地點</th>
+                        <th data-sortable="true" data-field="project_type">工作類型</th>
+                        <th data-sortable="true" data-field="remark">備註</th>
+                        <th data-sortable="true" data-field="attachment">工確單附件</th>
                     </tr>
                 </thead>
                 <tbody class="text-nowrap" style="font-size: 14px;">
@@ -252,16 +253,8 @@
                         <td>
                             {{ j.attendance_date }}
                         </td>
-                        <td>
-                            {% for employees_list in j.work_employee.all %}
-                            {{ employees_list.full_name }}
-                            {% endfor %}
-                        </td>
-                        <td>
-                            {% for employees_list in j.lead_employee.all %}
-                            {{ employees_list.full_name }}
-                            {% endfor %}
-                        </td>
+                        <td>{% for employees_list in j.work_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
+                        <td>{% for employees_list in j.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                         <td>{{ j.vehicle }}</td>
                         <td>{{ j.location }}</td>
                         <td>{{ j.project_type }}</td>

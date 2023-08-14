@@ -17,6 +17,7 @@ from django.forms.models import model_to_dict
 from django.views import View
 from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content
 import openpyxl
+from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
 import random
 import os
@@ -632,15 +633,35 @@ class ExcelExportView(View):
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.append(headers)
+        
+        # 初始化每個欄位的最大長度，以表頭長度為初始值
+        max_lengths = [len(header) for header in headers]
         for row_data in table_data:
-            row = [row_data.get(header, '') for header in headers]
+            # row = [row_data.get(header, '') for header in headers]
+            row = [self.replace_br_with_newline(row_data.get(header, '')) for header in headers]
+             # 更新每個欄位的最大長度
+            max_lengths = [max(max_length, len(str(cell))) for max_length, cell in zip(max_lengths, row)]
             ws.append(row)
+        # ws.iter_cols 迭代該列的所有欄，從 1 到 headers 的長度，也就是迭代所有欄位
+        for col_idx, col in enumerate(ws.iter_cols(min_col=1, max_col=len(headers))):
+            max_length = max(len(str(cell.value)) for cell in col)
+            adjusted_width = (max_length + 8)  # 調整列寬的公式
+            column_letter = get_column_letter(col_idx + 1)
+            ws.column_dimensions[column_letter].width = adjusted_width
+        # for col_idx, max_length in enumerate(max_lengths):
+        #     adjusted_width = (max_length + 2) * 1.2  # 調整列寬的公式
+        #     column_letter = get_column_letter(col_idx + 1)
+        #     ws.column_dimensions[column_letter].width = adjusted_width
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=表格数据.xlsx'
         wb.save(response)
 
         return response
+   def replace_br_with_newline(self, data):
+        if '<br>' in data:
+            return data.replace('<br>', ' ')
+        return data
 
 class Calendar_View(View):
    def get(self,request):
