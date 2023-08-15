@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle
+from .models import Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -121,4 +121,13 @@ class VehicleForm(BaseModelForm):
         fields = '__all__'
         widgets = {
             'vehicle_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+        }
+# 簽核狀態
+class ApprovalModelForm(BaseModelForm):
+
+    class Meta:
+        model = ApprovalModel
+        fields = '__all__'
+        widgets = {
+            'current_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }

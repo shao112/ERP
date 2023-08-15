@@ -14,8 +14,8 @@
 {% block main %}
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade px-3" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">切换内容示例</h4>
@@ -38,11 +38,42 @@
                     <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
                         工程確認單的内容
                         {% include 'components\project_confirmation_form.html' with employees_list=employees_list %}
-                        
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="status_control">簽核狀態</label>
+                                    {{ approval_model_form.current_status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="content_control">回饋區</label>
+                                    <textarea class="form-control form-control-sm" name="content" id="content_control"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
                         工程派任計畫的内容(先測試派工單)
                         {% include 'components\emplooyee_assiag_form.html'  %}
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="status_control">簽核狀態</label>
+                                    {{ approval_model_form.current_status }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="content_control">回饋區</label>
+                                    <textarea class="form-control form-control-sm" name="content" id="content_control"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

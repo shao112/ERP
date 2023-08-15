@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
+from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm
 from Backend.models import ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -304,6 +304,7 @@ class Approval_Process(UserPassesTestMixin,ListView):
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
         context["all_Equipment"] = Equipment.objects.all()
+        context['approval_model_form'] = ApprovalModelForm()
         return context
 
     def get_queryset(self):
