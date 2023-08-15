@@ -28,7 +28,7 @@ class Project_employee_assign_View(DetailView):
     context_object_name = 'project_employee_assign'
     pk_url_kwarg = 'id'  # This is where the 'id' parameter is mapped
 
-
+    
 # 首頁
 class Director_Index(View):
     def get(self,request):
@@ -294,11 +294,18 @@ class Approval_Process(UserPassesTestMixin,ListView):
     template_name = 'approval_process/approval_process.html'
     context_object_name = 'approval_process'
 
-    def test_func(self):
+    def test_func(self):#有簽核權
         if settings.PASS_TEST_FUNC:
             return True
         return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
+        context["all_Equipment"] = Equipment.objects.all()
+        return context
+
     def get_queryset(self):
         current_employee = self.request.user.employee
         current_department_id = current_employee.departments.id #取得員工部門
