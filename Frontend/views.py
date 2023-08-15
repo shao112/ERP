@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm
-from Backend.models import User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -16,7 +16,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import date
 from django.views.defaults import permission_denied
 from Backend.utils import convent_employee,get_weekly_clock_data
-from django.db.models import Q
+from django.db.models import Q,Value,CharField
+from django.db.models.functions import Concat
+
 
 
 
@@ -286,4 +288,45 @@ class Calendar(UserPassesTestMixin,ListView):
         if settings.PASS_TEST_FUNC:
             return True
         return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+
+class Approval_Process(UserPassesTestMixin,ListView):
+    model = ApprovalModel
+    template_name = 'approval_process/approval_process.html'
+    context_object_name = 'approval_process'
+
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
     
+    def get_queryset(self):
+        current_employee = self.request.user.employee
+        current_department_id = current_employee.departments.id #取得員工部門
+        #取得正在簽核有關他部門的ApprovalModel id
+        ApprovalModel_ids = ApprovalModel.objects.filter(
+            current_department_id=current_department_id,
+            current_status='in_progress'
+        ).values_list('id', flat=True)
+
+        #從工程確認單取得關聯
+        project_confirmation_records = Project_Confirmation.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').values('id',  'Approval').annotate(
+         model=Value('project_confirmation', output_field=CharField())
+         )
+        
+        project_job_assign_records = Project_Job_Assign.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').annotate(
+            model=Value('project_job_assign', output_field=CharField())
+        )
+        print(project_job_assign_records)
+
+        combined_records = list(project_confirmation_records) + list(project_job_assign_records)
+        print(combined_records)
+
+
+        queryset = combined_records
+        # print(queryset[0].project_confirmation)
+        return queryset
+

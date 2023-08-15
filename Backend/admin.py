@@ -3,7 +3,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee,Equipment, Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Employee,Equipment, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -68,6 +68,9 @@ class RequisitionAdmin(admin.ModelAdmin):
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
+admin.site.register(Approval_TargetDepartment)
+admin.site.register(ApprovalModel)
+admin.site.register(ApprovalLog)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
 admin.site.register(Equipment)

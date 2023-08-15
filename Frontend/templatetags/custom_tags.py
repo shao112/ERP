@@ -22,3 +22,13 @@ def highlight_date(date_str):
 @register.filter
 def format_with_zeros(value, width):
     return str(value).zfill(width)
+
+
+@register.filter(name='render_model_text')
+def render_model_text(model_value):
+    if model_value == 'project_confirmation':
+        return '工程確認單'
+    elif model_value == 'project_job_assign':
+        return '工程派任計畫'
+    else:
+        return '未知类型'

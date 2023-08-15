@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('project_employee_assign_View/<int:id>/', views.Project_employee_assign_View.as_view(), name='project_employee_assign_View'),
 
+    path('approval_process', views.Approval_Process.as_view(), name="Approval_Process"),
     path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),

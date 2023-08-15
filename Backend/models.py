@@ -11,18 +11,9 @@ from django_currentuser.middleware import get_current_authenticated_user
 from datetime import date
 import os
 
-class Approval(models.Model):
-    finish = models.BooleanField(default=False, verbose_name='完成')
-    class Meta:
-        verbose_name = '簽核狀態'
-        verbose_name_plural = '簽核狀態'
-        permissions = ( ('can_approval', '簽核權限'), )
-    def __str__(self):
-        return f'Approval {self.id}'
-
 
 class ApprovalLog(models.Model):
-    approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval_logs')
+    approval = models.ForeignKey("ApprovalModel", on_delete=models.DO_NOTHING, related_name='approval_logs')
     user = models.ForeignKey('Employee', on_delete=models.DO_NOTHING, verbose_name='簽核者')
     content = models.TextField(blank=True, null=True, verbose_name='內容')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
@@ -35,12 +26,52 @@ class ApprovalLog(models.Model):
         return f'ApprovalLog {self.id}'
 
 
-class ApprovalModel(models.Model):
-    approval = models.ForeignKey(Approval, on_delete=models.DO_NOTHING, related_name='approval')
-
+class Approval_TargetDepartment(models.Model):
+    name =models.CharField(max_length=20,verbose_name="表單名稱")
+    department = models.ForeignKey('Department', on_delete=models.CASCADE,verbose_name="簽到哪個部門")
     class Meta:
-        abstract = True
+        verbose_name = '簽核流程管理'
+        verbose_name_plural = verbose_name
 
+    def __str__(self):
+        return self.name
+
+
+
+class ApprovalModel(models.Model):
+    STATUS_CHOICES = [
+        ('completed', '完成'),
+        ('in_progress', '進行中'),
+        ('rejected', '駁回'),
+    ]
+
+    current_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    current_department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='current_approvals')
+    target_department = models.ForeignKey(Approval_TargetDepartment, on_delete=models.CASCADE, related_name='approvals')
+
+
+    def create_with_target_department(cls, department_name, department_id, current_department):
+        target_department = Approval_TargetDepartment.objects.get(department_name=department_name, department_id=department_id)
+        approval_model = cls(current_department=current_department, target_department=target_department)
+        return approval_model
+
+    def update_department_status(self, new_status):
+        self.current_status = new_status
+        self.save()
+
+    def find_and_update_parent_department(self):
+        current_department = self.current_department
+        if current_department.parent_department:
+            parent_department = current_department.parent_department
+            self.current_department = parent_department
+            self.save()
+            return parent_department
+        elif self.current_department == self.target_department:
+            self.update_department_status('completed')
+        return None
+    class Meta:
+        verbose_name = '簽核狀態'
+        verbose_name_plural = verbose_name
 
 
 #紀錄修改者
@@ -161,10 +192,8 @@ class Department(ModifiedModel):
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-    # def __str__(self):
-    #     if self.parent_department:
-    #         return f"{self.department_name} ({self.parent_department.department_name})"
-    #     return self.department_name
+    def __str__(self):
+        return self.department_name
 
 
 # 工程確認單
@@ -182,7 +211,8 @@ class Project_Confirmation(ModifiedModel):
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
-
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
+    
     class Meta:
         verbose_name = "工程確認單"   # 單數
         verbose_name_plural = verbose_name   #複數
@@ -212,6 +242,8 @@ class Project_Job_Assign(ModifiedModel):
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
+
 
     class Meta:
         verbose_name = "工作派任計畫"   # 單數

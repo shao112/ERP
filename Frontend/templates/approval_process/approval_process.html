@@ -1,0 +1,109 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}簽核管理{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+{% endblock %}
+
+
+{% load custom_tags %}
+
+{% block main %}
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">切换内容示例</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 标签页的切换 UI -->
+                <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">工程確認單</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="false">工程派任計畫</a>
+                    </li>
+                </ul>
+                <!-- 标签页的内容区域 -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
+                        工程確認單的内容
+                    </div>
+                    <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
+                        工程派任計畫的内容
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+
+    <div class="project-confirmation-table container-fluid shadow-sm table-responsive">
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
+            data-filter-control="true">
+            <div id="toolbar">
+               
+            </div>
+            <thead class="thead-light" style="font-size: 14px;">
+                <tr class="text-nowrap">
+                    <th data-sortable="true" data-field="is_completed">類型</th>
+                    <th data-sortable="true" data-field="completion_report_employee">簽核</th>
+                </tr>
+            </thead>
+            <tbody class="text-nowrap" style="font-size: 14px;">
+                {% for object in object_list %}
+                <tr>
+                    <td> 
+                        {{  object.model |render_model_text }}
+                    </td>
+                    
+                    <td>
+                        <button class="btn btn-primary" data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">查看</button>
+                    </td>
+                        
+                </tr>
+                {% endfor %}
+            
+            </tbody>
+        </table>
+    </div>
+ 
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        // 隐藏标签页的切换 UI
+        $('#myTabs').hide();
+        
+        // 监听模态框显示事件，在显示前根据按钮的 data-model 值选择对应的标签页
+        $('#myModal').on('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // 触发模态框的按钮
+            var modalModel = button.getAttribute('data-modal'); // 获取按钮的 data-modal 属性值
+            
+            // 显示对应的标签页并触发切换事件
+            if (modalModel === 'project_confirmation') {
+                console.log("1")
+                $('#tab1').tab('show');
+            } else if (            
+                modalModel     === 'project_job_assign') {
+                console.log("122")
+                $('#tab2').tab('show');
+            }
+        });
+    });
+</script>
+{% endblock %}
