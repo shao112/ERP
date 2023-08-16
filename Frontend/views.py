@@ -306,7 +306,6 @@ class Approval_Process(UserPassesTestMixin,ListView):
         context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
-        context['approval_model_form'] = ApprovalModelForm()
         context['vehicle'] = Vehicle.objects.all()
         return context
 
