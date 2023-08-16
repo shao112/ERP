@@ -142,6 +142,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
+
         context['vehicle'] = Vehicle.objects.all()
         return context
 
@@ -304,7 +305,9 @@ class Approval_Process(UserPassesTestMixin,ListView):
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
         context["all_Equipment"] = Equipment.objects.all()
+        context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['approval_model_form'] = ApprovalModelForm()
+        context['vehicle'] = Vehicle.objects.all()
         return context
 
     def get_queryset(self):
@@ -319,18 +322,26 @@ class Approval_Process(UserPassesTestMixin,ListView):
         #從工程確認單取得關聯
         project_confirmation_records = Project_Confirmation.objects.filter(
             Approval_id__in=ApprovalModel_ids
-        ).select_related('Approval').values('id',  'Approval').annotate(
-         model=Value('project_confirmation', output_field=CharField())
+        ).select_related('Approval').annotate(
+         model=Value('project_confirmation', output_field=CharField()),
+          url=Value('project_confirmation', output_field=CharField())
          )
         
         project_job_assign_records = Project_Job_Assign.objects.filter(
             Approval_id__in=ApprovalModel_ids
         ).select_related('Approval').annotate(
-            model=Value('project_job_assign', output_field=CharField())
+            model=Value('job_assign', output_field=CharField()),
+              url=Value('job_assign', output_field=CharField())
         )
-        print(project_job_assign_records)
 
-        combined_records = list(project_confirmation_records) + list(project_job_assign_records)
+        project_employee_assign_records = Project_Employee_Assign.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').annotate(
+            model=Value('project_employee_assign', output_field=CharField()),
+              url=Value('project_employee_assign', output_field=CharField())
+        )
+
+        combined_records = list(project_confirmation_records) + list(project_job_assign_records)+ list(project_employee_assign_records)
         print(combined_records)
 
 

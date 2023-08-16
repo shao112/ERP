@@ -13,15 +13,58 @@
 
 {% block main %}
 
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="approvalModalLabel">簽核處理</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="status">處理狀態</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="-1">選擇狀態</option>
+                            <option value="approved">通過</option>
+                            <option value="rejected">駁回</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">回饋</label>
+                        <textarea placeholder="可簡單輸入ok、處理狀態、駁回原因等....." class="form-control" id="feedback" name="feedback" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #approvalModal {
+    z-index: 1060; /* 可以根据需要调整值，要比原本的模态框更高 */
+}
+</style>
+
 
 <div class="modal fade px-3" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">切换内容示例</h4>
+                <h4 class="modal-title" id="myModalLabel">簽核內容</h4>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#approvalModal">簽核</button>
+                
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
+                
             </div>
             <div class="modal-body">
                 <!-- 标签页的切换 UI -->
@@ -32,48 +75,25 @@
                     <li class="nav-item">
                         <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="false">工程派任計畫</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab3" data-toggle="tab" href="#content3" role="tab" aria-controls="content3" aria-selected="false">派工單</a>
+                    </li>
                 </ul>
                 <!-- 标签页的内容区域 -->
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
-                        工程確認單的内容
-                        {% include 'components\project_confirmation_form.html' with employees_list=employees_list %}
-                        <div class="form-row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="status_control">簽核狀態</label>
-                                    {{ approval_model_form.current_status }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="content_control">回饋區</label>
-                                    <textarea class="form-control form-control-sm" name="content" id="content_control"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        工程確認單
+                        {% include 'components\project_confirmation_form.html' with employees_list=employees_list %}                     
                     </div>
                     <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
-                        工程派任計畫的内容(先測試派工單)
+                        工程派任計畫
+                        {% include 'components\job_assign_form.html'  %}
+                     
+                    </div>
+                    <div class="tab-pane fade" id="content3" role="tabpanel" aria-labelledby="tab3">
+                        派工單
                         {% include 'components\emplooyee_assiag_form.html'  %}
-                        <div class="form-row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="status_control">簽核狀態</label>
-                                    {{ approval_model_form.current_status }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="content_control">回饋區</label>
-                                    <textarea class="form-control form-control-sm" name="content" id="content_control"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                     
                     </div>
                 </div>
             </div>
@@ -93,8 +113,9 @@
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-sortable="true" data-field="is_completed">類型</th>
-                    <th data-sortable="true" data-field="completion_report_employee">簽核</th>
+                    <th data-sortable="true" data-field="type">類型</th>
+                    <th data-sortable="true" data-field="content">內容</th>
+                    <th data-sortable="true" data-field="process">簽核</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -103,9 +124,21 @@
                     <td> 
                         {{  object.model |render_model_text }}
                     </td>
+                    <td> 
+                       
+                    {% if object.model == 'project_confirmation' %}
+                        {{object.project_confirmation_id}} - {{ object.project_name}}
+                    {% elif object.model == 'job_assign' %}
+                        公派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
+                    {% elif object.model == 'project_employee_assign' %}
+                       派工-{{ object.project_job_assign.id|format_with_zeros:5}}
+                    {% else %}
+                        未知类型
+                    {% endif %}
+                    </td>
                     
                     <td>
-                        <button class="btn btn-primary" data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">查看</button>
+                        <button class="btn btn-primary" data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">查看</button>
                     </td>
                         
                 </tr>
@@ -119,23 +152,68 @@
 
 <script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
+
+            "{% static 'js/approval_process/approval_process.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
+    });
+
     $(document).ready(function () {
-        // 隐藏标签页的切换 UI
         $('#myTabs').hide();
         
-        // 监听模态框显示事件，在显示前根据按钮的 data-model 值选择对应的标签页
-        $('#myModal').on('show.bs.modal', function (event) {
+            $('#myModal').on('show.bs.modal', function (event) {
             var button = event.relatedTarget; // 触发模态框的按钮
+            GET_handleClick(button,false).then((data) => {
+
+                for (var key in data) {
+                    var input = document.getElementsByName(key)[0];
+                    if (input) {
+                        let get_value = jsonData[key];
+                        
+                        if (input.type == 'file') { 
+                            continue
+                        }
+                        
+                        input.disabled = true;  // 禁用
+                        input.setAttribute("readonly", "true"); //封印修改
+
+                        if (typeof (jsonData[key]) == "object" && get_value != null) {//判斷是不是陣列
+                            SetSelect2(input, key, get_value);
+                            continue
+                        }
+
+                        input.value = get_value;
+                        console.log("key " + key + " 帶資料:" + get_value);
+
+                    } else {
+                        console.log("Input not found for key:", key);
+                    }
+                }
+            });
+
+
             var modalModel = button.getAttribute('data-modal'); // 获取按钮的 data-modal 属性值
-            
-            // 显示对应的标签页并触发切换事件
+            console.log("modalModel")
+            console.log(modalModel)
+        
             if (modalModel === 'project_confirmation') {
                 console.log("1")
                 $('#tab1').tab('show');
-            } else if (            
-                modalModel     === 'project_job_assign') {
+            } else if (modalModel  === 'job_assign') {
                 console.log("122")
                 $('#tab2').tab('show');
+            } else if (modalModel  === 'project_employee_assign') {
+                console.log("333")
+                $('#tab3').tab('show');
             }
         });
     });

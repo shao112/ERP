@@ -1,0 +1,147 @@
+<form action="/restful/job_assign" id="form" method="POST" class="pb-4" data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden/>
+    <div class="form-row my-2">
+        <div class="col-12 col-md-6">
+            <h5 style="font-size: 1.2rem;">
+                <kbd>派任計畫描述</kbd>
+            </h5>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="project_confirmation">工程確認單編號</label>
+                        <select class="form-control form-control-sm" name="project_confirmation"
+                            id="project_confirmation_select2">
+                            <option value="-1">請選擇工確單編號</option>
+                            {% for project_confirmation in project_confirmation_list %}
+                            <option value="{{ project_confirmation.pk }}">
+                                {{project_confirmation.project_confirmation_id }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="job_assign_id_control">工派單編號(系統產生)</label>
+                        <input class="form-control form-control-sm" name="job_assign_id" readonly id="job_assign_id_control"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="project_name_control">工程名稱</label>
+                        <input class="form-control form-control-sm" name="project_name"id="project_name_control" readonly></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="c_a_control">母案編號</label>
+                        <input class="form-control form-control-sm" name="c_a" readonly id="c_a_control"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="client_control">客戶名稱</label>
+                        <input class="form-control form-control-sm" name="client"id="client_control" readonly></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="requisition_control">請購單位</label>
+                        <input class="form-control form-control-sm" name="requisition" readonly
+                            id="requisitioncontrol"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="location_control">工作地點</label>
+                        <input class="form-control form-control-sm" name="location"
+                            id="location_control"></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="project_type_control">工作類型</label>
+                        <input class="form-control form-control-sm" name="project_type"
+                            id="project_type_control"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="remark_control" class="col-form-label-sm">備註</label>
+                        <textarea class="form-control form-control-sm" name="remark"
+                            id="remark_control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <h5 style="font-size:1.2rem;">
+                <kbd>人力跟資源</kbd>
+            </h5>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="lead_employee_select2">帶班人員</label>
+                        <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"
+                            id="lead_employee_select2" multiple>
+                            {% for employee in employees_list %}
+                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="work_employee_select2">工作人員</label>
+                        <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
+                            id="work_employee_select2" multiple>
+                            {% for employee in employees_list %}
+                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="vehicle_control">使用車輛</label>
+                        <select class="select2" name="vehicle"
+                            id="vehicle_select2" multiple>
+                            {% for v in vehicle %}
+                            <option value="{{ v.vehicle_id }}">{{ v.vehicle_id }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="attendance_date">出勤日期</label>
+                        <input type="date" class="form-control form-control-sm"
+                        name="attendance_date"
+                        id="attendance_date"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -28,7 +28,9 @@ def format_with_zeros(value, width):
 def render_model_text(model_value):
     if model_value == 'project_confirmation':
         return '工程確認單'
-    elif model_value == 'project_job_assign':
+    elif model_value == 'job_assign':
         return '工程派任計畫'
+    elif model_value == 'project_employee_assign':
+        return '工程派工單'
     else:
         return '未知类型'

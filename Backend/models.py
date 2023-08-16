@@ -272,6 +272,8 @@ class Project_Employee_Assign(ModifiedModel):
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
+
     class Meta:
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數

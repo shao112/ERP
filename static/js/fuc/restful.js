@@ -44,7 +44,7 @@ document.querySelectorAll('.sys_get').forEach(element => {
 
 
 /**
- * 说明
+ * 說明
  * @param {event} param1 - 點擊的btn event
  * @param {bringdata} param2 - true由該事件帶入表單，false 不由GET_handleClick處理(目前沒使用到，但保留彈性)
  * @returns {type} 會回傳取得的data
@@ -53,9 +53,16 @@ async function GET_handleClick(event, bringdata=true) {
 
     cleanform()
 
-    const clickedElement = event.target.closest('[data-id]');
-    const url = "/restful/" + clickedElement.getAttribute('data-url');
-    const id = clickedElement.getAttribute('data-id');
+    try {
+        var clickedElement = event.target.closest('[data-id]');
+        var url = "/restful/" + clickedElement.getAttribute('data-url');
+        var id = clickedElement.getAttribute('data-id');
+    } catch (error) {
+        // console.error("An error occurred:", error);
+        var modalType = event.getAttribute('data-modal');
+        var id = event.getAttribute('data-id');
+        var url = "/restful/" + event.getAttribute('data-url');;
+    }
 
     $("#form").attr("data-method", "put");
     $("#form").attr("data-id", id);
@@ -77,9 +84,10 @@ async function GET_handleClick(event, bringdata=true) {
                 delete jsonData.created_date;
                 delete jsonData.modified_by;
  
-                resolve(jsonData); //設定回傳資料
-
-                var input = document.getElementsByName(key)[0];
+                
+                if(bringdata==false){
+                    return resolve(jsonData); //設定回傳資料
+                }
 
 
                 for (var key in jsonData) {
@@ -126,7 +134,7 @@ $("form").on("submit", function (event) {
     event.preventDefault();
 
     var form = $(this);
-    var url = form.attr("action");
+    var url = form.attr("action");  
     var formData = form.serialize();
     var method = form.data("method");
 
