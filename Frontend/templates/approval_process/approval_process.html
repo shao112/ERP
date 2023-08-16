@@ -170,12 +170,23 @@
     $(document).ready(function () {
         $('#myTabs').hide();
         
-            $('#myModal').on('show.bs.modal', function (event) {
+        
+        $('#myModal').on('show.bs.modal', function (event) {
             var button = event.relatedTarget; // 触发模态框的按钮
+            var modalModel = button.getAttribute('data-modal'); // 获取按钮的 data-modal 属性值            
+            // const getForm = document.getElementById(modalModel);
+            var form = document.querySelector('form[name="'+ modalModel+'"]');
+            console.log(form)
             GET_handleClick(button,false).then((data) => {
 
                 for (var key in data) {
-                    var input = document.getElementsByName(key)[0];
+                    
+                    var input = form.querySelector('[name="' + key + '"]');
+
+                    console.log(input)
+
+
+
                     if (input) {
                         let get_value = jsonData[key];
                         
@@ -201,9 +212,6 @@
             });
 
 
-            var modalModel = button.getAttribute('data-modal'); // 获取按钮的 data-modal 属性值
-            console.log("modalModel")
-            console.log(modalModel)
         
             if (modalModel === 'project_confirmation') {
                 console.log("1")
