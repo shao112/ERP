@@ -39,5 +39,6 @@ urlpatterns = [
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('news', views.New_View.as_view(), name="news_view_api"),
     path('calendar', views.Calendar_View.as_view(), name="calendar_api"),
+    path('approval_process', views.Approval_Process_View.as_view(), name="approval_process_view_api"),
 
 ]

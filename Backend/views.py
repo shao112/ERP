@@ -31,6 +31,22 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
+class Approval_Process_View(View):
+    def post(self,request):
+        status = request.POST.get("status")
+        feedback = request.POST.get("feedback")
+        print("status:", status)
+        print("feedback:", feedback)
+        data = []
+        data.append({
+                'status': status,
+                'feedback': feedback,
+            })
+        if status:
+            return JsonResponse({"data":data},status=200)
+        else:
+            return JsonResponse({"error":"error"},status=400)
+
 class Department_View(View):
 
     def put(self,request):
