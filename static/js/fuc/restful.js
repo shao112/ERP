@@ -82,6 +82,7 @@ async function GET_handleClick(event, bringdata=true) {
             success: function (response) {
                 jsonData = response.data
                 delete jsonData.created_date;
+                delete jsonData.update_date;
                 delete jsonData.modified_by;
  
                 

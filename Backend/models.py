@@ -33,8 +33,8 @@ class Approval_TargetDepartment(models.Model):
         verbose_name = '簽核流程管理'
         verbose_name_plural = verbose_name
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
 
@@ -46,7 +46,9 @@ class ApprovalModel(models.Model):
     ]
 
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    #目前待簽
     current_department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='current_approvals')
+    #目標部門
     target_department = models.ForeignKey(Approval_TargetDepartment, on_delete=models.CASCADE, related_name='approvals')
 
 
@@ -69,6 +71,76 @@ class ApprovalModel(models.Model):
         elif self.current_department == self.target_department:
             self.update_department_status('completed')
         return None
+
+    def get_approval_log_list(self):
+        """
+        取得相關的 ApprovalLog 並整理成列表
+        """
+        print("log")
+        approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
+        print(approval_logs )
+        show_list = []
+        
+        for log in approval_logs:
+            user_full_name = log.user.full_name
+            user_department = log.user.departments.department_name
+            content = log.content
+            status = "pass"  # 固定為 "pass
+            show_list.append({
+                "user_full_name": user_full_name,
+                "department": user_department,
+                "content": content,
+                "status": status
+            })
+
+        current_department = self.current_department
+        target_department = self.target_department.department
+
+        print("xx 目標簽到")
+        print(target_department.department_name)
+        print("xx")
+
+        print(current_department.department_name)
+        print(current_department.parent_department)
+        print(current_department.id)
+        print(target_department.id)
+        print("xx")
+        while True:
+            #檢查有沒有在log出現
+            department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
+            if not department_already_recorded:
+                print("while")
+                print(current_department.department_name)
+                show_list.append({
+                    "user_full_name": None,
+                    "user_department": None,
+                    "content": None,
+                    "status": "wait",  # 固定為 "wait"
+                    "department": current_department.department_name
+                })
+
+            #換上層部門
+            current_department = current_department.parent_department
+            print(current_department)
+            print("while end")
+            #感覺可以寫更好...判斷下層部門是不是target_department，然後再break
+            if current_department == target_department:
+                department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
+                if not department_already_recorded:
+                    show_list.append({
+                        "user_full_name": None,
+                        "user_department": None,
+                        "content": None,
+                        "status": "wait",
+                        "department": target_department.department_name
+                        })
+                break
+
+
+
+        return show_list
+
+
     class Meta:
         verbose_name = '簽核狀態'
         verbose_name_plural = verbose_name
@@ -79,14 +151,20 @@ class ModifiedModel(models.Model):
     modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
+    author = models.CharField(max_length=50,null=True, blank=True, default="",verbose_name="作者")
+
+
     class Meta:
         abstract = True
     def save(self, *args, **kwargs):
         # print("xxx save")
         # Get the current authenticated user
         user = get_current_authenticated_user()
+        
         if user !=None:
             self.modified_by = user.employee
+            if self.author =="":
+                self.author =user.employee.employee_id +" "+user.employee.full_name 
 
 
         super().save(*args, **kwargs)
@@ -192,8 +270,8 @@ class Department(ModifiedModel):
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-    def __str__(self):
-        return self.department_name
+    # def __str__(self):
+    #     return self.department_name
 
 
 # 工程確認單
