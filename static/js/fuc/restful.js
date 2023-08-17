@@ -84,6 +84,7 @@ async function GET_handleClick(event, bringdata=true) {
                 delete jsonData.created_date;
                 delete jsonData.update_date;
                 delete jsonData.modified_by;
+                delete jsonData.author;
  
                 
                 if(bringdata==false){

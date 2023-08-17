@@ -37,7 +37,7 @@
                         <textarea placeholder="可簡單輸入ok、處理狀態、駁回原因等....." class="form-control" id="feedback" name="feedback" rows="3"></textarea>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="submit" class="btn btn-primary">提交</button>
+                    <button type="button" id="approval_btn" class="btn btn-primary">提交</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -138,7 +138,7 @@
                     </td>
                     
                     <td>
-                        <a href="" data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">
+                        <a href="" data-Approval_id="{{ object.Approval.id }}"  data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">
                             <i class="fa-solid fa-eye fa-lg"></i>
                         </a>
                     </td>
@@ -153,6 +153,8 @@
 </div>
 
 <script>
+
+    let Approval_id=""
 
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
@@ -174,20 +176,18 @@
         
         
         $('#myModal').on('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // 触发模态框的按钮
-            var modalModel = button.getAttribute('data-modal'); // 获取按钮的 data-modal 属性值            
-            // const getForm = document.getElementById(modalModel);
+            var button = event.relatedTarget; // 觸碰的按钮
+            var modalModel = button.getAttribute('data-modal');        
+            Approval_id = button.getAttribute('data-Approval_id');           
+            console.log("dX")
+            console.log(Approval_id)
             var form = document.querySelector('form[name="'+ modalModel+'"]');
-            console.log(form)
+            
             GET_handleClick(button,false).then((data) => {
 
                 for (var key in data) {
                     
                     var input = form.querySelector('[name="' + key + '"]');
-
-                    console.log(input)
-
-
 
                     if (input) {
                         let get_value = jsonData[key];
@@ -195,6 +195,7 @@
                         if (input.type == 'file') { 
                             continue
                         }
+                        
                         
                         input.disabled = true;  // 禁用
                         input.setAttribute("readonly", "true"); //封印修改
@@ -205,10 +206,10 @@
                         }
 
                         input.value = get_value;
-                        console.log("key " + key + " 帶資料:" + get_value);
+                        // console.log("key " + key + " 帶資料:" + get_value);
 
                     } else {
-                        console.log("Input not found for key:", key);
+                        // console.log("Input not found for key:", key);
                     }
                 }
             });

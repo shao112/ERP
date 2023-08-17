@@ -5,11 +5,15 @@ from django.db.models.signals import pre_save
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
 from datetime import date
 import os
+
+
+
 
 
 class ApprovalLog(models.Model):
@@ -22,13 +26,18 @@ class ApprovalLog(models.Model):
         verbose_name = '簽核記錄'
         verbose_name_plural = '簽核記錄'
 
-    def __str__(self):
-        return f'ApprovalLog {self.id}'
 
 
 class Approval_TargetDepartment(models.Model):
-    name =models.CharField(max_length=20,verbose_name="表單名稱")
+    STATUS_CHOICES = [
+        ('工程確認單', '工程確認單'),
+        ('工程派任計畫單', '工程派任計畫單'),
+        ('派工單', '派工單'),
+    ]
+
+    name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
     department = models.ForeignKey('Department', on_delete=models.CASCADE,verbose_name="簽到哪個部門")
+    belong_department = models.ForeignKey('Department',related_name="belong_department", blank=True, null=True, on_delete=models.CASCADE,verbose_name="屬於哪部門的簽核")
     class Meta:
         verbose_name = '簽核流程管理'
         verbose_name_plural = verbose_name
@@ -58,8 +67,11 @@ class ApprovalModel(models.Model):
         return approval_model
 
     def update_department_status(self, new_status):
-        self.current_status = new_status
-        self.save()
+        if new_status == 'approved':
+            self.find_and_update_parent_department()
+        else:
+            self.current_status = new_status
+            self.save()
 
     def find_and_update_parent_department(self):
         current_department = self.current_department
@@ -270,8 +282,8 @@ class Department(ModifiedModel):
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-    # def __str__(self):
-    #     return self.department_name
+    def __str__(self):
+        return self.department_name
 
 
 # 工程確認單
@@ -467,3 +479,14 @@ class Requisition(ModifiedModel):
     class Meta:
         verbose_name = "請購單位"
         verbose_name_plural = verbose_name
+
+
+#處理自動建立簽核對象
+@receiver(post_save, sender=Project_Job_Assign)
+@receiver(post_save, sender=Project_Confirmation)
+def create_approval(sender, instance, created, **kwargs):
+    if created and not instance.Approval:
+        approval = ApprovalModel.objects.create()
+        instance.Approval = approval
+        # instance.save()
+

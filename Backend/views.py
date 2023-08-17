@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse
+from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse,Http404
 import json
 import datetime
 from django.contrib.auth import update_session_auth_hash
@@ -7,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Equipment, Department, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Equipment, Department,ApprovalLog,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm,EquipmentForm,DepartmentForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -33,19 +33,33 @@ from django.utils.text import get_valid_filename # 確保file檔名是合法的�
 
 class Approval_Process_View(View):
     def post(self,request):
-        status = request.POST.get("status")
-        feedback = request.POST.get("feedback")
-        print("status:", status)
-        print("feedback:", feedback)
-        data = []
-        data.append({
-                'status': status,
-                'feedback': feedback,
-            })
+        status = request.POST.get('status')
+        feedback = request.POST.get('feedback')
+        approval_id = request.POST.get('Approval_id')
+
+        if status not in ["approved", "rejected"]:
+            return JsonResponse({"error":"請選擇簽核狀態"},status=400)
+        
+        if not feedback.strip():  # 如果 feedback 是空白或只包含空格
+            return JsonResponse({"error":"回饋請勿空白，請簡單描述處理訊息"},status=400)
+        if approval_id ==None: 
+            return JsonResponse({"error":"請選擇approval"},status=400)
+        
+        #尋找實體
+        try:
+            approval_instance = get_object_or_404(ApprovalModel, id=approval_id)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的ApprovalModel"}, status=404)
+
+        ApprovalLog.objects.create(
+            approval=approval_instance,
+            user=request.user.employee,
+            content=feedback,
+        )
+        approval_instance.update_department_status(status)
+        
         if status:
-            return JsonResponse({"data":data},status=200)
-        else:
-            return JsonResponse({"error":"error"},status=400)
+            return JsonResponse({"data":"ok"},status=200)
 
 class Department_View(View):
 

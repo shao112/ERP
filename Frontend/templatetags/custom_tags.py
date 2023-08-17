@@ -33,4 +33,4 @@ def render_model_text(model_value):
     elif model_value == 'project_employee_assign':
         return '工程派工單'
     else:
-        return '未知类型'
+        return '未知'

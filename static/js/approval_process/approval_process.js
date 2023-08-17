@@ -1,8 +1,17 @@
-$("#approval_process_form").on("submit", function (event) {
-    alert("#approval_process_form送出")
-    event.preventDefault();
-    var form = $(this);
-    var formData = form.serialize();
+document.getElementById("approval_btn").onclick = handleApproval;
+
+function handleApproval() {
+    var statusValue = document.getElementById("status").value;
+    var feedbackValue = document.getElementById("feedback").value;
+    
+    console.log("Status: " + statusValue);
+    console.log("Feedback: " + feedbackValue);
+
+    var formData = {
+        status:statusValue,
+        feedback:feedbackValue,
+        Approval_id:Approval_id
+    };
 
     console.log("form data");
     console.log(formData);
@@ -14,8 +23,6 @@ $("#approval_process_form").on("submit", function (event) {
             'X-CSRFToken': csrftoken
         },
         cache: false, 
-        processData: false,
-        contentType: false,
         success: function (response) {
             alert("操作成功");
         },
@@ -23,5 +30,4 @@ $("#approval_process_form").on("submit", function (event) {
             console.log('Error fetching events:', error);
         }
     });
-
-});
+};
