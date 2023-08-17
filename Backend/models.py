@@ -75,13 +75,16 @@ class ApprovalModel(models.Model):
 
     def find_and_update_parent_department(self):
         current_department = self.current_department
+        #當目前部門 = 目標部門 代表已完成
+        if self.current_department == self.target_department:
+            return self.update_department_status('completed')
+        #否則繼續找
         if current_department.parent_department:
             parent_department = current_department.parent_department
             self.current_department = parent_department
             self.save()
             return parent_department
-        elif self.current_department == self.target_department:
-            self.update_department_status('completed')
+        
         return None
 
     def get_approval_log_list(self):
@@ -93,7 +96,7 @@ class ApprovalModel(models.Model):
         print(approval_logs)
         show_list = []
         
-        for log in approval_logs:
+        for log in approval_logs: #處理簽過LOG
             user_full_name = log.user.full_name
             user_department = log.user.departments.department_name
             content = log.content
@@ -117,8 +120,11 @@ class ApprovalModel(models.Model):
         # print(current_department.id)
         # print(target_department.id)
         # print("xx")
+
+        #先檢查current_department ==target_department
         while True:
             #檢查有沒有在log出現
+
             department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
             if not department_already_recorded:
                 print("while")

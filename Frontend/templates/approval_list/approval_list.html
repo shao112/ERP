@@ -122,7 +122,7 @@
                     {% elif object.model == 'job_assign' %}
                         公派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
                     {% elif object.model == 'project_employee_assign' %}
-                       派工-{{ object.project_job_assign.id|format_with_zeros:5}}
+                        派工-{{ object.project_job_assign.id|format_with_zeros:5}}
                     {% else %}
                         未知类型
                     {% endif %}
