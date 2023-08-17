@@ -62,9 +62,9 @@
         </div>
     </div>
     <div class="container shadow-sm mt-4">
-        <div class="row text-center">
+        <div class="row">
             <div class="col-12 col-md-6  border-right"  style="height: 230px;overflow: scroll;">
-                <div class="font-weight-bold mb-2" style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">行程安排</div>
+                <div class="font-weight-bold mb-2 text-center" style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">行程安排</div>
                 <div class="schedule container">
                     {% for date, projects in grouped_projects.items %}
                     <div class="row">
@@ -85,15 +85,18 @@
                 </div>
             </div>
             <div class=" col-12 col-md-6" style="height: 230px;overflow: scroll;">
-                <div class="font-weight-bold mb-2" style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">公司最新資訊</div>
+                <div class="font-weight-bold mb-2 text-center" style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">公司最新資訊</div>
                 <div class="news container">
                     {% for n in news %}
                     <a href="" data-toggle="modal" data-target="#news-modal"
                         data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}">
                         <div class="row">
-                            <div class="col-3 border-right">{{ n.get_category_display| truncatechars_html:6|safe }}</div>
-                            <div class="col-3 border-right">{{ n.get_type_display }}</div>
-                            <div class="col-6">{{ n.title }}</div>
+                            <div class="col-6" style="overflow-x: hidden;">
+                                [{{ n.get_category_display }}][{{ n.get_type_display }}]
+                            </div>
+                            <div class="col-6" style="overflow-x: hidden;">
+                                {{ n.title }}
+                            </div>
                         </div>
                     </a>
                     {% endfor %}
@@ -118,28 +121,6 @@
                                 <span class="created-date-badge"></span>
                             </h5>
                             <div class="content">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="job-assign-modal modal fade" id="job-assign-modal" tabindex="-1">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <h5 class="mb-4" id="badge-row">
-                                工程確認單
-                            </h5>
-                            <div class="content">
-
                             </div>
                         </div>
                     </div>

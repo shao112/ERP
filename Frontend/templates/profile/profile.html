@@ -21,12 +21,8 @@
     <div class="container shadow-sm">
         <div class="row my-4 py-4">
             <div class="col-6 col-md-3 text-center">
-                <div class="profile_img h-50 w-50 mx-auto mb-2">
-                    {% if user.employee.profile_image %}
-                        <img class="h-100 img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload" style="object-fit: cover;">
-                    {% else %}
-                        <img class="h-100 img-fluid" src="{% static 'img/profile/default_profile.png' %}" alt="員工照片" id="image-upload" style="object-fit: cover;">
-                    {% endif %}
+                <div class="profile_img mx-auto mb-2" style="width: 80px;">
+                    <img class="h-100 img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload" style="object-fit: cover;">
                 </div>
                 <form id="profileImageForm" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -90,7 +86,7 @@
                 </form>
             </div>
             <div class="col-7">
-                <div class="password-rule">
+                <div class="password-rule" style="font-size: 0.9rem;">
                     <ul>
                         <li>若忘記密碼，請聯繫相關資訊人員協助重設密碼。</li>
                         <li>你的密碼不能與其他個人資訊太相近。</li>
