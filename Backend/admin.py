@@ -1,5 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
+from .resources import DepartmentResource
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -20,7 +21,9 @@ class MyUserAdmin(UserAdmin):
 
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
-    list_display = ('parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
+    list_display = ('belong_to_company', 'parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
+    resource_class = DepartmentResource
+    
 # 工程確認單
 class ProjectConfirmationAdmin(admin.ModelAdmin):
     list_display = ('modified_by','quotation_id', 'project_confirmation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')

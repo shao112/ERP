@@ -279,6 +279,12 @@ class Employee(ModifiedModel):
 
 # 部門
 class Department(ModifiedModel):
+    COMPANY_CHOICES = [
+        ('艾力克電機', '艾力克電機'),
+        ('維景', '維景'),
+    ]
+
+    belong_to_company =models.CharField(max_length=20,choices=COMPANY_CHOICES, null=True, blank=True,verbose_name="所屬公司")
     parent_department  = models.ForeignKey('self',max_length=30,  on_delete=models.SET_NULL, null=True, blank=True, verbose_name='上層部門')
     department_name = models.CharField(max_length=30, null=True, blank=True,verbose_name='部門名稱')
     department_id = models.CharField(max_length=20, null=True, blank=True,verbose_name='部門編號')
