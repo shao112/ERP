@@ -129,7 +129,13 @@
                     </td>
                     <td>
                         {% for log in object.Approval.get_approval_log_list %}
-                            {{ log.department }} - {{ log.status }}
+                            {{ log.department }} - 
+                            {% if   log.status == 'pass' %}
+                            【{{log.user_full_name}}：{{log.content}}】
+
+                            {% else %}
+                            (wait)
+                            {% endif %}
                             {% if not forloop.last %} >{% endif %}
                         {% empty %}
                         未執行簽核

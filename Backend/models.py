@@ -97,7 +97,7 @@ class ApprovalModel(models.Model):
             user_full_name = log.user.full_name
             user_department = log.user.departments.department_name
             content = log.content
-            status = "pass"  # 固定為 "pass
+            status = "pass"  #有訊息都 固定為 "pass
             show_list.append({
                 "user_full_name": user_full_name,
                 "department": user_department,
