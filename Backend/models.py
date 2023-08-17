@@ -87,78 +87,78 @@ class ApprovalModel(models.Model):
         
         return None
 
-    def get_approval_log_list(self):
-        """
-        取得相關的 ApprovalLog 並整理成列表
-        """
-        print("modal log")
-        approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-        print(approval_logs)
-        show_list = []
+    # def get_approval_log_list(self):
+    #     """
+    #     取得相關的 ApprovalLog 並整理成列表
+    #     """
+    #     print("modal log")
+    #     approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
+    #     print(approval_logs)
+    #     show_list = []
         
-        for log in approval_logs: #處理簽過LOG
-            user_full_name = log.user.full_name
-            user_department = log.user.departments.department_name
-            content = log.content
-            status = "pass"  #有訊息都 固定為 "pass
-            show_list.append({
-                "user_full_name": user_full_name,
-                "department": user_department,
-                "content": content,
-                "status": status
-            })
+    #     for log in approval_logs: #處理簽過LOG
+    #         user_full_name = log.user.full_name
+    #         user_department = log.user.departments.department_name
+    #         content = log.content
+    #         status = "pass"  #有訊息都 固定為 "pass
+    #         show_list.append({
+    #             "user_full_name": user_full_name,
+    #             "department": user_department,
+    #             "content": content,
+    #             "status": status
+    #         })
 
-        current_department = self.current_department
-        target_department = self.target_department.department
+    #     current_department = self.current_department
+    #     target_department = self.target_department.department
 
-        # print("xx 目標簽到")
-        # print(target_department.department_name)
-        # print("xx")
+    #     # print("xx 目標簽到")
+    #     # print(target_department.department_name)
+    #     # print("xx")
 
-        # print(current_department.department_name)
-        # print(current_department.parent_department)
-        # print(current_department.id)
-        # print(target_department.id)
-        # print("xx")
+    #     # print(current_department.department_name)
+    #     # print(current_department.parent_department)
+    #     # print(current_department.id)
+    #     # print(target_department.id)
+    #     # print("xx")
 
-        #先檢查current_department ==target_department
-        while True:
-            #檢查有沒有在log出現
+    #     #先檢查current_department ==target_department
+    #     while True:
+    #         #檢查有沒有在log出現
 
-            department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
-            if not department_already_recorded:
-                print("while")
-                print(current_department.department_name)
-                show_list.append({
-                    "user_full_name": None,
-                    "user_department": None,
-                    "content": None,
-                    "status": "wait",  # 固定為 "wait"
-                    "department": current_department.department_name
-                })
-
-
-            current_department = current_department.parent_department
-            #換上層部門
-
-            # print(current_department)
-            # print("while end")
-            #感覺可以寫更好...判斷下層部門是不是target_department，然後再break
-            if current_department == target_department:
-                department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
-                if not department_already_recorded:
-                    show_list.append({
-                        "user_full_name": None,
-                        "user_department": None,
-                        "content": None,
-                        "status": "wait",
-                        "department": target_department.department_name
-                        })
-                break
+    #         department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
+    #         if not department_already_recorded:
+    #             print("while")
+    #             print(current_department.department_name)
+    #             show_list.append({
+    #                 "user_full_name": None,
+    #                 "user_department": None,
+    #                 "content": None,
+    #                 "status": "wait",  # 固定為 "wait"
+    #                 "department": current_department.department_name
+    #             })
 
 
+    #         current_department = current_department.parent_department
+    #         #換上層部門
 
-        return show_list
+    #         # print(current_department)
+    #         # print("while end")
+    #         #感覺可以寫更好...判斷下層部門是不是target_department，然後再break
+    #         if current_department == target_department:
+    #             department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
+    #             if not department_already_recorded:
+    #                 show_list.append({
+    #                     "user_full_name": None,
+    #                     "user_department": None,
+    #                     "content": None,
+    #                     "status": "wait",
+    #                     "department": target_department.department_name
+    #                     })
+    #             break
+
+
+
+    #     return show_list
 
 
     class Meta:

@@ -386,7 +386,7 @@ class Approval_Process(UserPassesTestMixin,ListView):
         combined_records = list(project_confirmation_records) + list(project_job_assign_records)+ list(project_employee_assign_records)
         # print(combined_records)
 
-        print(combined_records[0].Approval.get_approval_log_list())
+        # print(combined_records[0].Approval.get_approval_log_list())
 
 
         queryset = combined_records
