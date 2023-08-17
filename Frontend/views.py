@@ -290,6 +290,63 @@ class Calendar(UserPassesTestMixin,ListView):
             return True
         return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
 
+
+class Approval_Watch(UserPassesTestMixin,ListView):
+    model = ApprovalModel
+    template_name = 'approval_list/approval_list.html'
+    context_object_name = 'approval_list'
+
+    def test_func(self):#有簽核權
+        if settings.PASS_TEST_FUNC:
+            return True
+        return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        current_employee = self.request.user.employee
+        current_department_id = current_employee.departments.id #取得員工部門
+        #取得正在簽核有關他部門的ApprovalModel id
+        ApprovalModel_ids = ApprovalModel.objects.filter(
+            current_department_id=current_department_id,
+            current_status='in_progress'
+        ).values_list('id', flat=True)
+
+        #從工程確認單取得關聯
+        project_confirmation_records = Project_Confirmation.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').annotate(
+         model=Value('project_confirmation', output_field=CharField()),
+          url=Value('project_confirmation', output_field=CharField())
+         )
+        
+        project_job_assign_records = Project_Job_Assign.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').annotate(
+            model=Value('job_assign', output_field=CharField()),
+              url=Value('job_assign', output_field=CharField())
+        )
+
+        project_employee_assign_records = Project_Employee_Assign.objects.filter(
+            Approval_id__in=ApprovalModel_ids
+        ).select_related('Approval').annotate(
+            model=Value('project_employee_assign', output_field=CharField()),
+              url=Value('project_employee_assign', output_field=CharField())
+        )
+
+        combined_records = list(project_confirmation_records) + list(project_job_assign_records)+ list(project_employee_assign_records)
+        print(combined_records)
+
+        # print(combined_records[0].Approval.get_approval_log_list())
+
+
+        queryset = combined_records
+        return queryset
+
+
+
 class Approval_Process(UserPassesTestMixin,ListView):
     model = ApprovalModel
     template_name = 'approval_process/approval_process.html'
