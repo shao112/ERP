@@ -25,7 +25,6 @@
             <div class="modal-body">
                 <form id="approval_process_form">
                     <div class="form-group">
-                        <div class="form-group">
                         <label for="status">處理狀態</label>
                         <select class="form-control" id="status" name="status">
                             <option value="-1">選擇狀態</option>
@@ -47,11 +46,6 @@
     </div>
 </div>
 
-<style>
-    #approvalModal {
-    z-index: 1060; /* 可以根据需要调整值，要比原本的模态框更高 */
-}
-</style>
 
 
 <div class="modal fade px-3" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -113,7 +107,9 @@
                     <th data-sortable="true" data-field="type">類型</th>
                     <th data-sortable="true" data-field="content">內容</th>
                     <th data-sortable="true" data-field="progress">簽核進度</th>
+                    <!--
                     <th data-sortable="true" data-field="process">查看</th>
+                    -->
                 </tr>
             </thead>
             <tbody class="" style="font-size: 14px;">
@@ -135,14 +131,17 @@
                         {% for log in object.Approval.get_approval_log_list %}
                             {{ log.department }} - {{ log.status }}
                             {% if not forloop.last %} >{% endif %}
+                        {% empty %}
+                        未執行簽核
                         {% endfor %}
                     </td>
-                    
-                    <td>
-                        <a href="" data-Approval_id="{{ object.Approval.id }}"  data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">
-                            <i class="fa-solid fa-eye fa-lg"></i>
-                        </a>
-                    </td>
+                    <!--
+                        <td>
+                            <a href="" data-Approval_id="{{ object.Approval.id }}"  data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">
+                                <i class="fa-solid fa-eye fa-lg"></i>
+                            </a>
+                        </td>
+                    -->
                         
                 </tr>
                 {% endfor %}

@@ -88,9 +88,9 @@ class ApprovalModel(models.Model):
         """
         取得相關的 ApprovalLog 並整理成列表
         """
-        print("log")
+        print("modal log")
         approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-        print(approval_logs )
+        print(approval_logs)
         show_list = []
         
         for log in approval_logs:
@@ -108,15 +108,15 @@ class ApprovalModel(models.Model):
         current_department = self.current_department
         target_department = self.target_department.department
 
-        print("xx 目標簽到")
-        print(target_department.department_name)
-        print("xx")
+        # print("xx 目標簽到")
+        # print(target_department.department_name)
+        # print("xx")
 
-        print(current_department.department_name)
-        print(current_department.parent_department)
-        print(current_department.id)
-        print(target_department.id)
-        print("xx")
+        # print(current_department.department_name)
+        # print(current_department.parent_department)
+        # print(current_department.id)
+        # print(target_department.id)
+        # print("xx")
         while True:
             #檢查有沒有在log出現
             department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
@@ -131,10 +131,12 @@ class ApprovalModel(models.Model):
                     "department": current_department.department_name
                 })
 
-            #換上層部門
+
             current_department = current_department.parent_department
-            print(current_department)
-            print("while end")
+            #換上層部門
+
+            # print(current_department)
+            # print("while end")
             #感覺可以寫更好...判斷下層部門是不是target_department，然後再break
             if current_department == target_department:
                 department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)

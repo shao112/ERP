@@ -13,6 +13,9 @@
 
 {% block main %}
 
+
+
+
 <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -25,7 +28,6 @@
             <div class="modal-body">
                 <form id="approval_process_form">
                     <div class="form-group">
-                        <div class="form-group">
                         <label for="status">處理狀態</label>
                         <select class="form-control" id="status" name="status">
                             <option value="-1">選擇狀態</option>
@@ -46,13 +48,6 @@
         </div>
     </div>
 </div>
-
-<style>
-    #approvalModal {
-    z-index: 1060; /* 可以根据需要调整值，要比原本的模态框更高 */
-}
-</style>
-
 
 <div class="modal fade px-3" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -153,9 +148,17 @@
  
 </div>
 
+
+<style>
+    #approvalModal {
+    z-index: 1060; 
+}
+</style>
+
+
 <script>
 
-    let Approval_id=""
+    let Approval_id="";
 
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [

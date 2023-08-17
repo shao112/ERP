@@ -56,6 +56,9 @@ class ClockAdmin(admin.ModelAdmin):
 # 公告
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'modified_by')
+
+    # list_display = [field.name for field in News._meta.get_fields()]
+
 # 車輛
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ('vehicle_id', 'vehicle_type', 'created_date', 'update_date')
@@ -65,6 +68,13 @@ class ClientAdmin(admin.ModelAdmin):
 # 請購單位
 class RequisitionAdmin(admin.ModelAdmin):
     list_display = ('requisition_name', 'created_date', 'update_date')
+#派工單
+class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
+    list_display = ('project_job_assign','construction_location', 'modified_by')
+
+    # list_display = [field.name for field in Project_Employee_Assign._meta.get_fields()]
+
+admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
@@ -75,7 +85,6 @@ admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
 admin.site.register(Equipment)
 admin.site.register(Vehicle, VehicleAdmin)
-admin.site.register(Project_Employee_Assign)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Project_Confirmation, ProjectConfirmationAdmin)
