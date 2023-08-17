@@ -197,11 +197,16 @@ $("form").on("submit", function (event) {
         // inputType === "file"，inputName === "attachment"
         if ((inputType === "file") && (inputElement[0] != undefined)) {
             var fileInput = inputElement[0];
+            var file = fileInput.files[0];
+            if (!file) {
+                return
+            }
+
             console.log(fileInput)
             var modal = inputElement.data("modal");
             console.log("idValue: " + idValue)
             var formData = new FormData();
-            formData.append(inputName, fileInput.files[0]);
+            formData.append(inputName, file);
             formData.append("name", inputName);
             formData.append("id", idValue);
             formData.append("modal", modal);

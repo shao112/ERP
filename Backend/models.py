@@ -163,21 +163,18 @@ class ModifiedModel(models.Model):
     modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
-    author = models.CharField(max_length=50,null=True, blank=True, default="",verbose_name="作者")
 
 
     class Meta:
         abstract = True
     def save(self, *args, **kwargs):
-        # print("xxx save")
-        # Get the current authenticated user
         user = get_current_authenticated_user()
         
         if user !=None:
-            self.modified_by = user.employee
-            if self.author =="":
-                self.author =user.employee.employee_id +" "+user.employee.full_name 
-
+            self.modified_by = user.employee            
+            if hasattr(self, 'created_by'):
+                if self.created_by ==None:
+                    self.created_by =user.employee
 
         super().save(*args, **kwargs)
 
@@ -302,7 +299,9 @@ class Project_Confirmation(ModifiedModel):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
-    
+    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+
     class Meta:
         verbose_name = "工程確認單"   # 單數
         verbose_name_plural = verbose_name   #複數
@@ -333,6 +332,7 @@ class Project_Job_Assign(ModifiedModel):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
+    created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True)
 
 
     class Meta:
@@ -363,6 +363,8 @@ class Project_Employee_Assign(ModifiedModel):
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
+    created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True)
+
 
     class Meta:
         verbose_name = "派工單"   # 單數
@@ -395,6 +397,7 @@ class News(ModifiedModel):
     level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
     editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
     attachment = models.FileField(upload_to="news_attachment", null=True, blank=True, verbose_name="公告附件")
+    created_by = models.ForeignKey("Employee",related_name="New_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = "最新消息"
@@ -481,12 +484,12 @@ class Requisition(ModifiedModel):
         verbose_name_plural = verbose_name
 
 
-#處理自動建立簽核對象
-@receiver(post_save, sender=Project_Job_Assign)
-@receiver(post_save, sender=Project_Confirmation)
-def create_approval(sender, instance, created, **kwargs):
-    if created and not instance.Approval:
-        approval = ApprovalModel.objects.create()
-        instance.Approval = approval
-        # instance.save()
+# #處理自動建立簽核對象
+# @receiver(post_save, sender=Project_Job_Assign)
+# @receiver(post_save, sender=Project_Confirmation) 
+# def create_approval(sender, instance, created, **kwargs):
+#     if created and not instance.Approval:
+#         approval = ApprovalModel.objects.create()
+#         instance.Approval = approval
+#         # instance.save()
 

@@ -306,6 +306,7 @@ class IMGUploadView(View):
 
 
 
+#匯入檔案
 class FileUploadView(View):
    def post(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']
@@ -362,6 +363,7 @@ class FormUploadFileView(View):
         print("getname:", getname)
         print("getid:", getid)
         print("uploaded_file:", uploaded_file)
+        
         if(uploaded_file):
             match getmodal:
                 case "project_confirmation":
