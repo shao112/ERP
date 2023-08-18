@@ -14,6 +14,13 @@ import os
 
 
 
+class UploadedFile(models.Model):
+    name = models.CharField(max_length=100)
+    file = models.FileField(upload_to='uploads/users/')
+
+    def __str__(self):
+        return self.name
+
 
 
 class ApprovalLog(models.Model):
@@ -231,6 +238,7 @@ class Employee(ModifiedModel):
     ]   
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
     full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
     departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。

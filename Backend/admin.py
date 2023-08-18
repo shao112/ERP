@@ -4,7 +4,7 @@ from .resources import DepartmentResource
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee,Equipment, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -87,6 +87,7 @@ admin.site.register(ApprovalLog)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
 admin.site.register(Equipment)
+admin.site.register(UploadedFile)
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(Employee)
 admin.site.register(Department, DepartmentAdmin)

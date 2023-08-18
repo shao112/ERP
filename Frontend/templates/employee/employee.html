@@ -12,6 +12,41 @@
 
 
 {% block main %}
+
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileUploadModalLabel">員工檔案上傳</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="fileUploadForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fileNameInput">檔案名稱</label>
+                            <input type="text" class="form-control" id="fileNameInput">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="fileInput">選擇檔案</label>
+                            <input type="file" class="form-control-file" id="fileInput">
+                        </div>
+                    </div>
+                    <button type="button" id="fileUploadBtn" class="btn btn-primary">上傳</button>
+                </form>
+                <hr>
+                <h4>檔案列表</h4>
+                <ul id="fileList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <div class="main px-3" id="employee-app">
     <div id="error-message"></div>
     <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
@@ -248,6 +283,7 @@
                 <tr class="text-nowrap">
                     <th></th>
                     <th></th>
+                    <th></th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
@@ -266,6 +302,11 @@
                         <a data-url="employee" data-id="{{p.pk}}" type="button"
                         class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                     </td>
+                    <td>
+                        <button type="button" onclick="setEmployeeId({{p.pk}})"  class="btn btn-primary" data-toggle="modal" data-target="#fileUploadModal">
+                            開啟員工檔案上傳
+                        </button>
+                    </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
                     <td>{{ p.departments.department_name }}</td>
@@ -281,8 +322,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/employee/UserFile.js' %}",
             // "{% static 'js/fuc/fileimport.js' %}",
-            "{% static 'js/fuc/modaltopdf.js' %}"
+            // "{% static 'js/fuc/modaltopdf.js' %}"
         ];
 
         scripts.forEach(function (src) {

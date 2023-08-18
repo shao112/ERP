@@ -7,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Equipment, Department,ApprovalLog,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Equipment, UploadedFile,Department,ApprovalLog,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm,EquipmentForm,DepartmentForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -359,10 +359,15 @@ class FormUploadFileView(View):
         getmodal = request.POST.get("modal")
         getid = request.POST.get("id")
         uploaded_file = request.FILES.get(getname)
+        #如果是多對多，就用另一種
+        ManyToManyProcess = request.POST.get("ManyToManyProcess",False)
+        filename = request.POST.get("file_name","")
         print("getmodel:", getmodal)
         print("getname:", getname)
         print("getid:", getid)
         print("uploaded_file:", uploaded_file)
+        print("ManyToManyProcess:", ManyToManyProcess)
+        print("filename:", filename)
         
         if(uploaded_file):
             match getmodal:
@@ -376,11 +381,22 @@ class FormUploadFileView(View):
                     model=News.objects.get(id=getid)
                 case "Equipment":
                     model=Equipment.objects.get(id=getid)
+                case "employee":
+                    model=Employee.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
-            setattr(model, getname, uploaded_file)
-            model.save()
+            if ManyToManyProcess:
+                print("xx")
+                related_field = getattr(model, getname)
+                print("xx")
+                uploaded_file_obj = UploadedFile.objects.create(name=filename, file=uploaded_file)
+                print("xx")
+                related_field.add(uploaded_file_obj)
+            else:
+
+                setattr(model, getname, uploaded_file)
+                model.save()
             return JsonResponse({'status': 'success'},status=200)
         else:
             return JsonResponse({"data":"error"}, status=400,safe=False)
@@ -495,8 +511,17 @@ class Employee_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Employee, id=id)
+        uploaded_files = data.uploaded_files.all() 
+        uploaded_files_dict_list = []
+        for file in uploaded_files:
+            file_dict = model_to_dict(file)
+            file_dict["file"] = file.file.url
+            uploaded_files_dict_list.append(file_dict)
+
         data = model_to_dict(data)
+        data["uploaded_files"]=uploaded_files_dict_list
         data['profile_image'] = data['profile_image'].url if data['profile_image']  else None
+        print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
 # 員工出勤
