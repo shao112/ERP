@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Clock,Project_Confirmation,Project_Job_Assign
+from .models import Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -74,25 +74,37 @@ def convent_dict(data):
 def convent_excel_dict(worksheet,model):
     template_dict={}
     convent_model= None
-
+    print("model: ",model)
     match  model:
         case "project-confirmation":
             template_dict= {
                 "quotation_id":"",
                 "project_confirmation_id":"",
-                "project_name":"",
-                "order_id":"",
                 "c_a":"",
+                "project_name":"",
                 "client":"",
                 "requisition":"",
+                "order_id":"",
                 "turnover":"",
             }
             convent_model=Project_Confirmation
         case "job-assign":
             template_dict= {
-                "quotation_id":"",
+                "job_assign_id":"",
+                "attendance_date":"",
+                "location":"",
+                "project_type":"",
+                "remark":"",
             }
             convent_model=Project_Job_Assign
+        case "employee-assign":
+            template_dict= {
+                "construction_date":"",
+                "completion_date":"",
+                "is_completed":"",
+                "construction_location":"",
+            }
+            convent_model=Project_Employee_Assign
         case _:
             return "error"
 
@@ -105,6 +117,8 @@ def convent_excel_dict(worksheet,model):
             
         new_dict = template_dict.copy()
         for i, key in enumerate(new_dict.keys()):
+            print(row[i])
+            print(row[i].value)
             new_dict[key] = row[i].value
         
         #防止全空白+入
