@@ -758,3 +758,17 @@ class Check(View):
     def get(self,request):
        return HttpResponseNotAllowed(['only POST'])
 
+
+
+class DeleteUploadedFileView(View):
+    def delete(self, request, employee_id, file_id):
+        employee = get_object_or_404(Employee, id=employee_id)
+        uploaded_file = get_object_or_404(UploadedFile, id=file_id)
+        if uploaded_file in employee.uploaded_files.all():
+            employee.uploaded_files.remove(uploaded_file)
+            employee.save()
+            uploaded_file.delete()
+            
+            return JsonResponse({"message": "檔案已刪除。"}, status=200)
+        else:
+            return JsonResponse({"message": "檔案不存在或不屬於此員工。"}, status=400)
