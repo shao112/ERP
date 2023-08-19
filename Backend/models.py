@@ -16,8 +16,11 @@ import os
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
-    file = models.FileField(upload_to='uploads/users/')
+    file = models.FileField(upload_to='employee_profile/users/')
 
+    class Meta:
+        verbose_name = '檔案上傳管理'
+        verbose_name_plural = verbose_name
     def __str__(self):
         return self.name
 
@@ -43,14 +46,14 @@ class Approval_TargetDepartment(models.Model):
     ]
 
     name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
-    department = models.ForeignKey('Department', on_delete=models.CASCADE,verbose_name="簽到哪個部門")
+    department_order = models.JSONField( blank=True, null=True,verbose_name="部門簽核順序")
     belong_department = models.ForeignKey('Department',related_name="belong_department", blank=True, null=True, on_delete=models.CASCADE,verbose_name="屬於哪部門的簽核")
     class Meta:
         verbose_name = '簽核流程管理'
         verbose_name_plural = verbose_name
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return f"{self.name} - {self.belong_department}"
 
 
 
@@ -63,15 +66,9 @@ class ApprovalModel(models.Model):
 
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
     #目前待簽
-    current_department = models.ForeignKey('Department', on_delete=models.CASCADE, related_name='current_approvals')
-    #目標部門
-    target_department = models.ForeignKey(Approval_TargetDepartment, on_delete=models.CASCADE, related_name='approvals')
+    current_department = models.ForeignKey('Department', verbose_name="待簽核",on_delete=models.CASCADE, related_name='current_approvals')
+    target_department = models.ForeignKey(Approval_TargetDepartment,verbose_name="依附簽核", on_delete=models.CASCADE, related_name='approvals')
 
-
-    def create_with_target_department(cls, department_name, department_id, current_department):
-        target_department = Approval_TargetDepartment.objects.get(department_name=department_name, department_id=department_id)
-        approval_model = cls(current_department=current_department, target_department=target_department)
-        return approval_model
 
     def update_department_status(self, new_status):
         if new_status == 'approved':
@@ -82,91 +79,61 @@ class ApprovalModel(models.Model):
 
     def find_and_update_parent_department(self):
         current_department = self.current_department
-        #當目前部門 = 目標部門 代表已完成
-        if self.current_department == self.target_department:
-            return self.update_department_status('completed')
-        #否則繼續找
-        if current_department.parent_department:
-            parent_department = current_department.parent_department
-            self.current_department = parent_department
+        target_department = self.target_department
+        department_order = target_department.department_order
+        
+        #尋找簽核index
+        current_index = department_order.index(current_department.id)
+        #判斷是不是最後一個
+        if current_index ==len(department_order) :
+            self.find_and_update_parent_department("completed")
+        else:
+            next_department_id = department_order[current_index + 1]
+            next_department = Department.objects.get(id=next_department_id)
+            self.current_department = next_department
             self.save()
-            return parent_department
+
+    def get_approval_log_list(self):
+        """
+        取得相關的 ApprovalLog 並整理成列表
+        """
+        print("modal log")
+        approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
+        print(approval_logs)
+        show_list = []
         
-        return None
+        for log in approval_logs: #處理簽過LOG
+            show_list.append({
+                "user_full_name": log.user.full_name,
+                "department": log.user.departments.department_name,
+                "department_pk": log.user.departments.pk,
+                "content": log.content,
+                "status": "pass"
+            })
+        print(show_list)
 
-    # def get_approval_log_list(self):
-    #     """
-    #     取得相關的 ApprovalLog 並整理成列表
-    #     """
-    #     print("modal log")
-    #     approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-    #     print(approval_logs)
-    #     show_list = []
-        
-    #     for log in approval_logs: #處理簽過LOG
-    #         user_full_name = log.user.full_name
-    #         user_department = log.user.departments.department_name
-    #         content = log.content
-    #         status = "pass"  #有訊息都 固定為 "pass
-    #         show_list.append({
-    #             "user_full_name": user_full_name,
-    #             "department": user_department,
-    #             "content": content,
-    #             "status": status
-    #         })
+        current_department = self.current_department
+        department_order = self.target_department.department_order  # 從 target_department 中獲取順序
+        current_department_index = department_order.index(current_department.id)
 
-    #     current_department = self.current_department
-    #     target_department = self.target_department.department
+        for department_id in department_order[current_department_index:]:
+            department = Department.objects.get(id=department_id)
+            if show_list:
+                department_already_recorded = any(item["department_pk"] == department.pk for item in show_list)
+            else:
+                department_already_recorded = False
 
-    #     # print("xx 目標簽到")
-    #     # print(target_department.department_name)
-    #     # print("xx")
+            if not department_already_recorded:
+                show_list.append({
+                    "user_full_name": None,
+                    "user_department": None,
+                    "content": None,
+                    "department_pk": department.pk,
+                    "status": "wait",
+                    "department": department.department_name
+                })
 
-    #     # print(current_department.department_name)
-    #     # print(current_department.parent_department)
-    #     # print(current_department.id)
-    #     # print(target_department.id)
-    #     # print("xx")
-
-    #     #先檢查current_department ==target_department
-    #     while True:
-    #         #檢查有沒有在log出現
-
-    #         department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
-    #         if not department_already_recorded:
-    #             print("while")
-    #             print(current_department.department_name)
-    #             show_list.append({
-    #                 "user_full_name": None,
-    #                 "user_department": None,
-    #                 "content": None,
-    #                 "status": "wait",  # 固定為 "wait"
-    #                 "department": current_department.department_name
-    #             })
-
-
-    #         current_department = current_department.parent_department
-    #         #換上層部門
-
-    #         # print(current_department)
-    #         # print("while end")
-    #         #感覺可以寫更好...判斷下層部門是不是target_department，然後再break
-    #         if current_department == target_department:
-    #             department_already_recorded = any(item["department"] == current_department.department_name for item in show_list)
-    #             if not department_already_recorded:
-    #                 show_list.append({
-    #                     "user_full_name": None,
-    #                     "user_department": None,
-    #                     "content": None,
-    #                     "status": "wait",
-    #                     "department": target_department.department_name
-    #                     })
-    #             break
-
-
-
-    #     return show_list
-
+        return show_list
 
     class Meta:
         verbose_name = '簽核狀態'
@@ -302,7 +269,7 @@ class Department(ModifiedModel):
         verbose_name_plural = verbose_name   #複數
 
     def __str__(self):
-        return self.department_name
+        return f"{self.department_name}({self.belong_to_company})"
 
 
 # 工程確認單

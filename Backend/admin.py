@@ -21,7 +21,7 @@ class MyUserAdmin(UserAdmin):
 
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
-    list_display = ('belong_to_company', 'parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
+    list_display = ('pk','belong_to_company', 'parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
     resource_class = DepartmentResource
     
 # 工程確認單
