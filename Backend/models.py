@@ -288,7 +288,7 @@ class Project_Confirmation(ModifiedModel):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
 
     class Meta:
@@ -321,7 +321,7 @@ class Project_Job_Assign(ModifiedModel):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
 
     class Meta:
@@ -352,7 +352,7 @@ class Project_Employee_Assign(ModifiedModel):
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
 
     class Meta:

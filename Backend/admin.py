@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .resources import DepartmentResource, ProjectConfirmationResource
+from .resources import DepartmentResource, ProjectConfirmationResource, ProjectEmployeeAssignResource, ProjectJobAssignResource
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -32,7 +32,7 @@ class ProjectConfirmationAdmin(ImportExportModelAdmin):
     resource_class = ProjectConfirmationResource
     
 # 工作派任計畫
-class ProjectJobAssignAdmin(admin.ModelAdmin):
+class ProjectJobAssignAdmin(ImportExportModelAdmin):
     # list_display = ('project_confirmation', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'display_work_employee', 'display_lead_employee','vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
     list_display = ('project_confirmation', 'job_assign_id',  'display_work_employee', 'display_lead_employee','attendance_date','vehicle', 'location', 'project_type', 'remark', 'attachment', 'created_date', 'update_date')
     # ManyToMany不能在list_display顯示
@@ -42,16 +42,18 @@ class ProjectJobAssignAdmin(admin.ModelAdmin):
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
     display_lead_employee.short_description = '多對多_帶班人員'
+    resource_class = ProjectJobAssignResource
 
 # 派工單
 class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
     list_display = ('project_confirmation', 'construction_date', 'completion_date', 'is_completed', 'construction_location', 'inspector', 'vehicle', 'manuscript_return_date', 'display_lead_employee', 'author', 'enterprise_signature', 'created_date', 'update_date')
-    def display_inspector(self, obj):
-        return ', '.join([str(item) for item in obj.inspector.all()])
-    display_inspector.short_description = '多對多_檢測人員'
-    def display_lead_employee(self, obj):
-        return ', '.join([str(item) for item in obj.lead_employee.all()])
-    display_lead_employee.short_description = '多對多_帶班主管'
+    # def display_inspector(self, obj):
+    #     return ', '.join([str(item) for item in obj.inspector.all()])
+    # display_inspector.short_description = '多對多_檢測人員'
+    # def display_lead_employee(self, obj):
+    #     return ', '.join([str(item) for item in obj.lead_employee.all()])
+    # display_lead_employee.short_description = '多對多_帶班主管'
+    # resource_class = ProjectEmployeeAssignResource
 
 # 打卡
 class ClockAdmin(admin.ModelAdmin):
@@ -72,8 +74,15 @@ class ClientAdmin(admin.ModelAdmin):
 class RequisitionAdmin(admin.ModelAdmin):
     list_display = ('requisition_name', 'created_date', 'update_date')
 #派工單
-class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
+class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
     list_display = ('project_job_assign','construction_location', 'modified_by')
+    def display_inspector(self, obj):
+        return ', '.join([str(item) for item in obj.inspector.all()])
+    display_inspector.short_description = '多對多_檢測人員'
+    def display_lead_employee(self, obj):
+        return ', '.join([str(item) for item in obj.lead_employee.all()])
+    display_lead_employee.short_description = '多對多_帶班主管'
+    resource_class = ProjectEmployeeAssignResource
 
     # list_display = [field.name for field in Project_Employee_Assign._meta.get_fields()]
 
