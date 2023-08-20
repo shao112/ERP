@@ -29,10 +29,16 @@
                             {% csrf_token %}
                             <input name="id" hidden/>
                             <div class="row my-4">
-                                <div class="col-12 col-md-4">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="belong_to_company_control">所屬公司</label>
+                                        {{ department_form.belong_to_company }}
+                                    </div>
+                                </div>
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="parent_department_control">上層部門</label>
-                                        <select class="form-control form-control-sm" id="parent_department"
+                                        <select class="form-control form-control-sm" id="parent_department_control"
                                             name="parent_department">
                                             {% for d in department %}
                                             <option value="{{d.pk}}">{{d.department_name}}</option>
@@ -40,14 +46,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="department_id_control">部門編號</label>
                                         <input class="form-control form-control-sm" id="department_id_control"
                                             name="department_id"></input>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4">
+                                <div class="col-6">
                                     <div class="form-group">
                                         <label for="department_name_control">部門名稱</label>
                                         <input class="form-control form-control-sm" id="department_name_control"
@@ -56,7 +62,12 @@
                                 </div>
                                         
                             </div>
-                            <button type="submit" class="btn border border-dark rounded btn-block">送出</button>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-1"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-1"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -77,8 +88,9 @@
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
                     <tr>
-                        <th></th>
-                        <th></th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true">編輯</th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true">刪除</th>
+                        <th data-field="belong_to_company" data-sortable="true">所屬公司</th>
                         <th data-field="parent_department" data-sortable="true">上級部門</th>
                         <th data-field="department_name" data-sortable="true">部門名稱</th>
                         <th data-field="department_id" data-sortable="true">部門編號</th>
@@ -90,17 +102,19 @@
                     <tr>
                         <td>
                             <a type="button" data-url="department" data-id="{{ d.id }}"
-                                class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                                data-target="#department-modal"><i class="fas fa-edit"></i></a>
+                                class="btn btn-sm btn-warning" data-toggle="modal"
+                                data-target="#department-modal" onclick="LoadData(event)">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         </td>
                         <td>
-                            <a data-url="department" data-id="{{ d.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
+                            <a data-url="department" data-id="{{ d.id }}" type="button" onclick="DELETE_handleClick(event)"
+                            class="btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                         </td>
-                        <td>{% if d.parent_department %}{{ d.parent_department.department_name }}{% else %}無</td>
-                        </td>{% endif %}
-                        <td>{{ d.department_name }}</td>
-                        <td>{{ d.department_id }}</td>
+                        <td>{% if d.belong_to_company %}{{ d.belong_to_company }}{% else %}{% endif %}</td>
+                        <td>{% if d.parent_department %}{{ d.parent_department.department_name }}{% else %}無{% endif %}</td>
+                        <td>{% if d.department_name %}{{ d.department_name }}{% else %}{% endif %}</td>
+                        <td>{% if d.department_id %}{{ d.department_id }}{% else %}{% endif %}</td>
                         <td>{{ d.employees.all.count }}</td>
                     </tr>
                     {% endfor %}
@@ -110,18 +124,23 @@
 </div>
 
 <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var scripts = [
-                "{% static 'js/fuc/restful.js' %}",
-                "{% static 'js/fuc/modaltopdf.js' %}"
-            ];
+    document.addEventListener('DOMContentLoaded', function () {
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/modaltopdf.js' %}"
+        ];
 
-            scripts.forEach(function (src) {
-                var script = document.createElement('script');
-                script.src = src;
-                document.body.appendChild(script);
-            });
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
         });
+    });
+    async function LoadData(event){
+        console.log("load")
+        getdata = await GET_handleClick(event);
+
+    }
 
 </script>
 {% endblock %}

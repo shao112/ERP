@@ -100,6 +100,9 @@ class DepartmentForm(BaseModelForm):
     class Meta:
         model = Department
         fields = '__all__'
+        widgets = {
+            'belong_to_company': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'belong_to_company_control'}),
+        }
         
 # 員工
 class EmployeeForm(BaseModelForm):

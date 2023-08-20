@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .resources import DepartmentResource
+from .resources import DepartmentResource, ProjectConfirmationResource
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -9,7 +9,6 @@ from .models import Employee,Equipment,UploadedFile, Approval_TargetDepartment,A
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
 
-# Register your models here.
 class EmployeeInline(admin.StackedInline):
     model = Employee
     can_delete = False
@@ -25,11 +24,12 @@ class DepartmentAdmin(ImportExportModelAdmin):
     resource_class = DepartmentResource
     
 # 工程確認單
-class ProjectConfirmationAdmin(admin.ModelAdmin):
+class ProjectConfirmationAdmin(ImportExportModelAdmin):
     list_display = ('modified_by','quotation_id', 'project_confirmation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
+    resource_class = ProjectConfirmationResource
     
 # 工作派任計畫
 class ProjectJobAssignAdmin(admin.ModelAdmin):
@@ -81,10 +81,10 @@ admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Approval_TargetDepartment)
 admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)
-admin.site.register(User, MyUserAdmin)
 admin.site.register(News)
 admin.site.register(Equipment)
 admin.site.register(UploadedFile)

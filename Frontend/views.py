@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm
+from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -248,6 +248,11 @@ class Department_list(UserPassesTestMixin,ListView):
     model = Department
     template_name = 'department/department.html'
     context_object_name = 'department'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['department_form'] = DepartmentForm()
+        return context
 
     def post(self,request):
         context = {
