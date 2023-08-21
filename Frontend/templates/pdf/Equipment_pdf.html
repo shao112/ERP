@@ -2,7 +2,7 @@
 <html>
 
 <head>
-   
+
     <title>專案派任詳情</title>
 
     {% load static %}
@@ -42,7 +42,7 @@
             padding: 10px;
             text-align: center;
             display: flex;
-            justify-content: center;
+            justify-content: center;    
             align-items: center;
         }
 
@@ -50,11 +50,18 @@
             max-width: 100%;
             max-height: 100%;
         }
+
+        #show td.chinese {
+            background-color: #f2f2f2;
+            /* 灰色背景顏色 */
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
         integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -64,6 +71,45 @@
 
     <h1>派任單詳情</h1>
     <div class="assignment-details">
+        <table id="show">
+            <tbody>
+                <tr>
+                    <td class="chinese">請購單位</td>
+                    <td>{{ project_employee_assign.project_job_assign.project_confirmation.client }}</td>
+                    <td class="chinese">訂單編號</td>
+                    <td>{{ project_employee_assign.order_number }}</td>
+                    <td class="chinese">完工日期</td>
+                    <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
+                </tr>
+                <tr>
+                    <td class="chinese">工程名稱</td>
+                    <td>{{ project_employee_assign.project_job_assign.project_name }}</td>
+                    <td class="chinese">施工地點</td>
+                    <td colspan="3">{{ project_employee_assign.construction_location }}</td>
+                </tr>
+                <tr>
+                    <td class="chinese">支援公司 (人數/姓名)</td>
+                    <td colspan="3">{{ project_employee_assign.support_company }}</td>
+                    <td class="chinese">手稿預計回傳日</td>
+                    <td>{{ project_employee_assign.manuscript_return_date|date:"Y/m/d" }}</td>
+                </tr>
+                <tr>
+                    <td  class="chinese">使用車輛: {{ project_employee_assign.vehicle }}</td>
+                    <td colspan="5" ></td>
+                </tr>
+                <tr>
+                    <td  class="chinese">檢測人員</td>
+                    <td colspan="5" >
+                        {% for inspector in project_employee_assign.inspectors.all %}
+                        {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <!-- 繼續添加其他資料的 <tr> -->
+            </tbody>
+        </table>
+
+
         <p>施工日期：{{ project_employee_assign.construction_date }}</p>
         <p>完工日期：{{ project_employee_assign.completion_date }}</p>
         <p>完工狀態：{% if project_employee_assign.is_completed %}已完工{% else %}未完工{% endif %}</p>
@@ -104,6 +150,8 @@
         <div class="signature-box">
             {% if project_employee_assign.enterprise_signature %}
             <img class="signature-img" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
+            {% else %}
+            簽名
             {% endif %}
         </div>
     </div>
@@ -112,7 +160,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        print()
+        // print()
     });
 
 

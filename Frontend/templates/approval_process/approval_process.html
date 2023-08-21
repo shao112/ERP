@@ -117,9 +117,9 @@
                     <td>{{  object.model |render_model_text }}</td>
                     <td> 
                     {% if object.model == 'project_confirmation' %}
-                        {{object.project_confirmation_id}} - {{ object.project_name}}
+                        工確-{{object.id|format_with_zeros:5}} - {{ object.project_name}}
                     {% elif object.model == 'job_assign' %}
-                        公派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
+                        工派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
                     {% elif object.model == 'project_employee_assign' %}
                        派工-{{ object.project_job_assign.id|format_with_zeros:5}}
                     {% else %}

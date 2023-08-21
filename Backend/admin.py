@@ -25,7 +25,7 @@ class DepartmentAdmin(ImportExportModelAdmin):
     
 # 工程確認單
 class ProjectConfirmationAdmin(ImportExportModelAdmin):
-    list_display = ('quotation_id',  'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
+    list_display = ('quotation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
