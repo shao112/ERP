@@ -606,6 +606,7 @@ class Project_Confirmation_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
         data = model_to_dict(data)
+        data['project_confirmation_id'] = "工確-" +str(data["id"]).zfill(5)
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
@@ -675,7 +676,7 @@ class Job_Assign_View(View):
         data["work_employee"] = convent_employee(data["work_employee"])
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
-        data['job_assign_id'] = "公派-" +str(data["id"]).zfill(5)
+        data['job_assign_id'] = "工派-" +str(data["id"]).zfill(5)
         data['attachment'] = data['attachment'].url if data['attachment']  else None
     
         return JsonResponse({"data":data}, status=200,safe = False)
@@ -733,7 +734,7 @@ class Calendar_View(View):
                 project.location = "暫無"
             print(project.location)
             data.append({
-                'title': project.project_confirmation.project_confirmation_id,
+                'title': project.project_confirmation.pk,
                 'start': project.attendance_date,
                 'location': project.location
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),

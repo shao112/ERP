@@ -17,14 +17,6 @@ class DepartmentResource(resources.ModelResource):
     parent_department = Field(attribute='parent_department', column_name=Department.parent_department.field.verbose_name)
     department_name = Field(attribute='department_name', column_name=Department.department_name.field.verbose_name)
     department_id = Field(attribute='department_id', column_name=Department.department_id.field.verbose_name)
-    # def get_export_fields(self):
-    #     fields = self.get_fields()
-    #     for field in fields:
-    #         field_name = self.get_field_name(field)
-    #         # 如果有设置 verbose_name，则将 column_name 替换为 verbose_name, 否则维持原有的字段名。
-    #         if field_name in self.verbose_name_dict.keys():
-    #             field.column_name = self.verbose_name_dict[field_name]
-    #     return fields
     class Meta:
         model = Department
         # fields 匯入時要求的欄位格式
@@ -33,7 +25,7 @@ class DepartmentResource(resources.ModelResource):
         # export_order = ('parent_department','department_name','department_id')
 
 class ProjectConfirmationResource(resources.ModelResource):
-    project_confirmation_id = Field(attribute='project_confirmation_id', column_name=Project_Confirmation.project_confirmation_id.field.verbose_name)
+    # project_confirmation_id = Field(attribute='project_confirmation_id', column_name=Project_Confirmation.project_confirmation_id.field.verbose_name)
     quotation_id = Field(attribute='quotation_id', column_name=Project_Confirmation.quotation_id.field.verbose_name)
     project_name = Field(attribute='project_name', column_name=Project_Confirmation.project_name.field.verbose_name)
     order_id = Field(attribute='order_id', column_name=Project_Confirmation.order_id.field.verbose_name)
@@ -63,7 +55,7 @@ class ProjectConfirmationResource(resources.ModelResource):
 
 class ProjectJobAssignResource(resources.ModelResource):
     project_confirmation = Field(attribute='project_confirmation', column_name=Project_Job_Assign.project_confirmation.field.verbose_name)
-    job_assign_id = Field(attribute='job_assign_id', column_name=Project_Job_Assign.job_assign_id.field.verbose_name)
+    # job_assign_id = Field(attribute='job_assign_id', column_name=Project_Job_Assign.job_assign_id.field.verbose_name)
     attendance_date = Field(attribute='attendance_date', column_name=Project_Job_Assign.attendance_date.field.verbose_name)
     work_employee = Field(attribute='work_employee', column_name=Project_Job_Assign.work_employee.field.verbose_name)
     lead_employee = Field(attribute='lead_employee', column_name=Project_Job_Assign.lead_employee.field.verbose_name)

@@ -161,7 +161,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
-        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id')
         context["all_Equipment"] = Equipment.objects.all()
         return context
 
@@ -353,7 +353,7 @@ class Approval_Process(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
-        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id','project_confirmation__project_confirmation_id')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.values('id')
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['vehicle'] = Vehicle.objects.all()

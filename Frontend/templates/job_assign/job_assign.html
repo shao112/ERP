@@ -45,7 +45,8 @@
                                                     <option value="-1">請選擇工確單編號</option>
                                                     {% for project_confirmation in project_confirmation_list %}
                                                     <option value="{{ project_confirmation.pk }}">
-                                                        {{project_confirmation.project_confirmation_id }}</option>
+                                                        工確-{{ project_confirmation.pk|format_with_zeros:5 }}
+                                                    </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -248,9 +249,11 @@
                             <a data-url="job_assign" data-id="{{ j.id }}" type="button"
                                 class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
                         </td>
-                        <td>{{ j.project_confirmation.project_confirmation_id }}</td>
                         <td>
-                            公派-{{ j.id|format_with_zeros:5 }}
+                            工確-{{ j.project_confirmation.pk|format_with_zeros:5 }}
+                        </td>
+                        <td>
+                            工派-{{ j.id|format_with_zeros:5 }}
                         </td>
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
