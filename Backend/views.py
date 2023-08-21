@@ -237,6 +237,7 @@ class Project_Employee_Assign_View(View):
         else:
             data['enterprise_signature'] = None
         print("dict_data")
+        print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class New_View(View):

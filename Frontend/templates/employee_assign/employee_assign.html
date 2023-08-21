@@ -322,6 +322,7 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="naelete">簽名</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">列印/下載pdf</th>
 
+                    <th data-field="job" data-sortable="true">工派單</th>
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="project_name" data-sortable="true">工程名稱</th>
                     <th data-field="lead_employee" data-sortable="true">帶班主管</th>
@@ -357,6 +358,7 @@
                     <td><a target="_blank" href="{% url 'project_employee_assign_View' id=p.id %}">點擊</a></td>
 
                     
+                    <td>{{ p.project_job_assign.pk }}</td>
                     <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
                     <td>{{ p.project_job_assign.project_confirmation.project_name }}</td>
                     <td>{% for employees_list in p.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
@@ -419,8 +421,15 @@
 
     async function LoadData(event){
         console.log("load")
+        console.log("load")
+        console.log("load")
         getdata = await GET_handleClick(event,true);
+        console.log("xx")
         get_value = Object.values(getdata["carry_equipments"]);
+        console.log("xx")
+        console.log("xx")
+        console.log("xx")
+        console.log(get_value)
         all_Equipment_checked = get_value;
         syncall_Equipment_checkedRowsWithArray();
 

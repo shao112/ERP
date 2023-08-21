@@ -19,10 +19,12 @@ function SetSelect2(input, key, get_value) {
         } else {
             containsValue = get_value.find(item => item == option_id);
         }
-        // console.log(get_value)
-        // console.log(option_id)
-        // console.log(containsValue)
+        
+        console.log(get_value)
+        console.log(option_id)
+        console.log(containsValue)
         if (containsValue) {
+            console.log(option)
             option.selected = true;
         }
     }

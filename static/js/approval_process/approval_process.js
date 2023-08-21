@@ -1,5 +1,8 @@
 document.getElementById("approval_btn").onclick = handleApproval;
 
+let Approval_id="";
+
+
 function handleApproval() {
     var statusValue = document.getElementById("status").value;
     var feedbackValue = document.getElementById("feedback").value;
@@ -27,7 +30,9 @@ function handleApproval() {
             alert("操作成功");
         },
         error: function(error) {
+            alert("簽核失敗")
             console.log('Error fetching events:', error);
         }
     });
+
 };

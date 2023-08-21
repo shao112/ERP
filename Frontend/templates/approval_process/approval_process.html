@@ -126,9 +126,16 @@
                         未知类型
                     {% endif %}
                     </td>
+
                     <td>
                         {% for log in object.Approval.get_approval_log_list %}
-                            {{ log.department }} - {{ log.status }}
+                        {{ log.department }} - 
+                        {% if   log.status == 'pass' %}
+                        【{{log.user_full_name}}：{{log.content}}】
+
+                        {% else %}
+                        (wait)
+                        {% endif %}
                             {% if not forloop.last %} >{% endif %}
                         {% endfor %}
                     </td>
@@ -145,7 +152,7 @@
             </tbody>
         </table>
     </div>
- F
+ 
 </div>
 
 
@@ -158,7 +165,6 @@
 
 <script>
 
-    let Approval_id="";
 
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
@@ -180,7 +186,7 @@
         
         
         $('#myModal').on('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // 觸碰的按钮
+            var button = event.relatedTarget; 
             var modalModel = button.getAttribute('data-modal');        
             Approval_id = button.getAttribute('data-Approval_id');           
             console.log("dX")
@@ -200,7 +206,6 @@
                             continue
                         }
                         
-                        
                         input.disabled = true;  // 禁用
                         input.setAttribute("readonly", "true"); //封印修改
 
@@ -219,7 +224,6 @@
             });
 
 
-        
             if (modalModel === 'project_confirmation') {
                 console.log("1")
                 $('#tab1').tab('show');

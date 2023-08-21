@@ -105,6 +105,7 @@
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th data-sortable="true" data-field="type">類型</th>
+                    <th data-sortable="true" data-field="status">狀態</th>
                     <th data-sortable="true" data-field="content">內容</th>
                     <th data-sortable="true" data-field="progress">簽核進度</th>
                     <!--
@@ -120,12 +121,15 @@
                     {% if object.model == 'project_confirmation' %}
                         {{object.project_confirmation_id}} - {{ object.project_name}}
                     {% elif object.model == 'job_assign' %}
-                        公派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
+                        工派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
                     {% elif object.model == 'project_employee_assign' %}
                         派工-{{ object.project_job_assign.id|format_with_zeros:5}}
                     {% else %}
                         未知类型
                     {% endif %}
+                    </td>
+                    <td>
+                        {{ object.Approval.get_current_status_display }}
                     </td>
                     <td>
                         {% for log in object.Approval.get_approval_log_list %}

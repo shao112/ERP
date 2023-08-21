@@ -44,16 +44,6 @@ class ProjectJobAssignAdmin(ImportExportModelAdmin):
     display_lead_employee.short_description = '多對多_帶班人員'
     resource_class = ProjectJobAssignResource
 
-# 派工單
-class ProjectEmployeeAssignAdmin(admin.ModelAdmin):
-    list_display = ('project_confirmation', 'construction_date', 'completion_date', 'is_completed', 'construction_location', 'inspector', 'vehicle', 'manuscript_return_date', 'display_lead_employee', 'author', 'enterprise_signature', 'created_date', 'update_date')
-    # def display_inspector(self, obj):
-    #     return ', '.join([str(item) for item in obj.inspector.all()])
-    # display_inspector.short_description = '多對多_檢測人員'
-    # def display_lead_employee(self, obj):
-    #     return ', '.join([str(item) for item in obj.lead_employee.all()])
-    # display_lead_employee.short_description = '多對多_帶班主管'
-    # resource_class = ProjectEmployeeAssignResource
 
 # 打卡
 class ClockAdmin(admin.ModelAdmin):

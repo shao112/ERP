@@ -85,8 +85,8 @@ class ApprovalModel(models.Model):
         #尋找簽核index
         current_index = department_order.index(current_department.id)
         #判斷是不是最後一個
-        if current_index ==len(department_order) :
-            self.find_and_update_parent_department("completed")
+        if current_index ==len(department_order)-1 :
+            self.update_department_status("completed")
         else:
             next_department_id = department_order[current_index + 1]
             next_department = Department.objects.get(id=next_department_id)
@@ -98,19 +98,21 @@ class ApprovalModel(models.Model):
         取得相關的 ApprovalLog 並整理成列表
         """
         print("modal log")
-        approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-        print(approval_logs)
+        get_approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
+        print(get_approval_logs)
         show_list = []
         
-        for log in approval_logs: #處理簽過LOG
+        for log in get_approval_logs: #處理簽過LOG
             show_list.append({
                 "user_full_name": log.user.full_name,
                 "department": log.user.departments.department_name,
                 "department_pk": log.user.departments.pk,
-                "content": log.content,
+                "content": log.content, 
                 "status": "pass"
             })
         print(show_list)
+        print("log end")
+
 
         current_department = self.current_department
         department_order = self.target_department.department_order  # 從 target_department 中獲取順序
@@ -248,8 +250,8 @@ class Employee(ModifiedModel):
         # return round(seniority, 1)
         return 0
 
-    # def __str__(self):
-    #     return self.user.username
+    def __str__(self):
+        return self.full_name
 
 
 # 部門
@@ -329,6 +331,8 @@ class Project_Job_Assign(ModifiedModel):
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
 
+    def __str__(self) :
+        return   str(self.pk).zfill(5)
 
     def attachment_link(self):
         if self.attachment:
@@ -359,6 +363,8 @@ class Project_Employee_Assign(ModifiedModel):
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
+    def __str__(self):
+        return self.project_job_assign.job_assign_id
 
 
 # 公告
@@ -444,7 +450,11 @@ class Equipment(ModifiedModel):
     class Meta:
         verbose_name = "固定資產管理"
         verbose_name_plural = verbose_name
+    
+    def __str__(self):
+        return self.equipment_name  
         
+
 # 車輛
 class Vehicle(ModifiedModel):
     VEHICLE_TYPE = (

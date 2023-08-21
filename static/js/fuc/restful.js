@@ -86,11 +86,10 @@ async function GET_handleClick(event, bringdata=true) {
                 delete jsonData.modified_by;
                 delete jsonData.author;
  
-                
+                resolve(jsonData);
                 if(bringdata==false){
-                    return resolve(jsonData); //設定回傳資料
+                    return; //設定回傳資料
                 }
-
 
                 for (var key in jsonData) {
                     var input = document.getElementsByName(key)[0];
@@ -112,7 +111,6 @@ async function GET_handleClick(event, bringdata=true) {
                         console.log("Input not found for key:", key);
                     }
                 }
-
             },
             error: function (xhr, textStatus, errorThrown) {
                 if (xhr.status === 400) {
