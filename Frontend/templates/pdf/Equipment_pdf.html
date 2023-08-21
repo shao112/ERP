@@ -6,8 +6,16 @@
     <title>專案派任詳情</title>
 
     {% load static %}
-
+<!-- Bootstrap CSS 4.2.1 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <style>
+        body {
+            font-family: '標楷體', sans-serif;
+            width: 21cm; /* A4紙張的寬度 */
+            height: 29.7cm; /* A4紙張的高度 */
+            margin: 0 auto; /* 讓內容居中 */
+        }
         /* @import url('https://fonts.cdnfonts.com/css/strong'); */
         /* @import url('{% static ' fonts/stsong.ttf' %}');
 
@@ -16,9 +24,7 @@
             margin: 20px;
         } */
 
-        h1 {
-            text-align: center;
-        }
+        
 
         table {
             border-collapse: collapse;
@@ -29,10 +35,17 @@
 
         th,
         td {
-            border: 1px solid black;
+            border: 2px solid black;
             padding: 8px;
+            text-align: center;
+            width: 85px;
+            
+        }
+        td:not(.chinese) {
+            text-wrap:nowrap;
             text-align: left;
         }
+
 
         .signature-box {
             border: 2px solid black;
@@ -67,97 +80,108 @@
 
 <body id="download_pdf">
 
+    <div class="main mx-4" style="margin-top: 50px;">
+        <h3 class="text-center">艾力克電機股份有限公司</h3>
+        <h5 class="text-center">派工單測試簽收單</h5>
+        <div class="assignment-details">
+            <table id="show">
+                <tbody>
+                    <tr>
+                        <td class="chinese">客戶名稱</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.client }}</td>
+                        <td class="chinese">報價單號</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.quotation_id }}</td>
+                        <td class="chinese">施工日期</td>
+                        <td>{{ project_employee_assign.construction_date|date:"Y/m/d" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="chinese">請購單位<br>(業主)</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.requisition }}</td>
+                        <td class="chinese">訂單編號</td>
+                        <td>{{ project_employee_assign.order_number }}</td>
+                        <td class="chinese">完工日期</td>
+                        <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="chinese">工程名稱</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.project_name }}</td>
+                        <td class="chinese">施工地點</td>
+                        <td colspan="3">{{ project_employee_assign.construction_location }}</td>
+                    </tr>
+                    <tr>
+                        <td class="chinese">支援公司 (人數/姓名)</td>
+                        <td colspan="3">{{ project_employee_assign.support_company }}</td>
+                        <td class="chinese">手稿預計回傳日</td>
+                        <td>{{ project_employee_assign.manuscript_return_date|date:"Y/m/d" }}</td>
+                    </tr>
+                    <tr>
+                        <td  class="chinese">使用車輛: {{ project_employee_assign.vehicle }}</td>
+                        <td colspan="5" ></td>
+                    </tr>
+                    <tr>
+                        <td  class="chinese">檢測人員</td>
+                        <td colspan="5" >
+                            {% for inspector in project_employee_assign.inspectors.all %}
+                            {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <!-- 繼續添加其他資料的 <tr> -->
+                </tbody>
+            </table>
 
 
-    <h1>派任單詳情</h1>
-    <div class="assignment-details">
-        <table id="show">
-            <tbody>
+            <p>施工日期：{{ project_employee_assign.construction_date }}</p>
+            <p>完工日期：{{ project_employee_assign.completion_date }}</p>
+            <p>完工狀態：{% if project_employee_assign.is_completed %}已完工{% else %}未完工{% endif %}</p>
+            <p>施工地點：{{ project_employee_assign.construction_location }}</p>
+            <p>使用車輛：{{ project_employee_assign.vehicle }}</p>
+
+            <h2>帶班主管</h2>
+            <ul>
+                {% for lead in project_employee_assign.lead_employee.all %}
+                <li>{{ lead.full_name }} (員工編號：{{ lead.employee_id }})</li>
+                {% endfor %}
+            </ul>
+
+            <h2>攜帶資產</h2>
+            <table>
                 <tr>
-                    <td class="chinese">請購單位</td>
-                    <td>{{ project_employee_assign.project_job_assign.project_confirmation.client }}</td>
-                    <td class="chinese">訂單編號</td>
-                    <td>{{ project_employee_assign.order_number }}</td>
-                    <td class="chinese">完工日期</td>
-                    <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
+                    <th>資產標籤</th>
+                    <th>序號</th>
+                    <th>資產種類別</th>
+                    <th>中類</th>
+                    <th>品名</th>
+                    <th>廠牌/型號</th>
+                    <th>製造序號</th>
                 </tr>
+                {% for equipment in project_employee_assign.carry_equipments.all %}
                 <tr>
-                    <td class="chinese">工程名稱</td>
-                    <td>{{ project_employee_assign.project_job_assign.project_name }}</td>
-                    <td class="chinese">施工地點</td>
-                    <td colspan="3">{{ project_employee_assign.construction_location }}</td>
+                    <td>{{ equipment.equipment_id }}</td>
+                    <td>{{ equipment.order_id }}</td>
+                    <td>{{ equipment.equipment_category }}</td>
+                    <td>{{ equipment.equipment_type }}</td>
+                    <td>{{ equipment.equipment_name }}</td>
+                    <td>{{ equipment.product_model }}</td>
+                    <td>{{ equipment.manufacturing_number }}</td>
                 </tr>
-                <tr>
-                    <td class="chinese">支援公司 (人數/姓名)</td>
-                    <td colspan="3">{{ project_employee_assign.support_company }}</td>
-                    <td class="chinese">手稿預計回傳日</td>
-                    <td>{{ project_employee_assign.manuscript_return_date|date:"Y/m/d" }}</td>
-                </tr>
-                <tr>
-                    <td  class="chinese">使用車輛: {{ project_employee_assign.vehicle }}</td>
-                    <td colspan="5" ></td>
-                </tr>
-                <tr>
-                    <td  class="chinese">檢測人員</td>
-                    <td colspan="5" >
-                        {% for inspector in project_employee_assign.inspectors.all %}
-                        {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-                <!-- 繼續添加其他資料的 <tr> -->
-            </tbody>
-        </table>
+                {% endfor %}
+            </table>
 
-
-        <p>施工日期：{{ project_employee_assign.construction_date }}</p>
-        <p>完工日期：{{ project_employee_assign.completion_date }}</p>
-        <p>完工狀態：{% if project_employee_assign.is_completed %}已完工{% else %}未完工{% endif %}</p>
-        <p>施工地點：{{ project_employee_assign.construction_location }}</p>
-        <p>使用車輛：{{ project_employee_assign.vehicle }}</p>
-
-        <h2>帶班主管</h2>
-        <ul>
-            {% for lead in project_employee_assign.lead_employee.all %}
-            <li>{{ lead.full_name }} (員工編號：{{ lead.employee_id }})</li>
-            {% endfor %}
-        </ul>
-
-        <h2>攜帶資產</h2>
-        <table>
-            <tr>
-                <th>資產標籤</th>
-                <th>序號</th>
-                <th>資產種類別</th>
-                <th>中類</th>
-                <th>品名</th>
-                <th>廠牌/型號</th>
-                <th>製造序號</th>
-            </tr>
-            {% for equipment in project_employee_assign.carry_equipments.all %}
-            <tr>
-                <td>{{ equipment.equipment_id }}</td>
-                <td>{{ equipment.order_id }}</td>
-                <td>{{ equipment.equipment_category }}</td>
-                <td>{{ equipment.equipment_type }}</td>
-                <td>{{ equipment.equipment_name }}</td>
-                <td>{{ equipment.product_model }}</td>
-                <td>{{ equipment.manufacturing_number }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-
-        <div class="signature-box">
-            {% if project_employee_assign.enterprise_signature %}
-            <img class="signature-img" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
-            {% else %}
-            簽名
-            {% endif %}
+            <div class="signature-box">
+                {% if project_employee_assign.enterprise_signature %}
+                <img class="signature-img" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
+                {% else %}
+                簽名
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>
 
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // print()
