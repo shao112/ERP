@@ -12,17 +12,13 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
     <style>
         body {
             font-family: '標楷體', sans-serif;
-            width: 21cm; /* A4紙張的寬度 */
-            height: 29.7cm; /* A4紙張的高度 */
-            margin: 0 auto; /* 讓內容居中 */
+            font-size: 0.9rem;
+            width: 21cm; 
+            height: 29.7cm; 
+            margin: 0 auto;
         }
         /* @import url('https://fonts.cdnfonts.com/css/strong'); */
-        /* @import url('{% static ' fonts/stsong.ttf' %}');
-
-        body {
-            font-family: STSong-FONT;
-            margin: 20px;
-        } */
+        /* @import url('{% static ' fonts/stsong.ttf' %}');*/
 
         
 
@@ -30,24 +26,24 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 20px;
-            /* 添加表格下方邊界 */
         }
 
         th,
         td {
             border: 2px solid black;
-            padding: 8px;
+            padding: 4px 8px;
             text-align: center;
-            width: 85px;
+            width: 45px;
             
         }
         td:not(.chinese) {
-            text-wrap:nowrap;
+            /* text-wrap:nowrap; */
+            /* width: 60px; */
             text-align: left;
         }
 
 
-        .signature-box {
+        /* .signature-box {
             border: 2px solid black;
             width: 200px;
             height: 150px;
@@ -57,14 +53,9 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
             display: flex;
             justify-content: center;    
             align-items: center;
-        }
+        } */
 
-        .signature-img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #show td.chinese {
+        #show td.chinese, table th {
             background-color: #f2f2f2;
             /* 灰色背景顏色 */
         }
@@ -80,8 +71,8 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
 
 <body id="download_pdf">
 
-    <div class="main mx-4" style="margin-top: 50px;">
-        <h3 class="text-center">艾力克電機股份有限公司</h3>
+    <div class="main mx-2" style="margin-top: 50px;">
+        <h4 class="text-center">艾力克電機股份有限公司</h4>
         <h5 class="text-center">派工單測試簽收單</h5>
         <div class="assignment-details">
             <table id="show">
@@ -90,63 +81,44 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                         <td class="chinese">客戶名稱</td>
                         <td>{{ project_employee_assign.project_job_assign.project_confirmation.client }}</td>
                         <td class="chinese">報價單號</td>
-                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.quotation_id }}</td>
+                        <td colspan="2">{{ project_employee_assign.project_job_assign.project_confirmation.quotation_id }}</td>
                         <td class="chinese">施工日期</td>
-                        <td>{{ project_employee_assign.construction_date|date:"Y/m/d" }}</td>
+                        <td colspan="2">{{ project_employee_assign.construction_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">請購單位<br>(業主)</td>
                         <td>{{ project_employee_assign.project_job_assign.project_confirmation.requisition }}</td>
                         <td class="chinese">訂單編號</td>
-                        <td>{{ project_employee_assign.order_number }}</td>
+                        <td colspan="2">{{ project_employee_assign.order_number }}</td>
                         <td class="chinese">完工日期</td>
-                        <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
+                        <td colspan="2">{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">工程名稱</td>
                         <td>{{ project_employee_assign.project_job_assign.project_confirmation.project_name }}</td>
                         <td class="chinese">施工地點</td>
-                        <td colspan="3">{{ project_employee_assign.construction_location }}</td>
-                    </tr>
-                    <tr>
-                        <td class="chinese">支援公司 (人數/姓名)</td>
-                        <td colspan="3">{{ project_employee_assign.support_company }}</td>
+                        <td>{{ project_employee_assign.construction_location }}</td>
+                        <td class="chinese">支援公司<br>(人數/姓名)</td>
+                        <td>{{ project_employee_assign.support_company }}</td>
                         <td class="chinese">手稿預計回傳日</td>
                         <td>{{ project_employee_assign.manuscript_return_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
-                        <td  class="chinese">使用車輛: {{ project_employee_assign.vehicle }}</td>
-                        <td colspan="5" ></td>
-                    </tr>
-                    <tr>
+                        <td  class="chinese">使用車輛: </td>
+                        <td colspan="3" >{{ project_employee_assign.vehicle }}</td>
                         <td  class="chinese">檢測人員</td>
-                        <td colspan="5" >
+                        <td colspan="3" >
                             {% for inspector in project_employee_assign.inspectors.all %}
                             {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </td>
                     </tr>
-                    <!-- 繼續添加其他資料的 <tr> -->
                 </tbody>
             </table>
 
-
-            <p>施工日期：{{ project_employee_assign.construction_date }}</p>
-            <p>完工日期：{{ project_employee_assign.completion_date }}</p>
-            <p>完工狀態：{% if project_employee_assign.is_completed %}已完工{% else %}未完工{% endif %}</p>
-            <p>施工地點：{{ project_employee_assign.construction_location }}</p>
-            <p>使用車輛：{{ project_employee_assign.vehicle }}</p>
-
-            <h2>帶班主管</h2>
-            <ul>
-                {% for lead in project_employee_assign.lead_employee.all %}
-                <li>{{ lead.full_name }} (員工編號：{{ lead.employee_id }})</li>
-                {% endfor %}
-            </ul>
-
-            <h2>攜帶資產</h2>
-            <table>
-                <tr>
+            <h5 class="text-center">攜帶資產</h5>
+            <table class="equipment_table">
+                <thead>
                     <th>資產標籤</th>
                     <th>序號</th>
                     <th>資產種類別</th>
@@ -154,27 +126,53 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                     <th>品名</th>
                     <th>廠牌/型號</th>
                     <th>製造序號</th>
-                </tr>
-                {% for equipment in project_employee_assign.carry_equipments.all %}
-                <tr>
-                    <td>{{ equipment.equipment_id }}</td>
-                    <td>{{ equipment.order_id }}</td>
-                    <td>{{ equipment.equipment_category }}</td>
-                    <td>{{ equipment.equipment_type }}</td>
-                    <td>{{ equipment.equipment_name }}</td>
-                    <td>{{ equipment.product_model }}</td>
-                    <td>{{ equipment.manufacturing_number }}</td>
-                </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
+                    {% for equipment in project_employee_assign.carry_equipments.all %}
+                    <tr>
+                        <td>{{ equipment.equipment_id }}</td>
+                        <td>{{ equipment.order_id }}</td>
+                        <td>{{ equipment.equipment_category }}</td>
+                        <td>{{ equipment.equipment_type }}</td>
+                        <td>{{ equipment.equipment_name }}</td>
+                        <td>{{ equipment.product_model }}</td>
+                        <td>{{ equipment.manufacturing_number }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
             </table>
-
-            <div class="signature-box">
-                {% if project_employee_assign.enterprise_signature %}
-                <img class="signature-img" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
-                {% else %}
-                簽名
-                {% endif %}
-            </div>
+            <table class="signature_table">
+                <thead>
+                    <th>總經理</th>
+                    <th>經理</th>
+                    <th>帶班主管</th>
+                    <th>填表人</th>
+                    <th>業主簽名</th>
+                </thead>
+                <tbody>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="signature-box" style="height: 100px;">
+                            {% if project_employee_assign.enterprise_signature %}
+                            <img class="signature-img img-fluid" src="{{ project_employee_assign.enterprise_signature.url }}" alt="業主簽名">
+                            {% else %}
+                            簽名
+                            {% endif %}
+                        </div>
+                    </td>
+                </tbody>
+            </table>
+            
+            <h2>帶班主管(不知道放哪裡先放這裡)</h2>
+            <ul>
+                {% for lead in project_employee_assign.lead_employee.all %}
+                <li>{{ lead.full_name }} (員工編號：{{ lead.employee_id }})</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </body>
