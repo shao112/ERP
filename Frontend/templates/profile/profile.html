@@ -22,13 +22,18 @@
         <div class="row my-4 py-4">
             <div class="col-6 col-md-3 text-center">
                 <div class="profile_img mx-auto mb-2" style="width: 80px;">
+                    {% if user.employee.profile_image %}
+
                     <img class="h-100 img-fluid" src="{{ user.employee.profile_image.url }}" alt="員工照片" id="image-upload" style="object-fit: cover;">
+                    {% else %}
+                    暫無照片
+                    {% endif %}
                 </div>
                 <form id="profileImageForm" enctype="multipart/form-data">
                     {% csrf_token %}
                     <label>
                         <input id="profileImageInput" type="file" name="profile_image" style="display: none;">
-                        更換照片
+                        點我    更換照片
                     </label>
                     <input type="submit" class="btn" value="確定" style="display: none;">
                 </form>
