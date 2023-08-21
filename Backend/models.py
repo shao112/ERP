@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
 from datetime import date
 import os
+from django.db.models import Q
 
 
 
@@ -483,12 +484,17 @@ class Requisition(ModifiedModel):
         verbose_name_plural = verbose_name
 
 
-# #處理自動建立簽核對象
-# @receiver(post_save, sender=Project_Job_Assign)
-# @receiver(post_save, sender=Project_Confirmation) 
-# def create_approval(sender, instance, created, **kwargs):
-#     if created and not instance.Approval:
-#         approval = ApprovalModel.objects.create()
-#         instance.Approval = approval
-#         # instance.save()
+#處理自動建立簽核對象
+@receiver(post_save, sender=Project_Job_Assign)
+@receiver(post_save, sender=Project_Confirmation) 
+@receiver(post_save, sender=Project_Employee_Assign) 
+def create_approval(sender, instance, created, **kwargs):
+    if created and not instance.Approval:
+        user = get_current_authenticated_user()        
+        user = user.employee
+        get_department= user.departments #單一FK
+        target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
+        approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
+        instance.Approval = approval
+        instance.save()
 
