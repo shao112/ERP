@@ -494,6 +494,10 @@ def create_approval(sender, instance, created, **kwargs):
         user = user.employee
         get_department= user.departments #單一FK
         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
+        if not target_department:
+                    # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
+                    return
+
         approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
         instance.Approval = approval
         instance.save()

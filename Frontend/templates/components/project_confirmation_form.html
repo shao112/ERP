@@ -1,138 +1,131 @@
-<form action="/restful/project_confirmation" id="form" method="POST" name="project_confirmation"
-data-method="post">
-{% csrf_token %}
-<input name="id" hidden/>
-<div class="form-row my-2" id="modal-download_pdf">
-    <div class="col-12 col-md-6">
-        <h5 style="font-size: 1.2rem;">
-            <kbd>確認單描述</kbd>
-        </h5>
-        <div class="form-row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="quotation_id_control">報價單號</label>
-                    <input class="form-control form-control-sm" name="quotation_id"
-                        id="quotation_id_control" required></input>
+<form action="/restful/project_confirmation" id="form" method="POST" name="project_confirmation" data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden />
+    <div class="form-row my-2" id="modal-download_pdf">
+        <div class="col-12 col-md-6">
+            <h5 style="font-size: 1.2rem;">
+                <kbd>確認單描述</kbd>
+            </h5>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="quotation_id_control">報價單號</label>
+                        <input class="form-control form-control-sm" name="quotation_id" id="quotation_id_control"
+                            required></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="c_a_control">母案編號</label>
+                        <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="project_confirmation_id_control">工確單編號</label>
+                        <input class="form-control form-control-sm" name="project_confirmation_id"
+                            id="project_confirmation_id_control"></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="order_id_control">訂單編號</label>
+                        <input class="form-control form-control-sm" name="order_id" id="order_id_control"></input>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="client_control">客戶簡稱</label>
+                        <select class="form-control form-control-sm" name="client" id="client_control">
+                            <option value="">請選擇客戶簡稱</option>
+                            {% for client in client_list %}
+                            <option value="{{ client.client_name }}">{{ client.client_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="project_name_control">工程名稱</label>
+                        <input class="form-control form-control-sm" name="project_name"
+                            id="project_name_control"></input>
+                    </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="c_a_control">母案編號</label>
-                    <input class="form-control form-control-sm" name="c_a"
-                        id="c_a_control"></input>
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="requisition_control">請購單位</label>
+                        <select class="form-control form-control-sm" name="requisition" id="requisition_control">
+                            <option value="">請選擇請購單位</option>
+                            {% for requisition in requisition_list %}
+                            <option value="{{ requisition.requisition_name }}">{{ requisition.requisition_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="turnover_control">成交金額</label>
+                        <input class="form-control form-control-sm" name="turnover" id="turnover_control"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="remark_control" class="col-form-label-sm">備註</label>
+                        <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <h5 style="font-size:1.2rem;">
+                <kbd>完工狀態</kbd>
+            </h5>
+            <div class="form-row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="is_completed">是否完工</label>
+                        <select class="form-control form-control-sm" name="is_completed" id="is_completed" required>
+                            <option value="true">是</option>
+                            <option value="false">否</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="completion_report_date_control">完工回報日期</label>
+                        <input type="date" class="form-control form-control-sm" name="completion_report_date"
+                            id="completion_report_date_control"></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="completion_report_select2">完工回報人</label>
+                        <select class="select2" data-placeholder="選擇完工回報人" name="completion_report_employee"
+                            id="completion_report_employee_select2" multiple>
+                            {% for employee in employees_list %}
+                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
             </div>
 
         </div>
-        <div class="form-row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="project_confirmation_id_control">工確單編號</label>
-                    <input class="form-control form-control-sm"
-                        name="project_confirmation_id"
-                        id="project_confirmation_id_control"></input>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="order_id_control">訂單編號</label>
-                    <input class="form-control form-control-sm" name="order_id"
-                        id="order_id_control"></input>
-                </div>
-            </div>
-
-        </div>
-        <div class="form-row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="client_control">客戶簡稱</label>
-                    <select class="form-control form-control-sm" name="client" id="client_control">
-                        <option value="">請選擇客戶簡稱</option>
-                        {% for client in client_list %}
-                        <option value="{{ client.client_name }}">{{ client.client_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="project_name_control">工程名稱</label>
-                    <input class="form-control form-control-sm" name="project_name"
-                        id="project_name_control"></input>
-                </div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="requisition_control">請購單位</label>
-                    <select class="form-control form-control-sm" name="requisition" id="requisition_control">
-                        <option value="">請選擇請購單位</option>
-                        {% for requisition in requisition_list %}
-                        <option value="{{ requisition.requisition_name }}">{{ requisition.requisition_name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="form-group">
-                    <label for="turnover_control">成交金額</label>
-                    <input class="form-control form-control-sm" name="turnover"
-                        id="turnover_control"></input>
-                </div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-12">
-                <div class="form-group">
-                    <label for="remark_control" class="col-form-label-sm">備註</label>
-                    <textarea class="form-control form-control-sm" name="remark"
-                        id="remark_control"></textarea>
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="col-12 col-md-6">
-        <h5 style="font-size:1.2rem;">
-            <kbd>完工狀態</kbd>
-        </h5>
-        <div class="form-row">
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    <label for="is_completed">是否完工</label>
-                    <select class="form-control form-control-sm" name="is_completed"
-                        id="is_completed" required>
-                        <option value="true">是</option>
-                        <option value="false">否</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    <label for="completion_report_date_control">完工回報日期</label>
-                    <input type="date" class="form-control form-control-sm"
-                        name="completion_report_date" id="completion_report_date_control"></input>
-                </div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-12 col-md-6">
-                <div class="form-group">
-                    <label for="completion_report_select2">完工回報人</label>
-                    <select class="select2" data-placeholder="選擇完工回報人"
-                        name="completion_report_employee"
-                        id="completion_report_employee_select2" multiple>
-                        {% for employee in employees_list %}
-                        <option value="{{ employee.id }}">{{ employee.user__username }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
 
 </form>
