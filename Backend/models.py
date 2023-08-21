@@ -496,5 +496,4 @@ def create_approval(sender, instance, created, **kwargs):
         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
         approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
         instance.Approval = approval
-        instance.save()
 
