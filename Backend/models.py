@@ -403,7 +403,17 @@ class News(ModifiedModel):
         # Call the save method of the parent class (ModifiedModel) using super()
         super().save(*args, **kwargs)
 
+# 工項資料庫
+class Work_Item(ModifiedModel):
+    work_item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項編號")
+    item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
+    item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
+    unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
+    unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
 
+    class Meta:
+        verbose_name = "工項資料庫"
+        verbose_name_plural = verbose_name
 
 # 固定資產管理
 class Equipment(ModifiedModel):

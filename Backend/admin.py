@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -17,6 +17,10 @@ class EmployeeInline(admin.StackedInline):
 class MyUserAdmin(UserAdmin):
     inlines = (EmployeeInline, )
 
+# 工項資料庫
+class WorkItemAdmin(admin.ModelAdmin):
+    list_display = ('work_item_id','item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
+    # resource_class = DepartmentResource
 
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
@@ -96,3 +100,4 @@ admin.site.register(Project_Job_Assign, ProjectJobAssignAdmin)
 admin.site.register(Clock, ClockAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Requisition, RequisitionAdmin)
+admin.site.register(Work_Item, WorkItemAdmin)

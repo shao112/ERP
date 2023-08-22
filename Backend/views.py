@@ -286,7 +286,24 @@ class New_View(View):
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
-
+class Work_Item_View(View):
+   def post(self,request):
+        employeeid = request.user.employee
+        related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
+        data = []
+        for project in related_projects:
+            if project.attendance_date is None:
+                continue
+            if project.location is None:
+                project.location = "暫無"
+            print(project.location)
+            data.append({
+                'title': project.project_confirmation.pk,
+                'start': project.attendance_date,
+                'location': project.location
+                # 'start': project.attendance_date.strftime('%Y-%m-%d'),
+            })
+        return JsonResponse(data, status=200,safe = False)
 
 class IMGUploadView(View):
     def post(self, request):

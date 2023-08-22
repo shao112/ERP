@@ -41,5 +41,6 @@ urlpatterns = [
     path('news', views.New_View.as_view(), name="news_view_api"),
     path('calendar', views.Calendar_View.as_view(), name="calendar_api"),
     path('approval_process', views.Approval_Process_View.as_view(), name="approval_process_view_api"),
+    path('work_item', views.Work_Item_View.as_view(), name="work_item_api"),
 
 ]
