@@ -56,7 +56,7 @@
                 var date = moment(info.event.start).format('YYYY-MM-DD')
                 var location = info.event.extendedProps.location
                 console.log(location)
-                document.getElementById('calendar-title').innerHTML = title;
+                document.getElementById('calendar-title').innerHTML = "專案名稱: " +title;
                 document.getElementById('calendar-date').innerHTML = "日期: " + date;
                 document.getElementById('calendar-location').innerHTML = "地點: " + location;
             },
