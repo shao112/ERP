@@ -271,28 +271,29 @@
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增員工
                     </a>
-                    <br>
-                    <a class="upload-file font-weight-bold" onclick="importfile()">
-                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i>
-                        <span id="importLink">匯入</span>
-                        <input type="file" id="fileInput" style="display: none;" />
-                    </a>
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button class="d-none d-md-inline-block" onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
                 </div>
             </div>      
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox" class="d-none d-md-table-cell">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="employee_file_upload" >員工檔案上傳</th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
+                    <th data-field="position" data-sortable="true">職稱</th>
+                    <th data-field="position" data-sortable="true">手機號碼</th>
+                    <th data-field="position" data-sortable="true">聯絡電話</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in employee %}
                 {% if p.user.is_active %}
                 <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ p.id }}"></td>
                     <td>
                         <a type="button" data-url="employee" data-id="{{p.pk}}"
                         class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -303,13 +304,14 @@
                         class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td>
-                        <button type="button" onclick="setEmployeeId({{p.pk}})"  class="btn btn-primary" data-toggle="modal" data-target="#fileUploadModal">
-                            開啟員工檔案上傳
-                        </button>
+                        <a href="" onclick="setEmployeeId({{p.pk}})" data-toggle="modal" data-target="#fileUploadModal">點擊</a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
                     <td>{{ p.departments.department_name }}</td>
+                    <td>{{ p.position }}</td>
+                    <td>{% if p.phone_number %}{{ p.phone_number }}{% else %}{% endif %}</td>
+                    <td>{% if p.contact_number %}{{ p.contact_number }}{% else %}{% endif %}</td>
                 </tr>
                 {% endif %}
                 {% endfor %}
@@ -323,6 +325,9 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/employee/UserFile.js' %}",
+            "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
             // "{% static 'js/fuc/fileimport.js' %}",
             // "{% static 'js/fuc/modaltopdf.js' %}"
         ];
