@@ -322,7 +322,7 @@ class Project_Job_Assign(ModifiedModel):
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
+    # attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
@@ -335,13 +335,13 @@ class Project_Job_Assign(ModifiedModel):
     def __str__(self) :
         return   str(self.pk).zfill(5)
 
-    def attachment_link(self):
-        if self.attachment:
-            return format_html("<a href='%s' download>下載</a>" % (self.project_confirmation.attachment.url,))
-        else:
-            return ""
+    # def attachment_link(self):
+    #     if self.attachment:
+    #         return format_html("<a href='%s' download>下載</a>" % (self.project_confirmation.attachment.url,))
+    #     else:
+    #         return ""
     # 告訴admin這個包含HTML代碼，要幫忙解析
-    attachment_link.allow_tags = True
+    # attachment_link.allow_tags = True
 
 # 派工單
 class Project_Employee_Assign(ModifiedModel):
