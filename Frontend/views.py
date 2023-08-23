@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -280,6 +280,15 @@ class Work_Item_ListView(ListView):
     model = Work_Item
     template_name = 'work_item/work_item.html'
     context_object_name = 'work_item'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+# 報價單
+class Quotation_ListView(ListView):
+    model = Quotation
+    template_name = 'quotation/quotation.html'
+    context_object_name = 'quotation'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context

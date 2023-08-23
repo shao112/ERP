@@ -150,6 +150,7 @@ class ModifiedModel(models.Model):
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
 
+
     class Meta:
         abstract = True
     def save(self, *args, **kwargs):
