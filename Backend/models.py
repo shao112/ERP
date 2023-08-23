@@ -415,6 +415,31 @@ class Work_Item(ModifiedModel):
         verbose_name = "工項資料庫"
         verbose_name_plural = verbose_name
 
+
+class Quotation(models.Model):
+    customer_name = models.CharField(max_length=100, verbose_name="客戶名稱")
+    tax_id = models.CharField(max_length=20, verbose_name="統一編號")
+    contact_person = models.CharField(max_length=50, verbose_name="聯絡人")
+    address = models.TextField(verbose_name="地址")
+    tel = models.CharField(max_length=20, verbose_name="電話")
+    mobile = models.CharField(max_length=20, verbose_name="手機")
+    fax = models.CharField(max_length=20, verbose_name="傳真")
+    email = models.EmailField(verbose_name="電子郵件")
+    project_name = models.CharField(max_length=100, verbose_name="專案名稱")
+    quote_validity_period = models.IntegerField(verbose_name="報價單有效期")
+    business_tel = models.CharField(max_length=20, verbose_name="業務電話")
+    business_assistant = models.CharField(max_length=50, verbose_name="業務助理")
+    work_item = models.ManyToManyField(Work_Item,blank=True,  related_name="quotations")
+
+
+    def __str__(self):
+        return self.project_name
+
+    class Meta:
+        verbose_name = "報價單"
+        verbose_name_plural = "報價單"
+
+
 # 固定資產管理
 class Equipment(ModifiedModel):
     TRANSMITTER_SIZE = (
@@ -492,6 +517,7 @@ class Requisition(ModifiedModel):
     class Meta:
         verbose_name = "請購單位"
         verbose_name_plural = verbose_name
+
 
 
 #處理自動建立簽核對象

@@ -694,7 +694,6 @@ class Job_Assign_View(View):
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
         data['job_assign_id'] = "工派-" +str(data["id"]).zfill(5)
-        data['attachment'] = data['attachment'].url if data['attachment']  else None
     
         return JsonResponse({"data":data}, status=200,safe = False)
 
