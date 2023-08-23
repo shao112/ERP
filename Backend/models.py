@@ -404,7 +404,7 @@ class News(ModifiedModel):
         # Call the save method of the parent class (ModifiedModel) using super()
         super().save(*args, **kwargs)
 
-# 工項資料庫
+# 工項管理
 class Work_Item(ModifiedModel):
     item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
@@ -416,6 +416,37 @@ class Work_Item(ModifiedModel):
         verbose_name = "工項資料庫"
         verbose_name_plural = verbose_name
 
+# 請假
+class Leave(ModifiedModel):
+    type_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別項目")
+    start_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假起始日期")
+    end_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假結束日期")
+    start_time_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假起始時間")
+    end_time_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假結束時間")
+    leave_hours = models.CharField(max_length=100, blank=True, null=True, verbose_name="申請時數")
+    substitute = models.CharField(max_length=100, blank=True, null=True, verbose_name="工作代理人")
+    leave_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假事由")
+    backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
+    created_by = models.ForeignKey("Employee",related_name="leave_author", on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "請假"
+        verbose_name_plural = verbose_name
+
+# 加班
+class Work_Overtime(ModifiedModel):
+    date_of_overtime = models.DateField(blank=True, null=True, verbose_name="加班日期")
+    type_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班類別")
+    start_time_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班起始時間")
+    end_time_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班結束時間")
+    overtime_hours = models.IntegerField(blank=True, null=True, verbose_name="申請時數")
+    carry_over = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班結轉方式")
+    overtime_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班事由")
+    created_by = models.ForeignKey("Employee",related_name="work_overtime_author", on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "加班"
+        verbose_name_plural = verbose_name
 
 class Quotation(ModifiedModel):
     customer_name = models.CharField(max_length=100, verbose_name="客戶名稱")

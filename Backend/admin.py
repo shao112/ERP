@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Leave,Work_Overtime,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -17,9 +17,17 @@ class EmployeeInline(admin.StackedInline):
 class MyUserAdmin(UserAdmin):
     inlines = (EmployeeInline, )
 
-# 工項資料庫
+# 工項管理
 class WorkItemAdmin(admin.ModelAdmin):
     list_display = ('item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
+    # resource_class = DepartmentResource
+# 請假
+class LeaveAdmin(admin.ModelAdmin):
+    list_display = ('type_of_leave', 'start_date_of_leave', 'end_date_of_leave', 'start_time_of_leave', 'end_time_of_leave', 'leave_hours', 'substitute', 'leave_reason', 'backlog', 'created_date', 'update_date')
+    # resource_class = DepartmentResource
+# 加班
+class WorkOvertimeAdmin(admin.ModelAdmin):
+    list_display = ('date_of_overtime', 'type_of_overtime', 'start_time_of_overtime', 'end_time_of_overtime', 'overtime_hours', 'carry_over', 'overtime_reason', 'created_date', 'update_date')
     # resource_class = DepartmentResource
 
 # 部門
@@ -101,3 +109,5 @@ admin.site.register(Clock, ClockAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Requisition, RequisitionAdmin)
 admin.site.register(Work_Item, WorkItemAdmin)
+admin.site.register(Leave, LeaveAdmin)
+admin.site.register(Work_Overtime, WorkOvertimeAdmin)
