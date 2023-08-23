@@ -410,13 +410,14 @@ class Work_Item(ModifiedModel):
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
     unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
     unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
-
+    created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
+    
     class Meta:
         verbose_name = "工項資料庫"
         verbose_name_plural = verbose_name
 
 
-class Quotation(models.Model):
+class Quotation(ModifiedModel):
     customer_name = models.CharField(max_length=100, verbose_name="客戶名稱")
     tax_id = models.CharField(max_length=20, verbose_name="統一編號")
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人")
@@ -430,7 +431,7 @@ class Quotation(models.Model):
     business_tel = models.CharField(max_length=20, verbose_name="業務電話")
     business_assistant = models.CharField(max_length=50, verbose_name="業務助理")
     work_item = models.ManyToManyField(Work_Item,blank=True,  related_name="quotations")
-
+    created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.project_name
