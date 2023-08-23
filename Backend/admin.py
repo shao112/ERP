@@ -19,7 +19,7 @@ class MyUserAdmin(UserAdmin):
 
 # 工項資料庫
 class WorkItemAdmin(admin.ModelAdmin):
-    list_display = ('work_item_id','item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
+    list_display = ('item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
     # resource_class = DepartmentResource
 
 # 部門

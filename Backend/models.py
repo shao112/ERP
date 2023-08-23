@@ -406,7 +406,6 @@ class News(ModifiedModel):
 
 # 工項資料庫
 class Work_Item(ModifiedModel):
-    work_item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項編號")
     item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
     unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
