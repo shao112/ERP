@@ -7,9 +7,9 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Equipment, UploadedFile,Department,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm,EquipmentForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.forms import  ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -286,6 +286,67 @@ class New_View(View):
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
+
+
+class Quotation_View(View):
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = QuotationForm(dict_data)
+        if form.is_valid():
+            if "work_item" in dict_data:
+                getQuotation = Quotation.objects.get(id=dict_data['id'])
+                get_work_item = [int(item) for item in  dict_data["work_item"]]
+                del dict_data["work_item"]
+                getQuotation.work_item.set(get_work_item)
+
+                getQuotation.update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Quotation.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            return JsonResponse({"error":str(e)},status=500)
+
+
+    def post(self,request):
+        form = QuotationForm(request.POST)
+
+        if form.is_valid():
+            newobj = form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Quotation, id=id)
+
+        work_item_list = []
+        for item in data.work_item.all():
+            item_dict = model_to_dict(item)
+            work_item_list.append(item_dict)
+
+        data = model_to_dict(data)
+        print("dict_data")
+        print(data)
+        data['work_item_id'] = "QU-" +str(data["id"]).zfill(5)
+        data['work_item'] = work_item_list
+
+        return JsonResponse({"data":data}, status=200,safe = False)
+
+
 class Work_Item_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -325,9 +386,12 @@ class Work_Item_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Work_Item, id=id)
         data = model_to_dict(data)
+
+
         print("dict_data")
         print(data)
         data['work_item_id'] = "WT-" +str(data["id"]).zfill(5)
+
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
