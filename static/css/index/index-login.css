@@ -26,7 +26,9 @@
     }
 }
 /* ---Vue.js transition--- */
-
+.employee_full_name{
+    font-size: 0.9rem;
+}
 .news .row{
     overflow: hidden;
     text-overflow: ellipsis;
@@ -84,8 +86,9 @@ header{
     z-index: 1;
 }
 header button{
-    width: 105px;
+    width: 90px;
     height: 35px;
+    font-size: 0.9rem;
 }
 
 .clock-inout .modal-footer a{
@@ -109,11 +112,9 @@ header button{
         display: inline-block;
     }
     header button {
-        font-size: 0.9rem;
-        width: 90px;
+        font-size: 0.8rem;
+        width: 80px;
         height: 30px;
     }
-    .employee_full_name{
-        font-size: 0.9rem;
-    }
+    
 }

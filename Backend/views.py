@@ -541,7 +541,7 @@ class Employee_View(View):
         form = EmployeeForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data['full_name']
+            username = form.cleaned_data['employee_id']
             password = form.cleaned_data['id_number']
             user = User.objects.create_user(username=username, password=password)
             employee = form.save(commit=False)
