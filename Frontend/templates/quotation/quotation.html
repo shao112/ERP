@@ -190,6 +190,7 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
                     <th data-field="tax_id" data-sortable="true">客戶名稱</th>
                     <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
@@ -214,6 +215,9 @@
                         </a>
                     </td>
 
+                    <td>
+                        {{ item.get_show_id}}
+                    </td>
                     <td>
                         {{ item.project_name}}
                     </td>

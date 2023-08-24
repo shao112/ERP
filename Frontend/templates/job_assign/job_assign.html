@@ -248,10 +248,10 @@
                                 class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
                         </td>
                         <td>
-                            工確-{{ j.project_confirmation.pk|format_with_zeros:5 }}
+                            {{ j.project_confirmation.get_show_id }}
                         </td>
                         <td>
-                            工派-{{ j.id|format_with_zeros:5 }}
+                            {{ j.get_show_id }}
                         </td>
                         <td>{{ j.project_confirmation.project_name }}</td>
                         <td>{{ j.project_confirmation.c_a }}</td>
