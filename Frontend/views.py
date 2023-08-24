@@ -291,6 +291,9 @@ class Quotation_ListView(ListView):
     context_object_name = 'quotation'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["workitems"]= Work_Item.objects.all()
+        context['client_list'] = Client.objects.all()
+
         return context
 
 # 最新消息

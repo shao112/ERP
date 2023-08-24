@@ -31,7 +31,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/employee" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/quotation" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="form-row my-2">
@@ -40,7 +40,14 @@
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label for="customer_name">客戶名稱</label>
-                                                <input class="form-control form-control-sm" name="customer_name" id="customer_name" required>
+                                                <select class="form-control form-control-sm" name="customer_name"
+                                                    id="customer_name">
+                                                    <option value="">請選擇客戶簡稱</option>
+                                                    {% for client in client_list %}
+                                                    <option value="{{ client.client_name }}">{{ client.client_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
@@ -51,17 +58,19 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        
+
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label for="project_name">專案名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name" id="project_name">
+                                                <input class="form-control form-control-sm" name="project_name"
+                                                    id="project_name">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label for="quote_validity_period">報價單有效期</label>
-                                                <input type="number" class="form-control form-control-sm" name="quote_validity_period" id="quote_validity_period">
+                                                <input type="number" class="form-control form-control-sm"
+                                                    name="quote_validity_period" id="quote_validity_period">
                                             </div>
                                         </div>
                                     </div>
@@ -69,7 +78,8 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="contact_person">聯絡人</label>
-                                                <input class="form-control form-control-sm" name="contact_person" id="contact_person">
+                                                <input class="form-control form-control-sm" name="contact_person"
+                                                    id="contact_person">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -105,26 +115,41 @@
                                             </div>
                                         </div>
                                     </div>
-                                
+
                                     <div class="form-row">
-                                    
+
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="business_assistant">業務助理</label>
-                                                <input class="form-control form-control-sm" name="business_assistant" id="business_assistant">
+                                                <input class="form-control form-control-sm" name="business_assistant"
+                                                    id="business_assistant">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="business_tel">業務電話</label>
-                                                <input class="form-control form-control-sm" name="business_tel" id="business_tel">
+                                                <input class="form-control form-control-sm" name="business_tel"
+                                                    id="business_tel">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="internal_content">對內紀錄</label>
+                                                <textarea class="form-control form-control-sm" name="internal_content"
+                                                    id="internal_content">
+                                                </textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-lg-12">
                                         <div class="form-group">
                                             <label for="business_assistant">工項選擇</label>
-                                            <input class="form-control form-control-sm" name="business_assistant" id="business_assistant">
+                                            <select class="select2" name="work_item" id="work_item_select2" multiple>
+                                                {% for workitem in workitems %}
+                                                <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -136,8 +161,8 @@
                                     style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
                             </div>
                         </form>
-                        
-                    
+
+
                     </div>
                 </div>
             </div>
@@ -165,14 +190,45 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-field="tax_id" data-sortable="true">統一編號</th>
-                    <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
+                    <th data-field="tax_id" data-sortable="true">客戶名稱</th>
+                    <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
+                {% for item in quotation %}
+                <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ item.id }}"></td>
+                    <td>
+                        <a data-target="#employee-modal" type="button" data-url="quotation" data-id="{{ item.id }}"
+                            class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                            data-target="#project-confirmation-modal" onclick="LoadData(event)">
+                            <i class="fas fa-sm fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-url="quotation" data-target="#employee-modal" data-id="{{ item.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                            <i class="far fa-sm fa-trash-alt"></i>
+                        </a>
+                    </td>
 
+                    <td>
+                        {{ item.project_name}}
+                    </td>
+                    <td>
+                        {{ item.customer_name}}
+                    </td>
+                    <td>
+                        {{ item.quote_validity_period}}
+                    </td>
+                    <td>
+                        {{ item.created_date}}
+                    </td>
+
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -182,6 +238,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
@@ -193,6 +250,13 @@
             document.body.appendChild(script);
         });
     });
+
+    async function LoadData(event){
+        console.log("load")
+        getdata = await GET_handleClick(event);
+
+    }
+
 
 
 </script>
