@@ -1,5 +1,5 @@
 from django import forms
-from .models import Quotation,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -46,9 +46,15 @@ class NewsForm(BaseModelForm):
         }
 
 
-class QuotationForm(forms.ModelForm):
+class QuotationForm(BaseModelForm):
     class Meta:
         model = Quotation
+        fields = '__all__'
+        
+
+class Work_ItemForm(BaseModelForm):
+    class Meta:
+        model = Work_Item
         fields = '__all__'
         
 

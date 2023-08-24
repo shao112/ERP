@@ -7,9 +7,9 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Equipment, UploadedFile,Department,ApprovalLog,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Equipment, UploadedFile,Department,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm,EquipmentForm,DepartmentForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.forms import  ProjectConfirmationForm,EquipmentForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 
 from django.shortcuts import get_object_or_404
@@ -287,23 +287,50 @@ class New_View(View):
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class Work_Item_View(View):
-   def post(self,request):
-        employeeid = request.user.employee
-        related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
-        data = []
-        for project in related_projects:
-            if project.attendance_date is None:
-                continue
-            if project.location is None:
-                project.location = "暫無"
-            print(project.location)
-            data.append({
-                'title': project.project_confirmation.pk,
-                'start': project.attendance_date,
-                'location': project.location
-                # 'start': project.attendance_date.strftime('%Y-%m-%d'),
-            })
-        return JsonResponse(data, status=200,safe = False)
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = Work_ItemForm(dict_data)
+        if form.is_valid():
+            Work_Item.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Work_Item.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            return JsonResponse({"error":str(e)},status=500)
+
+
+    def post(self,request):
+        form = Work_ItemForm(request.POST)
+
+        if form.is_valid():
+            newobj = form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Work_Item, id=id)
+        data = model_to_dict(data)
+        print("dict_data")
+        print(data)
+        data['work_item_id'] = "WT-" +str(data["id"]).zfill(5)
+
+        return JsonResponse({"data":data}, status=200,safe = False)
+
 
 class IMGUploadView(View):
     def post(self, request):

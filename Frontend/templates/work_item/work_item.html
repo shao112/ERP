@@ -7,6 +7,8 @@
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
 
+{% load custom_tags %}
+
 
 {% endblock %}
 
@@ -30,23 +32,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/employee" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/work_item" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden/>
+                            <input name="id" hidden />
                             <div class="form-row my-2">
                                 <div class="col-12">
                                     <div class="form-row">
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
-                                                <label for="work_item_id">工項編號</label>
+                                                <label for="work_item_id">工項編號(自動產生)</label>
                                                 <input class="form-control form-control-sm" name="work_item_id"
-                                                    id="work_item_id" required></input>
+                                                    id="work_item_id" readonly></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
                                                 <label for="item_name">品名規格</label>
-                                                <input class="form-control form-control-sm" name="item_name" id="item_name"></input>
+                                                <input class="form-control form-control-sm" name="item_name"
+                                                    id="item_name"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -61,15 +64,15 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit">單位</label>
-                                                <input class="form-control form-control-sm"
-                                                    name="unit" id="unit"></input>
+                                                <input class="form-control form-control-sm" name="unit"
+                                                    id="unit"></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit_price">單價</label>
-                                                <input type="number" class="form-control form-control-sm" name="unit_price"
-                                                    id="unit_price"></input>
+                                                <input type="number" class="form-control form-control-sm"
+                                                    name="unit_price" id="unit_price"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -91,21 +94,24 @@
     </div>
     <div class="employee-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-        data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
-        data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
-        data-filter-control="true">
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-filter-control="true">
             <div id="toolbar">
                 <div class="employee-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-modal">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工項資料庫
                     </a>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button class="d-none d-md-inline-block" onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button class="d-none d-md-inline-block"
+                        onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
                 </div>
-            </div>      
+            </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox" class="d-none d-md-table-cell">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                        class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="work_item_id" data-sortable="true">工項編號</th>
@@ -116,7 +122,40 @@
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
-                
+                {% for item in work_item %}
+                <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ item.id }}"></td>
+                    <td>
+                        <a data-target="#employee-modal" type="button" data-url="work_item" data-id="{{ item.id }}"
+                            class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                            data-target="#project-confirmation-modal" onclick="LoadData(event)">
+                            <i class="fas fa-sm fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-url="work_item" data-target="#employee-modal" data-id="{{ item.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                            <i class="far fa-sm fa-trash-alt"></i>
+                        </a>
+                    </td>
+                    <td>
+                       WT-{{ item.id|format_with_zeros:5 }}
+                    </td>
+                    <td>
+                       {{ item.item_name }}
+                    </td>
+                    <td>
+                       {{ item.item_id }}
+                    </td>
+                    <td>
+                       {{ item.unit }}
+                    </td>
+                    <td>
+                       {{ item.unit_price }}
+                    </td>
+                    
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
