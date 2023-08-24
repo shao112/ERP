@@ -293,6 +293,9 @@ class Project_Confirmation(ModifiedModel):
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
+    def get_show_id(self):
+        return f"工確-{str(self.id).zfill(5)}"
+
 
     class Meta:
         verbose_name = "工程確認單"   # 單數
@@ -327,11 +330,16 @@ class Project_Job_Assign(ModifiedModel):
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
+    # def get_id():
 
     class Meta:
         verbose_name = "工作派任計畫"   # 單數
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
+
+    def get_show_id(self):
+        return f"工派-{str(self.id).zfill(5)}"
+
 
     def __str__(self) :
         return   str(self.pk).zfill(5)
@@ -359,6 +367,9 @@ class Project_Employee_Assign(ModifiedModel):
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
+    def get_show_id(self):
+        return f"派工-{str(self.id).zfill(5)}"
 
 
     class Meta:
@@ -446,8 +457,11 @@ class Work_Item(ModifiedModel):
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_display_text(self):
-        pn_id = f"QU-{str(self.id).zfill(5)}"
+        pn_id = f"WT-{str(self.id).zfill(5)}"
         return f"{pn_id} | {self.item_name} | {self.item_id} | {self.unit} | {self.unit_price}(價格)"
+
+    def get_show_id(self):
+        return f"工項-{str(self.id).zfill(5)}"
 
 
     class Meta:
@@ -470,8 +484,11 @@ class Quotation(ModifiedModel):
     business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)
     work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
-
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_show_id(self):
+        return f"報價-{str(self.id).zfill(5)}"
+
 
     def __str__(self):
         return self.project_name

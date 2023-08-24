@@ -247,7 +247,7 @@
                         </a>
                     </td>
                     <td>{% if p.quotation_id %}{{ p.quotation_id }}{% else %}{% endif %}</td>
-                    <td>{% if p.id %}工確-{{ p.id|format_with_zeros:5 }}{% else %}{% endif %}</td>
+                    <td>{% if p.id %}{{ p.get_show_id }}{% else %}{% endif %}</td>
                     <td>{% if p.c_a %}{{ p.c_a }}{% else %}{% endif %}</td>
                     <td>{% if p.project_name %}{{ p.project_name }}{% else %}{% endif %}</td>
                     <td>{% if p.client %}{{ p.client }}{% else %}{% endif %}</td>
