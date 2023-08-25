@@ -30,11 +30,17 @@
                             <input type="text" class="form-control" id="fileNameInput">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="fileInput">選擇檔案</label>
-                            <input type="file" class="form-control-file" id="fileInput">
+                            <!-- <label for="fileInput">選擇檔案</label>
+                            <input type="file" class="form-control-file" id="fileInput"> -->
+                            <label>選擇檔案</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control-file" id="fileInput">
+                                <label class="custom-file-label" for="fileInput">Choose file</label>
+                            </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn" class="btn btn-primary">上傳</button>
+                    <button type="button" id="fileUploadBtn"class="btn border border-dark rounded"
+                    style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
                 <h4>檔案列表</h4>

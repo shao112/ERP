@@ -17,10 +17,15 @@ class ConfirmationIDWidget(widgets.Widget):
     def render(self, value, obj=None):
         format_value = f"工確-{value:05d}".format(value=value)
         return format_value
-
+# 工作派任計畫編號匯出要變成 派任+id
 class JobAssignIDWidget(widgets.Widget):
     def render(self, value, obj=None):
         format_value = f"派任-{value:05d}".format(value=value)
+        return format_value
+# 派工單編號匯出要變成 派工+id
+class EmployeeAssignIDWidget(widgets.Widget):
+    def render(self, value, obj=None):
+        format_value = f"派工-{value:05d}".format(value=value)
         return format_value
 
 class DepartmentResource(resources.ModelResource):
@@ -82,6 +87,7 @@ class ProjectJobAssignResource(resources.ModelResource):
         exclude = ['modified_by', 'created_date','update_date','Approval']
 
 class ProjectEmployeeAssignResource(resources.ModelResource):
+    id = Field(attribute='id', column_name="編號", widget=EmployeeAssignIDWidget())
     project_job_assign = Field(attribute='project_job_assign', column_name=Project_Employee_Assign.project_job_assign.field.verbose_name)
     construction_date = Field(attribute='construction_date', column_name=Project_Employee_Assign.construction_date.field.verbose_name)
     completion_date = Field(attribute='completion_date', column_name=Project_Employee_Assign.completion_date.field.verbose_name)
@@ -96,4 +102,4 @@ class ProjectEmployeeAssignResource(resources.ModelResource):
 
     class Meta:
         model = Project_Employee_Assign
-        exclude = ['modified_by','id','created_date','update_date','Approval']
+        exclude = ['modified_by','created_date','update_date','Approval']
