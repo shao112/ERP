@@ -12,6 +12,17 @@ class BooleanWidget(widgets.BooleanWidget):
             return ""
         return '是' if value else '否'
 
+# 工程確認單編號匯出要變成 工確+id
+class ConfirmationIDWidget(widgets.Widget):
+    def render(self, value, obj=None):
+        format_value = f"工確-{value:05d}".format(value=value)
+        return format_value
+
+class JobAssignIDWidget(widgets.Widget):
+    def render(self, value, obj=None):
+        format_value = f"派任-{value:05d}".format(value=value)
+        return format_value
+
 class DepartmentResource(resources.ModelResource):
     belong_to_company = Field(attribute='belong_to_company', column_name=Department.belong_to_company.field.verbose_name)
     parent_department = Field(attribute='parent_department', column_name=Department.parent_department.field.verbose_name)
@@ -25,7 +36,7 @@ class DepartmentResource(resources.ModelResource):
         # export_order = ('parent_department','department_name','department_id')
 
 class ProjectConfirmationResource(resources.ModelResource):
-    # project_confirmation_id = Field(attribute='project_confirmation_id', column_name=Project_Confirmation.project_confirmation_id.field.verbose_name)
+    id = Field(attribute='id', column_name="編號", widget=ConfirmationIDWidget())
     quotation_id = Field(attribute='quotation_id', column_name=Project_Confirmation.quotation_id.field.verbose_name)
     project_name = Field(attribute='project_name', column_name=Project_Confirmation.project_name.field.verbose_name)
     order_id = Field(attribute='order_id', column_name=Project_Confirmation.order_id.field.verbose_name)
@@ -42,7 +53,7 @@ class ProjectConfirmationResource(resources.ModelResource):
 
     class Meta:
         model = Project_Confirmation
-        exclude = ['modified_by','id','created_date','update_date','Approval']
+        exclude = ['modified_by','created_date','update_date','Approval']
         
     # 命名方式為 dehydrate_欄位，匯出到此欄位就會呼叫這個方法轉成超連結
     def dehydrate_attachment(self, instance):
@@ -54,6 +65,7 @@ class ProjectConfirmationResource(resources.ModelResource):
             return ""
 
 class ProjectJobAssignResource(resources.ModelResource):
+    id = Field(attribute='id', column_name="編號", widget=JobAssignIDWidget())
     project_confirmation = Field(attribute='project_confirmation', column_name=Project_Job_Assign.project_confirmation.field.verbose_name)
     # job_assign_id = Field(attribute='job_assign_id', column_name=Project_Job_Assign.job_assign_id.field.verbose_name)
     attendance_date = Field(attribute='attendance_date', column_name=Project_Job_Assign.attendance_date.field.verbose_name)
@@ -67,7 +79,7 @@ class ProjectJobAssignResource(resources.ModelResource):
 
     class Meta:
         model = Project_Job_Assign
-        exclude = ['modified_by','id','created_date','update_date','Approval']
+        exclude = ['modified_by', 'created_date','update_date','Approval']
 
 class ProjectEmployeeAssignResource(resources.ModelResource):
     project_job_assign = Field(attribute='project_job_assign', column_name=Project_Employee_Assign.project_job_assign.field.verbose_name)
