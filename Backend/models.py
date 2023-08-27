@@ -140,7 +140,7 @@ class Approval_TargetDepartment(models.Model):
     ]
 
     name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
-    employee_order = models.ManyToManyField(Employee,verbose_name="員工簽核順序")
+    employee_order = models.JSONField(null=True, verbose_name="員工簽核順序")
     department_order = models.JSONField( blank=True, null=True,verbose_name="部門簽核順序")
     belong_department = models.ForeignKey('Department',related_name="belong_department", blank=True, null=True, on_delete=models.CASCADE,verbose_name="屬於哪部門的簽核")
     class Meta:

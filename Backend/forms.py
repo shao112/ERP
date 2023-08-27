@@ -149,12 +149,3 @@ class ApprovalModelForm(BaseModelForm):
             'current_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }
 
-# 簽核權
-class ApprovalTargetDepartmentModelForm(BaseModelForm):
-    name = forms.CharField(max_length=200)
-    employee_order = forms.ModelMultipleChoiceField(
-        queryset=Employee.objects.all(),
-        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control form-control-sm'}))
-    class Meta:
-        model = Approval_TargetDepartment
-        fields = '__all__'
