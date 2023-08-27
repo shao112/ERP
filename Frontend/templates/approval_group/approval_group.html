@@ -5,27 +5,27 @@
 {% block import %}
 
 {% load static%}
-<link rel="stylesheet" href="{% static 'css/employee_permission/employee_permission.css' %}">
+<link rel="stylesheet" href="{% static 'css/approval_group/approval_group.css' %}">
 
 
 {% endblock %}
 
 
 {% block main %}
-<div class="main px-3" id="employee-permission-app">
+<div class="main px-3">
     <div id="error-message"></div>
-    <div class="employee-permission modal fade" id="employee-permission-modal" tabindex="-1" aria-labelledby="employee-permission" aria-hidden="true">
+    <div class="approval_group modal fade" id="approval_group-modal" tabindex="-1" aria-labelledby="approval_group" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employee-permission-label">群組管理</h5>
+                    <h5 class="modal-title" id="approval_group-label">簽核權管理</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/group" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/approval_group" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden/>
                             <div class="row my-4">
@@ -75,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="employee-permission-table container">
+    <div class="approval_group_table container">
         <div class="col-12 col-md-10 mx-auto shadow-sm table-responsive-lg">
             <table class="table table-sm table-hover text-center">
                 <thead class="thead-light">
@@ -85,28 +85,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for g in groups %}
+                    {% for a in approval_group %}
                     <tr>
                         <td>
-                            <a type="button" data-url="group" data-id="{{ g.id }}"
-                                class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                                data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
+                            <a type="button" data-url="approval_group" data-id="{{ a.id }}"
+                                class="sys_get btn btn-sm btn-warning " data-toggle="modal"
+                                data-target="#approval_group-modal"><i class="fas fa-edit"></i></a>
                           
                         </td>
-                        <td data-toggle="collapse" data-target="#sub-row-{{ g.id }}">
-                            {{ g.name }}
+                        <td data-toggle="collapse" data-target="#sub-row-{{ a.id }}">
+                            {{ a.name }}
                         </td>
                     </tr>
-                    <tr class="collapse" id="sub-row-{{ g.id }}" style="background:#f1f1f1;">
+                    <tr class="collapse" id="sub-row-{{ a.id }}" style="background:#f1f1f1;">
                         <td></td>
                         <td>
-                            {% if g.user_set.all %}
-                                {% for employees_list in g.user_set.all %}
-                                <span class="text-muted">• {{ employees_list.employee.full_name }}</span>
-                                {% endfor %}
-                            {% else %}
-                                <span class="text-muted">目前無員工</span>
-                            {% endif %}
+                            <span class="text-muted">目前無員工</span>
                         </td>
                     </tr>
                     {% endfor %}

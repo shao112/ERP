@@ -24,8 +24,101 @@ class UploadedFile(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.name
+#紀錄修改者
+class ModifiedModel(models.Model):
+    modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
+    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
 
+
+    class Meta:
+        abstract = True
+    def save(self, *args, **kwargs):
+        user = get_current_authenticated_user()
+        
+        if user !=None:
+            self.modified_by = user.employee            
+            if hasattr(self, 'created_by'):
+                if self.created_by ==None:
+                    self.created_by =user.employee
+ 
+        super().save(*args, **kwargs)
+
+    def update_fields_and_save(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        self.save()
+        
+# 員工（以內建 User 擴增）
+class Employee(ModifiedModel):
+    GENDER_CHOICES = [
+        ('M', '男'),
+        ('F', '女'),
+    ]
+    BLOOD_TYPE_CHOICES = [
+        ('A', 'A型'),
+        ('B', 'B型'),
+        ('AB','AB型'),
+        ('O', 'O型'),
+    ]
+    MARITAL_STATUS_CHOICES = [
+        ('M', '已婚'),
+        ('S', '未婚'),
+        ('D', '離異'),
+    ]
+    MILITARY_STATUS_CHOICES = [
+        ('M', '義務役'),
+        ('E', '免服役'),
+        ('A', '替代役'),
+    ]   
+    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
+    full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
+    employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
+    departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
+    position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
+    phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
+    contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
+    start_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
+    seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
+    id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
+    birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True, verbose_name='性別')
+    blood_type = models.CharField(max_length=2, choices=BLOOD_TYPE_CHOICES, null=True, blank=True, verbose_name='血型')
+    birth_place = models.CharField(max_length=100, null=True, blank=True, verbose_name='出生地')
+    marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True, verbose_name='婚姻狀況')
+    military_status = models.CharField(max_length=1, choices=MILITARY_STATUS_CHOICES, null=True, blank=True, verbose_name='兵役狀況')
+    permanent_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='戶籍地址')
+    current_address_city = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址縣市')
+    current_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址')
+    location = models.CharField(max_length=50, null=True, blank=True, verbose_name='所在地')
+    company_email = models.EmailField(null=True, blank=True, verbose_name='公司E_Mail')
+    personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail')
+    emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
+    emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
+    emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
+
+    class Meta:
+        verbose_name = "員工"   # 單數
+        verbose_name_plural = verbose_name   #複數
+
+    # def employee_data_upload_path(instance, filename):
+    #     employee_id = instance.id
+    #     return os.path.join("Employee_data", str(employee_id), filename)
+
+
+    def calSeniority(self):
+        # current_date = date.today()
+        # seniority = current_date.year - self.start_date.year
+        # if (self.start_date.month, self.start_date.day) > (current_date.month, current_date.day):
+        #     seniority -= 1
+        # return round(seniority, 1)
+        return 0
+
+    def __str__(self):
+        return self.full_name
 
 class ApprovalLog(models.Model):
     approval = models.ForeignKey("ApprovalModel", on_delete=models.DO_NOTHING, related_name='approval_logs')
@@ -47,6 +140,7 @@ class Approval_TargetDepartment(models.Model):
     ]
 
     name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
+    employee_order = models.ManyToManyField(Employee,verbose_name="員工簽核順序")
     department_order = models.JSONField( blank=True, null=True,verbose_name="部門簽核順序")
     belong_department = models.ForeignKey('Department',related_name="belong_department", blank=True, null=True, on_delete=models.CASCADE,verbose_name="屬於哪部門的簽核")
     class Meta:
@@ -143,32 +237,6 @@ class ApprovalModel(models.Model):
         verbose_name_plural = verbose_name
 
 
-#紀錄修改者
-class ModifiedModel(models.Model):
-    modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
-    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
-    update_date = models.DateField(auto_now=True, verbose_name='更新日期')
-
-
-
-    class Meta:
-        abstract = True
-    def save(self, *args, **kwargs):
-        user = get_current_authenticated_user()
-        
-        if user !=None:
-            self.modified_by = user.employee            
-            if hasattr(self, 'created_by'):
-                if self.created_by ==None:
-                    self.created_by =user.employee
- 
-        super().save(*args, **kwargs)
-
-    def update_fields_and_save(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        self.save()
-
 
 class Clock(models.Model):
     employee_id = models.ForeignKey("Employee", related_name="clock",on_delete=models.CASCADE)
@@ -181,79 +249,6 @@ class Clock(models.Model):
     class Meta:
         verbose_name = "打卡紀錄"   # 單數
         verbose_name_plural = verbose_name   #複數
-
-
-# Create your models here.
-# 員工（以內建 User 擴增）
-# admin:admin IT0000:itadmin000
-class Employee(ModifiedModel):
-    GENDER_CHOICES = [
-        ('M', '男'),
-        ('F', '女'),
-    ]
-    BLOOD_TYPE_CHOICES = [
-        ('A', 'A型'),
-        ('B', 'B型'),
-        ('AB','AB型'),
-        ('O', 'O型'),
-    ]
-    MARITAL_STATUS_CHOICES = [
-        ('M', '已婚'),
-        ('S', '未婚'),
-        ('D', '離異'),
-    ]
-    MILITARY_STATUS_CHOICES = [
-        ('M', '義務役'),
-        ('E', '免服役'),
-        ('A', '替代役'),
-    ]   
-    user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
-    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
-    full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
-    employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
-    departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
-    position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
-    phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
-    contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
-    start_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
-    seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
-    id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
-    birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True, verbose_name='性別')
-    blood_type = models.CharField(max_length=2, choices=BLOOD_TYPE_CHOICES, null=True, blank=True, verbose_name='血型')
-    birth_place = models.CharField(max_length=100, null=True, blank=True, verbose_name='出生地')
-    marital_status = models.CharField(max_length=1, choices=MARITAL_STATUS_CHOICES, null=True, blank=True, verbose_name='婚姻狀況')
-    military_status = models.CharField(max_length=1, choices=MILITARY_STATUS_CHOICES, null=True, blank=True, verbose_name='兵役狀況')
-    permanent_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='戶籍地址')
-    current_address_city = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址縣市')
-    current_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址')
-    location = models.CharField(max_length=50, null=True, blank=True, verbose_name='所在地')
-    company_email = models.EmailField(null=True, blank=True, verbose_name='公司E_Mail')
-    personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail')
-    emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
-    emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
-    emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
-
-    class Meta:
-        verbose_name = "員工"   # 單數
-        verbose_name_plural = verbose_name   #複數
-
-    # def employee_data_upload_path(instance, filename):
-    #     employee_id = instance.id
-    #     return os.path.join("Employee_data", str(employee_id), filename)
-
-
-    def calSeniority(self):
-        # current_date = date.today()
-        # seniority = current_date.year - self.start_date.year
-        # if (self.start_date.month, self.start_date.day) > (current_date.month, current_date.day):
-        #     seniority -= 1
-        # return round(seniority, 1)
-        return 0
-
-    def __str__(self):
-        return self.full_name
 
 
 # 部門

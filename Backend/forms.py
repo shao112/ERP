@@ -1,5 +1,5 @@
 from django import forms
-from .models import Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Approval_TargetDepartment, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -148,3 +148,13 @@ class ApprovalModelForm(BaseModelForm):
         widgets = {
             'current_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }
+
+# 簽核權
+class ApprovalTargetDepartmentModelForm(BaseModelForm):
+    name = forms.CharField(max_length=200)
+    employee_order = forms.ModelMultipleChoiceField(
+        queryset=Employee.objects.all(),
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-control form-control-sm'}))
+    class Meta:
+        model = Approval_TargetDepartment
+        fields = '__all__'

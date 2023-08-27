@@ -1,0 +1,27 @@
+.approval_group-header a{
+    text-decoration: none;
+    color: black;
+}
+.approval_group-table td{
+    vertical-align: middle;
+}
+.approval_group-table table{
+    table-layout: fixed;
+    word-break: break-all;
+}
+thead th:first-child,
+tbody td:first-child{
+    width: 30%;
+}
+thead th:last-child,
+tbody td:last-child{
+    width: 70%;
+}
+tbody td:last-child:hover{
+    cursor: pointer;
+}
+.approval_group_table .collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}

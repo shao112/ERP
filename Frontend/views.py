@@ -5,8 +5,8 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.forms import  ApprovalTargetDepartmentModelForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.models import Approval_TargetDepartment, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -419,4 +419,21 @@ class Approval_Process(UserPassesTestMixin,ListView):
         queryset = combined_records
         # print(queryset[0].project_confirmation)
         return queryset
+
+# 簽核權
+class Approval_Group(UserPassesTestMixin,ListView):
+    model = Approval_TargetDepartment
+    template_name = 'approval_group/approval_group.html'
+    context_object_name = 'approval_group'
+
+    def test_func(self):#有簽核權
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='簽核權').exists() 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["employees"] = Employee.objects.all()
+        context["approval_target_form"] = ApprovalTargetDepartmentModelForm()
+        return context
 

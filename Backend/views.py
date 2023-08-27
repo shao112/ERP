@@ -7,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Approval_TargetDepartment, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -529,6 +529,25 @@ class Groups_View(View):
 
         return JsonResponse({"data": data}, status=200)
 
+class Approval_Groups_View(View):
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        group = Group.objects.get(id=dict_data['id'])
+        user_ids= dict_data.get("user_set",[])
+        users = User.objects.filter(id__in=user_ids)
+        group.user_set.set(users)
+        return JsonResponse({'data': "修改成功"},status=200)
+
+    def get(self, request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Approval_TargetDepartment, id=id)
+        employee_order = data.employee_order
+        print("employee_order: ",employee_order)
+        users = [user.id for user in employee_order]
+        data={"user_set":users,"id":data.id,"group_name":data.name}
+
+        return JsonResponse({"data": data}, status=200)
+    
 class Profile_View(View):
     # 同一個post要處理更新照片以及更新密碼
     def post(self,request):
