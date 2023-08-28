@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Leave,Work_Overtime,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Leave_Param, Leave,Work_Overtime,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -25,6 +25,10 @@ class WorkItemAdmin(admin.ModelAdmin):
 class LeaveAdmin(admin.ModelAdmin):
     list_display = ('type_of_leave', 'start_date_of_leave', 'end_date_of_leave', 'start_time_of_leave', 'end_time_of_leave', 'leave_hours', 'substitute', 'leave_reason', 'backlog', 'created_date', 'update_date')
     # resource_class = DepartmentResource
+# 請假參數
+class LeaveParamAdmin(admin.ModelAdmin):
+    list_display = ('leave_name', 'leave_type', 'days', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
+
 # 加班
 class WorkOvertimeAdmin(admin.ModelAdmin):
     list_display = ('date_of_overtime', 'type_of_overtime', 'start_time_of_overtime', 'end_time_of_overtime', 'overtime_hours', 'carry_over', 'overtime_reason', 'created_date', 'update_date')
@@ -110,4 +114,5 @@ admin.site.register(Client, ClientAdmin)
 admin.site.register(Requisition, RequisitionAdmin)
 admin.site.register(Work_Item, WorkItemAdmin)
 admin.site.register(Leave, LeaveAdmin)
+admin.site.register(Leave_Param, LeaveParamAdmin)
 admin.site.register(Work_Overtime, WorkOvertimeAdmin)

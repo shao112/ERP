@@ -428,6 +428,40 @@ class Leave(ModifiedModel):
         verbose_name = "請假"
         verbose_name_plural = verbose_name
 
+# 假別參數
+class Leave_Param(ModifiedModel):
+    GENDER_TYPE = (
+        ('男', '男'),
+        ('女', '女'),
+    )
+    UNIT_TYPE = (
+        ('小時', '小時'),
+        ('天', '天'),
+    )
+    LEAVE_TYPE = (
+        ('特休假', '特休假'),
+        ('一般假', '一般假'),
+        ('特別假', '特別假'),
+    )
+    # leave_code = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別代碼")
+    leave_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別名稱")
+    leave_type = models.CharField(max_length=5, choices=LEAVE_TYPE,blank=True, null=True, verbose_name="項目類別")
+    days = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數")
+    minimum_leave_number = models.DecimalField(max_digits=5, decimal_places=3, blank=True, null=True, verbose_name="最低請假數(為0就不卡控)")
+    minimum_leave_unit = models.DecimalField(max_digits=5, decimal_places=3, blank=True, null=True, verbose_name="最小請假單位(為0就不卡控)")
+    unit = models.CharField(max_length=5, choices=UNIT_TYPE,blank=True, null=True,verbose_name="單位")
+    is_audit = models.BooleanField(blank=True, default=False, verbose_name="附件稽核")
+    is_attachment = models.BooleanField(blank=True, default=False, verbose_name="附件提示")
+    deduct_percentage = models.IntegerField(blank=True, null=True, default=0, verbose_name="扣薪 %")
+    control = models.BooleanField(blank=True, default=False, verbose_name="假控")
+    gender = models.CharField(max_length=2, choices=GENDER_TYPE,blank=True, null=True,verbose_name="性別")
+    leave_rules = models.TextField(max_length=1000, blank=True, null=True, verbose_name="請假規定")
+    created_by = models.ForeignKey("Employee",related_name="leave_param_author", on_delete=models.SET_NULL, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "假別參數"
+        verbose_name_plural = verbose_name
+
 # 加班
 class Work_Overtime(ModifiedModel):
     date_of_overtime = models.DateField(blank=True, null=True, verbose_name="加班日期")
