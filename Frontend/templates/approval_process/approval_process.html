@@ -117,7 +117,7 @@
                     <td>{{  object.target_approval.name  }}</td>
                     <td> 
                         {{ object.get_foreignkey.get_show_id }}
-                        {{object.model_url}}
+                       
                     </td>
 
 
@@ -125,7 +125,7 @@
                         {% for log in object.get_approval_log_list %}
                         {{ log.show_name }} - 
                         {% if   log.status == 'pass' %}
-                        【{{log.user_full_name}}：{{log.content}}】
+                        【{{log.content}}】
 
                         {% else %}
                         (wait)
@@ -219,13 +219,10 @@
 
 
             if (modalModel === 'project_confirmation') {
-                console.log("1")
                 $('#tab1').tab('show');
             } else if (modalModel  === 'job_assign') {
-                console.log("122")
                 $('#tab2').tab('show');
             } else if (modalModel  === 'project_employee_assign') {
-                console.log("333")
                 $('#tab3').tab('show');
             }
         });

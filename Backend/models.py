@@ -181,19 +181,21 @@ class ApprovalModel(models.Model):
         if related_name:
             return related_name
         return None
+
+    @property
+    def get_created_by(self):
+        get_foreignkey = self.get_foreignkey()      
+        return get_foreignkey.created_by
+
     
-    def __str__(self):
-        return f"{self.target_approval.name} - {self.get_created_by()}"
-    #顯示內容
+    #回傳關聯
     def get_foreignkey(self):
         related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
         if related_name:
             return getattr(self, related_name, None).all()[0]
         return None
     
-    def get_created_by(self):
-        get_foreignkey = self.get_foreignkey()      
-        return get_foreignkey.created_by
+
 
     def get_approval_employee(self):
         current_index= self.current_index
@@ -227,8 +229,10 @@ class ApprovalModel(models.Model):
         """
         get_approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
         show_list = []
+        current_index = self.current_index
+        approval_order = self.target_approval.approval_order
         
-        for log in get_approval_logs: #處理簽過LOG
+        for index, log in enumerate(get_approval_logs): #處理簽過LOG
             show_list.append({
                 "show_name": log.user.full_name,
                 "department": log.user.departments.department_name,
@@ -238,8 +242,6 @@ class ApprovalModel(models.Model):
             })
 
 
-        current_index = self.current_index
-        approval_order = self.target_approval.approval_order
         #當到最大數量且 已完成
         if current_index == len(approval_order)-1 and self.current_status == "completed":
             return show_list
@@ -247,7 +249,7 @@ class ApprovalModel(models.Model):
         for  employee_id in approval_order[current_index:]:
             show_name= ""
             if employee_id == "x":
-                get_department_name = self.get_created_by().departments.department_name
+                get_department_name = self.get_created_by.departments.department_name
                 show_name = get_department_name+"(主管待簽)"
             else:
                 get_Employee = Employee.objects.get(id=employee_id)
@@ -266,6 +268,9 @@ class ApprovalModel(models.Model):
     class Meta:
         verbose_name = '簽核狀態'
         verbose_name_plural = verbose_name
+    
+    def __str__(self):
+        return f"{self.target_approval.name} - {self.get_created_by}"
     
 
 
