@@ -114,22 +114,16 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
-                    <td>{{  object.model |render_model_text }}</td>
+                    <td>{{  object.target_approval.name  }}</td>
                     <td> 
-                    {% if object.model == 'project_confirmation' %}
-                        工確-{{object.id|format_with_zeros:5}} - {{ object.project_name}}
-                    {% elif object.model == 'job_assign' %}
-                        工派-{{ object.id|format_with_zeros:5 }} -  出勤 {{ object.attendance_date}}
-                    {% elif object.model == 'project_employee_assign' %}
-                       派工-{{ object.project_job_assign.id|format_with_zeros:5}}
-                    {% else %}
-                        未知类型
-                    {% endif %}
+                        {{ object.get_foreignkey.get_show_id }}
+                        {{object.model_url}}
                     </td>
 
+
                     <td>
-                        {% for log in object.Approval.get_approval_log_list %}
-                        {{ log.department }} - 
+                        {% for log in object.get_approval_log_list %}
+                        {{ log.show_name }} - 
                         {% if   log.status == 'pass' %}
                         【{{log.user_full_name}}：{{log.content}}】
 
@@ -141,7 +135,7 @@
                     </td>
                     
                     <td>
-                        <a href="" data-Approval_id="{{ object.Approval.id }}"  data-url="{{object.url}}" data-id="{{object.id}}"  data-toggle="modal" data-modal="{{object.model}}" data-target="#myModal">
+                        <a href="" data-Approval_id="{{ object.id }}"   data-id="{{object.get_foreignkey.id}}"   data-url="{{object.model_url}}"  data-toggle="modal" data-target="#myModal">
                             <i class="fa-solid fa-eye fa-lg"></i>
                         </a>
                     </td>
@@ -187,9 +181,8 @@
         
         $('#myModal').on('show.bs.modal', function (event) {
             var button = event.relatedTarget; 
-            var modalModel = button.getAttribute('data-modal');        
+            var modalModel = button.getAttribute('data-url');        
             Approval_id = button.getAttribute('data-Approval_id');           
-            console.log("dX")
             console.log(Approval_id)
             var form = document.querySelector('form[name="'+ modalModel+'"]');
             

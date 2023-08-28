@@ -132,23 +132,21 @@ class ApprovalLog(models.Model):
 
 
 
-class Approval_TargetDepartment(models.Model):
+class Approval_Target(models.Model):
     STATUS_CHOICES = [
-        ('工程確認單', '工程確認單'),
-        ('工程派任計畫單', '工程派任計畫單'),
-        ('派工單', '派工單'),
+        ('工程確認單', '工程確認單'),#project_confirmation
+        ('工程派任計畫單', '工程派任計畫單'),#job_assign
+        ('派工單', '派工單'),#project_employee_assign
+        ('請假單', '請假單'),
     ]
-
     name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
-    employee_order = models.JSONField(null=True, verbose_name="員工簽核順序")
-    department_order = models.JSONField( blank=True, null=True,verbose_name="部門簽核順序")
-    belong_department = models.ForeignKey('Department',related_name="belong_department", blank=True, null=True, on_delete=models.CASCADE,verbose_name="屬於哪部門的簽核")
+    approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
     class Meta:
         verbose_name = '簽核流程管理'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f"{self.name} - {self.belong_department}"
+        return f"{self.name}"
 
 
 
@@ -158,12 +156,51 @@ class ApprovalModel(models.Model):
         ('in_progress', '進行中'),
         ('rejected', '駁回'),
     ]
+    #related_name 關聯
+    RELATED_NAME_MAP = {
+        '工程確認單': 'project_confirmation_Approval',
+        '工程派任計畫單': 'Project_Job_Assign_Approval',
+        '派工單': 'Project_Employee_Assign_Approval',
+    }
+    Modal_URL__MAP = {
+        '工程確認單': 'project_confirmation',
+        '工程派任計畫單': 'job_assign',
+        '派工單': 'project_employee_assign',
+    }
+
 
     current_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
-    #目前待簽
-    current_department = models.ForeignKey('Department', verbose_name="待簽核",on_delete=models.CASCADE, related_name='current_approvals')
-    target_department = models.ForeignKey(Approval_TargetDepartment,verbose_name="依附簽核", on_delete=models.CASCADE, related_name='approvals')
+    #目前待簽index
+    current_index = models.IntegerField( verbose_name="待簽核index",default=0,blank=True,null=True)
+    #依附簽核
+    target_approval = models.ForeignKey(Approval_Target,verbose_name="依附簽核",blank=True,null=True, on_delete=models.CASCADE, related_name='approvals')
 
+    @property
+    def model_url(self):
+        related_name = self.Modal_URL__MAP.get(self.target_approval.name)
+        if related_name:
+            return related_name
+        return None
+    
+    def __str__(self):
+        return f"{self.target_approval.name} - {self.get_created_by()}"
+    #顯示內容
+    def get_foreignkey(self):
+        related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
+        if related_name:
+            return getattr(self, related_name, None).all()[0]
+        return None
+    
+    def get_created_by(self):
+        get_foreignkey = self.get_foreignkey()      
+        return get_foreignkey.created_by
+
+    def get_approval_employee(self):
+        current_index= self.current_index
+        approval_order = self.target_approval.approval_order
+        if approval_order[current_index] !="x":
+            return Employee.objects.get(id=approval_order[current_index])
+        return "x"
 
     def update_department_status(self, new_status):
         if new_status == 'approved':
@@ -173,61 +210,55 @@ class ApprovalModel(models.Model):
             self.save()
 
     def find_and_update_parent_department(self):
-        current_department = self.current_department
-        target_department = self.target_department
-        department_order = target_department.department_order
+        current_index = self.current_index
+        approval_order = self.target_approval.approval_order
         
-        #尋找簽核index
-        current_index = department_order.index(current_department.id)
         #判斷是不是最後一個
-        if current_index ==len(department_order)-1 :
+        if current_index ==len(approval_order)-1 :
             self.update_department_status("completed")
         else:
-            next_department_id = department_order[current_index + 1]
-            next_department = Department.objects.get(id=next_department_id)
-            self.current_department = next_department
+            current_index+=1
+            self.current_index = current_index
             self.save()
 
     def get_approval_log_list(self):
         """
         取得相關的 ApprovalLog 並整理成列表
         """
-        print("modal log")
         get_approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-        print(get_approval_logs)
         show_list = []
         
         for log in get_approval_logs: #處理簽過LOG
             show_list.append({
-                "user_full_name": log.user.full_name,
+                "show_name": log.user.full_name,
                 "department": log.user.departments.department_name,
                 "department_pk": log.user.departments.pk,
                 "content": log.content, 
                 "status": "pass"
             })
-        print(show_list)
-        print("log end")
 
 
-        current_department = self.current_department
-        department_order = self.target_department.department_order  # 從 target_department 中獲取順序
-        current_department_index = department_order.index(current_department.id)
+        current_index = self.current_index
+        approval_order = self.target_approval.approval_order
+        #當到最大數量且 已完成
+        if current_index == len(approval_order)-1 and self.current_status == "completed":
+            return show_list
 
-        for department_id in department_order[current_department_index:]:
-            department = Department.objects.get(id=department_id)
-            if show_list:
-                department_already_recorded = any(item["department_pk"] == department.pk for item in show_list)
+        for  employee_id in approval_order[current_index:]:
+            show_name= ""
+            if employee_id == "x":
+                get_department_name = self.get_created_by().departments.department_name
+                show_name = get_department_name+"(主管待簽)"
             else:
-                department_already_recorded = False
+                get_Employee = Employee.objects.get(id=employee_id)
+                show_name = get_Employee.full_name
 
-            if not department_already_recorded:
-                show_list.append({
+            show_list.append({
                     "user_full_name": None,
                     "user_department": None,
                     "content": None,
-                    "department_pk": department.pk,
+                    "show_name":show_name,
                     "status": "wait",
-                    "department": department.department_name
                 })
 
         return show_list
@@ -235,7 +266,7 @@ class ApprovalModel(models.Model):
     class Meta:
         verbose_name = '簽核狀態'
         verbose_name_plural = verbose_name
-
+    
 
 
 class Clock(models.Model):
@@ -387,13 +418,6 @@ class Project_Job_Assign(ModifiedModel):
     def __str__(self) :
         return   str(self.pk).zfill(5)
 
-    # def attachment_link(self):
-    #     if self.attachment:
-    #         return format_html("<a href='%s' download>下載</a>" % (self.project_confirmation.attachment.url,))
-    #     else:
-    #         return ""
-    # 告訴admin這個包含HTML代碼，要幫忙解析
-    # attachment_link.allow_tags = True
 
 # 派工單
 class Project_Employee_Assign(ModifiedModel):
@@ -420,7 +444,7 @@ class Project_Employee_Assign(ModifiedModel):
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
     def __str__(self):
-        return self.project_job_assign.job_assign_id
+        return self.get_show_id()
 
 
 # 公告
@@ -619,6 +643,7 @@ def create_approval(sender, instance, created, **kwargs):
         get_department= user.departments #單一FK
         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
         if not target_department:
+            
                     # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
                     return
 

@@ -116,7 +116,7 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
-                    <td>{{  object.model |render_model_text }}</td>
+                    <td>{{  object.target_approval.name }}</td>
                     <td> 
                     {% if object.model == 'project_confirmation' %}
                     {{object.get_show_id }}  - {{ object.project_name}}

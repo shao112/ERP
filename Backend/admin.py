@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Leave_Param, Leave,Work_Overtime,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Leave_Param, Leave,Work_Overtime,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -13,6 +13,7 @@ class EmployeeInline(admin.StackedInline):
     model = Employee
     can_delete = False
     verbose_name_plural = 'Employee'
+    
 
 class MyUserAdmin(UserAdmin):
     inlines = (EmployeeInline, )
@@ -41,7 +42,7 @@ class DepartmentAdmin(ImportExportModelAdmin):
     
 # 工程確認單
 class ProjectConfirmationAdmin(ImportExportModelAdmin):
-    list_display = ('quotation_id', 'order_id', 'c_a',  'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
+    list_display = ('quotation_id', 'Approval','order_id', 'c_a',  'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
@@ -98,7 +99,7 @@ admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Quotation)
-admin.site.register(Approval_TargetDepartment)
+admin.site.register(Approval_Target)
 admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)
 admin.site.register(News)

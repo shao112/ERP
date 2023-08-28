@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Approval_TargetDepartment, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -360,6 +360,8 @@ class Approval_Watch(UserPassesTestMixin,ListView):
         queryset = combined_records
         return queryset
 
+from django.contrib.contenttypes.models import ContentType
+
 
 class Approval_Process(UserPassesTestMixin,ListView):
     model = ApprovalModel
@@ -382,48 +384,83 @@ class Approval_Process(UserPassesTestMixin,ListView):
 
     def get_queryset(self):
         current_employee = self.request.user.employee
-        current_department_id = current_employee.departments.id #取得員工部門
-        #取得正在簽核有關他部門的ApprovalModel id
-        ApprovalModel_ids = ApprovalModel.objects.filter(
-            current_department_id=current_department_id,
-            current_status='in_progress'
-        ).values_list('id', flat=True)
+    
+        related_records = []
+    
+        for Approval in ApprovalModel.objects.all():            
+            get_employee = Approval.get_approval_employee()
+            if get_employee !="x":
+                related_records.append(Approval)
+            else:
+                # 取得作者部門
+                get_createdby = Approval.get_created_by()
+                print(get_createdby)
+                department =get_createdby.departments
+                #撈取主管權限的員工
+                supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
+                print(supervisor_employees)
+                #判斷主管是不是當前user
+                is_supervisor = current_employee.id in supervisor_employees
+                if is_supervisor:            
+                   related_records.append(Approval)
 
-        #從工程確認單取得關聯
-        project_confirmation_records = Project_Confirmation.objects.filter(
-            Approval_id__in=ApprovalModel_ids
-        ).select_related('Approval').annotate(
-         model=Value('project_confirmation', output_field=CharField()),
-          url=Value('project_confirmation', output_field=CharField())
-         )
+        # print(related_records[0].get_foreignkey())
+                # for model_cls in [Project_Confirmation, Project_Job_Assign, Project_Employee_Assign]:
+                #     content_type = ContentType.objects.get_for_model(model_cls)
+                #     records = model_cls.objects.filter(
+                #         Approval_id__in=approval_model_ids,
+                #         content_type=content_type
+                #     ).select_related('Approval').annotate(
+                #         model=Value(model_cls.__name__.lower(), output_field=CharField()),
+                #         url=Value(model_cls.__name__.lower(), output_field=CharField())
+                #     )
+                #     related_records.extend(records)
+
+
+        # #取得正在簽核有關他部門的ApprovalModel id
+        # ApprovalModel_ids = ApprovalModel.objects.filter(
+        #     current_department_id=current_department_id,
+        #     current_status='in_progress'
+        # ).values_list('id', flat=True)
+
+        # #從工程確認單取得關聯
+        # project_confirmation_records = Project_Confirmation.objects.filter(
+        #     Approval_id__in=ApprovalModel_ids
+        # ).select_related('Approval').annotate(
+        #  model=Value('project_confirmation', output_field=CharField()),
+        #   url=Value('project_confirmation', output_field=CharField())
+        #  )
         
-        project_job_assign_records = Project_Job_Assign.objects.filter(
-            Approval_id__in=ApprovalModel_ids
-        ).select_related('Approval').annotate(
-            model=Value('job_assign', output_field=CharField()),
-              url=Value('job_assign', output_field=CharField())
-        )
+        # project_job_assign_records = Project_Job_Assign.objects.filter(
+        #     Approval_id__in=ApprovalModel_ids
+        # ).select_related('Approval').annotate(
+        #     model=Value('job_assign', output_field=CharField()),
+        #       url=Value('job_assign', output_field=CharField())
+        # )
 
-        project_employee_assign_records = Project_Employee_Assign.objects.filter(
-            Approval_id__in=ApprovalModel_ids
-        ).select_related('Approval').annotate(
-            model=Value('project_employee_assign', output_field=CharField()),
-              url=Value('project_employee_assign', output_field=CharField())
-        )
+        # project_employee_assign_records = Project_Employee_Assign.objects.filter(
+        #     Approval_id__in=ApprovalModel_ids
+        # ).select_related('Approval').annotate(
+        #     model=Value('project_employee_assign', output_field=CharField()),
+        #       url=Value('project_employee_assign', output_field=CharField())
+        # )
 
-        combined_records = list(project_confirmation_records) + list(project_job_assign_records)+ list(project_employee_assign_records)
+        # combined_records = list(project_confirmation_records) + list(project_job_assign_records)+ list(project_employee_assign_records)
         # print(combined_records)
 
         # print(combined_records[0].Approval.get_approval_log_list())
 
 
-        queryset = combined_records
+        # queryset = combined_records
         # print(queryset[0].project_confirmation)
+        queryset=related_records
+        print(queryset[0].target_approval.name)
         return queryset
+    
 
 # 簽核權
 class Approval_Group(UserPassesTestMixin,ListView):
-    model = Approval_TargetDepartment
+    model = Approval_Target
     template_name = 'approval_group/approval_group.html'
     context_object_name = 'approval_group'
 

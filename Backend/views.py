@@ -7,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Approval_TargetDepartment, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -541,7 +541,7 @@ class Approval_Groups_View(View):
 
     def get(self, request):
         id = request.GET.get('id')
-        data = get_object_or_404(Approval_TargetDepartment, id=id)
+        data = get_object_or_404(Approval_Target, id=id)
         employee_order = data.employee_order
         print("employee_order: ",employee_order)
         users = [user.id for user in employee_order]

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Approval_TargetDepartment, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
