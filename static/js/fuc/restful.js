@@ -158,12 +158,19 @@ $("form").on("submit", function (event) {
       if (xhr.status === 400) {
         var errorMessage = xhr.responseJSON.error;
         console.log(errorMessage);
+
         var errorMessageHTML = "<ul>";
-        Object.entries(errorMessage).map(([key, errors]) => {
-          errors.forEach((error) => {
-            errorMessageHTML += "<li>" + error + "</li>";
+
+        if (typeof errorMessage == "string") {
+          errorMessageHTML += "<li>" + errorMessage + "</li>";
+        } else {
+          Object.entries(errorMessage).map(([key, errors]) => {
+            errors.forEach((error) => {
+              errorMessageHTML += "<li>" + error + "</li>";
+            });
           });
-        });
+        }
+        
         errorMessageHTML += "</ul>";
         console.log(errorMessageHTML);
 

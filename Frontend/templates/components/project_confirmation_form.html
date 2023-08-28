@@ -1,4 +1,4 @@
-<form action="/restful/project_confirmation" id="form" method="POST" name="project_confirmation" data-method="post">
+<form action="/restful/project_confirmation" id="form" method="POST" class="pb-4" data-method="post">
     {% csrf_token %}
     <input name="id" hidden />
     <div class="form-row my-2" id="modal-download_pdf">
@@ -8,16 +8,21 @@
             </h5>
             <div class="form-row">
                 <div class="col-6">
-                    <div class="form-group">
-                        <label for="quotation_id_control">報價單號</label>
-                        <input class="form-control form-control-sm" name="quotation_id" id="quotation_id_control"
-                            required></input>
-                    </div>
+                    <label for="quotation">報價單號</label>
+                    <select class="form-control form-control-sm" name="quotation" id="quotation_id">
+                        <option value="-1">選擇報價單號</option>
+                        {% for quotation in quotation_list %}
+                        <option value="{{ quotation.id }}">{{ quotation.get_show_id }}
+                        </option>
+                        {% endfor %}
+                    </select>
                 </div>
+
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="c_a_control">母案編號</label>
-                        <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
+                        <label for="project_name_control">工程名稱</label>
+                        <input class="form-control form-control-sm" name="project_name" id="project_name_control"
+                            readonly></input>
                     </div>
                 </div>
 
@@ -25,9 +30,9 @@
             <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="project_confirmation_id_control">工確單編號</label>
+                        <label for="project_confirmation_id_control">工確單編號(系統產生)</label>
                         <input class="form-control form-control-sm" name="project_confirmation_id"
-                            id="project_confirmation_id_control"></input>
+                            id="project_confirmation_id_control" readonly></input>
                     </div>
                 </div>
                 <div class="col-6">
@@ -42,21 +47,17 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="client_control">客戶簡稱</label>
-                        <select class="form-control form-control-sm" name="client" id="client_control">
-                            <option value="">請選擇客戶簡稱</option>
-                            {% for client in client_list %}
-                            <option value="{{ client.client_name }}">{{ client.client_name }}</option>
-                            {% endfor %}
-                        </select>
+                        <input readonly type="text" class="form-control form-control-sm" id="client_id" />
                     </div>
                 </div>
+
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="project_name_control">工程名稱</label>
-                        <input class="form-control form-control-sm" name="project_name"
-                            id="project_name_control"></input>
+                        <label for="c_a_control">母案編號</label>
+                        <input class="form-control form-control-sm" name="c_a" id="c_a_control"></input>
                     </div>
                 </div>
+
             </div>
             <div class="form-row">
                 <div class="col-6">
@@ -65,8 +66,8 @@
                         <select class="form-control form-control-sm" name="requisition" id="requisition_control">
                             <option value="">請選擇請購單位</option>
                             {% for requisition in requisition_list %}
-                            <option value="{{ requisition.requisition_name }}">{{ requisition.requisition_name }}
-                            </option>
+                            <option value="{{ requisition.requisition_name }}">
+                                {{ requisition.requisition_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -124,8 +125,24 @@
                 </div>
 
             </div>
-
+            <div class="form-row">
+                <div class="col-12">
+                    <label>完工重派附件</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" data-modal="project_confirmation" name="attachment"
+                            id="reassignment_attachment_control">
+                        <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    {% if showbtn %}
+    <div class=" d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4 " style="color: #fff;background: #1E3050;"
+            data-dismiss="modal">關閉</button>
+    </div>
+    {% endif %}
 </form>

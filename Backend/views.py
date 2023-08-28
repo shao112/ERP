@@ -697,7 +697,10 @@ class Project_Confirmation_View(View):
                 get_completion_report_employee = dict_data["completion_report_employee"]
                 del dict_data["completion_report_employee"]
                 getObject.completion_report_employee.set(get_completion_report_employee)
-
+            
+            get_Quotation_Object = Quotation.objects.get(id=dict_data['quotation'])
+            getObject.quotation = get_Quotation_Object
+            del dict_data["quotation"]
             getObject.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "完成修改"},status=200)
