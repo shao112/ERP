@@ -270,14 +270,62 @@ class Department(ModifiedModel):
     def __str__(self):
         return f"{self.department_name}({self.belong_to_company})"
 
+# 工項管理
+class Work_Item(ModifiedModel):
+    item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
+    item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
+    unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
+    unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
+    created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_display_text(self):
+        pn_id = f"WT-{str(self.id).zfill(5)}"
+        return f"{pn_id} | {self.item_name} | {self.item_id} | {self.unit} | {self.unit_price}(價格)"
+
+    def get_show_id(self):
+        return f"工項-{str(self.id).zfill(5)}"
+
+
+    class Meta:
+        verbose_name = "工項資料庫"
+        verbose_name_plural = verbose_name
+
+#報價單
+class Quotation(ModifiedModel):
+    customer_name = models.CharField(max_length=100, verbose_name="客戶名稱",blank=True, null=True)
+    tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
+    contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
+    address = models.TextField(verbose_name="地址",blank=True, null=True)
+    tel = models.CharField(max_length=20, verbose_name="電話",blank=True, null=True)
+    mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
+    fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
+    email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
+    project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
+    quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
+    business_tel = models.CharField(max_length=20, verbose_name="業務電話",blank=True, null=True)
+    business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)
+    work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
+    internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
+    created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    def get_show_id(self):
+        return f"報價-{str(self.id).zfill(5)}"
+
+
+    def __str__(self):
+        return self.project_name
+
+    class Meta:
+        verbose_name = "報價單"
+        verbose_name_plural = "報價單"
 
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
-    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name="報價單號")
-    project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
+    quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
+    # project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
-    client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
+    # client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
@@ -477,54 +525,7 @@ class Work_Overtime(ModifiedModel):
         verbose_name = "加班"
         verbose_name_plural = verbose_name
 
-# 工項管理
-class Work_Item(ModifiedModel):
-    item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
-    item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
-    unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
-    unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
-    created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
-    def get_display_text(self):
-        pn_id = f"WT-{str(self.id).zfill(5)}"
-        return f"{pn_id} | {self.item_name} | {self.item_id} | {self.unit} | {self.unit_price}(價格)"
-
-    def get_show_id(self):
-        return f"工項-{str(self.id).zfill(5)}"
-
-
-    class Meta:
-        verbose_name = "工項資料庫"
-        verbose_name_plural = verbose_name
-
-#報價單
-class Quotation(ModifiedModel):
-    customer_name = models.CharField(max_length=100, verbose_name="客戶名稱",blank=True, null=True)
-    tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
-    contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
-    address = models.TextField(verbose_name="地址",blank=True, null=True)
-    tel = models.CharField(max_length=20, verbose_name="電話",blank=True, null=True)
-    mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
-    fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
-    email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
-    project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
-    quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
-    business_tel = models.CharField(max_length=20, verbose_name="業務電話",blank=True, null=True)
-    business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)
-    work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
-    internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
-    created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
-
-    def get_show_id(self):
-        return f"報價-{str(self.id).zfill(5)}"
-
-
-    def __str__(self):
-        return self.project_name
-
-    class Meta:
-        verbose_name = "報價單"
-        verbose_name_plural = "報價單"
 
 
 # 固定資產管理

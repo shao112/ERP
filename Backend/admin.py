@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Leave_Param, Leave,Work_Overtime,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Leave_Param, Leave,Work_Overtime,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_TargetDepartment,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -41,7 +41,7 @@ class DepartmentAdmin(ImportExportModelAdmin):
     
 # 工程確認單
 class ProjectConfirmationAdmin(ImportExportModelAdmin):
-    list_display = ('quotation_id', 'project_name', 'order_id', 'c_a', 'client', 'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
+    list_display = ('quotation_id', 'order_id', 'c_a',  'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
@@ -97,6 +97,7 @@ admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
+admin.site.register(Quotation)
 admin.site.register(Approval_TargetDepartment)
 admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)

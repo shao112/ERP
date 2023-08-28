@@ -332,6 +332,7 @@ class Quotation_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Quotation, id=id)
+        get_id = data.get_show_id()
 
         work_item_list = []
         for item in data.work_item.all():
@@ -341,8 +342,8 @@ class Quotation_View(View):
         data = model_to_dict(data)
         print("dict_data")
         print(data)
-        data['work_item_id'] = "QU-" +str(data["id"]).zfill(5)
         data['work_item'] = work_item_list
+        data['quotation_id'] = get_id
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
@@ -732,10 +733,12 @@ class Project_Confirmation_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
+        get_id=data.get_show_id()
         data = model_to_dict(data)
-        data['project_confirmation_id'] = "工確-" +str(data["id"]).zfill(5)
+        data['project_confirmation_id'] = get_id
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
+        print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class Job_Assign_View(View):

@@ -43,10 +43,10 @@ class DepartmentResource(resources.ModelResource):
 class ProjectConfirmationResource(resources.ModelResource):
     id = Field(attribute='id', column_name="編號", widget=ConfirmationIDWidget())
     quotation_id = Field(attribute='quotation_id', column_name=Project_Confirmation.quotation_id.field.verbose_name)
-    project_name = Field(attribute='project_name', column_name=Project_Confirmation.project_name.field.verbose_name)
+    # project_name = Field(attribute='project_name', column_name=Project_Confirmation.project_name.field.verbose_name)
     order_id = Field(attribute='order_id', column_name=Project_Confirmation.order_id.field.verbose_name)
     c_a = Field(attribute='c_a', column_name=Project_Confirmation.c_a.field.verbose_name)
-    client = Field(attribute='client', column_name=Project_Confirmation.client.field.verbose_name)
+    # client = Field(attribute='client', column_name=Project_Confirmation.client.field.verbose_name)
     requisition = Field(attribute='requisition', column_name=Project_Confirmation.requisition.field.verbose_name)
     turnover = Field(attribute='turnover', column_name=Project_Confirmation.turnover.field.verbose_name)
     is_completed = Field(attribute='is_completed', column_name=Project_Confirmation.is_completed.field.verbose_name, widget=BooleanWidget())

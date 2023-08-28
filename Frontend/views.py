@@ -126,6 +126,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         context["employees_list"] = Employee.objects.values('id','user__username')
         context['client_list'] = Client.objects.all()
         context['requisition_list'] = Requisition.objects.all()
+        context['quotation_list'] = Quotation.objects.all()
         return context
 
     def test_func(self):
