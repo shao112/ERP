@@ -490,7 +490,7 @@ class News(ModifiedModel):
 
 # 請假
 class Leave(ModifiedModel):
-    type_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別項目")
+    type_of_leave = models.ForeignKey("Leave_Param", on_delete=models.SET_NULL,related_name="leave_param", blank=True, null=True, verbose_name="假別項目")
     start_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假起始日期")
     end_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假結束日期")
     start_time_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假起始時間")
@@ -508,6 +508,7 @@ class Leave(ModifiedModel):
 # 假別參數
 class Leave_Param(ModifiedModel):
     GENDER_TYPE = (
+        ('不限', '不限'),
         ('男', '男'),
         ('女', '女'),
     )
@@ -517,6 +518,7 @@ class Leave_Param(ModifiedModel):
     )
     LEAVE_TYPE = (
         ('特休假', '特休假'),
+        ('補休假', '補休假'),
         ('一般假', '一般假'),
         ('特別假', '特別假'),
     )
@@ -530,14 +532,18 @@ class Leave_Param(ModifiedModel):
     is_audit = models.BooleanField(blank=True, default=False, verbose_name="附件稽核")
     is_attachment = models.BooleanField(blank=True, default=False, verbose_name="附件提示")
     deduct_percentage = models.IntegerField(blank=True, null=True, default=0, verbose_name="扣薪 %")
-    control = models.BooleanField(blank=True, default=False, verbose_name="假控")
-    gender = models.CharField(max_length=2, choices=GENDER_TYPE,blank=True, null=True,verbose_name="性別")
+    control = models.BooleanField(blank=True, default=True, verbose_name="假控")
+    gender = models.CharField(max_length=5, choices=GENDER_TYPE,blank=True, null=True,verbose_name="性別")
     leave_rules = models.TextField(max_length=1000, blank=True, null=True, verbose_name="請假規定")
     created_by = models.ForeignKey("Employee",related_name="leave_param_author", on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         verbose_name = "假別參數"
         verbose_name_plural = verbose_name
+    def get_show_id(self):
+        return f"{str(self.id).zfill(5)}"
+    def __str__(self):
+        return self.leave_name
 
 # 加班
 class Work_Overtime(ModifiedModel):

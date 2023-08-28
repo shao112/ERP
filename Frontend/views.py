@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -411,4 +411,19 @@ class Approval_Group(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["employees"] = Employee.objects.all()
         return context
+    
+class Leave_Param_List(UserPassesTestMixin,ListView):
+    model = Leave_Param
+    template_name = 'leave_param/leave_param.html'
+    context_object_name = 'leave_param'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leave_param"] = Leave_Param.objects.all()
+        return context
+    
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='簽核權').exists()
 

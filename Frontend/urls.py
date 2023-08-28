@@ -30,6 +30,7 @@ urlpatterns = [
     path('quotation', views.Quotation_ListView.as_view(), name="quotation"),
     path('approval_list', views.Approval_List.as_view(), name="Approval_List"),
     path('approval_group', views.Approval_Group.as_view(), name="Approval_Group"),
+    path('leave_param', views.Leave_Param_List.as_view(), name="Leave_Param"),
     path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
