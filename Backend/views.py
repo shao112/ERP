@@ -40,11 +40,7 @@ class Approval_Process_View(View):
         if status not in ["approved", "rejected"]:
             return JsonResponse({"error":"請選擇簽核狀態"},status=400)
         
-        if not feedback.strip():  # 如果 feedback 是空白或只包含空格
-            return JsonResponse({"error":"回饋請勿空白，請簡單描述處理訊息"},status=400)
-        if approval_id ==None: 
-            return JsonResponse({"error":"請選擇approval"},status=400)
-        
+
         #尋找實體
         try:
             approval_instance = get_object_or_404(ApprovalModel, id=approval_id)
