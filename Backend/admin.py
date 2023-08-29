@@ -28,7 +28,7 @@ class LeaveAdmin(admin.ModelAdmin):
     # resource_class = DepartmentResource
 # 請假參數
 class LeaveParamAdmin(admin.ModelAdmin):
-    list_display = ('leave_name', 'leave_type', 'days', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
+    list_display = ('leave_name', 'leave_type', 'leave_quantity', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
 
 # 加班
 class WorkOvertimeAdmin(admin.ModelAdmin):

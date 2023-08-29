@@ -13,73 +13,90 @@
 
 {% block main %}
 <div class="main px-3">
-    <div class="leave_param_table container">
-        <div class="mx-auto shadow-sm container-fluid table-responsive-lg">
-            <form action="#" method="post">
-                <table class="table table-sm table-hover">
-                    <thead class="thead-light text-center">
-                        <tr class="text-nowrap" style="font-size: 14px;">
-                            <th>假別代碼</th>
-                            <th>假別名稱</th>
-                            <th>項目類別</th>
-                            <th>給假數</th>
-                            <th>最低請假數(為0就不卡控)</th>
-                            <th>最小請假單位(為0就不卡控)</th>
-                            <th>單位</th>
-                            <th>附件稽核</th>
-                            <th>附件提示</th>
-                            <th>扣薪 %</th>
-                            <th>假控</th>
-                            <th>性別</th>
-                            <th>請假規定</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-nowrap text-center" style="font-size: 14px;">
-                        {% for l in leave_param %}
-                        <tr>
-                            <td>{{ l.get_show_id}}</td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.leave_name }}">
-                            </td>
-                            <td>{{ l.leave_type }}</td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.days }}">
-                            </td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.minimum_leave_number }}" >
-                            </td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.minimum_leave_unit }}" >
-                            </td>
-                            <td>{{ l.unit }}</td>
-                            <td>
-                                <input type="checkbox" name="is_audit" class="form-check-input" value="{{ l.is_audit }}"
-                                {% if l.is_audit %}checked{% endif %}>
-                            </td>
-                            <td>
-                                <input type="checkbox" name="is_audit" class="form-check-input" value="{{ l.is_attachment }}" >{{ l.is_attachment }}
-                            </td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.deduct_percentage }}" >
-                            </td>
-                            <td>{% if l.control %}是{% else %}否{% endif %}</td>
-                            <td>
-                                <input type="text" name="name" class="form-control form-control-sm" value="{{ l.gender }}" >
-                            </td>
-                            <td></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                          <td colspan="13">
-                            <input type="submit" class="btn border border-dark rounded"style="color: #fff;background: #1E3050;"value="送出">
-                          </td>
-                        </tr>
-                      </tfoot>
-                </table>
-            </form>
-        </div>
+    <div class="leave_param_table container-fluid shadow-sm table-responsive">
+        <form action="#" method="post">
+            <table class="table table-sm table-hover">
+                <div class="leave-param-header container-fluid">
+                    請假參數設定，設定好請勿隨意改動
+                </div>
+                <thead class="thead-light text-center">
+                    <tr class="text-nowrap" style="font-size: 14px;">
+                        <th>假別代碼</th>
+                        <th>假別名稱</th>
+                        <th>項目類別</th>
+                        <th>給假數</th>
+                        <th>最低請假數(為0就不卡控)</th>
+                        <th>最小請假單位(為0就不卡控)</th>
+                        <th>單位</th>
+                        <th>附件稽核</th>
+                        <th>附件提示</th>
+                        <th>扣薪 %</th>
+                        <th>假控</th>
+                        <th>性別</th>
+                        <th>請假規定</th>
+                    </tr>
+                </thead>
+                <tbody class="text-nowrap text-center" style="font-size: 14px;">
+                    {% for l in leave_param %}
+                    <div class="modal fade" id="leaveRulesModal" tabindex="-1" role="dialog" aria-labelledby="leaveRulesModal" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">請假規定</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ l.leave_rules|safe|linebreaksbr }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <tr>
+                        <td>{{ l.get_show_id}}</td>
+                        <td>
+                            <input type="text" name="leave_name" class="form-control form-control-sm" value="{{ l.leave_name }}">
+                        </td>
+                        <td>{{ l.leave_type }}</td>
+                        <td>
+                            <input type="text" name="leave_quantity" class="form-control form-control-sm" value="{{ l.leave_quantity }}">
+                        </td>
+                        <td>
+                            <input type="text" name="minimum_leave_number" class="form-control form-control-sm" value="{{ l.minimum_leave_number }}" >
+                        </td>
+                        <td>
+                            <input type="text" name="minimum_leave_unit" class="form-control form-control-sm" value="{{ l.minimum_leave_unit }}" >
+                        </td>
+                        <td>{{ l.unit }}</td>
+                        <td>
+                            <input type="checkbox" name="is_audit" value="{{ l.is_audit }}"{% if l.is_audit %}checked{% endif %}>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="is_attachment" value="{{ l.is_attachment }}">
+                        </td>
+                        <td>
+                            <input type="text" name="deduct_percentage" class="form-control form-control-sm" value="{{ l.deduct_percentage }}" >
+                        </td>
+                        <td>{% if l.control %}是{% else %}否{% endif %}</td>
+                        <td>
+                            {{ l.gender }}
+                        </td>
+                        <td>
+                            <a href="#" data-toggle="modal" data-target="#leaveRulesModal">規定</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="13">
+                        <input type="submit" class="btn border border-dark rounded"style="color: #fff;background: #1E3050;"value="送出">
+                        </td>
+                    </tr>
+                    </tfoot>
+            </table>
+        </form>
         
     </div>
 </div>
