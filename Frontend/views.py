@@ -98,6 +98,17 @@ class Index(View):
                         else:
                             grouped_projects[date_str] = [project]
             sorted_grouped_projects = dict(sorted(grouped_projects.items()))
+            
+            current_employee = self.request.user.employee
+
+            # related_approval_models = ApprovalModel.objects.filter(get_created_by__exact == current_employee)
+            # approval_count = 0
+            # related_approval_models = [
+            #     approval_model for approval_model in all_approval_models
+            #     if approval_model.get_created_by == current_employee
+            # ]
+
+            # print("related_approval_models",related_approval_models)
 
             context = {
                 'clock_inout':clock_inout,
@@ -108,6 +119,10 @@ class Index(View):
         else:
             # 使用者是 AnonymousUser，代表是匿名使用者
             return render(request, 'index/index-unlogin.html')
+        
+    # def get_queryset(self):
+        
+    #     return related_approval_models
 
 @login_required
 def signout(request):

@@ -98,10 +98,12 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#reimbursementCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="reimbursementCollapse">
+            <a class="nav-link collapsed" href="#approvalCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="approvalCollapse">
+
+                <div id="message-count"></div>
                 <i class="fa-solid fa-pen" style="color: #ffffff;"></i> 簽核管理
             </a>
-            <div class="collapse" id="reimbursementCollapse">
+            <div class="collapse" id="approvalCollapse">
                 <ul class="nav flex-column ml-4">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Approval_Process' %}">待簽核處理</a>

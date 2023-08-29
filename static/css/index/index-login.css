@@ -70,6 +70,18 @@
     height: 100px;
 }
 
+.sidebar #message-count {
+    position: absolute;
+    right: 33px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    font-size: 4px;
+}
+
 .main{
     width: calc(100vw - var(--sidebar-width) - 20px);
     position: relative;
