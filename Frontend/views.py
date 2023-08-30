@@ -390,16 +390,14 @@ class Approval_Process(UserPassesTestMixin,ListView):
     
         related_records = []
     
-        for Approval in ApprovalModel.objects.filter(current_status="in_progress"):  
-            #簽核對象     
+        for Approval in ApprovalModel.objects.all():            
             get_employee = Approval.get_approval_employee()
-
             if get_employee !="x":
-                if get_employee == current_employee:#如果是本人
-                    related_records.append(Approval)
+                related_records.append(Approval)
             else:
+                # 取得作者部門
                 get_createdby = Approval.get_created_by
-                #取得作者部門
+                print(get_createdby)
                 department =get_createdby.departments
                 #撈取主管權限的員工
                 supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)

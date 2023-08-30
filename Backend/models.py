@@ -643,21 +643,21 @@ class Requisition(ModifiedModel):
 
 
 
-#處理自動建立簽核對象
-@receiver(post_save, sender=Project_Job_Assign)
-@receiver(post_save, sender=Project_Confirmation) 
-@receiver(post_save, sender=Project_Employee_Assign) 
-def create_approval(sender, instance, created, **kwargs):
-    if created and not instance.Approval:
-        user = get_current_authenticated_user()        
-        user = user.employee
-        get_department= user.departments #單一FK
-        target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
-        if not target_department:
+# #處理自動建立簽核對象
+# @receiver(post_save, sender=Project_Job_Assign)
+# @receiver(post_save, sender=Project_Confirmation) 
+# @receiver(post_save, sender=Project_Employee_Assign) 
+# def create_approval(sender, instance, created, **kwargs):
+#     if created and not instance.Approval:
+#         user = get_current_authenticated_user()        
+#         user = user.employee
+#         get_department= user.departments #單一FK
+#         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
+#         if not target_department:
             
-                    # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
-                    return
+#                     # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
+#                     return
 
-        approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
-        instance.Approval = approval
-        instance.save()
+#         approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
+#         instance.Approval = approval
+#         instance.save()

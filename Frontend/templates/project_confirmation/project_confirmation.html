@@ -26,7 +26,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        {% include 'components\project_confirmation_form.html' with showbtn=True %}  
+                        {% include 'components\project_confirmation_form.html' with showbtn=True %}
                     </div>
                 </div>
             </div>
@@ -66,6 +66,7 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-sortable="true" data-field="approval">簽核狀態</th>
                     <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="project_confirmation_id">工確單編號</th>
                     <th data-sortable="true" data-filter-control="input" data-field="c_a">母案編號</th>
@@ -98,6 +99,31 @@
                             class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
+                    </td>
+                    <td>
+                        {% if p.Approval %}
+                            {{p.Approval.get_current_status_display}}
+                            /
+                            {% if p.Approval.current_status  == "completed" %}
+                                {% if request.user|get_supervisor %}
+                                <a>收回(主管)</a>
+                                {% endif %}
+                            {% endif %}
+
+
+                            {% if p.Approval.current_status  == "in_progress" %}
+                                <a>收回</a>
+                            {% endif %}
+
+                            {% if p.Approval.current_status  == "rejected" %}
+                                <a>發送新簽核</a>
+                            {% endif %}
+                            
+                        {% else %}
+                                <a>開始簽核</a>
+                        {% endif %}
+
+
                     </td>
                     <td>{{ p.quotation.get_show_id }}</td>
                     <td>{% if p.id %}{{ p.get_show_id }}{% else %}{% endif %}</td>
@@ -147,7 +173,7 @@
 
         var choose_input = document.getElementById("quotation_id");
         const change_event = new Event("change");
-        choose_input.dispatchEvent(change_event);     
+        choose_input.dispatchEvent(change_event);
 
 
     }

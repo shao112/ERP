@@ -24,6 +24,18 @@ def format_with_zeros(value, width):
     return str(value).zfill(width)
 
 
+@register.filter
+def get_supervisor(user):
+    is_supervisor = False
+    for group in user.groups.all():
+        if group.name == '主管':
+            is_supervisor = True
+            break
+
+    return is_supervisor
+
+
+
 @register.filter(name='render_model_text')
 def render_model_text(model_value):
     if model_value == 'project_confirmation':
