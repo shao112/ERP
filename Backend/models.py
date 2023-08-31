@@ -204,6 +204,26 @@ class ApprovalModel(models.Model):
             return get_foreignkey.created_by
         return None    
 
+    def send_message_to_related_users(self, content):
+            senders = {self.get_created_by}
+
+            for employee_id in self.target_approval.approval_order:
+                if employee_id == "x":
+                    department_employees = self.get_created_by.departments.employees.all()
+                    senders.update(department_employees)
+                else:
+                    try:
+                        employee = Employee.objects.get(id=employee_id)
+                        senders.add(employee)
+                    except Employee.DoesNotExist:
+                        continue
+
+            for sender in senders:
+                SysMessage.objects.create(
+                    Target_user=sender,
+                    content=content
+                )
+
     
     #回傳關聯
     def get_foreignkey(self):

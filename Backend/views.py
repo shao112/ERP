@@ -95,16 +95,16 @@ class Approval_View_Process(View):
             return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
         
         user = request.user.employee
-        employee = request.user.employee
         approval_obj = get_obj.Approval
 
         if approval_obj.current_status == 'in_progress':
+            approval_obj.send_message_to_related_users(f"{get_obj.get_show_id()} 單被{user.full_name}收回簽核")
             approval_obj.delete()
-            # get_obj.Approval=None
-            # get_obj.save()
+
             return JsonResponse({"message": "删除成功"}, status=200)
         elif approval_obj.current_status == 'completed':
             if request.user.groups.filter(name='主管').exists():
+                approval_obj.send_message_to_related_users(f"{get_obj.get_show_id()} 單被{user.full_name}收回簽核")
                 approval_obj.delete()
                 # get_obj.Approval=None
                 # get_obj.save()
