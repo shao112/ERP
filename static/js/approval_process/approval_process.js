@@ -20,7 +20,7 @@ function handleApproval() {
     console.log(formData);
     $.ajax({
         type: "post",
-        url: "/restful/approval_process",
+        url: "/restful/approval_process_log",
         data: formData,
         headers: {
             'X-CSRFToken': csrftoken

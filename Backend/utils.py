@@ -129,6 +129,17 @@ def convent_excel_dict(worksheet,model):
 
     return convent_ary,convent_model
 
+def get_model_by_name(model_name):
+     match model_name:
+        case "project_confirmation":
+            return Project_Confirmation
+        case "job_assign":
+            return Project_Job_Assign
+        case "employee_assign":
+            return Project_Employee_Assign
+        case _:
+            return None
+
 def match_excel_content(model):
     match  model:
         case "project-confirmation":

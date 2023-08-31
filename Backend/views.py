@@ -11,11 +11,12 @@ from Backend.models import Approval_Target, Equipment, UploadedFile,Department,Q
 from django.contrib.auth.models import User,Group
 from Backend.forms import  ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
+from urllib.parse import parse_qs
 
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content
+from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
 import openpyxl
 from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
@@ -31,7 +32,76 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
-class Approval_Process_View(View):
+
+class Approval_View_Process(View):
+    def post(self,request):
+        try:
+            id = request.POST.get('id')
+            modeltext = request.POST.get('model')
+
+            getmodel = get_model_by_name(modeltext)
+            if getmodel is  None:
+                return JsonResponse({"error":"找不到model"},status=400)
+
+            try:
+                get_obj = get_object_or_404(getmodel, id=id)
+            except Http404:
+                return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+            
+            model_name = {
+                'project_confirmation': 'Project_Confirmation',
+                'job_assign': 'Project_Job_Assign',
+                'project_employee_assign': 'Project_Employee_Assign',
+                '請假單': '請假單',
+            }
+
+            try:
+                get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))
+            except Http404:
+                return JsonResponse({"error": "找不到相應的簽核目標"}, status=404)
+
+            new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target)
+            get_obj.Approval=new_Approval
+            get_obj.save()
+            return JsonResponse({"success":"成功"},status=200)
+        except Exception as e:
+            print(str(e))
+            return JsonResponse({"error": f"系統發生錯誤, {str(e)} "}, status=500)
+
+    def delete(self,request):
+        data = request.body.decode('utf-8')
+        parsed_data = parse_qs(data)
+        id = parsed_data.get('id', [None])[0]
+        modeltext = parsed_data.get('model', [None])[0]
+        getmodel = get_model_by_name(modeltext)
+
+        if getmodel is  None:
+            return JsonResponse({"error":"找不到model"},status=400)
+
+        try:
+            get_obj = get_object_or_404(getmodel, id=id)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+        
+        user = request.user.employee
+        employee = request.user.employee
+        approval_obj = get_obj.Approval
+
+        if approval_obj.current_status == 'in_progress':
+            approval_obj.delete()
+            return JsonResponse({"message": "删除成功"}, status=200)
+        elif approval_obj.current_status == 'completed':
+            if request.user.groups.filter(name='主管').exists():
+                approval_obj.delete()
+                return JsonResponse({"message": "删除成功"}, status=200)
+            else:
+                return JsonResponse({"error": "只有主管才可處理"}, status=403)
+        else:
+            return JsonResponse({"error": "操作不允許"}, status=403)
+ 
+
+
+class Approval_Process_Log(View):
     def post(self,request):
         status = request.POST.get('status')
         feedback = request.POST.get('feedback')
@@ -40,8 +110,6 @@ class Approval_Process_View(View):
         if status not in ["approved", "rejected"]:
             return JsonResponse({"error":"請選擇簽核狀態"},status=400)
         
-        if not feedback.strip():  # 如果 feedback 是空白或只包含空格
-            return JsonResponse({"error":"回饋請勿空白，請簡單描述處理訊息"},status=400)
         if approval_id ==None: 
             return JsonResponse({"error":"請選擇approval"},status=400)
         

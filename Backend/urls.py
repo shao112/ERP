@@ -1,18 +1,3 @@
-"""EZ9 URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.urls import path, include
 from . import views
 from django.conf.urls.static import static
@@ -41,7 +26,10 @@ urlpatterns = [
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('news', views.New_View.as_view(), name="news_view_api"),
     path('calendar', views.Calendar_View.as_view(), name="calendar_api"),
-    path('approval_process', views.Approval_Process_View.as_view(), name="approval_process_view_api"),
+    #處理approval 的簽核進度
+    path('approval_process_log', views.Approval_Process_Log.as_view(), name="approval_process_Log_api"),
+    #處理工確、派工單等的頁面處理
+    path('approval_view_process', views.Approval_View_Process.as_view(), name="approval_view_process_api"),
     path('work_item', views.Work_Item_View.as_view(), name="work_item_api"),
     path('quotation', views.Quotation_View.as_view(), name="quotation_api"),
 
