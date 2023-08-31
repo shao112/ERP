@@ -612,7 +612,7 @@ class Groups_View(View):
         data={"user_set":users,"id":data.id,"group_name":data.name}
 
         return JsonResponse({"data": data}, status=200)
-
+from django.core import serializers
 class Approval_Groups_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -623,12 +623,24 @@ class Approval_Groups_View(View):
         return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):
+        is_director = False
+        approval_order_list = []
+
         id = request.GET.get('id')
         data = get_object_or_404(Approval_Target, id=id)
-        employee_order = data.employee_order
-        print("employee_order: ",employee_order)
-        users = [user.id for user in employee_order]
-        data={"user_set":users,"id":data.id,"group_name":data.name}
+        approval_order_json = data.approval_order
+        print("approval_order_json: ",approval_order_json)
+        for item in approval_order_json:
+            if isinstance(item, int):
+                approval_order_list.append(item)
+            else:
+                is_director = True
+        print("approval_order_list: ",approval_order_list)
+        
+        approval_order = Employee.objects.filter(id__in=approval_order_list)
+        approval_order = serializers.serialize(approval_order, many=True)
+        print(approval_order)
+        data={"approval_order":approval_order,"id":data.id,"group_name":data.name,"is_director":is_director}
 
         return JsonResponse({"data": data}, status=200)
     
