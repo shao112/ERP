@@ -18,6 +18,7 @@ from django.views.defaults import permission_denied
 from Backend.utils import convent_employee,get_weekly_clock_data
 from django.db.models import Q,Value,CharField
 from django.db.models.functions import Concat
+import json
 
 
 
@@ -427,6 +428,8 @@ class Approval_Group(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees"] = Employee.objects.all()
+        data = list(Employee.objects.values('id','user__username'))
+        context["employee_json"] = json.dumps(data)
         return context
     
 class Leave_Param_List(UserPassesTestMixin,ListView):
