@@ -7,9 +7,9 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import  ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.forms import   ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
 
@@ -24,6 +24,7 @@ import random
 import os
 import re
 
+
 from  django.conf import settings
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -32,6 +33,16 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
+
+
+class SysMessage_API(View):
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        id = data.get('id')  # 获取 id
+        getobj = SysMessage.objects.get(id=id)
+        getobj.watch=True
+        getobj.save()
+        return HttpResponse(200)
 
 class Approval_View_Process(View):
     def post(self,request):

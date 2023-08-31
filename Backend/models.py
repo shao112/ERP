@@ -14,6 +14,20 @@ import os
 from django.db.models import Q
 
 
+class SysMessage(models.Model):
+
+    Target_user = models.ForeignKey("Employee", related_name="sys_messages", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='顯示對象')
+    content = models.TextField(verbose_name='內容')
+    watch = models.BooleanField(default=False,verbose_name='已看過')
+
+    class Meta:
+        verbose_name = '系統消息'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.content
+
+
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
