@@ -390,7 +390,7 @@ class Approval_Process(UserPassesTestMixin,ListView):
     
         related_records = []
     
-        for Approval in ApprovalModel.objects.all():            
+        for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
             get_employee = Approval.get_approval_employee()
             if get_employee !="x":
                 related_records.append(Approval)

@@ -89,10 +89,14 @@ class Approval_View_Process(View):
 
         if approval_obj.current_status == 'in_progress':
             approval_obj.delete()
+            # get_obj.Approval=None
+            # get_obj.save()
             return JsonResponse({"message": "删除成功"}, status=200)
         elif approval_obj.current_status == 'completed':
             if request.user.groups.filter(name='主管').exists():
                 approval_obj.delete()
+                # get_obj.Approval=None
+                # get_obj.save()
                 return JsonResponse({"message": "删除成功"}, status=200)
             else:
                 return JsonResponse({"error": "只有主管才可處理"}, status=403)
@@ -776,7 +780,6 @@ class Project_Confirmation_View(View):
             error_messages = form.get_error_messages()
             return JsonResponse({"error":error_messages},status=400)
 
-
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
@@ -805,8 +808,10 @@ class Project_Confirmation_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Confirmation, id=id)
         get_id=data.get_show_id()
+        project_name=data.quotation.project_name if data.quotation else None
         data = model_to_dict(data)
         data['project_confirmation_id'] = get_id
+        data['project_name'] = project_name
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         print(data)

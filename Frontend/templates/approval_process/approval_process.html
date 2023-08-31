@@ -165,6 +165,7 @@
             "{% static 'js/approval_process/approval_process.js' %}",
             "{% static 'js/project_confirmation/project_confirmation.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/job-assign/job-assign.js' %}",
             "{% static 'js/fuc/restful.js' %}",
 
         ];
@@ -215,7 +216,11 @@
                         // console.log("Input not found for key:", key);
                     }
                 }
+                const change_event = new Event("change");
+                projectConfirmationIdControl.dispatchEvent(change_event);     
+
             });
+
 
 
             if (modalModel === 'project_confirmation') {

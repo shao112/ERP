@@ -252,8 +252,8 @@ class ApprovalModel(models.Model):
         for  employee_id in approval_order[current_index:]:
             show_name= ""
             if employee_id == "x":
-                get_department_name = self.get_created_by.departments.department_name
-                show_name = get_department_name+"(主管待簽)"
+                    get_department_name = self.get_created_by.departments.department_name
+                    show_name = get_department_name+"(主管待簽)"
             else:
                 get_Employee = Employee.objects.get(id=employee_id)
                 show_name = get_Employee.full_name
@@ -273,7 +273,8 @@ class ApprovalModel(models.Model):
         verbose_name_plural = verbose_name
     
     def __str__(self):
-        return f"{self.target_approval.name} - {self.get_created_by} "
+        get_created_by =self.get_created_by
+        return f"{self.target_approval.name} - {get_created_by} "
     
 
 
@@ -361,10 +362,8 @@ class Quotation(ModifiedModel):
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
     quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
-    # project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
-    # client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
@@ -399,16 +398,13 @@ class Project_Confirmation(ModifiedModel):
 class Project_Job_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
-    #  = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
     attendance_date =models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
-    # support_employee = models.ManyToManyField('Employee', related_name='projects_support_employee', blank=True,verbose_name='支援人力')
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    # attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 

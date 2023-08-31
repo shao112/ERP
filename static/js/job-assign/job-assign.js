@@ -22,9 +22,11 @@ projectConfirmationIdControl.addEventListener('change', function () {
         success: function (response) {
                 jsonData = response.data
                 console.log(jsonData["project_name"],jsonData["c_a"])
-                document.getElementsByName("project_name")[0].value = jsonData["project_name"];
-                document.getElementsByName("c_a")[0].value = jsonData["c_a"];
-
+                var form = document.querySelector('form[name="job_assign"]');
+                var projectName = form.querySelectorAll('[name="project_name"]')[0];
+                var c_a = form.querySelectorAll('[name="c_a"]')[0];
+                projectName.value = jsonData["project_name"];
+                c_a.value = jsonData["c_a"];
                 
         },
         error: function (xhr, textStatus, errorThrown) {
