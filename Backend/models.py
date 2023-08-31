@@ -14,6 +14,20 @@ import os
 from django.db.models import Q
 
 
+class SysMessage(models.Model):
+
+    Target_user = models.ForeignKey("Employee", related_name="sys_messages", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='顯示對象')
+    content = models.TextField(verbose_name='內容')
+    watch = models.BooleanField(default=False,verbose_name='已看過')
+
+    class Meta:
+        verbose_name = '系統消息'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.content
+
+
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
@@ -121,7 +135,7 @@ class Employee(ModifiedModel):
         return self.full_name
 
 class ApprovalLog(models.Model):
-    approval = models.ForeignKey("ApprovalModel", on_delete=models.DO_NOTHING, related_name='approval_logs')
+    approval = models.ForeignKey("ApprovalModel", on_delete=models.CASCADE, related_name='approval_logs')
     user = models.ForeignKey('Employee', on_delete=models.DO_NOTHING, verbose_name='簽核者')
     content = models.TextField(blank=True, null=True, verbose_name='內容')
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
@@ -134,12 +148,12 @@ class ApprovalLog(models.Model):
 
 class Approval_Target(models.Model):
     STATUS_CHOICES = [
-        ('工程確認單', '工程確認單'),#project_confirmation
-        ('工程派任計畫單', '工程派任計畫單'),#job_assign
-        ('派工單', '派工單'),#project_employee_assign
+        ('Project_Confirmation', '工程確認單'),
+        ('Project_Job_Assign', '工程派任計畫單'),
+        ('Project_Employee_Assign', '派工單'),
         ('請假單', '請假單'),
     ]
-    name =models.CharField(max_length=20,verbose_name="表單名稱",choices=STATUS_CHOICES)
+    name =models.CharField(max_length=30,verbose_name="表單名稱",choices=STATUS_CHOICES)
     approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
     class Meta:
         verbose_name = '簽核流程管理'
@@ -147,7 +161,6 @@ class Approval_Target(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
 
 
 class ApprovalModel(models.Model):
@@ -158,18 +171,20 @@ class ApprovalModel(models.Model):
     ]
     #related_name 關聯
     RELATED_NAME_MAP = {
-        '工程確認單': 'project_confirmation_Approval',
-        '工程派任計畫單': 'Project_Job_Assign_Approval',
-        '派工單': 'Project_Employee_Assign_Approval',
+        'Project_Confirmation': 'project_confirmation_Approval',
+        'Project_Job_Assign': 'Project_Job_Assign_Approval',
+        'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
     }
+
+    #對應的model，會帶入data-model
     Modal_URL__MAP = {
-        '工程確認單': 'project_confirmation',
-        '工程派任計畫單': 'job_assign',
-        '派工單': 'project_employee_assign',
+        'Project_Confirmation': 'project_confirmation',
+        'Project_Job_Assign': 'job_assign',
+        'Project_Employee_Assign': 'project_employee_assign',
     }
 
 
-    current_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
+    current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_progress')
     #目前待簽index
     current_index = models.IntegerField( verbose_name="待簽核index",default=0,blank=True,null=True)
     #依附簽核
@@ -184,8 +199,10 @@ class ApprovalModel(models.Model):
 
     @property
     def get_created_by(self):
-        get_foreignkey = self.get_foreignkey()      
-        return get_foreignkey.created_by
+        get_foreignkey = self.get_foreignkey()   
+        if get_foreignkey:   
+            return get_foreignkey.created_by
+        return None    
 
     
     #回傳關聯
@@ -249,8 +266,8 @@ class ApprovalModel(models.Model):
         for  employee_id in approval_order[current_index:]:
             show_name= ""
             if employee_id == "x":
-                get_department_name = self.get_created_by.departments.department_name
-                show_name = get_department_name+"(主管待簽)"
+                    get_department_name = self.get_created_by.departments.department_name
+                    show_name = get_department_name+"(主管待簽)"
             else:
                 get_Employee = Employee.objects.get(id=employee_id)
                 show_name = get_Employee.full_name
@@ -270,7 +287,8 @@ class ApprovalModel(models.Model):
         verbose_name_plural = verbose_name
     
     def __str__(self):
-        return f"{self.target_approval.name} - {self.get_created_by}"
+        get_created_by =self.get_created_by
+        return f"{self.target_approval.name} - {get_created_by} "
     
 
 
@@ -358,10 +376,8 @@ class Quotation(ModifiedModel):
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
     quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
-    # project_name = models.CharField(max_length=100, null=True, blank=True, verbose_name="工程名稱")
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
-    # client = models.CharField(max_length=100, null=True, blank=True, verbose_name='客戶簡稱')
     requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
@@ -369,7 +385,7 @@ class Project_Confirmation(ModifiedModel):
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='project_confirmation_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     def get_show_id(self):
@@ -396,17 +412,14 @@ class Project_Confirmation(ModifiedModel):
 class Project_Job_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
-    #  = models.CharField(max_length=100,null=True, blank=True, verbose_name='工派單編號')
     attendance_date =models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
-    # support_employee = models.ManyToManyField('Employee', related_name='projects_support_employee', blank=True,verbose_name='支援人力')
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=100,null=True, blank=True, verbose_name="工作地點")
     project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    # attachment = models.FileField(upload_to="project-attachment/", null=True, blank=True, verbose_name="工確單附件")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     # def get_id():
@@ -437,7 +450,7 @@ class Project_Employee_Assign(ModifiedModel):
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     def get_show_id(self):
@@ -643,21 +656,21 @@ class Requisition(ModifiedModel):
 
 
 
-#處理自動建立簽核對象
-@receiver(post_save, sender=Project_Job_Assign)
-@receiver(post_save, sender=Project_Confirmation) 
-@receiver(post_save, sender=Project_Employee_Assign) 
-def create_approval(sender, instance, created, **kwargs):
-    if created and not instance.Approval:
-        user = get_current_authenticated_user()        
-        user = user.employee
-        get_department= user.departments #單一FK
-        target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
-        if not target_department:
+# #處理自動建立簽核對象
+# @receiver(post_save, sender=Project_Job_Assign)
+# @receiver(post_save, sender=Project_Confirmation) 
+# @receiver(post_save, sender=Project_Employee_Assign) 
+# def create_approval(sender, instance, created, **kwargs):
+#     if created and not instance.Approval:
+#         user = get_current_authenticated_user()        
+#         user = user.employee
+#         get_department= user.departments #單一FK
+#         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
+#         if not target_department:
             
-                    # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
-                    return
+#                     # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
+#                     return
 
-        approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
-        instance.Approval = approval
-        instance.save()
+#         approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
+#         instance.Approval = approval
+#         instance.save()

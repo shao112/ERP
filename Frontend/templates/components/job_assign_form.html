@@ -15,7 +15,8 @@
                             <option value="-1">請選擇工確單編號</option>
                             {% for project_confirmation in project_confirmation_list %}
                             <option value="{{ project_confirmation.pk }}">
-                                {{project_confirmation.project_confirmation_id }}</option>
+                                {{ project_confirmation.get_show_id }}
+                            </option>
                             {% endfor %}
                         </select>
                     </div>
@@ -138,10 +139,21 @@
             </div>
             <div class="form-row">
                 <div class="col-12">
-
+                    <!-- 工確單的附件連結 -->
+                    <!-- <div class="custom-file">
+                        <input type="file" class="custom-file-input"
+                            name="reassignment_attachment" id="reassignment_attachment_control">
+                        <label class="custom-file-label"
+                            for="reassignment_attachment_control">Choose file</label>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
-
+    <div class=" d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4 "
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4 "
+            style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+    </div>
 </form>
