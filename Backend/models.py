@@ -229,8 +229,12 @@ class ApprovalModel(models.Model):
     def get_foreignkey(self):
         related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
         print("related_name ",related_name)
+        print("related_name ",self.id)
         if related_name:
-            return getattr(self, related_name, None).all()[0]
+            getobj = getattr(self, related_name, None).all()
+            if len(getobj)!=0:
+                return getattr(self, related_name, None).all()[0]
+            return None
         return None
     
 
@@ -304,7 +308,7 @@ class ApprovalModel(models.Model):
         return show_list
 
     class Meta:
-        verbose_name = '簽核狀態'
+        verbose_name = '簽核執行'
         verbose_name_plural = verbose_name
     
     def __str__(self):
