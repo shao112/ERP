@@ -312,8 +312,14 @@ class ApprovalModel(models.Model):
         verbose_name_plural = verbose_name
     
     def __str__(self):
-        get_created_by =self.get_created_by
-        return f"{self.target_approval.name} - {get_created_by} "
+        get_foreignkey = self.get_foreignkey()
+        get_show_id =""
+        get_created_by =""
+        if get_foreignkey !="":
+            get_show_id = get_foreignkey.get_show_id()
+            get_created_by =get_foreignkey.created_by
+        
+        return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
     
 
 
