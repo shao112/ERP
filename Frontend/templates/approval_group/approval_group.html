@@ -32,8 +32,8 @@
                             <div class="col-12">
                                 {{ employees_detail }}
                                 <div class="form-group form-row">
-                                    <label for="group_name">群組名稱</label>
-                                    <input class="form-control form-control-sm" name="group_name" id="group_name"
+                                    <label for="name">群組名稱</label>
+                                    <input class="form-control form-control-sm" name="name" id="name"
                                         disabled></input>
                                 </div>
                                 <div class="form-group form-row">
@@ -121,7 +121,7 @@
         a.appendChild(icon);
 
         var span = document.createElement("span");
-        span.textContent = stageArray[i].user__username;
+        span.textContent = stageArray[i].full_name;
 
         newDiv.appendChild(label);
         newDiv.appendChild(span);
@@ -134,19 +134,25 @@
     let set_id = ""
     function sendApprovalGroup(id) {
         set_id = id;
-        // 使用 AJAX 發送 GET 請求
         $.ajax({
             type: "GET",
-            url: "/restful/approval_group", // 替換為實際的 API 端點 URL
+            url: "/restful/approval_group",
             data: {
-                id: id // 傳遞的參數
+                id: id
             },
             success: function (response) {
-                // 成功處理回應的部分
-                console.log("成功", response);
+                jsonData = JSON.stringify(response.data);
+                console.log(jsonData);
+                for (var key in jsonData["approval_order"]) {
+                    console.log(key)
+                    var input = document.getElementsByName(key)[0];
+                    if (input) {
+                        let get_value = jsonData[key];
+                        input.value = get_value;
+                    }
+                }
             },
             error: function (error) {
-                // 錯誤處理的部分
                 console.error("錯誤", error);
             }
         });
