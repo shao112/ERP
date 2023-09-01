@@ -90,12 +90,14 @@
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                            data-approval="{{p.Approval.current_status}}"
                             data-target="#project-confirmation-modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
+                        data-approval="{{p.Approval.current_status}}"
                             class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
@@ -170,12 +172,19 @@
 
     async function LoadData(event) {
         console.log("load")
-        getdata = await GET_handleClick(event);
 
+        const approvalStatus =  event.currentTarget.getAttribute('data-approval');        
+
+        getdata = await GET_handleClick(event);
         var choose_input = document.getElementById("quotation_id");
         const change_event = new Event("change");
         choose_input.dispatchEvent(change_event);
 
+        if(approvalStatus=="in_progress" || approvalStatus=="completed" ){
+            lock_input();
+        }else{
+            unlock_input();
+        }
 
     }
 

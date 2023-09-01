@@ -15,6 +15,31 @@ function showSwal(title, text, icon, showCancelButton) {
   return Swal.fire(setting_dict);
 }
 
+function get_all_input() {
+  const allElements = document.querySelectorAll("input, select, textarea");
+  return allElements;
+}
+
+function unlock_input() {
+  const get_input = get_all_input();
+  console.log(get_input);
+  get_input.forEach((input) => {
+    if (!input.classList.contains("readonly")) {
+      input.removeAttribute("readonly");
+      input.disabled = false;
+    }
+  });
+}
+
+function lock_input() {
+  const get_input = get_all_input();
+
+  get_input.forEach((input) => {
+    input.setAttribute("readonly", "readonly");
+    input.disabled = true;
+  });
+}
+
 function cleanform() {
   $("[id*='_select2']").each(function () {
     var id = $(this).attr("id");
@@ -62,7 +87,7 @@ async function GET_handleClick(event, bringdata = true) {
 
   $("#form").attr("data-method", "put");
   $("#form").attr("data-id", id);
-  console.log(`URL: ${url}, ID: ${id}`);
+  // console.log(`URL: ${url}, ID: ${id}`);
 
   formData = { id: id };
   return new Promise((resolve, reject) => {
@@ -100,9 +125,9 @@ async function GET_handleClick(event, bringdata = true) {
             }
 
             input.value = get_value;
-            console.log("key " + key + " 帶資料:" + get_value);
+            // console.log("key " + key + " 帶資料:" + get_value);
           } else {
-            console.log("Input not found for key:", key);
+            // console.log("Input not found for key:", key);
           }
         }
       },
@@ -170,7 +195,7 @@ $("form").on("submit", function (event) {
             });
           });
         }
-        
+
         errorMessageHTML += "</ul>";
         console.log(errorMessageHTML);
 
@@ -247,8 +272,19 @@ async function DELETE_handleClick(event) {
   // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
   const url = "/restful/" + clickedElement.getAttribute("data-url");
   const id = clickedElement.getAttribute("data-id");
+  const approvalStatus = clickedElement.getAttribute("data-approval");
 
-  console.log(`URL: ${url}, ID: ${id}`);
+  // console.log(`URL: ${url}, ID: ${id}`);
+  // console.log(`URL:${approvalStatus}`);
+
+  if(approvalStatus=="in_progress" || approvalStatus=="completed" ){
+    return showSwal(
+      "刪除異常",
+      "此單正在簽核中或是已完成，請先收回。如果已完成請通知主管處理。",
+      "error",
+      false
+    );
+  }
 
   formData = { id: id };
 

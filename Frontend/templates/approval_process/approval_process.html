@@ -196,13 +196,13 @@
 
                     if (input) {
                         let get_value = jsonData[key];
+                        input.disabled = true;  // 禁用
+                        input.setAttribute("readonly", "true"); //封印修改
                         
                         if (input.type == 'file') { 
                             continue
                         }
                         
-                        input.disabled = true;  // 禁用
-                        input.setAttribute("readonly", "true"); //封印修改
 
                         if (typeof (jsonData[key]) == "object" && get_value != null) {//判斷是不是陣列
                             SetSelect2(input, key, get_value);

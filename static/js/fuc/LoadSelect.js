@@ -1,7 +1,7 @@
 function SetSelect2(input, key, get_value) {
     const options = input.options;
     selectname = `#${key}_select2`
-    console.log("GET_" + key + "=> " + selectname);
+    // console.log("GET_" + key + "=> " + selectname);
     // console.log(get_value)
     get_value = Object.values(get_value);
     if (get_value.length == 0) {

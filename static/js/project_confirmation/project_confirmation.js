@@ -1,40 +1,36 @@
+var quotation_select = document.getElementById("quotation_id");
 
-var quotation_select = document.getElementById('quotation_id');
+quotation_select.addEventListener("change", function () {
+  var selectedOptionIndex = quotation_select.selectedIndex;
+  var selectedOption = quotation_select.options[selectedOptionIndex];
+  if (selectedOption==undefined) {
+    return;
+  }
 
-quotation_select.addEventListener('change', function () {
+  var selectedId = selectedOption.value;
+  // console.log('選中的選項 id 為: ' + selectedId);
 
-    var selectedOptionIndex = quotation_select.selectedIndex;
-    var selectedOption = quotation_select.options[selectedOptionIndex];
-    var selectedId = selectedOption.value;
+  const url = "/restful/quotation";
+  formData = { id: getdata["quotation"] };
 
-    console.log('選中的選項 id 為: ' + selectedId);
-
-    const url = "/restful/quotation";
-    formData = { id: getdata["quotation"] };
-
-    $.ajax({
-        type: "GET",
-        url: url,
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        data: formData,
-        success: function (response) {
-            jsonData = response.data
-            console.log(jsonData)
-            console.log(jsonData["customer_name"])
-            document.getElementsByName("project_name")[0].value = jsonData["project_name"];
-            document.getElementById("client_id").value = jsonData["customer_name"];
-
-
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            alert("quotation  error")
-            console.log("get error");
-        }
-    });
-
-
-
-
+  $.ajax({
+    type: "GET",
+    url: url,
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+    data: formData,
+    success: function (response) {
+      jsonData = response.data;
+      // console.log(jsonData)
+      // console.log(jsonData["customer_name"])
+      document.getElementsByName("project_name")[0].value =
+        jsonData["project_name"];
+      document.getElementById("client_id").value = jsonData["customer_name"];
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      alert("quotation  error");
+      console.log("get error");
+    },
+  });
 });

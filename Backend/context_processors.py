@@ -15,7 +15,7 @@ def sys_messages(request):
             'content': msg.content,
             'bottom': bottom_position
         })
-        bottom_position += 70  # 递增底部位置
+        bottom_position += 70 
 
 
     return {'sys_messages': sys_messages_data}
