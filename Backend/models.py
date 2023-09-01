@@ -228,6 +228,7 @@ class ApprovalModel(models.Model):
     #回傳關聯
     def get_foreignkey(self):
         related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
+        print("related_name ",related_name)
         if related_name:
             return getattr(self, related_name, None).all()[0]
         return None
