@@ -14,7 +14,8 @@
 {% block main %}
 <div class="main px-3">
     <div id="error-message"></div>
-    <div class="approval_group modal fade" id="approval_group-modal" tabindex="-1" aria-labelledby="approval_group" aria-hidden="true">
+    <div class="approval_group modal fade" id="approval_group-modal" tabindex="-1" aria-labelledby="approval_group"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -27,32 +28,34 @@
                     <div class="container shadow-sm">
                         <form action="/restful/approval_group" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden/>
-                                <div class="col-12">
-                                    {{ employees_detail }}
-                                    <div class="form-group form-row">
-                                        <label for="group_name">群組名稱</label>
-                                        <input class="form-control form-control-sm" name="group_name"  id="group_name" disabled></input>
-                                    </div>
-                                    <div class="form-group form-row">
-                                        <label for="new_stage">新增關卡</label>
-                                        <select class="form-control form-control-sm" name="new_stage" id="new_stage">
-                                            <option value="">請選擇員工</option>
-                                            {% for employee in employees %}
-                                            <option value="{{ employee.user_id }}">{{ employee.full_name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group form-row">
-                                        <button type="submit" class="btn border border-dark rounded w-100" style="color: #fff;background: #1E3050;">送出</button>
-                                    </div>
-                                    
-                                    <div class="form-group form-check form-row">
-                                        <input type="checkbox" name="is_director" class="form-check-input" id="is_director">
-                                        <label class="form-check-label" for="is_director">是否經過直屬主管簽核</label>
-                                    </div>
-                                    <div class="mt-4" id="approval_stage"></div>
+                            <input name="id" hidden />
+                            <div class="col-12">
+                                {{ employees_detail }}
+                                <div class="form-group form-row">
+                                    <label for="group_name">群組名稱</label>
+                                    <input class="form-control form-control-sm" name="group_name" id="group_name"
+                                        disabled></input>
                                 </div>
+                                <div class="form-group form-row">
+                                    <label for="new_stage">新增關卡</label>
+                                    <select class="form-control form-control-sm" name="new_stage" id="new_stage">
+                                        <option value="">請選擇員工</option>
+                                        {% for employee in employees %}
+                                        <option value="{{ employee.user_id }}">{{ employee.full_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group form-row">
+                                    <button type="submit" class="btn border border-dark rounded w-100"
+                                        style="color: #fff;background: #1E3050;">送出</button>
+                                </div>
+
+                                <div class="form-group form-check form-row">
+                                    <input type="checkbox" name="is_director" class="form-check-input" id="is_director">
+                                    <label class="form-check-label" for="is_director">是否經過直屬主管簽核</label>
+                                </div>
+                                <div class="mt-4" id="approval_stage"></div>
+                            </div>
                         </form>
 
 
@@ -74,10 +77,10 @@
                     {% for a in approval_group %}
                     <tr>
                         <td>
-                            <a type="button" data-url="approval_group" data-id="{{ a.id }}"
-                                class="sys_get btn btn-sm btn-warning " data-toggle="modal"
+                            <a onclick="sendApprovalGroup('{{a.id}}')" type="button" data-url="approval_group" data-id="{{ a.id }}"
+                                class="btn btn-sm btn-warning " data-toggle="modal"
                                 data-target="#approval_group-modal"><i class="fas fa-edit"></i></a>
-                          
+
                         </td>
                         <td data-toggle="collapse" data-target="#sub-row-{{ a.id }}">
                             {{ a.name }}
@@ -93,39 +96,62 @@
                 </tbody>
             </table>
         </div>
-        
+
     </div>
 </div>
 
 <script>
     var stageArray = JSON.parse('{{ employee_json|safe }}')
     console.log(stageArray)
-    for(let i = 1; i <= stageArray.length; i++){
+
+    for (let i = 1; i <= stageArray.length; i++) {
         var stageDiv = document.getElementById("approval_stage");
         var newDiv = document.createElement("div");
         newDiv.className = "form-group form-row d-flex justify-content-between";
 
         var label = document.createElement("label");
         label.setAttribute("for", "stage-" + i);
-        label.textContent = "第 " + i +" 關";
+        label.textContent = "第 " + i + " 關";
 
         var a = document.createElement("a")
-        a.setAttribute("type","button")
+        a.setAttribute("type", "button")
         a.className = "sys_del btn btn-sm btn-danger";
         var icon = document.createElement("i");
         icon.className = "far fa-sm fa-trash-alt";
         a.appendChild(icon);
 
         var span = document.createElement("span");
-        span.textContent = stageArray[i].user__username ;
+        span.textContent = stageArray[i].user__username;
 
         newDiv.appendChild(label);
         newDiv.appendChild(span);
         newDiv.appendChild(a);
         stageDiv.appendChild(newDiv);
     }
+
 </script>
 <script>
+    let set_id = ""
+    function sendApprovalGroup(id) {
+        set_id = id;
+        // 使用 AJAX 發送 GET 請求
+        $.ajax({
+            type: "GET",
+            url: "/restful/approval_group", // 替換為實際的 API 端點 URL
+            data: {
+                id: id // 傳遞的參數
+            },
+            success: function (response) {
+                // 成功處理回應的部分
+                console.log("成功", response);
+            },
+            error: function (error) {
+                // 錯誤處理的部分
+                console.error("錯誤", error);
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",

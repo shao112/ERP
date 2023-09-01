@@ -613,6 +613,7 @@ class Groups_View(View):
 
         return JsonResponse({"data": data}, status=200)
 from django.core import serializers
+
 class Approval_Groups_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -623,26 +624,22 @@ class Approval_Groups_View(View):
         return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):
-        is_director = False
-        approval_order_list = []
 
         id = request.GET.get('id')
         data = get_object_or_404(Approval_Target, id=id)
-        approval_order_json = data.approval_order
-        print("approval_order_json: ",approval_order_json)
-        for item in approval_order_json:
-            if isinstance(item, int):
-                approval_order_list.append(item)
-            else:
-                is_director = True
-        print("approval_order_list: ",approval_order_list)
+        json_data = model_to_dict(data)
+        approval_order_list = []
         
-        approval_order = Employee.objects.filter(id__in=approval_order_list)
-        approval_order = serializers.serialize(approval_order, many=True)
-        print(approval_order)
-        data={"approval_order":approval_order,"id":data.id,"group_name":data.name,"is_director":is_director}
+        for item in json_data['approval_order']:
+            if item != "x":
+                try:
+                    employee = Employee.objects.get(id=item)
+                    approval_order_list.append({"id": item, "name": employee.full_name})
+                except Employee.DoesNotExist:
+                    continue
+        json_data["approval_order"]= approval_order_list
 
-        return JsonResponse({"data": data}, status=200)
+        return JsonResponse({"data": json_data}, status=200)
     
 class Profile_View(View):
     # 同一個post要處理更新照片以及更新密碼
