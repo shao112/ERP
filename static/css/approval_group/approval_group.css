@@ -25,3 +25,6 @@ tbody td:last-child:hover{
     transition: none;
     display: none;
 }
+#approval_stage  .form-group:hover{
+    background: #ebebeb;
+}

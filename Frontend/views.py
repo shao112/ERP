@@ -426,8 +426,6 @@ class Approval_Group(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees"] = Employee.objects.all()
-        # data = list(Employee.objects.values('id','full_name'))
-        # context["employee_json"] = json.dumps(data)
         return context
     
 class Leave_Param_List(UserPassesTestMixin,ListView):

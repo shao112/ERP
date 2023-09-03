@@ -1,4 +1,24 @@
 /* index-login.css 包含 sidebar.html 跟 header.html 的修改 */
+.main{
+    width: calc(100vw - var(--sidebar-width) - 20px);
+    position: relative;
+    left: var(--sidebar-width);
+    top: 100px;
+}
+header{
+    width: calc(100vw - var(--sidebar-width));
+    /* width: calc(100vw - 240px); */
+    height: 100px;
+    background: var(--theme-white);
+    position: fixed;
+    left: var(--sidebar-width);
+    z-index: 1;
+}
+header button{
+    width: 90px;
+    height: 35px;
+    font-size: 0.9rem;
+}
 
 /* ---Vue.js transition--- */
 .modal-body .clock-in {
@@ -26,6 +46,15 @@
     }
 }
 /* ---Vue.js transition--- */
+.clock-inout .modal-footer a{
+    color: #fff;
+    background: #1E3050;
+}
+.clock-inout .modal-footer a:hover{
+    color: #fff;
+    background: #1d2c46;
+}
+
 .employee_full_name{
     font-size: 0.9rem;
 }
@@ -35,8 +64,8 @@
     white-space: nowrap;
 }
 
-.modal-body a:hover{
-    color: #fff;
+.clock-inout .modal-body a:hover{
+    /* color: #fff; */
     background: #f0f0f0;
 }
 
@@ -82,35 +111,10 @@
     font-size: 4px;
 }
 
-.main{
-    width: calc(100vw - var(--sidebar-width) - 20px);
-    position: relative;
-    left: var(--sidebar-width);
-    top: 100px;
-}
-header{
-    width: calc(100vw - var(--sidebar-width));
-    /* width: calc(100vw - 240px); */
-    height: 100px;
-    background: var(--theme-white);
-    position: fixed;
-    left: var(--sidebar-width);
-    z-index: 1;
-}
-header button{
-    width: 90px;
-    height: 35px;
-    font-size: 0.9rem;
-}
 
-.clock-inout .modal-footer a{
-    color: #fff;
-    background: #1E3050;
-}
-.clock-inout .modal-footer a:hover{
-    color: #fff;
-    background: #1d2c46;
-}
+
+
+
 @media(max-width:767px) {
     .main{
         width: 100vw;

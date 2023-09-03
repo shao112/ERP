@@ -630,7 +630,6 @@ class Approval_Groups_View(View):
         return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):
-
         id = request.GET.get('id')
         data = get_object_or_404(Approval_Target, id=id)
         json_data = model_to_dict(data)
@@ -644,6 +643,7 @@ class Approval_Groups_View(View):
                 except Employee.DoesNotExist:
                     continue
         json_data["approval_order"]= approval_order_list
+        json_data["name"]= data.get_name_display()
 
         return JsonResponse({"data": json_data}, status=200)
     
