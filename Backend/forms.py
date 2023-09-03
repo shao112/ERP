@@ -1,5 +1,5 @@
 from django import forms
-from .models import Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -149,3 +149,9 @@ class ApprovalModelForm(BaseModelForm):
             'current_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }
 
+# 請假參數
+class LeaveParamModelForm(BaseModelForm):
+
+    class Meta:
+        model = Leave_Param
+        fields = '__all__'

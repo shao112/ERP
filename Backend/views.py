@@ -7,9 +7,9 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
-from Backend.forms import   ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.forms import  LeaveParamModelForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
 
@@ -683,7 +683,18 @@ class Approval_Groups_View(View):
         except  Exception as e:
             print(e)
             return JsonResponse({"error":str(e)},status=500)
-    
+
+class Leave_Param_View(View):
+    def post(self,request):
+        dict_data = convent_dict(request.body)
+        print("dict_data ",dict_data)
+        # form = LeaveParamModelForm(dict_data)
+        # if form.is_valid():
+        #     Leave_Param.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+        return JsonResponse({'data': "修改成功"},status=200)
+        # else:
+        #     error_messages = form.get_error_messages()
+        #     return JsonResponse({"error":error_messages},status=400)
 class Profile_View(View):
     # 同一個post要處理更新照片以及更新密碼
     def post(self,request):

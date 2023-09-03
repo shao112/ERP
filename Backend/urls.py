@@ -22,6 +22,7 @@ urlpatterns = [
     path('employee_attendance', views.Employee_Attendance_View.as_view(), name="employee_attendance_api"),
     path('group', views.Groups_View.as_view(), name="groups_view_api"),
     path('approval_group', views.Approval_Groups_View.as_view(), name="approval_group_view_api"),
+    path('leave_param', views.Leave_Param_View.as_view(), name="leave_param_view_api"),
     path('project_employee_assign', views.Project_Employee_Assign_View.as_view(), name='project_employee_assign_api'),
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('news', views.New_View.as_view(), name="news_view_api"),

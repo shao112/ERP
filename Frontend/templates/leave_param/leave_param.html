@@ -14,7 +14,7 @@
 {% block main %}
 <div class="main px-3">
     <div class="leave_param_table container-fluid shadow-sm table-responsive">
-        <form action="#" method="post">
+        <form action="/restful/approval_group" id="form">
             <table class="table table-sm table-hover">
                 <div class="leave-param-header container-fluid">
                     請假參數設定，設定好請勿隨意改動
@@ -84,6 +84,7 @@
                         </td>
                         <td>
                             <a href="#" data-toggle="modal" data-target="#leaveRulesModal">規定</a>
+                            <input name="id" hidden value="{{ l.id }}"/>
                         </td>
                     </tr>
                     {% endfor %}
@@ -91,32 +92,43 @@
                 <tfoot>
                     <tr>
                         <td colspan="13">
-                        <input type="submit" class="btn border border-dark rounded"style="color: #fff;background: #1E3050;"value="送出">
+                            <input type="submit" class="btn border border-dark rounded"style="color: #fff;background: #1E3050;"value="送出">
                         </td>
                     </tr>
-                    </tfoot>
+                </tfoot>
             </table>
         </form>
         
     </div>
 </div>
 
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var scripts = [
-            "{% static 'js/fuc/restful.js' %}",
-            "{% static 'js/fuc/LoadSelect.js' %}",
-        ];
+$("form").on("submit", function (event) {
+    event.preventDefault();
+    var form = $(this);
+    var url = form.attr("action");
+    var formData = form.serialize();
+    console.log("form data "+formData);
 
-        scripts.forEach(function (src) {
-            var script = document.createElement('script');
-            script.src = src;
-            document.body.appendChild(script);
-        });
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: formData,
+        async: false,
+        headers: {
+            "X-CSRFToken": csrftoken,
+        },
+        success: function (response) {
+            jsonData = response.data;
+            console.log(jsonData)
+        },
+        error: function (error) {
+            alert("錯誤", error);
+        },
     });
-
+})
 </script>
+
 
 
 {% endblock %}
