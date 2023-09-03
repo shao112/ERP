@@ -92,7 +92,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="13">
-                            <input type="submit" class="btn border border-dark rounded"style="color: #fff;background: #1E3050;"value="送出">
+                            <button type="submit" class="btn border border-dark rounded" style="color: #fff;background: #1E3050;">送出</button>
                         </td>
                     </tr>
                 </tfoot>
@@ -103,12 +103,32 @@
 </div>
 
 <script>
+    
 $("form").on("submit", function (event) {
     event.preventDefault();
     var form = $(this);
     var url = form.attr("action");
-    var formData = form.serialize();
-    console.log("form data "+formData);
+    // 不能用form.find(":input").each(function ()去找所有input，因為卡到內有modal button close，有點奇怪的問題
+    var formData = new FormData()
+    function getValueForLoop(inputElement){
+        for(let i = 0; i < inputElement.length; i++){
+            console.log(inputElement[i].value);
+            console.log(inputElement[i].name);
+            formData.append(inputElement[i].name, inputElement[i].value);
+            console.log(formData) // formData放不進去內容
+        }
+    }
+
+    var leave_name_input = document.getElementsByName("leave_name")
+    getValueForLoop(leave_name_input)
+    // formData.append("leave_name", leave_name);
+    // formData.append("leave_quantity", leave_quantity);
+    // formData.append("minimum_leave_number", minimum_leave_number);
+    // formData.append("minimum_leave_unit", minimum_leave_unit);
+    // formData.append("is_audit", is_audit);
+    // formData.append("is_attachment", is_attachment);
+    // formData.append("deduct_percentage", deduct_percentage);
+    console.log(formData);
 
     $.ajax({
         type: "POST",
