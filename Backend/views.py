@@ -616,16 +616,33 @@ from django.core import serializers
 
 class Approval_Groups_View(View):
     def post(self,request):
-        print("request.new_stage_id ",request.POST["new_stage_id"])
+        # post 處理兩個事件，【是否勾選直屬主管】以及【送出新關卡(員工)】
         dict_data = convent_dict(request.body)
         print("dict_data ",dict_data)
-        employee_id = dict_data["new_stage_id"]
-        # 取得該Approval_Target物件，新增新關卡員工id到Approval_Target的approval_order
         approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
         approval_order = approval_target.approval_order
+
+        # 【勾選直屬主管】:
+        if dict_data["is_checked"]:
+            print("勾選")
+            approval_order.insert(0,"x")
+            approval_target.approval_order = approval_order
+            approval_target.save()
+            return JsonResponse({'data': "修改成功"},status=200)
+        elif not dict_data["is_checked"]:
+        # 【取消勾選直屬主管】:
+            print("取消勾選")
+            approval_order.remove("x")
+            approval_target.approval_order = approval_order
+            approval_target.save()
+            return JsonResponse({'data': "修改成功"},status=200)
+        
+        # 【送出新關卡(員工)】:
+        employee_id = dict_data["new_stage_id"]
         approval_order.append(employee_id)
         approval_target.approval_order = approval_order
         approval_target.save()
+        print("approval_target.approval_order ",approval_target.approval_order)
         
         return JsonResponse({'data': "修改成功"},status=200)
 
@@ -633,6 +650,7 @@ class Approval_Groups_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Approval_Target, id=id)
         json_data = model_to_dict(data)
+        json_data["is_director"] = False
         approval_order_list = []
         
         for item in json_data['approval_order']:
@@ -642,10 +660,29 @@ class Approval_Groups_View(View):
                     approval_order_list.append({"id": item, "name": employee.full_name})
                 except Employee.DoesNotExist:
                     continue
+            elif item == "x":
+                json_data["is_director"] = True
+        
         json_data["approval_order"]= approval_order_list
         json_data["name"]= data.get_name_display()
 
         return JsonResponse({"data": json_data}, status=200)
+    
+    def delete(self, request):
+        try:
+            dict_data = convent_dict(request.body)
+            employee_id = dict_data["new_stage_id"]
+            approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
+            approval_order = approval_target.approval_order
+            approval_order.remove(employee_id)
+            approval_target.approval_order = approval_order
+            approval_target.save()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
     
 class Profile_View(View):
     # 同一個post要處理更新照片以及更新密碼

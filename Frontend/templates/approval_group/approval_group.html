@@ -101,6 +101,26 @@
 </div>
 
 <script>
+    var is_director_checkbox = document.getElementById("is_director")
+    is_director_checkbox.addEventListener("change",function(){
+        $.ajax({
+            type: "POST",
+            url: "/restful/approval_group",
+            data: {
+                set_id:set_id,
+                is_checked: is_director_checkbox.checked,
+            },
+            headers: {
+                "X-CSRFToken": csrftoken,
+            },
+            success: function (response) {
+                
+            },
+            error: function (error) {
+                alert("錯誤", error);
+            }
+        });
+    })
     function createApprovalStageElement(jsonData){
         // 先清除子元素
         var stageDiv = document.getElementById("approval_stage");
@@ -110,7 +130,7 @@
 
         var stageArray = jsonData
         console.log(stageArray)
-        for (let i = 0; i <= stageArray.length; i++) {
+        for (let i = 0; i < stageArray.length; i++) {
             var newDiv = document.createElement("div");
             newDiv.className = "form-group form-row d-flex justify-content-between align-items-center";
 
@@ -120,11 +140,29 @@
 
             var a = document.createElement("a")
             a.setAttribute("type", "button")
-            a.setAttribute("onclick", "deleteApprovalStage()")
+            // a.setAttribute("onclick", "deleteApprovalStage()")
             a.className = "sys_del btn btn-sm btn-danger";
             var icon = document.createElement("i");
             icon.className = "far fa-sm fa-trash-alt";
             a.appendChild(icon);
+            a.click(function () {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/restful/approval_group",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                    },
+                    // data:{}
+                    success: function (response) {
+                        alert("刪除成功!");
+                        // sendApprovalGroup();
+                    },
+                    error: function (error) {
+                        alert("刪除失敗!");
+                        console.log("Error:", error);
+                    },
+                });
+            });
 
             var span = document.createElement("span");
             span.textContent = stageArray[i].name;
@@ -150,22 +188,27 @@
             },
             success: function (response) {
                 jsonData = response.data;
-                console.log(jsonData);
-                console.log(jsonData.approval_order);
-                
                 for (var key in jsonData) {
                     console.log("key " + key)
                     if(key == "name"){
                         var h5 = document.getElementById(key);
                         if (h5) {
-                            console.log("key " + jsonData[key])
                             h5.textContent = jsonData[key];
                         }
                     }
                     if(key == "approval_order"){
                         createApprovalStageElement(jsonData[key]);
                     }
-                    /* -- 結束判斷，把該物件id設給name*/
+                    if(key == "is_director"){
+                        var is_director = document.getElementById(key);
+                        if(jsonData[key]){
+                            console.log("is_director.checked = true;")
+                            is_director.checked = true;
+                        }else{
+                            console.log("is_director.checked = false;")
+                            is_director.checked = false;
+                        }
+                    }
 
                 }
             },
@@ -197,9 +240,6 @@
                 // 員工已被選過錯誤處理
             }
         })
-    }
-    function deleteApprovalStage(){
-        alert("delete")
     }
 </script>
 
