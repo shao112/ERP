@@ -30,7 +30,6 @@
                             {% csrf_token %}
                             <input name="id" hidden />
                             <div class="col-12">
-                                {{ employees_detail }}
                                 <div class="form-group form-row">
                                     <h5 id="name"></h5>
                                     <!-- <label for="name">群組名稱</label>
@@ -42,12 +41,12 @@
                                     <select class="form-control form-control-sm" name="new_stage" id="new_stage">
                                         <option value="">請選擇員工</option>
                                         {% for employee in employees %}
-                                        <option value="{{ employee.user_id }}">{{ employee.full_name }}</option>
+                                        <option value="{{ employee.id }}">{{ employee.full_name }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="form-group form-row">
-                                    <button type="submit" class="btn border border-dark rounded w-100"
+                                    <button id="submitEmployeeBtn" type="button" class="btn border border-dark rounded w-100"
                                         style="color: #fff;background: #1E3050;">送出</button>
                                 </div>
 
@@ -139,7 +138,7 @@
 
 </script>
 <script>
-    let set_id = ""
+    var set_id = ""
     function sendApprovalGroup(id) {
         set_id = id;
         $.ajax({
@@ -165,6 +164,8 @@
                     if(key == "approval_order"){
                         createApprovalStageElement(jsonData[key]);
                     }
+                    /* -- 結束判斷，把該物件id設給name*/
+
                 }
             },
             error: function (error) {
@@ -172,7 +173,33 @@
             }
         });
     }
+    document.getElementById("submitEmployeeBtn").onclick = submitEmployee;
+    function submitEmployee(){
+        const new_stage_select = document.getElementById("new_stage");
+        const new_stage_id = new_stage_select.value;
+        $.ajax({
+            type: 'POST',
+            url: '/restful/approval_group',
+            data: {
+                new_stage_id: new_stage_id,
+                set_id: set_id
+            },
+            headers: {
+                "X-CSRFToken": csrftoken,
+            },
+            success: function(response) {
+                console.log(response);
+                sendApprovalGroup(set_id)
+            },
+            error: function(error) {
+                console.log(error);
+                // 員工已被選過錯誤處理
+            }
+        })
+    }
+</script>
 
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",

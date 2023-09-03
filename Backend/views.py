@@ -615,12 +615,18 @@ class Groups_View(View):
 from django.core import serializers
 
 class Approval_Groups_View(View):
-    def put(self,request):
+    def post(self,request):
+        print("request.new_stage_id ",request.POST["new_stage_id"])
         dict_data = convent_dict(request.body)
-        group = Group.objects.get(id=dict_data['id'])
-        user_ids= dict_data.get("user_set",[])
-        users = User.objects.filter(id__in=user_ids)
-        group.user_set.set(users)
+        print("dict_data ",dict_data)
+        employee_id = dict_data["new_stage_id"]
+        # 取得該Approval_Target物件，新增新關卡員工id到Approval_Target的approval_order
+        approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
+        approval_order = approval_target.approval_order
+        approval_order.append(employee_id)
+        approval_target.approval_order = approval_order
+        approval_target.save()
+        
         return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):
