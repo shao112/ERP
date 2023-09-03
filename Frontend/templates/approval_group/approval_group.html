@@ -32,9 +32,10 @@
                             <div class="col-12">
                                 {{ employees_detail }}
                                 <div class="form-group form-row">
-                                    <label for="name">群組名稱</label>
+                                    <h5 id="name"></h5>
+                                    <!-- <label for="name">群組名稱</label>
                                     <input class="form-control form-control-sm" name="name" id="name"
-                                        disabled></input>
+                                        disabled></input> -->
                                 </div>
                                 <div class="form-group form-row">
                                     <label for="new_stage">新增關卡</label>
@@ -70,7 +71,7 @@
                 <thead class="thead-light">
                     <tr class="text-nowrap">
                         <th></th>
-                        <th>群組名稱</th>
+                        <th>簽核群組名稱</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,33 +102,40 @@
 </div>
 
 <script>
-    var stageArray = JSON.parse('{{ employee_json|safe }}')
-    console.log(stageArray)
-
-    for (let i = 1; i <= stageArray.length; i++) {
+    function createApprovalStageElement(jsonData){
+        // 先清除子元素
         var stageDiv = document.getElementById("approval_stage");
-        var newDiv = document.createElement("div");
-        newDiv.className = "form-group form-row d-flex justify-content-between";
+        while(stageDiv.hasChildNodes()){
+            stageDiv.removeChild(stageDiv.firstChild);
+        }
 
-        var label = document.createElement("label");
-        label.setAttribute("for", "stage-" + i);
-        label.textContent = "第 " + i + " 關";
+        var stageArray = jsonData
+        console.log(stageArray)
+        for (let i = 0; i <= stageArray.length; i++) {
+            var newDiv = document.createElement("div");
+            newDiv.className = "form-group form-row d-flex justify-content-between";
 
-        var a = document.createElement("a")
-        a.setAttribute("type", "button")
-        a.className = "sys_del btn btn-sm btn-danger";
-        var icon = document.createElement("i");
-        icon.className = "far fa-sm fa-trash-alt";
-        a.appendChild(icon);
+            var label = document.createElement("label");
+            label.setAttribute("for", "stage-" + i);
+            label.textContent = "第 " + (i+1) + " 關";
 
-        var span = document.createElement("span");
-        span.textContent = stageArray[i].full_name;
+            var a = document.createElement("a")
+            a.setAttribute("type", "button")
+            a.className = "sys_del btn btn-sm btn-danger";
+            var icon = document.createElement("i");
+            icon.className = "far fa-sm fa-trash-alt";
+            a.appendChild(icon);
 
-        newDiv.appendChild(label);
-        newDiv.appendChild(span);
-        newDiv.appendChild(a);
-        stageDiv.appendChild(newDiv);
+            var span = document.createElement("span");
+            span.textContent = stageArray[i].name;
+
+            newDiv.appendChild(label);
+            newDiv.appendChild(span);
+            newDiv.appendChild(a);
+            stageDiv.appendChild(newDiv);
+        }
     }
+    
 
 </script>
 <script>
@@ -141,14 +149,21 @@
                 id: id
             },
             success: function (response) {
-                jsonData = JSON.stringify(response.data);
+                jsonData = response.data;
                 console.log(jsonData);
-                for (var key in jsonData["approval_order"]) {
-                    console.log(key)
-                    var input = document.getElementsByName(key)[0];
-                    if (input) {
-                        let get_value = jsonData[key];
-                        input.value = get_value;
+                console.log(jsonData.approval_order);
+                
+                for (var key in jsonData) {
+                    console.log("key " + key)
+                    if(key == "name"){
+                        var h5 = document.getElementById(key);
+                        if (h5) {
+                            console.log("key " + jsonData[key])
+                            h5.textContent = jsonData[key];
+                        }
+                    }
+                    if(key == "approval_order"){
+                        createApprovalStageElement(jsonData[key]);
                     }
                 }
             },
