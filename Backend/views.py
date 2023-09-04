@@ -427,6 +427,8 @@ class Quotation_View(View):
         print(data)
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
+        data['invoice_attachment'] = data['invoice_attachment'].url if data['invoice_attachment']  else None
+
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
@@ -576,15 +578,15 @@ class FormUploadFileView(View):
                     model=Equipment.objects.get(id=getid)
                 case "employee":
                     model=Employee.objects.get(id=getid)
+                case "Quotation":
+                    model=Quotation.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
             if ManyToManyProcess:
-                print("xx")
+                print("ManyToManyProcess")
                 related_field = getattr(model, getname)
-                print("xx")
                 uploaded_file_obj = UploadedFile.objects.create(name=filename, file=uploaded_file)
-                print("xx")
                 related_field.add(uploaded_file_obj)
             else:
 

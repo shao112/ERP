@@ -390,6 +390,7 @@ class Quotation(ModifiedModel):
     work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
+    invoice_attachment = models.FileField(upload_to="Invoice", null=True, blank=True, verbose_name="請款單")
 
     def get_show_id(self):
         return f"報價-{str(self.id).zfill(5)}"
@@ -481,6 +482,7 @@ class Project_Employee_Assign(ModifiedModel):
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
 
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
