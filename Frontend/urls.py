@@ -28,6 +28,8 @@ urlpatterns = [
 
     path('approval_process', views.Approval_Process.as_view(), name="Approval_Process"),
     path('quotation', views.Quotation_ListView.as_view(), name="quotation"),
+    path('quotation/<int:client_id>/', views.Quotation_ListView.as_view(), name='quotation_detail'),
+
     path('approval_list', views.Approval_List.as_view(), name="Approval_List"),
     path('approval_group', views.Approval_Group.as_view(), name="Approval_Group"),
     path('leave_param', views.Leave_Param_List.as_view(), name="Leave_Param"),

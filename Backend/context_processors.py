@@ -17,5 +17,6 @@ def sys_messages(request):
         })
         bottom_position += 70 
 
-
     return {'sys_messages': sys_messages_data}
+
+

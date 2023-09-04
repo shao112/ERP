@@ -39,12 +39,12 @@
                                     <div class="form-row">
                                         <div class="col-12 col-lg-6">
                                             <div class="form-group">
-                                                <label for="customer_name">客戶名稱</label>
-                                                <select class="form-control form-control-sm" name="customer_name"
-                                                    id="customer_name">
+                                                <label for="client">選擇客戶</label>
+                                                <select class="form-control form-control-sm" name="client"
+                                                    id="client">
                                                     <option value="">請選擇客戶簡稱</option>
                                                     {% for client in client_list %}
-                                                    <option value="{{ client.client_name }}">{{ client.client_name }}
+                                                    <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
@@ -232,7 +232,7 @@
                         {{ item.project_name}}
                     </td>
                     <td>
-                        {{ item.customer_name}}
+                        {{ item.client.client_name}}
                     </td>
                     <td>
                         {{ item.quote_validity_period}}

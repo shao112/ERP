@@ -7,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Client,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  LeaveParamModelForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -381,8 +381,13 @@ class Quotation_View(View):
                 get_work_item = [int(item) for item in  dict_data["work_item"]]
                 del dict_data["work_item"]
                 getQuotation.work_item.set(get_work_item)
+            
+            if "client" in dict_data:
+                get_obj = Client.objects.get(pk=int(dict_data["client"]))
+                getQuotation.client = get_obj
+                del dict_data["client"]
 
-                getQuotation.update_fields_and_save(**dict_data)
+            getQuotation.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "修改成功"},status=200)
         else:
             error_messages = form.get_error_messages()

@@ -301,6 +301,7 @@ class Work_Item_ListView(ListView):
         context = super().get_context_data(**kwargs)
         return context
 
+
 # 報價單
 class Quotation_ListView(ListView):
     model = Quotation
@@ -310,6 +311,12 @@ class Quotation_ListView(ListView):
         context = super().get_context_data(**kwargs)
         context["workitems"]= Work_Item.objects.all()
         context['client_list'] = Client.objects.all()
+
+        client_id = self.kwargs.get('client_id', None)
+        if client_id:
+            context['quotation'] = Quotation.objects.filter(client=client_id)
+        else:
+            context['quotation'] = Quotation.objects.all()
 
         return context
 

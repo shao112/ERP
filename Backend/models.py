@@ -375,7 +375,7 @@ class Work_Item(ModifiedModel):
 
 #報價單
 class Quotation(ModifiedModel):
-    customer_name = models.CharField(max_length=100, verbose_name="客戶名稱",blank=True, null=True)
+    client = models.ForeignKey("Client",related_name="Quotation", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='客戶名稱')
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
     address = models.TextField(verbose_name="地址",blank=True, null=True)
