@@ -647,7 +647,7 @@ class Approval_Groups_View(View):
                 return JsonResponse({'data': "修改成功"},status=200)
         
         # 【送出新關卡(員工)】:
-        employee_id = dict_data["new_stage_id"]
+        employee_id = int(dict_data["new_stage_id"])
         approval_order.append(employee_id)
         approval_target.approval_order = approval_order
         approval_target.save()
@@ -680,10 +680,14 @@ class Approval_Groups_View(View):
     def delete(self, request):
         try:
             dict_data = convent_dict(request.body)
-            employee_id = dict_data["new_stage_id"]
+            employee_id = dict_data["employee_id"]
+
             approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
             approval_order = approval_target.approval_order
-            approval_order.remove(employee_id)
+            print("Befor: ",approval_order)
+            while employee_id in approval_order:
+                approval_order.remove(employee_id)
+            print("after: ",approval_order)
             approval_target.approval_order = approval_order
             approval_target.save()
             return HttpResponse("成功刪除",status=200)
