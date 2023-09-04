@@ -633,7 +633,8 @@ class Approval_Groups_View(View):
             else:
             # 【取消勾選直屬主管】:
                 print("取消勾選")
-                approval_order.remove("x")
+                while "x" in approval_order:
+                    approval_order.remove("x")
                 approval_target.approval_order = approval_order
                 approval_target.save()
                 return JsonResponse({'data': "修改成功"},status=200)
