@@ -612,7 +612,6 @@ class Groups_View(View):
         data={"user_set":users,"id":data.id,"group_name":data.name}
 
         return JsonResponse({"data": data}, status=200)
-from django.core import serializers
 
 class Approval_Groups_View(View):
     def post(self,request):
@@ -622,20 +621,22 @@ class Approval_Groups_View(View):
         approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
         approval_order = approval_target.approval_order
 
-        # 【勾選直屬主管】:
-        if dict_data["is_checked"]:
-            print("勾選")
-            approval_order.insert(0,"x")
-            approval_target.approval_order = approval_order
-            approval_target.save()
-            return JsonResponse({'data': "修改成功"},status=200)
-        elif not dict_data["is_checked"]:
-        # 【取消勾選直屬主管】:
-            print("取消勾選")
-            approval_order.remove("x")
-            approval_target.approval_order = approval_order
-            approval_target.save()
-            return JsonResponse({'data': "修改成功"},status=200)
+        
+        if "is_checked" in dict_data:
+            # 【勾選直屬主管】:
+            if dict_data["is_checked"]:
+                print("勾選")
+                approval_order.insert(0,"x")
+                approval_target.approval_order = approval_order
+                approval_target.save()
+                return JsonResponse({'data': "修改成功"},status=200)
+            else:
+            # 【取消勾選直屬主管】:
+                print("取消勾選")
+                approval_order.remove("x")
+                approval_target.approval_order = approval_order
+                approval_target.save()
+                return JsonResponse({'data': "修改成功"},status=200)
         
         # 【送出新關卡(員工)】:
         employee_id = dict_data["new_stage_id"]
