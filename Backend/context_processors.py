@@ -1,4 +1,4 @@
-from Backend.models import SysMessage
+from Backend.models import SysMessage,Client
 from django.contrib.auth.models import AnonymousUser
 
 def sys_messages(request):
@@ -20,3 +20,6 @@ def sys_messages(request):
     return {'sys_messages': sys_messages_data}
 
 
+def client_list(request):
+    clients = Client.objects.all()
+    return {'clients': clients}

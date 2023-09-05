@@ -4,7 +4,8 @@
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="engineerCollapse">
                 <i class="fa-solid fa-user-pen" style="color: #ffffff;"></i> 個人管理
             </a>
             <div class="collapse" id="calendarCollapse">
@@ -16,7 +17,8 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#directorCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#directorCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="engineerCollapse">
                 <i class="fa-solid fa-user-tie" style="color: #ffffff;"></i> 主管管理
             </a>
             <div class="collapse" id="directorCollapse">
@@ -28,7 +30,8 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#engineerCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="engineerCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#engineerCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="engineerCollapse">
                 <i class="fa-solid fa-wrench" style="color: #ffffff;"></i> 工程部
             </a>
             <div class="collapse" id="engineerCollapse">
@@ -45,9 +48,10 @@
                 </ul>
             </div>
         </li>
-        
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="personnelCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="personnelCollapse">
                 <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> 管理部
             </a>
             <div class="collapse" id="personnelCollapse">
@@ -71,13 +75,29 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#salesCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="personnelCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#salesCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="personnelCollapse">
                 <i class="fa-solid fa-book-open" style="color: #ffffff;"></i> 業務部
             </a>
             <div class="collapse" id="salesCollapse">
                 <ul class="nav flex-column ml-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'quotation' %}">報價單</a>
+                        <a class="nav-link collapsed" href="#" data-target="#clients" data-toggle="collapse"
+                            aria-expanded="false" aria-controls="personnelCollapse">
+                            <!-- <i class="fa-solid fa-book-open" style="color: #ffffff;"></i>  -->
+                            報價單
+                        </a>
+                        <div class="collapse" id="clients">
+                            <ul class="nav flex-column ml-4">
+                                {% for client in clients %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'quotation_detail' client.id %}">
+                                        {{ client.client_name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'work_item_list' %}">工項管理</a>
@@ -86,19 +106,21 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#financialCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="financialCollapse">
+            <a class="nav-link collapsed" href="#financialCollapse" data-toggle="collapse" aria-expanded="false"
+                aria-controls="financialCollapse">
                 <i class="fa-solid fa-sack-dollar" style="color: #ffffff;"></i> 財務部
             </a>
             <div class="collapse" id="financialCollapse">
-            <ul class="nav flex-column ml-4">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
-                </li>
-            </ul>
+                <ul class="nav flex-column ml-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
+                    </li>
+                </ul>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#approvalCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="approvalCollapse">
+            <a class="nav-link collapsed" href="#approvalCollapse" data-toggle="collapse" aria-expanded="false"
+                aria-controls="approvalCollapse">
 
                 <!-- <div id="message-count"></div> -->
                 <i class="fa-solid fa-pen" style="color: #ffffff;"></i> 簽核管理
@@ -118,15 +140,16 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#newsCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="newsCollapse">
+            <a class="nav-link collapsed" href="#newsCollapse" data-toggle="collapse" aria-expanded="false"
+                aria-controls="newsCollapse">
                 <i class="fa-solid fa-bullhorn" style="color: #ffffff;"></i> 行政管理
             </a>
             <div class="collapse" id="newsCollapse">
-            <ul class="nav flex-column ml-4">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'news' %}">公告設置</a>
-                </li>
-            </ul>
+                <ul class="nav flex-column ml-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'news' %}">公告設置</a>
+                    </li>
+                </ul>
             </div>
         </li>
     </ul>
