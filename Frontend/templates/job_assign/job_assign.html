@@ -61,7 +61,6 @@
                         <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox" class="d-none d-md-table-cell">匯出</th>
                         <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                         <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                        <th data-sortable="true" data-field="approval">簽核狀態</th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_confirmation_id">工確單編號</th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
                         <th data-sortable="true" data-field="project_name">工程名稱</th>
@@ -90,31 +89,6 @@
                                 class="sys_del btn btn-sm btn-danger"><i class="far fa-sm fa-trash-alt"></i></a>
                         </td>
 
-                        <td>
-                            {% if j.Approval %}
-                                {{j.Approval.get_current_status_display}}
-                                
-                                {% if j.Approval.current_status  == "completed" %}
-                                    {% if request.user|get_supervisor %}
-                                    / <button data-id="{{j.id}}" data-model="job_assign" onclick="DelApproval(event)" >收回(主管)</button>
-                                    {% endif %}
-                                {% endif %}
-    
-    
-                                {% if j.Approval.current_status  == "in_progress" %}
-                                   / <button data-id="{{j.id}}" data-model="job_assign" onclick="DelApproval(event)">收回</button>
-                                {% endif %}
-    
-                                {% if j.Approval.current_status  == "rejected" %}
-                                    / <button  data-id="{{j.id}}" data-model="job_assign" onclick="submitApproval(event)">發送新簽核</button>
-                                {% endif %}
-                                
-                            {% else %}
-                                    <button data-id="{{j.id}}" data-model="job_assign" onclick="submitApproval(event)">開始簽核</button>
-                            {% endif %}
-    
-    
-                        </td>
 
                         <td>
                             {{ j.project_confirmation.get_show_id }}

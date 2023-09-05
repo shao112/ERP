@@ -33,6 +33,16 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
+class SalaryListView(View):
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        year = data.get('year')
+        month = data.get('month')
+        print(year, month)
+        employees = Employee.objects.all()
+
+        return JsonResponse({"ok":"ok"},status=200)
+        # return JsonResponse({"error":"找不到model"},status=400)
 
 
 class SysMessage_API(View):

@@ -34,5 +34,8 @@ urlpatterns = [
     path('sysmessage', views.SysMessage_API.as_view(), name="approval_view_process_api"),
     path('work_item', views.Work_Item_View.as_view(), name="work_item_api"),
     path('quotation', views.Quotation_View.as_view(), name="quotation_api"),
+    #計算當月所有
+    path('salary/<int:employee_id>/<int:file_id>', views.SalaryListView.as_view(), name="salary_api"),
+    #處理當月單一員工
 
 ]

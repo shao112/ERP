@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Salary,SalaryDetail, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -153,3 +153,27 @@ def match_excel_content(model):
         case _:
             return "error"
     
+
+def create_salary(employee,year,month):
+    salary, created = Salary.objects.get_or_create(user=employee, year=2023, month=8)
+
+    if not created:#清除所有明細
+        SalaryDetail.objects.filter(salary=salary).delete()
+
+    # 创建基本时薪的工资详情
+    basic_salary = SalaryDetail.objects.create(
+        salary=salary,
+        name='基本時薪',
+        system_amount=employee.default_salary,
+        adjustment_amount=0,
+        deduction=False
+    )
+
+    # 创建伙食津贴的工资详情
+    meal_allowance = SalaryDetail.objects.create(
+        salary=salary,
+        name='伙食津貼',
+        system_amount=1000,  # 你可以根据需要设置不同的值
+        adjustment_amount=0,
+        deduction=False
+    )

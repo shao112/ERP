@@ -3,7 +3,7 @@ var quotation_select = document.getElementById("quotation_id");
 quotation_select.addEventListener("change", function () {
   var selectedOptionIndex = quotation_select.selectedIndex;
   var selectedOption = quotation_select.options[selectedOptionIndex];
-  if (selectedOption==undefined) {
+  if (selectedOption == undefined) {
     return;
   }
 

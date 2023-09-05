@@ -14,6 +14,9 @@ import os
 from django.db.models import Q
 
 
+
+
+
 class SysMessage(models.Model):
 
     Target_user = models.ForeignKey("Employee", related_name="sys_messages", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='顯示對象')
@@ -43,8 +46,6 @@ class ModifiedModel(models.Model):
     modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
-
-
 
     class Meta:
         abstract = True
@@ -113,6 +114,7 @@ class Employee(ModifiedModel):
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
     emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
+    default_salary = models.IntegerField(default=27000, null=True, blank=True, verbose_name="薪資")#預設薪資
 
     class Meta:
         verbose_name = "員工"   # 單數
@@ -133,6 +135,32 @@ class Employee(ModifiedModel):
 
     def __str__(self):
         return self.full_name
+
+
+class SalaryDetail(models.Model):
+    salary = models.ForeignKey("salarydetail",on_delete=models.CASCADE, verbose_name="依附薪資單",null=True, blank=True)
+    name = models.CharField(max_length=100, verbose_name='名稱')
+    system_amount = models.PositiveIntegerField(default=0, verbose_name='系統金額')
+    adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
+    deduction = models.BooleanField(default=False, verbose_name='扣款項目') #F為補貼、T為請事假、勞保...
+    def __str__(self):
+        return self.name
+
+
+class Salary(ModifiedModel):
+    user = models.ForeignKey(Employee,related_name="salary_user" ,on_delete=models.DO_NOTHING, verbose_name="員工")
+    year = models.PositiveIntegerField(verbose_name="年")
+    month = models.PositiveIntegerField(verbose_name="月")
+    created_by = models.ForeignKey("Employee",related_name="Salary_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "薪資"
+        verbose_name_plural = "薪資"
+
+    def __str__(self):
+        return f"{self.user} - {self.year}年{self.month}月的薪資"
+
+
 
 class ApprovalLog(models.Model):
     approval = models.ForeignKey("ApprovalModel", on_delete=models.CASCADE, related_name='approval_logs')

@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -22,19 +22,30 @@ import json
 
 
 
-
 class Project_employee_assign_View(DetailView):
     model = Project_Employee_Assign
     template_name = 'pdf/Equipment_pdf.html'
     context_object_name = 'project_employee_assign'
     pk_url_kwarg = 'id'  # This is where the 'id' parameter is mapped
 
+
+
+
+class SalaryDetailView(ListView):
+    model = Salary
+    template_name = 'Salary/Salary.html'
+    context_object_name = 'salaries'
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        queryset = Salary.objects.filter(year=year, month=month)
+
+        return queryset
     
 # 首頁
 class Director_Index(View):
     def get(self,request):
             current_employee = request.user.employee
-            
             other_employees = current_employee.departments.employees.exclude(id=current_employee.id)
             other_employees = convent_employee(other_employees)
             for employee in other_employees:
@@ -162,6 +173,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
 
+
         context['vehicle'] = Vehicle.objects.all()
         return context
 
@@ -177,7 +189,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     context_object_name = 'Project_Employee_Assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["employees_list"] =  Employee.objects.values('id','user__username')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         return context
@@ -300,6 +312,9 @@ class Work_Item_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+
 
 
 # 報價單
