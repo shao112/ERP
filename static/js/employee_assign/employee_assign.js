@@ -9,6 +9,9 @@ project_job_assign_IdControl.addEventListener('change', function () {
     var selectedId = selectedOption.value;
 
     console.log('選中的選項 id 為: ' + selectedId);
+    if(selectedId ==-1){
+        return;
+    }
 
     const url = "/restful/job_assign";
     formData = { id: selectedId };
@@ -25,9 +28,9 @@ project_job_assign_IdControl.addEventListener('change', function () {
             jsonData = response.data
             console.table(jsonData)
             project_confirmation = jsonData["project_confirmation"]
-            console.table(project_confirmation)
-            document.getElementById("project_name").value = project_confirmation["project_name"];
-            document.getElementById("quotation_id").value = project_confirmation["quotation_id"];
+            quotation_dict = jsonData["quotation_dict"]
+            document.getElementById("project_name").value = quotation_dict["project_name"];
+            document.getElementById("quotation_id").value = quotation_dict["q_id"];
             document.getElementById("client").value = jsonData["client"];
             document.getElementById("requisition").value = jsonData["requisition"];
 

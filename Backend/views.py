@@ -38,10 +38,9 @@ from django.utils.text import get_valid_filename # 確保file檔名是合法的�
 class SysMessage_API(View):
     def post(self, request, *args, **kwargs):
         data = request.POST
-        id = data.get('id')  # 获取 id
+        id = data.get('id')  
         getobj = SysMessage.objects.get(id=id)
-        getobj.watch=True
-        getobj.save()
+        getobj.delete() 
         return HttpResponse(200)
 
 class Approval_View_Process(View):
@@ -62,7 +61,7 @@ class Approval_View_Process(View):
             model_name = {
                 'project_confirmation': 'Project_Confirmation',
                 'job_assign': 'Project_Job_Assign',
-                'project_employee_assign': 'Project_Employee_Assign',
+                'Project_Employee_Assign': 'Project_Employee_Assign',
                 '請假單': '請假單',
             }
 
@@ -680,13 +679,13 @@ class Approval_Groups_View(View):
     def delete(self, request):
         try:
             dict_data = convent_dict(request.body)
-            employee_id = dict_data["employee_id"]
+            employee_id = int(dict_data["employee_id"])
 
             approval_target = get_object_or_404(Approval_Target, id=dict_data["set_id"])
             approval_order = approval_target.approval_order
-            print("Befor: ",approval_order)
-            while employee_id in approval_order:
-                approval_order.remove(employee_id)
+            print("del: ",employee_id)
+            print("Befor    : ",approval_order)
+            approval_order = [x for x in approval_order if x != employee_id]
             print("after: ",approval_order)
             approval_target.approval_order = approval_order
             approval_target.save()
@@ -957,20 +956,23 @@ class Job_Assign_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Job_Assign, id=id)
-        print(data)
-
-
+        show_data_id= data.get_show_id()
         #渲染關聯
-        selected_fields = ['id','quotation_id', 'project_name', 'client', 'requisition']
+        selected_fields = ['id','quotation_id', 'quotation', 'client', 'requisition']
+        quotation_selected_fields = ['id','project_name',  'client']
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
+        
+        quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)
+        q_id= data.project_confirmation.quotation.get_show_id()
+        quotation_dict["q_id"] = q_id
 
         data = model_to_dict(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
-        data['job_assign_id'] = "工派-" +str(data["id"]).zfill(5)
-    
+        data['quotation_dict'] = quotation_dict
+        data['job_assign_id'] = show_data_id
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
