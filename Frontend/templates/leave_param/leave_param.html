@@ -14,7 +14,7 @@
 {% block main %}
 <div class="main px-3">
     <div class="leave_param_table container-fluid shadow-sm table-responsive">
-        <form action="/restful/approval_group" id="form">
+        <form action="/restful/leave_param" id="form">
             <table class="table table-sm table-hover">
                 <div class="leave-param-header container-fluid">
                     請假參數設定，設定好請勿隨意改動
@@ -108,19 +108,39 @@ $("form").on("submit", function (event) {
     event.preventDefault();
     var form = $(this);
     var url = form.attr("action");
-    // 不能用form.find(":input").each(function ()去找所有input，因為卡到內有modal button close，有點奇怪的問題
-    var formData = new FormData()
-    function getValueForLoop(inputElement){
-        for(let i = 0; i < inputElement.length; i++){
-            console.log(inputElement[i].value);
-            console.log(inputElement[i].name);
-            formData.append(inputElement[i].name, inputElement[i].value);
-            console.log(formData) // formData放不進去內容
-        }
-    }
 
-    var leave_name_input = document.getElementsByName("leave_name")
-    getValueForLoop(leave_name_input)
+    var id_arr = []
+    var leave_name_arr = []
+    var leave_quantity_arr = []
+    var formData = new FormData();
+    form.find(":input").each(function () {
+        var inputElement = $(this);
+        var inputName = inputElement.attr("name");
+        if(inputName == "id"){
+            id_arr.push(inputElement.attr("value"))
+        }else if(inputName == "leave_name"){
+            leave_name_arr.push(inputElement.attr("value"))
+        }else if(inputName == "leave_quantity"){
+            leave_quantity_arr.push(inputElement.attr("value"))
+        }
+    })
+    formData.append("id",id_arr)
+    formData.append("leave_name",leave_name_arr)
+    formData.append("leave_quantity",leave_quantity_arr)
+    formData.forEach((key, value) => {
+        console.log(key, value);
+    });
+    // function getValueForLoop(inputElement){
+    //     for(let i = 0; i < inputElement.length; i++){
+    //         console.log(inputElement[i].value);
+    //         console.log(inputElement[i].name);
+    //         formData.append(inputElement[i].name, inputElement[i].value);
+    //         console.log(formData) // formData放不進去內容
+    //     }
+    // }
+
+    // var leave_name_input = document.getElementsByName("leave_name")
+    // getValueForLoop(leave_name_input)
     // formData.append("leave_name", leave_name);
     // formData.append("leave_quantity", leave_quantity);
     // formData.append("minimum_leave_number", minimum_leave_number);
@@ -128,16 +148,15 @@ $("form").on("submit", function (event) {
     // formData.append("is_audit", is_audit);
     // formData.append("is_attachment", is_attachment);
     // formData.append("deduct_percentage", deduct_percentage);
-    console.log(formData);
 
     $.ajax({
         type: "POST",
         url: url,
         data: formData,
-        async: false,
         headers: {
             "X-CSRFToken": csrftoken,
         },
+        processData : false,
         success: function (response) {
             jsonData = response.data;
             console.log(jsonData)

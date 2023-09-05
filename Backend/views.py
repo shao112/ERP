@@ -699,11 +699,27 @@ class Approval_Groups_View(View):
 
 class Leave_Param_View(View):
     def post(self,request):
-        dict_data = convent_dict(request.body)
-        print("dict_data ",dict_data)
+        # data = request.POST
+        # getid = request.POST['id']
+        # getleave_name = request.POST['leave_name']
+        # getleave_quantity = request.POST['leave_quantity']
+        # print(getid)
+        # print(getleave_name)
+        # print(getleave_quantity)
+        # dict_data = convent_dict(request.body)
+        # data = request.POST
+        # for field in data.getlist("leave_name"):
+        #     leave_param = Leave_Param.objects.get(leave_name=field)
+        #     print("原內容: ", leave_param.leave_name)
+        #     print("新內容: ", data.get("leave_name"))
+            # leave_param.leave_name = data.get("leave_name")
+            # leave_param.save()
+        # dict_data = convent_dict(request.body)
+        # print("dict_data ",dict_data)
         # form = LeaveParamModelForm(dict_data)
         # if form.is_valid():
         #     Leave_Param.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+        # print(dict_data)
         return JsonResponse({'data': "修改成功"},status=200)
         # else:
         #     error_messages = form.get_error_messages()
