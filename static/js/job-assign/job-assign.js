@@ -7,7 +7,11 @@ projectConfirmationIdControl.addEventListener('change', function () {
     var selectedOption = projectConfirmationIdControl.options[selectedOptionIndex];
     var selectedId = selectedOption.value;
 
+    
     console.log('選中的選項 id 為: ' + selectedId);
+    if(selectedId ==-1){
+        return;
+    }
 
     const url = "/restful/project_confirmation";
     formData = { id: selectedId };

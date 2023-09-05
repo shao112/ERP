@@ -307,11 +307,13 @@ class Project_Employee_Assign_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
+        get_id=data.get_show_id()
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
         data["lead_employee"] = convent_employee(data["lead_employee"])
         carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
         data["carry_equipments"] = list(carry_equipments_ids)
+        data["quotation"] = get_id
         
 
         if  data['enterprise_signature']:
@@ -964,7 +966,9 @@ class Job_Assign_View(View):
         
         quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)
         q_id= data.project_confirmation.quotation.get_show_id()
+        client_name= data.project_confirmation.quotation.client.client_name
         quotation_dict["q_id"] = q_id
+        quotation_dict["client_name"] = client_name
 
         data = model_to_dict(data)
         data["lead_employee"] = convent_employee(data["lead_employee"])
