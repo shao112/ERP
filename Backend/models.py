@@ -376,6 +376,7 @@ class Work_Item(ModifiedModel):
 #報價單
 class Quotation(ModifiedModel):
     client = models.ForeignKey("Client",related_name="Quotation", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='客戶名稱')
+    project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
     address = models.TextField(verbose_name="地址",blank=True, null=True)
@@ -383,7 +384,6 @@ class Quotation(ModifiedModel):
     mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
     fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
     email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
-    project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
     quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
     business_tel = models.CharField(max_length=20, verbose_name="業務電話",blank=True, null=True)
     business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)

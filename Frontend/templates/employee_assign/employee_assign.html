@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/project_employee_assign" id="form" method="POST" class="pb-4"
+                        <form action="/restful/project_employee_assign" id="form"  name="project_employee_assign" method="POST" class="pb-4"
                             data-method="post">
                             {% csrf_token %}
 
@@ -119,7 +119,7 @@
                                                             <option value="-1">請選擇工作派任計畫</option>
                                                             {% for job_assign in all_project_job_assign %}
                                                             <option value="{{ job_assign.id }}">
-                                                                工派 - {{job_assign.id |format_with_zeros:5}}
+                                                                 {{job_assign.get_show_id }}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -323,6 +323,7 @@
                         class="d-none d-md-inline-block">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edid">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="approval">簽核</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="naelete">簽名</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
                         列印/下載pdf</th>
@@ -357,6 +358,31 @@
                         <a data-url="project_employee_assign" data-id="{{p.id}}" type="button"
                             class="sys_del btn btn-sm btn-danger my-2 mx-md-2"><i
                                 class="far fa-sm fa-trash-alt"></i></a>
+                    </td>
+                    <td>
+
+                        {% if p.Approval %}
+                        {{p.Approval.get_current_status_display}}
+                        
+                        {% if p.Approval.current_status  == "completed" %}
+                            {% if request.user|get_supervisor %}
+                            / <button data-id="{{p.id}}" data-model="Project_Employee_Assign" onclick="DelApproval(event)" >收回(主管)</button>
+                            {% endif %}
+                        {% endif %}
+
+
+                        {% if p.Approval.current_status  == "in_progress" %}
+                           / <button data-id="{{p.id}}" data-model="Project_Employee_Assign" onclick="DelApproval(event)">收回</button>
+                        {% endif %}
+
+                        {% if p.Approval.current_status  == "rejected" %}
+                            / <button  data-id="{{p.id}}" data-model="Project_Employee_Assign" onclick="submitApproval(event)">發送新簽核</button>
+                        {% endif %}
+                        
+                        {% else %}
+                                <button data-id="{{p.id}}" data-model="Project_Employee_Assign" onclick="submitApproval(event)">開始簽核</button>
+                        {% endif %}
+
                     </td>
                     <td>
                         <a href="" onclick="setSettingId('{{ p.id }}')" data-toggle="modal"
@@ -400,6 +426,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/approval.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/fuc/fileimport.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",

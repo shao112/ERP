@@ -5,9 +5,9 @@
 
 <div class="tab-content">
     <div class="tab-pane fade show active" id="none_equipment_tab">
-        <input name="id"  />
+        <input name="id"   hidden/>
+    
         
-
         <div class="form-row my-2">
             <div class="col-12 col-md-6">
                 <div class="form-row">
@@ -19,7 +19,7 @@
                                 <option value="-1">請選擇工作派任計畫</option>
                                 {% for job_assign in all_project_job_assign %}
                                 <option value="{{ job_assign.id }}">
-                                    {{ job_assign.id|format_with_zeros:5 }}
+                                    {{job_assign.get_show_id }}
                                 </option>
                                 {% endfor %}
                             </select>
@@ -89,6 +89,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="col-12 col-md-6">
                 <div class="form-row">
                     <div class="col-12 col-md-6">
@@ -113,6 +114,7 @@
                 <div class="form-row">
                     <div class="col-12 col-md-6">
                         <div class="form-group">
+
                             <label for="inspector_select2">檢測人員</label>
                             <select class="select2" data-placeholder="選擇工作人員"
                                 name="inspector" id="inspector_select2" multiple>

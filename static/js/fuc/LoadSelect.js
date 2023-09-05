@@ -20,13 +20,16 @@ function SetSelect2(input, key, get_value) {
             containsValue = get_value.find(item => item == option_id);
         }
         
-        console.log(get_value)
-        console.log(option_id)
-        console.log(containsValue)
+        // console.log(get_value)
+        // console.log(option_id)
+        // console.log(containsValue)
         if (containsValue) {
-            console.log(option)
+            // console.log(option)
             option.selected = true;
         }
     }
-    $(selectname).trigger('change');
+    $(`[name="${key}"]`).each(function() {
+        $(this).trigger('change');
+    });
+    // $(selectname).trigger('change');
 }
