@@ -532,21 +532,25 @@ class News(ModifiedModel):
         super().save(*args, **kwargs)
 
 
-# 請假
-class Leave(ModifiedModel):
+# 請假申請
+class Leave_Application(ModifiedModel):
     type_of_leave = models.ForeignKey("Leave_Param", on_delete=models.SET_NULL,related_name="leave_param", blank=True, null=True, verbose_name="假別項目")
     start_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假起始日期")
     end_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假結束日期")
-    start_time_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假起始時間")
-    end_time_of_leave = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假結束時間")
-    leave_hours = models.CharField(max_length=100, blank=True, null=True, verbose_name="申請時數")
-    substitute = models.CharField(max_length=100, blank=True, null=True, verbose_name="工作代理人")
-    leave_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="請假事由")
+    start_hours_of_leave = models.IntegerField(default=0,blank=True, null=True, verbose_name="請假起始小時")
+    start_mins_of_leave = models.IntegerField(default=0,blank=True, null=True, verbose_name="請假起始分鐘")
+    end_hours_of_leave = models.IntegerField(default=0,blank=True, null=True, verbose_name="請假結束小時")
+    end_mins_of_leave = models.IntegerField(default=0,blank=True, null=True, verbose_name="請假結束分鐘")
+    leave_hours = models.IntegerField(default=0, blank=True, null=True, verbose_name="申請時數(時)")
+    leave_mins = models.IntegerField(default=0, blank=True, null=True, verbose_name="申請時數(分)")
+    substitute = models.ForeignKey("Employee", on_delete=models.SET_NULL,related_name="leave_application_substitute", blank=True, null=True, verbose_name="工作代理人")
+    leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
     created_by = models.ForeignKey("Employee",related_name="leave_author", on_delete=models.SET_NULL, null=True, blank=True)
-    
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
+
     class Meta:
-        verbose_name = "請假"
+        verbose_name = "請假申請"
         verbose_name_plural = verbose_name
 
 # 假別參數
@@ -589,22 +593,59 @@ class Leave_Param(ModifiedModel):
     def __str__(self):
         return self.leave_name
 
-# 加班
-class Work_Overtime(ModifiedModel):
+# 加班申請
+class Work_Overtime_Application(ModifiedModel):
+    SHIFT_TYPE= (
+        ('1', '班前加班'),
+        ('2', '班後加班'),
+    )
+    OVERTIME_TYPE= (
+        ('1', '平日加班'),
+    )
     date_of_overtime = models.DateField(blank=True, null=True, verbose_name="加班日期")
-    type_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班類別")
-    start_time_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班起始時間")
-    end_time_of_overtime = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班結束時間")
-    overtime_hours = models.IntegerField(blank=True, null=True, verbose_name="申請時數")
+    shift_of_overtime = models.CharField(max_length=1, choices=SHIFT_TYPE, blank=True, null=True, verbose_name="班前/班後")
+    type_of_overtime = models.CharField(max_length=1, choices=OVERTIME_TYPE, blank=True, null=True, verbose_name="加班類別")
+    start_hours_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班起始小時")
+    start_mins_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班起始分鐘")
+    end_hours_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班結束小時")
+    end_mins_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班結束分鐘")
+    overtime_hours = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(時)")
+    overtime_mins = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(分)")
     carry_over = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班結轉方式")
-    overtime_reason = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班事由")
-    created_by = models.ForeignKey("Employee",related_name="work_overtime_author", on_delete=models.SET_NULL, null=True, blank=True)
-    
+    overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
+    created_by = models.ForeignKey("Employee",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Work_Overtime_Application_Approval')
+
     class Meta:
-        verbose_name = "加班"
+        verbose_name = "加班申請"
         verbose_name_plural = verbose_name
 
+# 補卡申請
+class Clock_Correction_Application(ModifiedModel):
+    SHIFT_TYPE= (
+        ('1', 'A班'),
+    )
+    CLOCK_CATEGORY= (
+        ('1', '忘打卡'),
+        ('2', '其他'),
+    )
+    CLOCK_TYPE= (
+        ('1', '補上班'),
+        ('2', '補下班'),
+    )
+    date_of_clock = models.DateField(blank=True, null=True, verbose_name="補卡日期")
+    shift_of_clock = models.CharField(max_length=1, choices=SHIFT_TYPE, blank=True, null=True, verbose_name="補卡班別")
+    category_of_clock = models.CharField(max_length=1, choices=CLOCK_CATEGORY, blank=True, null=True, verbose_name="補卡類別")
+    type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, blank=True, null=True, verbose_name="補卡方式")
+    end_hours_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡小時")
+    end_mins_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡分鐘")
+    clock_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="補卡事由")
+    created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
 
+    class Meta:
+        verbose_name = "補卡申請"
+        verbose_name_plural = verbose_name
 
 
 # 固定資產管理

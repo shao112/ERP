@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import SysMessage, Leave_Param, Leave,Work_Overtime,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -22,18 +22,20 @@ class MyUserAdmin(UserAdmin):
 class WorkItemAdmin(admin.ModelAdmin):
     list_display = ('item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
     # resource_class = DepartmentResource
-# 請假
-class LeaveAdmin(admin.ModelAdmin):
-    list_display = ('type_of_leave', 'start_date_of_leave', 'end_date_of_leave', 'start_time_of_leave', 'end_time_of_leave', 'leave_hours', 'substitute', 'leave_reason', 'backlog', 'created_date', 'update_date')
+# 請假申請
+class LeaveApplicationAdmin(admin.ModelAdmin):
+    list_display = ('type_of_leave', 'start_date_of_leave', 'end_date_of_leave', 'start_hours_of_leave', 'start_mins_of_leave', 'end_hours_of_leave','end_mins_of_leave','leave_hours', 'leave_mins', 'substitute', 'leave_reason', 'backlog', 'created_date', 'update_date')
     # resource_class = DepartmentResource
 # 請假參數
 class LeaveParamAdmin(admin.ModelAdmin):
     list_display = ('leave_name', 'leave_type', 'leave_quantity', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
+# 加班申請
+class WorkOvertimeApplicationAdmin(admin.ModelAdmin):
+    list_display = ('date_of_overtime', 'shift_of_overtime', 'type_of_overtime', 'start_hours_of_overtime', 'start_mins_of_overtime', 'end_hours_of_overtime','end_mins_of_overtime','overtime_hours', 'overtime_mins','carry_over', 'overtime_reason', 'created_date', 'update_date')
+# 補卡申請
+class ClockCorrectionApplicationAdmin(admin.ModelAdmin):
+    list_display = ('date_of_clock', 'shift_of_clock', 'category_of_clock', 'type_of_clock', 'end_hours_of_clock', 'end_mins_of_clock','clock_reason', 'created_date', 'update_date')
 
-# 加班
-class WorkOvertimeAdmin(admin.ModelAdmin):
-    list_display = ('date_of_overtime', 'type_of_overtime', 'start_time_of_overtime', 'end_time_of_overtime', 'overtime_hours', 'carry_over', 'overtime_reason', 'created_date', 'update_date')
-    # resource_class = DepartmentResource
 
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
@@ -116,6 +118,7 @@ admin.site.register(Clock, ClockAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Requisition, RequisitionAdmin)
 admin.site.register(Work_Item, WorkItemAdmin)
-admin.site.register(Leave, LeaveAdmin)
+admin.site.register(Leave_Application, LeaveApplicationAdmin)
 admin.site.register(Leave_Param, LeaveParamAdmin)
-admin.site.register(Work_Overtime, WorkOvertimeAdmin)
+admin.site.register(Work_Overtime_Application, WorkOvertimeApplicationAdmin)
+admin.site.register(Clock_Correction_Application, ClockCorrectionApplicationAdmin)
