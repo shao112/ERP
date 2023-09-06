@@ -162,7 +162,7 @@ def create_salary(employee,year,month):
 
     SalaryDetail.objects.create(
         salary=salary,
-        name='基本時薪',
+        name='基本薪資',
         system_amount=employee.default_salary,
         adjustment_amount=employee.default_salary,
         deduction=False
@@ -170,7 +170,7 @@ def create_salary(employee,year,month):
 
     SalaryDetail.objects.create(
         salary=salary,
-        name='伙食津貼',
+        name='伙食加給',
         system_amount=2400,  
         adjustment_amount=2400,
         deduction=False

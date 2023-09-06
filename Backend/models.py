@@ -11,14 +11,13 @@ from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
 from datetime import date
 import os
-from django.db.models import Q
+from django.db.models import F, Sum
 
 
 
 
 
 class SysMessage(models.Model):
-
     Target_user = models.ForeignKey("Employee", related_name="sys_messages", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='顯示對象')
     content = models.TextField(verbose_name='內容')
     watch = models.BooleanField(default=False,verbose_name='已看過')
@@ -143,8 +142,15 @@ class SalaryDetail(models.Model):
     system_amount = models.PositiveIntegerField(default=0, verbose_name='系統金額')
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
     deduction = models.BooleanField(default=False, verbose_name='扣款項目') #F為補貼、T為請事假、勞保...
+
+    def set_name_and_adjustment_amount(self, name, amount,deduction):
+        self.name = name
+        self.deduction = deduction
+        self.adjustment_amount = amount
+        self.save()
+
     def __str__(self):
-        return self.name
+        return f"{self.name} + {self.salary}"
 
 
 class Salary(ModifiedModel):
@@ -152,6 +158,32 @@ class Salary(ModifiedModel):
     year = models.PositiveIntegerField(verbose_name="年")
     month = models.PositiveIntegerField(verbose_name="月")
     created_by = models.ForeignKey("Employee",related_name="Salary_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def system_total_money(self):
+        return self.calculate_total_amount()
+
+    @property
+    def adjustment_total_money(self):
+        return self.calculate_total_amount(False)
+
+    def calculate_total_amount(self, use_system_amount=True):
+        details = self.details.all()
+        
+        total_amount = 0
+
+        for detail in details:
+            if use_system_amount:
+                amount_to_add = detail.system_amount
+            else:
+                amount_to_add = detail.adjustment_amount
+
+            if detail.deduction:
+                amount_to_add = -amount_to_add  
+
+            total_amount += amount_to_add
+        print(total_amount)
+        return total_amount
 
     class Meta:
         verbose_name = "薪資"
