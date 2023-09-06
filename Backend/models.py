@@ -407,7 +407,7 @@ class Quotation(ModifiedModel):
     project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
-    address = models.TextField(verbose_name="地址",blank=True, null=True)
+    address = models.CharField(max_length=100,verbose_name="地址",blank=True, null=True)
     tel = models.CharField(max_length=20, verbose_name="電話",blank=True, null=True)
     mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
     fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
@@ -580,7 +580,17 @@ class Leave_Application(ModifiedModel):
     class Meta:
         verbose_name = "請假申請"
         verbose_name_plural = verbose_name
-
+    # def cal_leave_hours(self):
+    #     self.leave_hours = self.end_hours_of_leave - self.start_hours_of_leave
+    #     return self.leave_hours
+    # def cal_leave_mins(self):
+    #     self.leave_mins = self.end_mins_of_leave - self.start_mins_of_leave
+    #     return self.leave_mins
+    # def get_leave_hours(self):
+    #     return f"{str(self.cal_leave_hours()).zfill(2)}"
+    # def get_leave_mins(self):
+    #     return f"{str(self.cal_leave_mins()).zfill(2)}"
+    
 # 假別參數
 class Leave_Param(ModifiedModel):
     GENDER_TYPE = (

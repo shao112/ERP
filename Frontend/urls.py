@@ -34,6 +34,9 @@ urlpatterns = [
 
     path('approval_list', views.Approval_List.as_view(), name="Approval_List"),
     path('approval_group', views.Approval_Group.as_view(), name="Approval_Group"),
+    path('leave_application', views.Leave_Application_List.as_view(), name="Leave_Application"),
+    path('work_overtime_application', views.Work_Overtime_Application_List.as_view(), name="Work_Overtime_Application"),
+    path('clock_correction_application', views.Clock_Correction_Application_List.as_view(), name="Clock_Correction_Application"),
     path('leave_param', views.Leave_Param_List.as_view(), name="Leave_Param"),
     path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),

@@ -5,8 +5,8 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.forms import  LeaveApplicationForm,ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.models import Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -464,9 +464,58 @@ class Approval_Group(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["employees"] = Employee.objects.all()
         return context
-    
+
+
+# 請假參數
 class Leave_Param_List(UserPassesTestMixin,ListView):
     model = Leave_Param
+    template_name = 'leave_param/leave_param.html'
+    context_object_name = 'leave_param'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leave_param"] = Leave_Param.objects.all()
+        return context
+    
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+# 請假申請
+class Leave_Application_List(UserPassesTestMixin,ListView):
+    model = Leave_Application
+    template_name = 'leave_application/leave_application.html'
+    context_object_name = 'leave_application_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leave_application_form"] = LeaveApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
+        return context
+    
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+# 加班申請
+class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
+    model = Work_Overtime_Application
+    template_name = 'leave_param/leave_param.html'
+    context_object_name = 'leave_param'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leave_param"] = Leave_Param.objects.all()
+        return context
+    
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+# 補卡申請
+class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
+    model = Clock_Correction_Application
     template_name = 'leave_param/leave_param.html'
     context_object_name = 'leave_param'
 

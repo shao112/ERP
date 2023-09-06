@@ -35,7 +35,9 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="client">客戶名稱</label>
-                                                <input class="form-control form-control-sm" name="client" id="client" value="{{ client.client_name }}" readonly>
+                                                <select class="form-control form-control-sm" name="client" id="client" readonly>
+                                                    <option value="{{ client.id }}" selected>{{ client.client_name }}</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -47,7 +49,7 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="project_name">專案名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name" d="project_name">
+                                                <input class="form-control form-control-sm" name="project_name" id="project_name">
                                             </div>
                                         </div>
                                     </div>

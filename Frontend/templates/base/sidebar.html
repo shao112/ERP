@@ -5,7 +5,7 @@
     <ul class="nav flex-column">
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse"
-                aria-expanded="false" aria-controls="engineerCollapse">
+                aria-expanded="false" aria-controls="calendarCollapse">
                 <i class="fa-solid fa-user-pen" style="color: #ffffff;"></i> 個人管理
             </a>
             <div class="collapse" id="calendarCollapse">
@@ -17,8 +17,27 @@
             </div>
         </li>
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-target="#applicationCollapse" data-toggle="collapse"
+                aria-expanded="false" aria-controls="applicationCollapse">
+                <i class="fa-solid fa-clipboard" style="color: #ffffff;"></i> 申請管理
+            </a>
+            <div class="collapse" id="applicationCollapse">
+                <ul class="nav flex-column ml-4">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Leave_Application' %}">請假申請</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Work_Overtime_Application' %}">加班申請</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Clock_Correction_Application' %}">補卡申請</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#directorCollapse" data-toggle="collapse"
-                aria-expanded="false" aria-controls="engineerCollapse">
+                aria-expanded="false" aria-controls="directorCollapse">
                 <i class="fa-solid fa-user-tie" style="color: #ffffff;"></i> 主管管理
             </a>
             <div class="collapse" id="directorCollapse">
