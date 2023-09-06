@@ -155,25 +155,24 @@ def match_excel_content(model):
     
 
 def create_salary(employee,year,month):
-    salary, created = Salary.objects.get_or_create(user=employee, year=2023, month=8)
+    salary, created = Salary.objects.get_or_create(user=employee, year=year, month=month)
 
     if not created:#清除所有明細
         SalaryDetail.objects.filter(salary=salary).delete()
 
-    # 创建基本时薪的工资详情
-    basic_salary = SalaryDetail.objects.create(
+    SalaryDetail.objects.create(
         salary=salary,
         name='基本時薪',
         system_amount=employee.default_salary,
-        adjustment_amount=0,
+        adjustment_amount=employee.default_salary,
         deduction=False
     )
 
-    # 创建伙食津贴的工资详情
-    meal_allowance = SalaryDetail.objects.create(
+    SalaryDetail.objects.create(
         salary=salary,
         name='伙食津貼',
-        system_amount=1000,  # 你可以根据需要设置不同的值
-        adjustment_amount=0,
+        system_amount=2400,  
+        adjustment_amount=2400,
         deduction=False
     )
+    #價單

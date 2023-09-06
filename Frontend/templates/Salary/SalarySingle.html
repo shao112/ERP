@@ -38,8 +38,6 @@
                                     <input type="text" class="form-control" id="detail">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <!-- <label for="fileInput">選擇檔案</label>
-                                        <input type="file" class="form-control-file" id="fileInput"> -->
                                     <label>輸入金額</label>
                                     <div class="custom-file">
                                         <label class="custom-file-label" for="fileInput">調整金額</label>
@@ -67,48 +65,40 @@
             data-filter-control="true">
             <div id="toolbar">
                 <div class="employee-header container-fluid">
-
-                    <x href="" type="button" onclick="set_month_salary()" class="font-weight-bold" id="sys_new">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 計算當月系統薪資
-                    </x>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工薪資.xlsx')"
-                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button class="d-none d-md-inline-block"
-                        onclick="exportSelectedOptionToExcel('員工薪資.xlsx')">匯出已選資料</button>
+                    <input> 新增
                 </div>
             </div>
+
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
-                        class="d-none d-md-table-cell">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
-                    <th data-field="quotation_id" data-sortable="true">員工</th>
+                        class="d-none d-md-table-cell">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">保存</th>
+                    <th data-field="quotation_id" data-sortable="true">明細</th>
                     <th data-field="tax_id" data-sortable="true">系統薪資</th>
                     <th data-field="project_name" data-sortable="true">調整薪資</th>
-                    <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
-                {% for item in salaries %}
+                {% for item in salary.details.all %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
-                            value="{{ item.id }}"></td>
                     <td>
-                        <a type="button" onclick="goLink('{{ item.user.id }}')"> 明細 <i class="fas fa-sm fa-edit"></i>
+                        <a type="button" onclick="goLink('{{ item.id }}')"> 刪除 <i class="fas fa-sm fa-edit"></i>
+                        </a>
+                    <td>
+                        <a type="button" onclick="save('{{ item.id }}')"> 送出 <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        {{ item.user.full_name}}
+                        <input type="text" class="form-control" name="name" value="{{ item.name }}">
                     </td>
 
                     <td>
-                        {{ item.id}}
+                        {{ item.system_amount}}
                     </td>
                     <td>
-                        {{ item.project_name}}
-                    </td>
-                    <td>
-                        {{ item.created_date}}
+                        <input type="number" class="form-control" name="adjustment_amount"
+                            value="{{ item.adjustment_amount }}">
                     </td>
 
                 </tr>
@@ -118,16 +108,8 @@
     </div>
 </div>
 
-{% now "Y" as current_year %}
-{% now "m" as current_month %}
 
 <script>
-
-    function goLink(id) {
-        var currentUrl = window.location.href + "/" + id;
-        window.open(currentUrl, "_blank");
-
-    }
 
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
@@ -145,33 +127,17 @@
         });
     });
 
-    var currentYear = "{{ current_year }}";
-    var currentMonth = parseInt("{{ current_month }}");
+    function save(itemid) {
+        var row = $('a[onclick="save(\'' + itemid + '\')"]').closest('tr');
 
-    function set_month_salary() {
+        var name = row.find('input[name="name"]').val();
+        var adjustmentAmount = row.find('input[name="adjustment_amount"]').val();
+        console.log(row)
+        console.log(name)
+        console.log(adjustmentAmount)
 
-        $.ajax({
-            type: "post",
-            url: "{% url 'salary_api' current_year current_month %}",
-            headers: {
-                "X-CSRFToken": csrftoken,
-            },
-            data: { year: currentYear, month: currentMonth },
-            success: function (response) {
-                alert("系統薪資計算完成")
-            },
-
-            error: function (xhr, textStatus, errorThrown) {
-                alert("計算失敗");
-                console.log("get error");
-            },
-        });
     }
 
-    async function LoadData(event) {
-        console.log("load")
-        getdata = await GET_handleClick(event);
-    }
 
 
 

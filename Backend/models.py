@@ -138,7 +138,7 @@ class Employee(ModifiedModel):
 
 
 class SalaryDetail(models.Model):
-    salary = models.ForeignKey("salarydetail",on_delete=models.CASCADE, verbose_name="依附薪資單",null=True, blank=True)
+    salary = models.ForeignKey("Salary",related_name="details",on_delete=models.CASCADE, verbose_name="依附薪資單",null=True, blank=True)
     name = models.CharField(max_length=100, verbose_name='名稱')
     system_amount = models.PositiveIntegerField(default=0, verbose_name='系統金額')
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')

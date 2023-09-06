@@ -30,8 +30,23 @@ class Project_employee_assign_View(DetailView):
 
 
 
-
 class SalaryDetailView(ListView):
+    model = Salary
+    template_name = 'Salary/SalarySingle.html'
+    context_object_name = 'salary'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        user = self.kwargs.get('user')    
+        context["salary"] = Salary.objects.get(user=user, year=year, month=month)
+        print(context["salary"].details.all())
+
+        return context
+
+
+class SalaryListView(ListView):
     model = Salary
     template_name = 'Salary/Salary.html'
     context_object_name = 'salaries'

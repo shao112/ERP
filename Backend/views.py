@@ -12,21 +12,17 @@ from django.contrib.auth.models import User,Group
 from Backend.forms import  LeaveParamModelForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
-
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import create_salary,convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
 import openpyxl
 from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
 import random
 import os
 import re
-
-
 from  django.conf import settings
-
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
@@ -40,6 +36,8 @@ class SalaryListView(View):
         month = data.get('month')
         print(year, month)
         employees = Employee.objects.all()
+        for employee in employees:
+            create_salary(employee, year, month)
 
         return JsonResponse({"ok":"ok"},status=200)
         # return JsonResponse({"error":"找不到model"},status=400)
