@@ -38,8 +38,6 @@
                                     <input type="text" class="form-control" id="detail">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <!-- <label for="fileInput">選擇檔案</label>
-                                        <input type="file" class="form-control-file" id="fileInput"> -->
                                     <label>輸入金額</label>
                                     <div class="custom-file">
                                         <label class="custom-file-label" for="fileInput">調整金額</label>
@@ -102,11 +100,12 @@
                     </td>
 
                     <td>
-                        {{ item.id}}
+                        {{ item.system_total_money}}
                     </td>
                     <td>
-                        {{ item.project_name}}
+                        {{ item.adjustment_total_money}}
                     </td>
+                    
                     <td>
                         {{ item.created_date}}
                     </td>

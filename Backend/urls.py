@@ -36,6 +36,7 @@ urlpatterns = [
     path('quotation', views.Quotation_View.as_view(), name="quotation_api"),
     #計算當月所有
     path('salary/<int:employee_id>/<int:file_id>', views.SalaryListView.as_view(), name="salary_api"),
-    #處理當月單一員工
+    #處理明細
+    path('salary/<int:year>/<int:month>/<int:user>', views.SalaryDetailView.as_view(), name='salary_detail'),
 
 ]

@@ -1,13 +1,12 @@
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse,Http404
-import json
-import datetime
+import json,datetime
 from django.contrib.auth import update_session_auth_hash
 import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Client,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Salary,SalaryDetail, Client,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from django.contrib.auth.models import User,Group
 from Backend.forms import  LeaveParamModelForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
@@ -19,15 +18,57 @@ from .utils import create_salary,convent_dict,convent_employee,convent_excel_dic
 import openpyxl
 from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
-import random
-import os
-import re
+import random,os,re
 from  django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
+
+class SalaryDetailView(View):
+    def put(self, request, *args, **kwargs):
+        dict_data = convent_dict(request.body)
+
+        id = int(dict_data.get('itemid'))
+        name = dict_data.get('name') 
+        deduction = dict_data.get('deduction') 
+        adjustmentAmount = int(dict_data.get('adjustmentAmount'))
+
+        if adjustmentAmount <0:
+            return JsonResponse({"error": "調整金額需大於0，如需扣款請勾選為扣款項"}, status=404)
+
+        try:
+            get_obj = get_object_or_404(SalaryDetail, id=id)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+
+        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction)  
+
+        return JsonResponse({"ok":"ok"},status=200)
+
+    def post(self, request, *args, **kwargs):
+        dict_data = convent_dict(request.body)
+        moneyValue = dict_data.get('moneyValue')
+        name = dict_data.get('name')
+        deductionValue = dict_data.get('deductionValue')
+        year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
+        try:
+            get_salary =Salary.objects.get(user=user, year=year, month=month)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+
+        SalaryDetail.objects.create(
+            salary=get_salary,
+            name=name,
+            system_amount=moneyValue,  
+            adjustment_amount=moneyValue,
+            deduction=deductionValue
+        )
+        return JsonResponse({"ok":"ok"},status=200)
+
+
+        
 
 class SalaryListView(View):
     def post(self, request, *args, **kwargs):
@@ -38,6 +79,7 @@ class SalaryListView(View):
         employees = Employee.objects.all()
         for employee in employees:
             create_salary(employee, year, month)
+           
 
         return JsonResponse({"ok":"ok"},status=200)
         # return JsonResponse({"error":"找不到model"},status=400)

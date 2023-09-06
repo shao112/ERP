@@ -41,7 +41,6 @@ class SalaryDetailView(ListView):
         month = self.kwargs.get('month')
         user = self.kwargs.get('user')    
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
-        print(context["salary"].details.all())
 
         return context
 
