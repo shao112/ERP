@@ -13,12 +13,7 @@
 
 {% block main %}
 
-
-
-
-
-
-<div class="main px-3" id="employee-app">
+<div class="main px-3">
     <div id="error-message"></div>
     <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -37,35 +32,26 @@
                             <div class="form-row my-2">
                                 <div class="col-12">
                                     <div class="form-row">
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="client">選擇客戶</label>
-                                                <select class="form-control form-control-sm" name="client"
-                                                    id="client">
-                                                    <option value="">請選擇客戶簡稱</option>
-                                                    {% for client in client_list %}
-                                                    <option value="{{ client.id }}">{{ client.client_name }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
+                                                <label for="client">客戶名稱</label>
+                                                <input class="form-control form-control-sm" name="client" id="client" value="{{ client.client_name }}" readonly>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="tax_id">統一編號</label>
                                                 <input class="form-control form-control-sm" name="tax_id" id="tax_id">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
-
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="project_name">專案名稱</label>
-                                                <input class="form-control form-control-sm" name="project_name"
-                                                    id="project_name">
+                                                <input class="form-control form-control-sm" name="project_name" d="project_name">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="quote_validity_period">報價單有效期</label>
@@ -73,14 +59,10 @@
                                                     name="quote_validity_period" id="quote_validity_period">
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-4">
+                                        <div class="col-12 col-lg-8">
                                             <div class="form-group">
-                                                <label for="internal_content">報價單(對方提供)</label>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" data-modal="Quotation" name="invoice_attachment"
-                                                        id="reassignment_attachment_control">
-                                                    <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
-                                                </div>
+                                                <label for="address">地址</label>
+                                                <input class="form-control form-control-sm" name="address" id="address">
                                             </div>
                                         </div>
                                     </div>
@@ -94,20 +76,6 @@
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="address">地址</label>
-                                                <input class="form-control form-control-sm" name="address" id="address">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="email">電子郵件</label>
-                                                <input class="form-control form-control-sm" name="email" id="email">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
                                                 <label for="tel">電話</label>
                                                 <input class="form-control form-control-sm" name="tel" id="tel">
                                             </div>
@@ -118,14 +86,30 @@
                                                 <input class="form-control form-control-sm" name="mobile" id="mobile">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="email">電子郵件</label>
+                                                <input class="form-control form-control-sm" name="email" id="email">
+                                            </div>
+                                        </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="fax">傳真</label>
                                                 <input class="form-control form-control-sm" name="fax" id="fax">
                                             </div>
                                         </div>
+                                        <div class="col-12 col-lg-4">
+                                            <label>報價單(對方提供)</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" data-modal="Quotation" name="invoice_attachment"
+                                                    id="invoice_attachment">
+                                                <label class="custom-file-label" for="invoice_attachment">Choose file</label>
+                                            </div>
+                                        </div>
                                     </div>
-
+                                    
                                     <div class="form-row">
 
                                         <div class="col-12 col-lg-4">
@@ -150,6 +134,7 @@
                                                 </textarea>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="col-12 col-lg-12">
                                         <div class="form-group">

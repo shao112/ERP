@@ -746,6 +746,9 @@ class Client(ModifiedModel):
     class Meta:
         verbose_name = "客戶簡稱"
         verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.client_name  
+    
 # 請購單位
 class Requisition(ModifiedModel):
     requisition_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="請購單位")

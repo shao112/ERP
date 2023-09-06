@@ -27,7 +27,7 @@ urlpatterns = [
     path('project_employee_assign_View/<int:id>/', views.Project_employee_assign_View.as_view(), name='project_employee_assign_View'),
 
     path('approval_process', views.Approval_Process.as_view(), name="Approval_Process"),
-    path('quotation', views.Quotation_ListView.as_view(), name="quotation"),
+    # path('quotation', views.Quotation_ListView.as_view(), name="quotation"),
     path('quotation/<int:client_id>/', views.Quotation_ListView.as_view(), name='quotation_detail'),
     path('salary/<int:year>/<int:month>/<int:user>', views.SalaryDetailView.as_view(), name='salary_detail'),
     path('salary/<int:year>/<int:month>', views.SalaryListView.as_view(), name='salary_list'),
