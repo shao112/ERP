@@ -190,7 +190,7 @@
                     </td>
 
                     <td>
-                        {{ work_overtime_application.date_of_overtime }}
+                        {{ work_overtime_application.date_of_overtime|date:"Y-m-d" }}
                     </td>
                     <td>
                         {{ work_overtime_application.get_shift_of_overtime_display }}

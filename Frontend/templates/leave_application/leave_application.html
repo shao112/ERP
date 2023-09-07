@@ -202,7 +202,7 @@
                         {{ leave_application.type_of_leave }}
                     </td>
                     <td>
-                        {{ leave_application.start_date_of_leave }} - {{ leave_application.end_date_of_leave }}
+                        {{ leave_application.start_date_of_leave|date:"Y-m-d" }} - {{ leave_application.end_date_of_leave|date:"Y-m-d" }}
                     </td>
                     <td>
                         {{ leave_application.start_hours_of_leave }}:{{ leave_application.start_mins_of_leave }} - {{ leave_application.end_hours_of_leave }}:{{ leave_application.end_mins_of_leave }}
