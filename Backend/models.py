@@ -685,6 +685,9 @@ class Work_Overtime_Application(ModifiedModel):
     OVERTIME_TYPE= (
         ('1', '平日加班'),
     )
+    CARRY_OVER_TYPE= (
+        ('1', '加班費'),
+    )
     date_of_overtime = models.DateField(blank=True, null=True, verbose_name="加班日期")
     shift_of_overtime = models.CharField(max_length=1, choices=SHIFT_TYPE, blank=True, null=True, verbose_name="班前/班後")
     type_of_overtime = models.CharField(max_length=1, choices=OVERTIME_TYPE, blank=True, null=True, verbose_name="加班類別")
@@ -694,7 +697,7 @@ class Work_Overtime_Application(ModifiedModel):
     end_mins_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班結束分鐘")
     overtime_hours = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(時)")
     overtime_mins = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(分)")
-    carry_over = models.CharField(max_length=100, blank=True, null=True, verbose_name="加班結轉方式")
+    carry_over = models.CharField(max_length=100, choices=CARRY_OVER_TYPE, blank=True, null=True, verbose_name="加班結轉方式")
     overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
     created_by = models.ForeignKey("Employee",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Work_Overtime_Application_Approval')

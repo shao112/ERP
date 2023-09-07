@@ -1,5 +1,5 @@
 from django import forms
-from .models import Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -156,7 +156,7 @@ class LeaveParamModelForm(BaseModelForm):
         model = Leave_Param
         fields = '__all__'
 
-# 員工
+# 請假申請
 class LeaveApplicationForm(BaseModelForm):
 
     class Meta:
@@ -165,4 +165,15 @@ class LeaveApplicationForm(BaseModelForm):
         widgets = {
             'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'substitute': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+        }
+# 加班申請
+class WorkOvertimeApplicationForm(BaseModelForm):
+
+    class Meta:
+        model = Work_Overtime_Application
+        fields = '__all__'
+        widgets = {
+            'shift_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'type_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'carry_over': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }

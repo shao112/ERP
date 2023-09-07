@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  LeaveApplicationForm,ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import  WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -500,12 +500,14 @@ class Leave_Application_List(UserPassesTestMixin,ListView):
 # 加班申請
 class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
     model = Work_Overtime_Application
-    template_name = 'leave_param/leave_param.html'
-    context_object_name = 'leave_param'
+    template_name = 'work_overtime_application/work_overtime_application.html'
+    context_object_name = 'work_overtime_application_list'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["leave_param"] = Leave_Param.objects.all()
+        context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
         return context
     
     def test_func(self):
@@ -515,12 +517,11 @@ class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
 # 補卡申請
 class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
     model = Clock_Correction_Application
-    template_name = 'leave_param/leave_param.html'
-    context_object_name = 'leave_param'
+    template_name = 'clock_correction_application/clock_correction_application.html'
+    context_object_name = 'clock_correction_application'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["leave_param"] = Leave_Param.objects.all()
         return context
     
     def test_func(self):

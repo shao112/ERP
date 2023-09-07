@@ -1,0 +1,246 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
+
+
+{% endblock %}
+
+
+{% block main %}
+
+<div class="main px-3">
+    <div id="error-message"></div>
+    <div class="work-overtime-application modal fade" id="work-overtime-application-modal" tabindex="-1" aria-labelledby="work-overtime-application" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="work-overtime-application-label">請假申請</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        <form action="/restful/quotation" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="form-row my-2">
+                                <div class="col-12">
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="date_of_overtime">加班日期</label>
+                                                <input type="date" class="form-control form-control-sm" name="date_of_overtime" id="date_of_overtime">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="shift_of_overtime">班前/班後</label>
+                                                {{ work_overtime_application_form.shift_of_overtime }}
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="type_of_overtime">加班類別</label>
+                                                {{ work_overtime_application_form.type_of_overtime }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="start_hours_of_overtime">加班起始小時</label>
+                                                <select name="start_hours_of_overtime" class="form-control form-control-sm">
+                                                    {% for i in 24range %}
+                                                      <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="start_mins_of_overtime">加班起始分鐘</label>
+                                                <select name="start_mins_of_overtime" class="form-control form-control-sm">
+                                                    {% for i in 60range %}
+                                                      <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="end_hours_of_overtime">加班結束小時</label>
+                                                <select name="end_hours_of_overtime" class="form-control form-control-sm">
+                                                    {% for i in 24range %}
+                                                      <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="end_mins_of_overtime">加班結束分鐘</label>
+                                                <select name="end_mins_of_overtime" class="form-control form-control-sm">
+                                                    {% for i in 60range %}
+                                                      <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="overtime_hours">申請時數(時)</label>
+                                                <input class="form-control form-control-sm" name="overtime_hours" id="overtime_hours" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="overtime_mins">申請時數(分)</label>
+                                                <input class="form-control form-control-sm" name="overtime_mins" id="overtime_mins" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="carry_over">加班結轉方式</label>
+                                                {{ work_overtime_application_form.carry_over }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="overtime_reason">加班事由</label>
+                                                <textarea class="form-control form-control-sm" name="overtime_reason" id="overtime_reason">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="employee-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-filter-control="true">
+            <div id="toolbar">
+                <div class="employee-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#work-overtime-application-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增加班申請
+                    </a>
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button class="d-none d-md-inline-block"
+                        onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
+                </div>
+            </div>
+            <thead class="thead-light" style="font-size: 14px;">
+                <tr class="text-nowrap">
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                        class="d-none d-md-table-cell">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-field="type_of_leave" data-sortable="true">加班日期</th>
+                    <th data-field="date_of_leave" data-sortable="true">班前/班後</th>
+                    <th data-field="time_of_leave" data-sortable="true">加班類別</th>
+                    <th data-field="leave_hours" data-sortable="true">加班時間</th>
+                    <th data-field="substitute" data-sortable="true">申請時數</th>
+                    <th data-field="leave_reason" data-sortable="true">加班結轉方式</th>
+                    <th data-field="backlog" data-sortable="true">加班事由</th>
+                </tr>
+            </thead>
+            <tbody class="text-nowrap" style="font-size: 14px;">
+                {% for work_overtime_application in work_overtime_application_list %}
+                <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ work_overtime_application.id }}"></td>
+                    <td>
+                        <a data-target="#work-overtime-application-modal" type="button" data-url="quotation" data-id="{{ work_overtime_application.id }}"
+                            class="sys_get btn btn-sm btn-warning" data-toggle="modal"
+                            data-target="#project-confirmation-modal" onclick="LoadData(event)">
+                            <i class="fas fa-sm fa-edit"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a data-url="quotation" data-target="#work-overtime-application-modal" data-id="{{ work_overtime_application.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                            <i class="far fa-sm fa-trash-alt"></i>
+                        </a>
+                    </td>
+
+                    <td>
+                        {{ work_overtime_application.date_of_overtime }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.get_shift_of_overtime_display }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.get_type_of_overtime_display }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.start_hours_of_overtime }}:{{ work_overtime_application.start_mins_of_overtime }} - {{ work_overtime_application.end_hours_of_overtime }}:{{ work_overtime_application.end_mins_of_overtime }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.overtime_hours }} 時 {{ work_overtime_application.overtime_mins }} 分
+                    </td>
+                    <td>
+                        {{ work_overtime_application.get_carry_over_display }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.overtime_reason }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
+    });
+
+    async function LoadData(event){
+        console.log("load")
+        getdata = await GET_handleClick(event);
+
+    }
+
+
+
+</script>
+{% endblock %}
