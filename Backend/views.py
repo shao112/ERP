@@ -27,6 +27,17 @@ from django.utils.text import get_valid_filename # 確保file檔名是合法的�
 
 
 class SalaryDetailView(View):
+    def delete(self, request, *args, **kwargs):
+        dict_data = convent_dict(request.body)
+
+        id = int(dict_data.get('itemid'))
+        try:
+            get_obj = get_object_or_404(SalaryDetail, id=id)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的明細 obj"}, status=404)
+        get_obj.delete()
+        return JsonResponse({"ok":"ok"},status=200)
+
     def put(self, request, *args, **kwargs):
         dict_data = convent_dict(request.body)
 

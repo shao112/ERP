@@ -13,50 +13,15 @@
 
 {% block main %}
 
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
 
 
 
 <div class="main px-3" id="employee-app">
     <div id="error-message"></div>
-    <div class="employee modal fade" id="employee-modal" tabindex="-1" aria-labelledby="employee" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="employee-label">報價單</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container shadow-sm">
-                        <form action="/restful/quotation" id="form" method="POST" class="pb-4" data-method="post">
-                            {% csrf_token %}
-                            <input name="id" hidden>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="fileNameInput">明細名稱</label>
-                                    <input type="text" class="form-control" id="detail">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>輸入金額</label>
-                                    <div class="custom-file">
-                                        <label class="custom-file-label" for="fileInput">調整金額</label>
-                                        <input type="number" class="form-control" id="money">
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" id="fileUploadBtn" class="btn border border-dark rounded"
-                                style="color: #fff;background: #1E3050;">上傳</button>
-                        </form>
-                        <hr>
-                        <h4>檔案列表</h4>
-                        <ul id="fileList" class="list-group"></ul>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{current_year}}/{{current_month}} 薪資處理
 
     <div class="employee-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
@@ -105,7 +70,7 @@
                     <td>
                         {{ item.adjustment_total_money}}
                     </td>
-                    
+
                     <td>
                         {{ item.created_date}}
                     </td>
@@ -117,8 +82,6 @@
     </div>
 </div>
 
-{% now "Y" as current_year %}
-{% now "m" as current_month %}
 
 <script>
 
@@ -148,23 +111,37 @@
     var currentMonth = parseInt("{{ current_month }}");
 
     function set_month_salary() {
+        Swal.fire({
+            title: '小心執行',
+            html: "準備計算系統薪資!<br><h5>此舉動會重製本頁的當月薪資!</h5><br>如本頁無資料請放心使用",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '確定執行',
+            cancelButtonText: '刪除'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "{% url 'salary_api' current_year current_month %}",
+                    headers: {
+                        "X-CSRFToken": csrftoken,
+                    },
+                    data: { year: currentYear, month: currentMonth },
+                    success: function (response) {
+                        alert("系統薪資計算完成")
+                    },
 
-        $.ajax({
-            type: "post",
-            url: "{% url 'salary_api' current_year current_month %}",
-            headers: {
-                "X-CSRFToken": csrftoken,
-            },
-            data: { year: currentYear, month: currentMonth },
-            success: function (response) {
-                alert("系統薪資計算完成")
-            },
+                    error: function (xhr, textStatus, errorThrown) {
+                        alert("計算失敗");
+                        console.log("get error");
+                    },
+                });
+            }
+        })
 
-            error: function (xhr, textStatus, errorThrown) {
-                alert("計算失敗");
-                console.log("get error");
-            },
-        });
+
     }
 
     async function LoadData(event) {

@@ -167,6 +167,19 @@ class Salary(ModifiedModel):
     def adjustment_total_money(self):
         return self.calculate_total_amount(False)
 
+
+    def calculate_adjustment_addition(self):
+        details = self.details.filter(deduction=False)
+        total_adjustment_addition = details.aggregate(total=Sum(F('adjustment_amount')))['total'] or 0
+
+        return total_adjustment_addition
+
+    def calculate_adjustment_deduction(self):
+        details = self.details.filter(deduction=True)
+        total_adjustment_deduction = details.aggregate(total=Sum(F('adjustment_amount')))['total'] or 0
+        return total_adjustment_deduction
+
+
     def calculate_total_amount(self, use_system_amount=True):
         details = self.details.all()
         
