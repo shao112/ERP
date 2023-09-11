@@ -13,7 +13,23 @@ from datetime import date
 import os
 from django.db.models import F, Sum
 
-
+LOCATION_CHOICES = [
+    ("台東", "台東"),
+    ("花蓮", "花蓮"),
+    ("宜蘭", "宜蘭"),
+    ("北北基", "北北基"),
+    ("桃園", "桃園"),
+    ("新竹", "新竹"),
+    ("苗栗", "苗栗"),
+    ("台中", "台中"),
+    ("南投", "南投"),
+    ("彰化", "彰化"),
+    ("雲林", "雲林"),
+    ("嘉義", "嘉義"),
+    ("台南", "台南"),
+    ("高雄", "高雄"),
+    ("屏東", "屏東"),
+]
 
 
 
@@ -29,8 +45,6 @@ class SysMessage(models.Model):
     def __str__(self):
         return self.content
 
-
-
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
     file = models.FileField(upload_to='employee_profile/users/')
@@ -40,6 +54,7 @@ class UploadedFile(models.Model):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.name
+
 #紀錄修改者
 class ModifiedModel(models.Model):
     modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
@@ -63,6 +78,21 @@ class ModifiedModel(models.Model):
         for key, value in kwargs.items():
             setattr(self, key, value)
         self.save()
+
+class ReferenceTable(models.Model):
+    location_city_residence = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="居住地")
+    location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
+    amount = models.PositiveIntegerField(verbose_name="金額")
+    name=models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = "參照表"
+        verbose_name_plural = "參照表"
+
+    def __str__(self):
+        return f"{self.name}參照表 居住地 {self.location_city_residence} / 出差地 {self.location_city_business_trip}  金額 {self.amount}"
+
+
         
 # 員工（以內建 User 擴增）
 class Employee(ModifiedModel):
@@ -88,6 +118,7 @@ class Employee(ModifiedModel):
     ]   
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
+    location_city = models.CharField(max_length=4, choices=LOCATION_CHOICES, null=True, blank=True, verbose_name='居住城市(用於計算津貼)')
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
     full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
@@ -148,6 +179,10 @@ class SalaryDetail(models.Model):
         self.deduction = deduction
         self.adjustment_amount = amount
         self.save()
+
+    class Meta:
+        verbose_name = "薪資明細"
+        verbose_name_plural = "薪資明細"
 
     def __str__(self):
         return f"{self.name} + {self.salary}"
