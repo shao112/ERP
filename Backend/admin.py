@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import  SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import  ReferenceTable,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -35,7 +35,6 @@ class WorkOvertimeApplicationAdmin(admin.ModelAdmin):
 # 補卡申請
 class ClockCorrectionApplicationAdmin(admin.ModelAdmin):
     list_display = ('date_of_clock', 'shift_of_clock', 'category_of_clock', 'type_of_clock', 'end_hours_of_clock', 'end_mins_of_clock','clock_reason', 'created_date', 'update_date')
-
 
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
@@ -101,6 +100,7 @@ admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(SysMessage)
+admin.site.register(ReferenceTable)
 admin.site.register(SalaryDetail)
 admin.site.register(Quotation)
 admin.site.register(Approval_Target)
