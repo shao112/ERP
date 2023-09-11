@@ -49,6 +49,20 @@ function cleanform() {
         .trigger("change");
     }
   });
+
+  var inputElements = document.querySelectorAll('form input[type="file"]');
+
+  for (var i = 0; i < inputElements.length; i++) {
+    var inputElement = inputElements[i];
+    var name = inputElement.name;
+    var linkElement = document.getElementById(name);
+    if (linkElement) {
+      linkElement.href = "#";
+      linkElement.target = "_self";
+      linkElement.textContent = "未上傳資料";
+    }
+  }
+
   $("#form")[0].reset();
   $("#form").attr("data-method", "POST");
 }
@@ -114,7 +128,13 @@ async function GET_handleClick(event, bringdata = true) {
           var input = document.getElementsByName(key)[0];
           if (input) {
             let get_value = jsonData[key];
-            if (input.type == "file") {
+            if (input.type == "file" && get_value != null) {
+              console.log(get_value);
+              var element = document.getElementById(key);
+              element.href = get_value;
+              element.target = "_blank";
+              element.textContent = "下載";
+
               continue;
             }
 
@@ -277,7 +297,7 @@ async function DELETE_handleClick(event) {
   // console.log(`URL: ${url}, ID: ${id}`);
   // console.log(`URL:${approvalStatus}`);
 
-  if(approvalStatus=="in_progress" || approvalStatus=="completed" ){
+  if (approvalStatus == "in_progress" || approvalStatus == "completed") {
     return showSwal(
       "刪除異常",
       "此單正在簽核中或是已完成，請先收回。如果已完成請通知主管處理。",

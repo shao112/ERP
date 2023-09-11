@@ -1,4 +1,5 @@
-<form action="/restful/project_confirmation" id="form" name="project_confirmation" method="POST" class="pb-4" data-method="post">
+<form action="/restful/project_confirmation" id="form" name="project_confirmation" method="POST" class="pb-4"
+    data-method="post">
     {% csrf_token %}
     <input name="id" hidden />
     <div class="form-row my-2" id="modal-download_pdf">
@@ -21,8 +22,8 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="project_name_control">工程名稱</label>
-                        <input class="readonly form-control form-control-sm" name="project_name" id="project_name_control"
-                            readonly></input>
+                        <input class="readonly form-control form-control-sm" name="project_name"
+                            id="project_name_control" readonly></input>
                     </div>
                 </div>
 
@@ -133,6 +134,7 @@
                             id="reassignment_attachment_control">
                         <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
                     </div>
+                    <a href="#" id="attachment" >下載附件</a>
                 </div>
             </div>
         </div>

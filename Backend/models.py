@@ -221,10 +221,10 @@ class ApprovalLog(models.Model):
 
 class Approval_Target(models.Model):
     STATUS_CHOICES = [
-        ('Project_Confirmation', '工程確認單'),
-        ('Project_Job_Assign', '工程派任計畫單'),
         ('Project_Employee_Assign', '派工單'),
-        ('請假單', '請假單'),
+        ('Leave_Application', '請假單'),
+        ('Work_Overtime_Application', '補卡單'),
+        ('Clock_Correction_Application', '加班單'),
     ]
     name =models.CharField(max_length=30,verbose_name="表單名稱",choices=STATUS_CHOICES)
     approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
@@ -233,7 +233,7 @@ class Approval_Target(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.get_name_display()}"
 
 
 class ApprovalModel(models.Model):
