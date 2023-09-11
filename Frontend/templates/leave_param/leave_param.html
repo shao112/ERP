@@ -5,7 +5,11 @@
 {% block import %}
 
 {% load static%}
-
+<style>
+    .leave-param-table td{
+        vertical-align: middle;
+    }
+</style>
 
 
 {% endblock %}
@@ -13,7 +17,7 @@
 
 {% block main %}
 <div class="main px-3">
-    <div class="leave_param_table container-fluid shadow-sm table-responsive">
+    <div class="leave-param-table container-fluid shadow-sm table-responsive">
         <form action="/restful/leave_param" id="form">
             <table class="table table-sm table-hover">
                 <div class="leave-param-header container-fluid">

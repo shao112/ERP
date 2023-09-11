@@ -5,7 +5,15 @@
 {% block import %}
 
 {% load static%}
-<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
+<style>
+    .leave_application-header a{
+        text-decoration: none;
+        color: black;
+    }
+    .leave_application-table td{
+        vertical-align: middle;
+    }
+</style>
 
 
 {% endblock %}
@@ -149,13 +157,13 @@
             </div>
         </div>
     </div>
-    <div class="employee-table container-fluid shadow-sm table-responsive-lg">
+    <div class="leave_application-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
-                <div class="employee-header container-fluid">
+                <div class="leave_application-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#leave-application-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增請假申請
                     </a>

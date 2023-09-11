@@ -1,5 +1,5 @@
 from django import forms
-from .models import Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Clock_Correction_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -176,4 +176,15 @@ class WorkOvertimeApplicationForm(BaseModelForm):
             'shift_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'type_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'carry_over': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+        }
+# 補卡申請
+class ClockCorrectionApplicationForm(BaseModelForm):
+
+    class Meta:
+        model = Clock_Correction_Application
+        fields = '__all__'
+        widgets = {
+            'shift_of_clock': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'category_of_clock': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'type_of_clock': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }

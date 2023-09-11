@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
-from Backend.forms import  WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import  ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -518,10 +518,13 @@ class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
 class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
     model = Clock_Correction_Application
     template_name = 'clock_correction_application/clock_correction_application.html'
-    context_object_name = 'clock_correction_application'
+    context_object_name = 'clock_correction_application_list'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
         return context
     
     def test_func(self):
