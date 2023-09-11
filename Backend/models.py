@@ -395,7 +395,12 @@ class ApprovalModel(models.Model):
 
 
 class Clock(models.Model):
+    CLOCK_TYPE= (
+        ('1', '正常打卡'),
+        ('2', '補打卡'),
+    )
     employee_id = models.ForeignKey("Employee", related_name="clock",on_delete=models.CASCADE)
+    type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, default="1", blank=True, null=True, verbose_name="打卡類別")
     clock_in_or_out = models.BooleanField()
     clock_time = models.TimeField()
     clock_GPS = models.CharField(max_length=255)
@@ -405,6 +410,8 @@ class Clock(models.Model):
     class Meta:
         verbose_name = "打卡紀錄"   # 單數
         verbose_name_plural = verbose_name   #複數
+    def __str__(self):
+        return f"{self.employee_id}({self.type_of_clock})"
 
 
 # 部門
@@ -726,6 +733,7 @@ class Clock_Correction_Application(ModifiedModel):
     end_hours_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡小時")
     end_mins_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡分鐘")
     clock_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="補卡事由")
+    clock = models.ForeignKey("Clock",related_name="clock_correction_application", on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
 
