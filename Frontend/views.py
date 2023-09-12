@@ -474,12 +474,14 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["leave_param"] = Leave_Param.objects.all()
+ 
         return context
     
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
         return self.request.user.groups.filter(name__icontains='簽核權').exists()
+
 # 請假申請
 class Leave_Application_List(UserPassesTestMixin,ListView):
     model = Leave_Application
@@ -491,12 +493,18 @@ class Leave_Application_List(UserPassesTestMixin,ListView):
         context["leave_application_form"] = LeaveApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
+
+        user = self.request.user.employee
+        # x = Leave_Param.objects.get(id=3)
+        # print(x.get_user_leave_applications(user))
+        context["leave_details"] =Leave_Param.get_leave_param_details(user)
+
         return context
     
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+        return  True
 # 加班申請
 class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
     model = Work_Overtime_Application
@@ -513,7 +521,7 @@ class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+        return True
 # 補卡申請
 class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
     model = Clock_Correction_Application
@@ -530,5 +538,5 @@ class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+        return True
 

@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from django_currentuser.middleware import get_current_authenticated_user
 from datetime import date
 import os
+from datetime import timedelta,datetime
+
 from django.db.models import F, Sum
 
 LOCATION_CHOICES = [
@@ -611,11 +613,10 @@ class Project_Employee_Assign(ModifiedModel):
         return self.get_show_id()
 
 
-from datetime import timedelta,datetime
 
 # 請假申請
 class Leave_Application(ModifiedModel):
-    type_of_leave = models.ForeignKey("Leave_Param", on_delete=models.SET_NULL,related_name="leave_param", blank=True, null=True, verbose_name="假別項目")
+    type_of_leave = models.ForeignKey("Leave_Param", on_delete=models.SET_NULL,related_name="lication", blank=True, null=True, verbose_name="假別項目")
     start_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假起始日期")
     end_date_of_leave = models.DateField(blank=True, null=True, verbose_name="請假結束日期")
     start_hours_of_leave = models.IntegerField(default=0,blank=True, null=True, verbose_name="請假起始小時")
@@ -642,7 +643,6 @@ class Leave_Application(ModifiedModel):
                                                 minutes=self.end_mins_of_leave - self.start_mins_of_leave)
             total_hours = leave_duration.seconds // 3600
             total_minutes = (leave_duration.seconds // 60) % 60
-            print(total_hours)
             if total_minutes < 30:
                 total_minutes = 0
             else:
@@ -709,7 +709,7 @@ class Leave_Param(ModifiedModel):
     # leave_code = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別代碼")
     leave_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別名稱")
     leave_type = models.CharField(max_length=5, choices=LEAVE_TYPE,blank=True, null=True, verbose_name="項目類別")
-    leave_quantity = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數")
+    leave_quantity = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
     minimum_leave_number = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最低請假數(為0就不卡控)")
     minimum_leave_unit = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最小請假單位(為0就不卡控)")
     unit = models.CharField(max_length=5, choices=UNIT_TYPE,blank=True, null=True,verbose_name="單位")
@@ -728,6 +728,52 @@ class Leave_Param(ModifiedModel):
         return f"{str(self.id).zfill(5)}"
     def __str__(self):
         return self.leave_name
+
+    def get_user_leave_applications(self, user):
+            return self.lication.filter(created_by=user)
+
+    def calculate_total_leave_duration(self, user):
+        total_hours = 0
+        total_minutes = 0
+        
+        user_leave_applications = self.lication.filter(created_by=user)
+        
+        for leave_application in user_leave_applications:
+            leave_hours, leave_minutes = leave_application.calculate_leave_duration()
+            total_hours += leave_hours
+            total_minutes += leave_minutes
+        #進位
+        total_hours += total_minutes // 60
+        total_minutes %= 60
+
+        return total_hours, total_minutes
+    
+    #判斷能不能請假
+    def exceeds_leave_quantity(self, leave_application,user):
+        total_hours, total_minutes = self.calculate_total_leave_duration(user)
+        total_hours += total_minutes / 60
+    
+        leave_application_hours, leave_application_minutes = leave_application.calculate_leave_duration()
+        total_hours += leave_application_hours + leave_application_minutes / 60
+
+        return total_hours > self.leave_quantit
+    @classmethod
+    def get_leave_param_details(cls, user):
+        leave_param_details = []
+
+        leave_params = cls.objects.all()
+
+        for leave_param in leave_params:
+            total_hours, total_minutes = leave_param.calculate_total_leave_duration(user)
+
+            leave_param_details.append({
+                'id': leave_param.id,
+                'name': leave_param.leave_name,
+                'total_hours': total_hours,
+                'total_minutes': total_minutes
+            })
+
+        return leave_param_details
 
 # 加班申請
 class Work_Overtime_Application(ModifiedModel):
