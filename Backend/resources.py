@@ -92,7 +92,6 @@ class ProjectEmployeeAssignResource(resources.ModelResource):
     construction_date = Field(attribute='construction_date', column_name=Project_Employee_Assign.construction_date.field.verbose_name)
     completion_date = Field(attribute='completion_date', column_name=Project_Employee_Assign.completion_date.field.verbose_name)
     is_completed = Field(attribute='is_completed', column_name=Project_Employee_Assign.is_completed.field.verbose_name, widget=BooleanWidget())
-    construction_location = Field(attribute='construction_location', column_name=Project_Employee_Assign.construction_location.field.verbose_name)
     inspector = Field(attribute='inspector', column_name=Project_Employee_Assign.inspector.field.verbose_name)
     manuscript_return_date = Field(attribute='manuscript_return_date', column_name=Project_Employee_Assign.manuscript_return_date.field.verbose_name)
     lead_employee = Field(attribute='lead_employee', column_name=Project_Employee_Assign.lead_employee.field.verbose_name)

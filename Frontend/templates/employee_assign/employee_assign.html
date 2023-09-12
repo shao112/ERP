@@ -149,8 +149,8 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="project_name_control">工程名稱</label>
-                                                        <input class="form-control form-control-sm" readonly
+                                                        <label for="project_name">工程名稱</label>
+                                                        <input class="form-control form-control-sm" name="project_name" readonly
                                                             id="project_name"></input>
                                                     </div>
                                                 </div>
@@ -158,19 +158,31 @@
                                             <div class="form-row">
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="client_control">客戶名稱</label>
-                                                        <input class="form-control form-control-sm" readonly
-                                                            id="client"></input>
+                                                        <label for="client_name">客戶名稱</label>
+                                                        <input class="form-control form-control-sm" name="client_name" readonly
+                                                            id="client_name"></input>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="requisition_control">請購單位</label>
-                                                        <input class="form-control form-control-sm" readonly
+                                                        <label for="requisition">請購單位</label>
+                                                        <input class="form-control form-control-sm" name="requisition" readonly
                                                             id="requisition"></input>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="location">施工地點</label>
+                                                        <input class="form-control form-control-sm"
+                                                            name="location" id="location"
+                                                            readonly></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
                                             <div class="form-row">
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
@@ -188,8 +200,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
                                             <div class="form-row">
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
@@ -201,14 +211,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="construction_location">施工地點</label>
-                                                        <input class="form-control form-control-sm"
-                                                            name="construction_location" id="construction_location"
-                                                            required></input>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-12 col-md-6">
@@ -401,7 +404,7 @@
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>{{ p.client }}</td>
                     <td>{{ p.requisition }}</td>
-                    <td>{{ p.construction_location }}</td>
+                    <td></td>
                     <td>{% for employees_list in p.inspector.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                     <td>{{ p.vehicle }}</td>
                     <td>{{ p.manuscript_return_date }}</td>

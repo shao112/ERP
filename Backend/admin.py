@@ -83,7 +83,7 @@ class RequisitionAdmin(admin.ModelAdmin):
     list_display = ('requisition_name', 'created_date', 'update_date')
 #派工單
 class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
-    list_display = ('project_job_assign','construction_location', 'modified_by')
+    list_display = ('project_job_assign', 'modified_by')
     def display_inspector(self, obj):
         return ', '.join([str(item) for item in obj.inspector.all()])
     display_inspector.short_description = '多對多_檢測人員'

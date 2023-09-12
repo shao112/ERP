@@ -591,7 +591,7 @@ class Project_Employee_Assign(ModifiedModel):
     construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
     completion_date = models.DateField(null=True, blank=True, verbose_name="完工日期")
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
-    construction_location = models.CharField(max_length=100,null=True, blank=True, verbose_name='施工地點')
+    # construction_location = models.CharField(max_length=100,null=True, blank=True, verbose_name='施工地點')
     inspector = models.ManyToManyField('Employee', related_name='employee_assign_work_employee', blank=True, verbose_name='檢測人員')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')

@@ -28,27 +28,22 @@ project_job_assign_IdControl.addEventListener("change", function () {
     },
     data: formData,
     success: function (response) {
-      jsonData = response.data;
-      console.log(jsonData);
-      project_confirmation = jsonData["project_confirmation"];
-      quotation_dict = jsonData["quotation_dict"];
+        jsonData = response.data;
+        console.log(jsonData);
+        project_confirmation = jsonData["project_confirmation"];
+        quotation_dict = jsonData["quotation_dict"];
 
-      var q_id = set_project_employee_assign_form.querySelectorAll(
-        '[id="quotation_id"]'
-      )[0];
-      console.log(set_project_employee_assign_form);
-      console.log(q_id);
-      q_id.value = quotation_dict["q_id"];
-
-      document.getElementById("project_name").value =
-        quotation_dict["project_name"];
-      document.getElementById("client").value = quotation_dict["client_name"];
-      document.getElementById("requisition").value =
-        project_confirmation["requisition"];
+        var q_id = set_project_employee_assign_form.querySelectorAll('[id="quotation_id"]')[0];
+        q_id.value = quotation_dict["q_id"];
+        console.log("quotation_dict[client_name]" + quotation_dict["client_name"])
+        document.getElementsByName("project_name")[0].value =quotation_dict["project_name"];
+        document.getElementsByName("client_name")[0].value = quotation_dict["client_name"];
+        document.getElementsByName("requisition")[0].value = project_confirmation["requisition"];
+        document.getElementsByName("location")[0].value = jsonData["location"];
     },
     error: function (xhr, textStatus, errorThrown) {
-      alert("job_assign js error");
-      console.log("get error");
+        alert("job_assign js error");
+        console.log("get error");
     },
   });
 });
