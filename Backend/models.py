@@ -611,41 +611,7 @@ class Project_Employee_Assign(ModifiedModel):
         return self.get_show_id()
 
 
-# 公告
-class News(ModifiedModel):
-    NEWS_TYPE = (
-        ('1', '獎懲規範'),
-        ('2', '系統相關'),
-        ('3', '出勤與薪資相關'),
-        ('4', '車輛相關'),
-        ('5', '津貼相關'),
-        ('6', '異常報告相關'),
-    )
-    CATEGORY_TYPE = (
-        ('1', '公告'),
-        ('2', '文管'),
-    )
-    LEVEL_TYPE = (
-        ('H', '高'),
-        ('M', '中'),
-        ('L', '低'),
-    )
-    title = models.CharField(max_length=30, blank=True, null=True, verbose_name="公告標題")
-    category = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="公告類別")
-    type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
-    level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
-    editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
-    attachment = models.FileField(upload_to="news_attachment", null=True, blank=True, verbose_name="公告附件")
-    created_by = models.ForeignKey("Employee",related_name="New_author", on_delete=models.SET_NULL, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "最新消息"
-        verbose_name_plural = verbose_name
-    
-    def save(self, *args, **kwargs):
-        # Call the save method of the parent class (ModifiedModel) using super()
-        super().save(*args, **kwargs)
-
+from datetime import timedelta,datetime
 
 # 請假申請
 class Leave_Application(ModifiedModel):
@@ -667,6 +633,51 @@ class Leave_Application(ModifiedModel):
     class Meta:
         verbose_name = "請假申請"
         verbose_name_plural = verbose_name
+    
+    def calculate_leave_duration(self):
+        total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
+
+        if total_days==0:  # 請假只有一天
+            leave_duration = timedelta(hours=self.end_hours_of_leave - self.start_hours_of_leave, 
+                                                minutes=self.end_mins_of_leave - self.start_mins_of_leave)
+            total_hours = leave_duration.seconds // 3600
+            total_minutes = (leave_duration.seconds // 60) % 60
+            print(total_hours)
+            if total_minutes < 30:
+                total_minutes = 0
+            else:
+                total_minutes = 30
+            if self.start_hours_of_leave < 13 and self.end_hours_of_leave >= 13 :   #
+                total_hours -= 1
+
+        else:
+
+            #計算第一天上多久跟最後一天請多久。
+            start_time = timedelta(hours=self.start_hours_of_leave, minutes=self.start_mins_of_leave)
+            start_difference = timedelta(hours=17)- start_time 
+            end_time = timedelta(hours=self.end_hours_of_leave, minutes=self.end_mins_of_leave)
+            end_difference = end_time - timedelta(hours=8)
+            total_difference = start_difference + end_difference
+            total_hours = total_difference.seconds // 3600
+            total_minutes = (total_difference.seconds // 60) % 60
+
+            if self.start_hours_of_leave < 13: #第一天是否在八點前請假
+                total_hours -= 1
+
+            if self.end_hours_of_leave >= 13:  # 最後天是否在八點前請完
+                total_hours -= 1
+            if total_minutes < 30:
+                total_minutes = 0
+            else:
+                total_minutes = 30
+
+            sleep_day =  total_days-2
+            if sleep_day > 0:
+                total_hours +=sleep_day *8
+
+
+        return total_hours, total_minutes
+
     # def cal_leave_hours(self):
     #     self.leave_hours = self.end_hours_of_leave - self.start_hours_of_leave
     #     return self.leave_hours
@@ -860,21 +871,39 @@ class Requisition(ModifiedModel):
 
 
 
-# #處理自動建立簽核對象
-# @receiver(post_save, sender=Project_Job_Assign)
-# @receiver(post_save, sender=Project_Confirmation) 
-# @receiver(post_save, sender=Project_Employee_Assign) 
-# def create_approval(sender, instance, created, **kwargs):
-#     if created and not instance.Approval:
-#         user = get_current_authenticated_user()        
-#         user = user.employee
-#         get_department= user.departments #單一FK
-#         target_department = Approval_TargetDepartment.objects.filter(belong_department=get_department).first()
-#         if not target_department:
-            
-#                     # 如果找不到對應的 Approval_TargetDepartment，可以採取適當的處理方式
-#                     return
 
-#         approval = ApprovalModel.objects.create(target_department=target_department,current_department=get_department)
-#         instance.Approval = approval
-#         instance.save()
+
+# 公告
+class News(ModifiedModel):
+    NEWS_TYPE = (
+        ('1', '獎懲規範'),
+        ('2', '系統相關'),
+        ('3', '出勤與薪資相關'),
+        ('4', '車輛相關'),
+        ('5', '津貼相關'),
+        ('6', '異常報告相關'),
+    )
+    CATEGORY_TYPE = (
+        ('1', '公告'),
+        ('2', '文管'),
+    )
+    LEVEL_TYPE = (
+        ('H', '高'),
+        ('M', '中'),
+        ('L', '低'),
+    )
+    title = models.CharField(max_length=30, blank=True, null=True, verbose_name="公告標題")
+    category = models.CharField(max_length=1, choices=NEWS_TYPE, blank=True, null=True, verbose_name="公告類別")
+    type = models.CharField(max_length=1, choices=CATEGORY_TYPE, blank=True, null=True, verbose_name="類別")
+    level = models.CharField(max_length=1, choices=LEVEL_TYPE, blank=True, null=True, verbose_name="重要性")
+    editor_content = models.TextField(blank=True, null=True, verbose_name='內容')
+    attachment = models.FileField(upload_to="news_attachment", null=True, blank=True, verbose_name="公告附件")
+    created_by = models.ForeignKey("Employee",related_name="New_author", on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "最新消息"
+        verbose_name_plural = verbose_name
+    
+    def save(self, *args, **kwargs):
+        # Call the save method of the parent class (ModifiedModel) using super()
+        super().save(*args, **kwargs)
