@@ -212,11 +212,11 @@
                     <td>
                         {{ leave_application.start_date_of_leave|date:"Y-m-d" }} - {{ leave_application.end_date_of_leave|date:"Y-m-d" }}
                     </td>
-                    <td>    
+                    <td>
                         {{ leave_application.start_hours_of_leave }}:{{ leave_application.start_mins_of_leave }} - {{ leave_application.end_hours_of_leave }}:{{ leave_application.end_mins_of_leave }}
                     </td>
                     <td>
-                        {{ leave_application.calculate_leave_duration.0 }}時 {{ leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分
+                        {{ leave_application.leave_hours }} 時 {{ leave_application.leave_mins }} 分
                     </td>
                     <td>
                         {{ leave_application.substitute }}
