@@ -838,15 +838,8 @@ class Clock_Correction_Application_View(View):
     def post(self,request):
         form = ClockCorrectionApplicationForm(request.POST)
         if form.is_valid():
-            get_leave_id = form.cleaned_data["type_of_leave"].id
-            newobj =form.save(commit=False)
-            leave_obj =Clock_Correction_Application.objects.get(id=get_leave_id)
-            can_leave = leave_obj.exceeds_leave_quantity(newobj,request.user.employee)
-            if can_leave:
-                newobj.save()
-                return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
-            else:
-                return JsonResponse({"error":"無法請假，已沒有請假時數"},status=404)
+            newobj = form.save()
+            return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()
@@ -886,15 +879,8 @@ class Work_Overtime_Application_View(View):
     def post(self,request):
         form = WorkOvertimeApplicationForm(request.POST)
         if form.is_valid():
-            get_leave_id = form.cleaned_data["type_of_leave"].id
-            newobj =form.save(commit=False)
-            leave_obj =Leave_Param.objects.get(id=get_leave_id)
-            can_leave = leave_obj.exceeds_leave_quantity(newobj,request.user.employee)
-            if can_leave:
-                newobj.save()
-                return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
-            else:
-                return JsonResponse({"error":"無法請假，已沒有請假時數"},status=404)
+            newobj = form.save()
+            return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()

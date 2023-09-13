@@ -27,7 +27,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="work-overtime-application-label">請假申請</h5>
+                    <h5 class="modal-title" id="work-overtime-application-label">加班申請</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -98,7 +98,7 @@
                         {{ work_overtime_application.get_type_of_overtime_display }}
                     </td>
                     <td>
-                        {{ work_overtime_application.start_hours_of_overtime }}:{{ work_overtime_application.start_mins_of_overtime }} - {{ work_overtime_application.end_hours_of_overtime }}:{{ work_overtime_application.end_mins_of_overtime }}
+                        {{ work_overtime_application.get_start_hours_of_overtime_zfill }}:{{ work_overtime_application.get_start_mins_of_overtime_zfill }} - {{ work_overtime_application.get_end_hours_of_overtime_zfill }}:{{ work_overtime_application.get_end_mins_of_overtime_zfill }}
                     </td>
                     <td>
                         {{ work_overtime_application.overtime_hours }} 時 {{ work_overtime_application.overtime_mins }} 分
