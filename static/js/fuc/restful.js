@@ -70,6 +70,7 @@ function cleanform() {
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
   cleanform();
+  unlock_input();
 });
 
 //  獲取資料並帶入

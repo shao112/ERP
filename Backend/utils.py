@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Salary,SalaryDetail, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Salary,SalaryDetail,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -139,6 +139,8 @@ def get_model_by_name(model_name):
             return Project_Job_Assign
         case "Project_Employee_Assign":
             return Project_Employee_Assign
+        case "Leave_Application":
+             return Leave_Application
         case _:
             return None
 

@@ -439,7 +439,6 @@ class Approval_Process(UserPassesTestMixin,ListView):
                 department =get_createdby.departments
                 #撈取主管權限的員工
                 supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
-                print(supervisor_employees)
                 #判斷主管是不是在當前user
                 is_supervisor = current_employee.id in supervisor_employees
                 if is_supervisor:            

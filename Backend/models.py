@@ -279,18 +279,17 @@ class ApprovalModel(models.Model):
         ('in_progress', '進行中'),
         ('rejected', '駁回'),
     ]
+
     #related_name 關聯
     RELATED_NAME_MAP = {
-        'Project_Confirmation': 'project_confirmation_Approval',
-        'Project_Job_Assign': 'Project_Job_Assign_Approval',
         'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
+        'Leave_Application': 'Leave_Application_Approval',
     }
 
     #對應的model，會帶入data-model
     Modal_URL__MAP = {
-        'Project_Confirmation': 'project_confirmation',
-        'Project_Job_Assign': 'job_assign',
         'Project_Employee_Assign': 'project_employee_assign',
+        'Leave_Application': 'leave_application',
     }
 
 
@@ -629,12 +628,15 @@ class Leave_Application(ModifiedModel):
     leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
     created_by = models.ForeignKey("Employee",related_name="leave_author", on_delete=models.SET_NULL, null=True, blank=True)
+    attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
 
     class Meta:
         verbose_name = "請假申請"
         verbose_name_plural = verbose_name
-    
+    def get_show_id(self):
+        return f"假單-{str(self.id).zfill(5)}"
+
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
@@ -756,7 +758,7 @@ class Leave_Param(ModifiedModel):
         leave_application_hours, leave_application_minutes = leave_application.calculate_leave_duration()
         total_hours += leave_application_hours + leave_application_minutes / 60
 
-        return total_hours > self.leave_quantit
+        return  self.leave_quantity > total_hours
     @classmethod
     def get_leave_param_details(cls, user):
         leave_param_details = []

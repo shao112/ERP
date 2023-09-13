@@ -1,0 +1,130 @@
+  <form action="/restful/leave_application" name="leave_application" id="form" method="POST" class="pb-4" data-method="post">
+                            {% csrf_token %}
+                            <input name="id" hidden>
+                            <div class="form-row my-2">
+                                <div class="col-12">
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="type_of_leave">假別項目</label>
+                                                {{ leave_application_form.type_of_leave }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="start_date_of_leave">請假起始日期</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="start_date_of_leave" id="start_date_of_leave">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="end_date_of_leave">請假結束日期</label>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    name="end_date_of_leave" id="end_date_of_leave">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="start_hours_of_leave">請假起始小時</label>
+                                                <select name="start_hours_of_leave" class="form-control form-control-sm">
+                                                    {% for i in 24range %}
+                                                    <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="start_mins_of_leave">請假起始分鐘</label>
+                                                <select name="start_mins_of_leave" class="form-control form-control-sm">
+                                                    {% for i in 60range %}
+                                                    <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="end_hours_of_leave">請假結束小時</label>
+                                                <select name="end_hours_of_leave" class="form-control form-control-sm">
+                                                    {% for i in 24range %}
+                                                    <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="end_mins_of_leave">請假結束分鐘</label>
+                                                <select name="end_mins_of_leave" class="form-control form-control-sm">
+                                                    {% for i in 60range %}
+                                                    <option value="{{ i }}">{{ i }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="leave_hours">申請時數(時)</label>
+                                                <input class="form-control form-control-sm" name="leave_hours"
+                                                    id="leave_hours" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="leave_mins">申請時數(分)</label>
+                                                <input class="form-control form-control-sm" name="leave_mins"
+                                                    id="leave_mins" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="substitute">工作代理人</label>
+                                                {{ leave_application_form.substitute }}
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="backlog">待辦事項</label>
+                                                <input class="form-control form-control-sm" name="backlog" id="backlog">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="leave_reason">請假事由</label>
+                                                <textarea class="form-control form-control-sm" name="leave_reason"
+                                                    id="leave_reason">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6 " >
+                                            <label>完工重派附件</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" data-modal="Leave_Application" name="attachment"
+                                                    id="reassignment_attachment_control">
+                                                <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
+                                            </div>
+                                            <a href="#" id="attachment" >下載附件</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                            </div>
+                        </form>

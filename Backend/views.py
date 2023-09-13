@@ -6,9 +6,9 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Salary,SalaryDetail, Client,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.forms import  LeaveParamModelForm,Leave_ApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
-from Backend.forms import  LeaveParamModelForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
 from django.shortcuts import get_object_or_404
@@ -123,7 +123,7 @@ class Approval_View_Process(View):
                 'project_confirmation': 'Project_Confirmation',
                 'job_assign': 'Project_Job_Assign',
                 'Project_Employee_Assign': 'Project_Employee_Assign',
-                '請假單': '請假單',
+                'Leave_Application': 'Leave_Application',
             }
 
             try:
@@ -647,6 +647,8 @@ class FormUploadFileView(View):
                     model=Employee.objects.get(id=getid)
                 case "Quotation":
                     model=Quotation.objects.get(id=getid)
+                case "Leave_Application":
+                    model=Leave_Application.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
@@ -758,6 +760,56 @@ class Approval_Groups_View(View):
         except  Exception as e:
             print(e)
             return JsonResponse({"error":str(e)},status=500)
+
+class Leave_Application_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = Leave_ApplicationForm(dict_data)
+        if form.is_valid():
+            getObject = Leave_Application.objects.get(id=dict_data['id'])
+            if "type_of_leave" in dict_data:
+                type_of_leave = dict_data["type_of_leave"]
+                del dict_data["type_of_leave"]
+                getObject.type_of_leave = Leave_Param.objects.get(id=type_of_leave)
+            if "substitute" in dict_data:
+                substitute = dict_data["substitute"]
+                del dict_data["substitute"]
+                getObject.substitute = Employee.objects.get(id=substitute)
+            
+            getObject.update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "完成修改"},status=200)
+        else:
+            return JsonResponse({"error":form.errors},status=400)
+
+
+    def post(self,request):
+        form = Leave_ApplicationForm(request.POST)
+        if form.is_valid():
+            get_leave_id = form.cleaned_data["type_of_leave"].id
+            newobj =form.save(commit=False)
+            leave_obj =Leave_Param.objects.get(id=get_leave_id)
+            can_leave = leave_obj.exceeds_leave_quantity(newobj,request.user.employee)
+            if can_leave:
+                newobj.save()
+                return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
+            else:
+                return JsonResponse({"error":"無法請假，已沒有請假時數"},status=404)
+        else:
+            print("is_valid FALSE")
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+    
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Leave_Application, id=id)
+        data = model_to_dict(data)
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
+        return JsonResponse({"data":data}, status=200,safe = False)
+
+
 
 class Leave_Param_View(View):
     def post(self,request):

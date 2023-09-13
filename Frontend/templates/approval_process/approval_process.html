@@ -68,7 +68,7 @@
                 <ul class="nav nav-tabs" id="myTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1" role="tab"
-                            aria-controls="content1" aria-selected="true">工程確認單</a>
+                            aria-controls="content1" aria-selected="true">假單</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab"
@@ -81,8 +81,8 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
-                        工程確認單
-                        {% include 'components\project_confirmation_form.html' with employees_list=employees_list %}
+                        請假單
+                        {% include 'components\leave_application_form.html' %}
                     </div>
                     <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
                         工程派任計畫
@@ -198,7 +198,7 @@
             console.log(form);
 
             GET_handleClick(button, false).then((data) => {
-
+                console.log(data)
                 for (var key in data) {
 
                     var input = form.querySelector('[name="' + key + '"]');
@@ -231,8 +231,8 @@
                 const change_event = new Event("change");
 
 
-                if (modalModel === 'project_confirmation') {
-                    projectConfirmationIdControl.dispatchEvent(change_event);
+                if (modalModel === 'Leave_Application') {
+                    // projectConfirmationIdControl.dispatchEvent(change_event);
                     $('#tab1').tab('show');
                 } else if (modalModel === 'job_assign') {
                     $('#tab2').tab('show');
