@@ -91,6 +91,9 @@ class ProjectJobAssignForm(BaseModelForm):
     class Meta:
         model = Project_Job_Assign
         fields = '__all__'
+        widgets = {
+            'location': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'belong_to_company_control'}),
+        }
     def clean(self):
         cleaned_data = super().clean()
         project_confirmation = cleaned_data.get('project_confirmation')

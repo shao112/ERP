@@ -1,0 +1,72 @@
+<form action="/restful/quotation" id="form" method="POST" class="pb-4" data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden>
+    <div class="form-row my-2">
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-12 col-lg-4">
+                    <div class="form-group">
+                        <label for="date_of_clock">補卡日期</label>
+                        <input type="date" class="form-control form-control-sm" name="date_of_clock" id="date_of_clock">
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="form-group">
+                        <label for="shift_of_clock">補卡班別</label>
+                        {{ clock_correction_application_form.shift_of_clock }}
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="form-group">
+                        <label for="category_of_clock">補卡類別</label>
+                        {{ clock_correction_application_form.category_of_clock }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12 col-lg-4">
+                    <div class="form-group">
+                        <label for="type_of_clock">補卡方式</label>
+                        {{ clock_correction_application_form.type_of_clock }}
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="form-group">
+                        <label for="end_hours_of_clock">補卡小時</label>
+                        <select name="end_hours_of_clock" class="form-control form-control-sm">
+                            {% for i in 24range %}
+                              <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="form-group">
+                        <label for="end_mins_of_clock">補卡分鐘</label>
+                        <select name="end_mins_of_clock" class="form-control form-control-sm">
+                            {% for i in 60range %}
+                              <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="clock_reason">補卡事由</label>
+                        <textarea class="form-control form-control-sm" name="clock_reason" id="clock_reason"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if showbtn %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4"
+            style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+    </div>
+    {% endif %}
+</form>
