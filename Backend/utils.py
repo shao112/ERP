@@ -158,7 +158,8 @@ def match_excel_content(model):
 
 def create_salary(employee,year,month):
     salary, created = Salary.objects.get_or_create(user=employee, year=year, month=month)
-
+    print("xxxx")
+    print(created)
     if not created:#清除所有明細
         SalaryDetail.objects.filter(salary=salary).delete()
 
@@ -178,6 +179,7 @@ def create_salary(employee,year,month):
         deduction=False
     )
     #請假單
+    print("請假單")
     cost_list = Leave_Param.get_year_total_cost_list(employee,year=year,month=month)
     for item in cost_list:
         SalaryDetail.objects.create(

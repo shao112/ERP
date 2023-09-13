@@ -35,9 +35,11 @@ urlpatterns = [
     path('sysmessage', views.SysMessage_API.as_view(), name="approval_view_process_api"),
     path('work_item', views.Work_Item_View.as_view(), name="work_item_api"),
     path('quotation', views.Quotation_View.as_view(), name="quotation_api"),
-    #計算當月所有
-    path('salary/<int:employee_id>/<int:file_id>', views.SalaryListView.as_view(), name="salary_api"),
-    #處理明細
+    #計算當月所有薪資明細
+    path('salary/<int:year>/<int:month>', views.SalaryListView.as_view(), name="salary_api"),
+    #處理個人明細重製
+    path('salary/<int:year>/<int:month>/<int:user_id>/reset', views.SalaryListView.as_view(), name="salary_only_one_api"),
+    #處理明細單頁的API處理
     path('salary/<int:year>/<int:month>/<int:user>', views.SalaryDetailView.as_view(), name='salary_detail'),
 
 ]
