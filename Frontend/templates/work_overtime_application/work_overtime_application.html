@@ -76,13 +76,13 @@
                 <tr>
                     <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ work_overtime_application.id }}"></td>
                     <td>
-                        <a data-target="#work-overtime-application-modal" type="button" data-url="quotation" data-id="{{ work_overtime_application.id }}"
+                        <a data-target="#work-overtime-application-modal" type="button" data-url="work_overtime_application" data-id="{{ work_overtime_application.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        <a data-url="quotation" data-target="#work-overtime-application-modal" data-id="{{ work_overtime_application.id }}"
+                        <a data-url="work_overtime_application" data-target="#work-overtime-application-modal" data-id="{{ work_overtime_application.id }}"
                             type="button" class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>

@@ -6,7 +6,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import  ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
@@ -813,13 +813,13 @@ class Leave_Application_View(View):
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
-class Clock_Correction_Application(View):
+class Clock_Correction_Application_View(View):
 
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = ClockCorrectionApplicationForm(dict_data)
         if form.is_valid():
-            getObject = Leave_Application.objects.get(id=dict_data['id'])
+            getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
             if "type_of_leave" in dict_data:
                 type_of_leave = dict_data["type_of_leave"]
                 del dict_data["type_of_leave"]
@@ -840,7 +840,7 @@ class Clock_Correction_Application(View):
         if form.is_valid():
             get_leave_id = form.cleaned_data["type_of_leave"].id
             newobj =form.save(commit=False)
-            leave_obj =Leave_Param.objects.get(id=get_leave_id)
+            leave_obj =Clock_Correction_Application.objects.get(id=get_leave_id)
             can_leave = leave_obj.exceeds_leave_quantity(newobj,request.user.employee)
             if can_leave:
                 newobj.save()
@@ -856,9 +856,9 @@ class Clock_Correction_Application(View):
     
     def get(self,request):
         id = request.GET.get('id')
-        data = get_object_or_404(Leave_Application, id=id)
+        data = get_object_or_404(Clock_Correction_Application, id=id)
         data = model_to_dict(data)
-        data['attachment'] = data['attachment'].url if data['attachment']  else None
+        # data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class Work_Overtime_Application_View(View):
@@ -904,9 +904,9 @@ class Work_Overtime_Application_View(View):
     
     def get(self,request):
         id = request.GET.get('id')
-        data = get_object_or_404(Leave_Application, id=id)
+        data = get_object_or_404(Work_Overtime_Application, id=id)
         data = model_to_dict(data)
-        data['attachment'] = data['attachment'].url if data['attachment']  else None
+        # data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
 

@@ -72,15 +72,15 @@
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for clock_correction_application in clock_correction_application_list %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ work_overtime_application.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ clock_correction_application.id }}"></td>
                     <td>
-                        <a data-target="#clock-correction-application-modal" type="button" data-url="quotation" data-id="{{ work_overtime_application.id }}"
+                        <a data-target="#clock-correction-application-modal" type="button" data-url="clock_correction_application" data-id="{{ clock_correction_application.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        <a data-url="quotation" data-target="#clock-correction-application-modal" data-id="{{ work_overtime_application.id }}" type="button"
+                        <a data-url="clock_correction_application" data-target="#clock-correction-application-modal" data-id="{{ clock_correction_application.id }}" type="button"
                             class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
