@@ -5,8 +5,18 @@
 {% block import %}
 
 {% load static%}
-<link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
-
+<style>
+    .salary-header a{
+        text-decoration: none;
+        color: black;
+    }
+    .salary-table td{
+        vertical-align: middle;
+    }
+    .select2-container {
+        font-size: 14px;
+    }
+</style>
 
 {% endblock %}
 
@@ -18,18 +28,18 @@
 
 
 
-<div class="main px-3" id="employee-app">
+<div class="main px-3">
     <div id="error-message"></div>
 
     {{current_year}}/{{current_month}} 薪資處理
 
-    <div class="employee-table container-fluid shadow-sm table-responsive-lg">
+    <div class="salary-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
-                <div class="employee-header container-fluid">
+                <div class="salary-header container-fluid">
 
                     <x href="" type="button" onclick="set_month_salary()" class="font-weight-bold" id="sys_new">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 計算當月系統薪資

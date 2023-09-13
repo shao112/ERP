@@ -138,7 +138,6 @@
                         {% load tz %}  {# 導入時區 #}
                         {% now "Y" as current_year %}
                         {% now "m" as current_month %}
-
                         <a class="nav-link" href="{% url 'salary_list' current_year current_month %}">員工薪水</a>
                     </li>
                 </ul>
