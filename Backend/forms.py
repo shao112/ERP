@@ -50,11 +50,6 @@ class QuotationForm(BaseModelForm):
     class Meta:
         model = Quotation
         fields = '__all__'
-
-class Leave_ApplicationForm(BaseModelForm):
-    class Meta:
-        model = Leave_Application
-        fields = '__all__'
         
 
 class Work_ItemForm(BaseModelForm):
