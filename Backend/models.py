@@ -629,6 +629,7 @@ class Leave_Application(ModifiedModel):
     leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
     created_by = models.ForeignKey("Employee",related_name="leave_author", on_delete=models.SET_NULL, null=True, blank=True)
+    attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
 
     class Meta:
@@ -756,7 +757,7 @@ class Leave_Param(ModifiedModel):
         leave_application_hours, leave_application_minutes = leave_application.calculate_leave_duration()
         total_hours += leave_application_hours + leave_application_minutes / 60
 
-        return total_hours > self.leave_quantit
+        return  self.leave_quantity > total_hours
     @classmethod
     def get_leave_param_details(cls, user):
         leave_param_details = []
