@@ -680,18 +680,12 @@ class Leave_Application(ModifiedModel):
 
         return total_hours, total_minutes
 
-    # def cal_leave_hours(self):
-    #     self.leave_hours = self.end_hours_of_leave - self.start_hours_of_leave
-    #     return self.leave_hours
-    # def cal_leave_mins(self):
-    #     self.leave_mins = self.end_mins_of_leave - self.start_mins_of_leave
-    #     return self.leave_mins
-    # def get_leave_hours(self):
-    #     return f"{str(self.cal_leave_hours()).zfill(2)}"
-    # def get_leave_mins(self):
-    #     return f"{str(self.cal_leave_mins()).zfill(2)}"
     
 # 假別參數
+from django.db.models.functions import ExtractYear,ExtractMonth
+import math
+
+
 class Leave_Param(ModifiedModel):
     GENDER_TYPE = (
         ('不限', '不限'),
@@ -730,20 +724,44 @@ class Leave_Param(ModifiedModel):
         return f"{str(self.id).zfill(5)}"
     def __str__(self):
         return self.leave_name
+    
 
-    def get_user_leave_applications(self, user):
-            return self.lication.filter(created_by=user)
+    def calculate_total_leave_cost(self, user,year,month):
+        #計算薪水
+        hourly_salary = math.ceil(user.default_salary / 240)
+        print(hourly_salary)
+        #回傳已請假(簽核)
+        total_hours, total_minutes = self.calculate_total_leave_duration(user=user, Approval_status= True,year=year,month=month)
+        total_cost = (total_hours * hourly_salary) + (total_minutes * hourly_salary / 2)
+        #百分比
+        deduction_percentage = self.deduct_percentage / 100
+        total_cost *= deduction_percentage
+        return math.ceil(total_cost),total_hours,total_minutes
 
-    def calculate_total_leave_duration(self, user):
+    def get_user_leave_applications(self, user,Approval_status=None,year=None,month=None):
+
+        applications = self.lication.filter(created_by=user)        
+        if year:
+            applications = applications.annotate(year=ExtractYear('start_date_of_leave')).filter(year=year)
+        if month:
+            applications = applications.annotate(month=ExtractMonth('start_date_of_leave')).filter(month=month)
+
+        if Approval_status:
+            applications = applications.filter(Approval__current_status="completed")
+        return applications
+    
+
+    def calculate_total_leave_duration(self, user,Approval_status=None,year=None,month=None):
         total_hours = 0
         total_minutes = 0
         
-        user_leave_applications = self.lication.filter(created_by=user)
+        user_leave_applications = self.get_user_leave_applications(user=user,Approval_status=Approval_status,year=year,month=month)
         
         for leave_application in user_leave_applications:
             leave_hours, leave_minutes = leave_application.calculate_leave_duration()
             total_hours += leave_hours
             total_minutes += leave_minutes
+
         #進位
         total_hours += total_minutes // 60
         total_minutes %= 60
@@ -759,6 +777,25 @@ class Leave_Param(ModifiedModel):
         total_hours += leave_application_hours + leave_application_minutes / 60
 
         return  self.leave_quantity > total_hours
+
+    @classmethod
+    def get_year_total_cost_list(cls, user,year,month):
+        leave_param_details = []
+        leave_params = cls.objects.all()
+
+        for leave_param in leave_params:
+            cost,total_hours, total_minutes  = leave_param.calculate_total_leave_cost(user=user,year=year,month=month)
+            if cost!=0:
+                leave_param_details.append({
+                    'id': leave_param.id,
+                    'name': leave_param.leave_name,
+                    'cost': cost,
+                    'total_hours': total_hours,
+                    'total_minutes': total_minutes
+                })
+
+        return leave_param_details
+
     @classmethod
     def get_leave_param_details(cls, user):
         leave_param_details = []

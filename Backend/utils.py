@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Salary,SalaryDetail,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -177,4 +177,13 @@ def create_salary(employee,year,month):
         adjustment_amount=2400,
         deduction=False
     )
-    #價單
+    #請假單
+    cost_list = Leave_Param.get_year_total_cost_list(employee,year=year,month=month)
+    for item in cost_list:
+        SalaryDetail.objects.create(
+            salary=salary,
+            name=item['name'],
+            system_amount=item['cost'],  
+            adjustment_amount=item['cost'],
+            deduction=True
+        )

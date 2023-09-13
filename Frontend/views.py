@@ -42,6 +42,10 @@ class SalaryDetailView(ListView):
         user = self.kwargs.get('user')    
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
 
+        print(self.request.user)
+        print(Leave_Param.get_year_total_cost_list(self.request.user.employee,year=year,month=month))
+
+
         return context
 
 
@@ -53,7 +57,6 @@ class SalaryListView(ListView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         queryset = Salary.objects.filter(year=year, month=month)
-
         return queryset
     
 # 首頁
