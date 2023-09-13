@@ -143,14 +143,14 @@
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="quotation_id_control">報價單號</label>
-                                                        <input class="form-control form-control-sm" readonly
+                                                        <input class="readonly form-control form-control-sm" readonly
                                                             id="quotation_id"></input>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="project_name">工程名稱</label>
-                                                        <input class="form-control form-control-sm" name="project_name"
+                                                        <input class="readonly form-control form-control-sm" name="project_name"
                                                             readonly id="project_name"></input>
                                                     </div>
                                                 </div>
@@ -159,14 +159,14 @@
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="client_name">客戶名稱</label>
-                                                        <input class="form-control form-control-sm" name="client_name"
+                                                        <input class="readonly form-control form-control-sm" name="client_name"
                                                             readonly id="client_name"></input>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="requisition">請購單位</label>
-                                                        <input class="form-control form-control-sm" name="requisition"
+                                                        <input class="form-control readonly form-control-sm" name="requisition"
                                                             readonly id="requisition"></input>
                                                     </div>
                                                 </div>
@@ -175,7 +175,7 @@
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
                                                         <label for="location">施工地點</label>
-                                                        <input class="form-control form-control-sm" name="location"
+                                                        <input class="form-control readonly form-control-sm" name="location"
                                                             id="location" readonly></input>
                                                     </div>
                                                 </div>
@@ -465,7 +465,6 @@
     async function LoadData(event) {
 
         const approvalStatus = event.currentTarget.getAttribute('data-approval');
-        console.log(approvalStatus);
 
         if(approvalStatus=="in_progress" || approvalStatus=="completed" ){
             lock_input();

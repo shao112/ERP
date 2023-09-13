@@ -279,18 +279,17 @@ class ApprovalModel(models.Model):
         ('in_progress', '進行中'),
         ('rejected', '駁回'),
     ]
+
     #related_name 關聯
     RELATED_NAME_MAP = {
-        'Project_Confirmation': 'project_confirmation_Approval',
-        'Project_Job_Assign': 'Project_Job_Assign_Approval',
         'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
+        'Leave_Application': 'Leave_Application_Approval',
     }
 
     #對應的model，會帶入data-model
     Modal_URL__MAP = {
-        'Project_Confirmation': 'project_confirmation',
-        'Project_Job_Assign': 'job_assign',
         'Project_Employee_Assign': 'project_employee_assign',
+        'Leave_Application': 'leave_application',
     }
 
 
@@ -635,7 +634,9 @@ class Leave_Application(ModifiedModel):
     class Meta:
         verbose_name = "請假申請"
         verbose_name_plural = verbose_name
-    
+    def get_show_id(self):
+        return f"假單-{str(self.id).zfill(5)}"
+
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 

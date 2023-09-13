@@ -123,7 +123,7 @@ class Approval_View_Process(View):
                 'project_confirmation': 'Project_Confirmation',
                 'job_assign': 'Project_Job_Assign',
                 'Project_Employee_Assign': 'Project_Employee_Assign',
-                '請假單': '請假單',
+                'Leave_Application': 'Leave_Application',
             }
 
             try:
