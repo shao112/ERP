@@ -83,13 +83,17 @@ class SalaryDetailView(View):
 
 class SalaryListView(View):
     def post(self, request, *args, **kwargs):
-        data = request.POST
-        year = data.get('year')
-        month = data.get('month')
-        print(year, month)
-        employees = Employee.objects.all()
-        for employee in employees:
+        year = kwargs.get('year')
+        month = kwargs.get('month')
+        user_id = kwargs.get('user_id')
+        print(year, month,user_id)
+        if user_id:
+            employee = Employee.objects.get(id=user_id)
             create_salary(employee, year, month)
+        else:
+            employees = Employee.objects.all()
+            for employee in employees:
+                create_salary(employee, year, month)
            
 
         return JsonResponse({"ok":"ok"},status=200)

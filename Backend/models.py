@@ -729,7 +729,6 @@ class Leave_Param(ModifiedModel):
     def calculate_total_leave_cost(self, user,year,month):
         #計算薪水
         hourly_salary = math.ceil(user.default_salary / 240)
-        print(hourly_salary)
         #回傳已請假(簽核)
         total_hours, total_minutes = self.calculate_total_leave_duration(user=user, Approval_status= True,year=year,month=month)
         total_cost = (total_hours * hourly_salary) + (total_minutes * hourly_salary / 2)
