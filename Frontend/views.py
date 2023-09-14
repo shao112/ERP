@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -99,11 +99,12 @@ class Index(View):
         
 
     def get(self,request):
-        # 0710
-        # 以下寫法: employeeid = request.user.employee
-        # 這樣寫出現問題: 我們登入登出頁面都做在一起，當登出時，也會跑來此get()，而user會變成AnonymousUser，AnonymousUser裡面不存在employee，頁面壞掉
-        # (Django做使用者登出時，request.user變成AnonymousUser是預設行為)
-        # 目前先加上判斷是不是AnonymousUser，再觀察有沒有效
+
+        # print(Clock.get_hour_for_month(request.user.employee,2023,2))
+        my_date = date(2023, 9, 13)
+
+        # print(request.user.employee.day_status(my_date))
+        print(Leave_Application.objects.get(id=4).hour_day(my_date))
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
@@ -124,17 +125,6 @@ class Index(View):
                             grouped_projects[date_str] = [project]
             sorted_grouped_projects = dict(sorted(grouped_projects.items()))
             
-            current_employee = self.request.user.employee
-
-            # related_approval_models = ApprovalModel.objects.filter(get_created_by__exact == current_employee)
-            # approval_count = 0
-            # related_approval_models = [
-            #     approval_model for approval_model in all_approval_models
-            #     if approval_model.get_created_by == current_employee
-            # ]
-
-            # print("related_approval_models",related_approval_models)
-
             context = {
                 'clock_inout':clock_inout,
                 'news':news,

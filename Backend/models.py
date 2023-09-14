@@ -1,4 +1,5 @@
-
+from django.db.models.functions import ExtractYear,ExtractMonth,ExtractDay
+import math
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.db.models.signals import pre_save
@@ -152,18 +153,80 @@ class Employee(ModifiedModel):
         verbose_name = "員工"   # 單數
         verbose_name_plural = verbose_name   #複數
 
-    # def employee_data_upload_path(instance, filename):
-    #     employee_id = instance.id
-    #     return os.path.join("Employee_data", str(employee_id), filename)
+    def day_status(self, date): #當天還要上幾小時
+        from datetime import time
 
+        leave_applications = self.leave_list.filter(
+        start_date_of_leave__lte=date, 
+        end_date_of_leave__gte=date,
+        Approval__current_status="completed"
+        )
+        results = []
 
-    def calSeniority(self):
-        # current_date = date.today()
-        # seniority = current_date.year - self.start_date.year
-        # if (self.start_date.month, self.start_date.day) > (current_date.month, current_date.day):
-        #     seniority -= 1
-        # return round(seniority, 1)
-        return 0
+        work_start_time = timedelta(hours=8)
+        work_end_time = timedelta(hours=17)
+
+            
+        for leave_application in leave_applications:
+            #當天
+            if leave_application.start_date_of_leave == date and leave_application.end_date_of_leave == date:
+                start_time = timedelta(hours=leave_application.start_hours_of_leave, minutes=leave_application.start_mins_of_leave)
+                end_time = timedelta(hours=leave_application.end_hours_of_leave, minutes=leave_application.end_mins_of_leave)
+
+                if start_time < work_start_time:
+                    start_time = work_start_time
+
+                if end_time > work_end_time:
+                    end_time = work_end_time
+
+                leave_duration = end_time - start_time
+                total_hours = leave_duration.seconds // 3600
+                total_minutes = (leave_duration.seconds // 60) % 60
+
+                if total_minutes < 30:
+                    total_minutes = 0
+                else:
+                    total_minutes = 30
+
+                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
+
+            elif leave_application.start_date_of_leave == date:
+                start_time = timedelta(hours=leave_application.start_hours_of_leave, minutes=leave_application.start_mins_of_leave)
+
+                if start_time < work_start_time:
+                    start_time = work_start_time
+
+                leave_duration = work_end_time - start_time
+                total_hours = leave_duration.seconds // 3600
+                total_minutes = (leave_duration.seconds // 60) % 60
+
+                if total_minutes < 30:
+                    total_minutes = 0
+                else:
+                    total_minutes = 30
+
+                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
+
+            elif leave_application.end_date_of_leave == date:
+                end_time = timedelta(hours=leave_application.end_hours_of_leave, minutes=leave_application.end_mins_of_leave)
+
+                if end_time > work_end_time:
+                    end_time = work_end_time
+
+                leave_duration = end_time - work_start_time
+                total_hours = leave_duration.seconds // 3600
+                total_minutes = (leave_duration.seconds // 60) % 60
+
+                if total_minutes < 30:
+                    total_minutes = 0
+                else:
+                    total_minutes = 30
+
+                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
+
+            elif leave_application.start_date_of_leave < date < leave_application.end_date_of_leave:
+                results.append({"total_hours": 8, "total_minutes": 0, "type_of_leave": leave_application.type_of_leave})
+
 
     def __str__(self):
         return self.full_name
@@ -430,6 +493,7 @@ class ApprovalModel(models.Model):
     
 
 
+
 class Clock(models.Model):
     CLOCK_TYPE= (
         ('1', '正常打卡'),
@@ -438,7 +502,8 @@ class Clock(models.Model):
     employee_id = models.ForeignKey("Employee", related_name="clock",on_delete=models.CASCADE)
     type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, default="1", blank=True, null=True, verbose_name="打卡類別")
     clock_in_or_out = models.BooleanField()
-    clock_time = models.TimeField()
+    clock_date = models.DateField(default=timezone.now,verbose_name='打卡時間')
+    clock_time = models.TimeField() #打卡日期
     clock_GPS = models.CharField(max_length=255)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
@@ -448,6 +513,33 @@ class Clock(models.Model):
         verbose_name_plural = verbose_name   #複數
     def __str__(self):
         return f"{self.employee_id}({self.type_of_clock})"
+    
+    @classmethod
+    def get_hour_for_month(cls, user,year, month):
+        day_clocks = cls.objects.filter(employee_id=user, clock_date__month=month,clock_date__year=year)
+        first_day_of_month = datetime(year=year, month=month, day=1)
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            last_day_of_month = first_day_of_month.replace(day=31)
+        elif month == 2:
+            y = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+            if y :
+                last_day_of_month = first_day_of_month.replace(day=29)
+            else:
+                last_day_of_month = first_day_of_month.replace(day=28)
+        else:
+            last_day_of_month = first_day_of_month.replace(day=30)
+
+
+        for day in range((last_day_of_month - first_day_of_month).days + 1):
+            date_to_check = first_day_of_month + timedelta(days=day)
+            print(date_to_check)
+
+            # if has_records:
+            #     # 在这里执行你需要的操作
+            #     # 例如：记录有打卡的日期或其他处理
+            #     pass
+
+        return day_clocks
 
 
 # 部門
@@ -603,7 +695,6 @@ class Project_Employee_Assign(ModifiedModel):
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
 
-
     class Meta:
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數
@@ -627,15 +718,22 @@ class Leave_Application(ModifiedModel):
     substitute = models.ForeignKey("Employee", on_delete=models.SET_NULL,related_name="leave_application_substitute", blank=True, null=True, verbose_name="工作代理人")
     leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
-    created_by = models.ForeignKey("Employee",related_name="leave_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",verbose_name="申請者",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True)
     attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
 
     class Meta:
         verbose_name = "請假申請"
         verbose_name_plural = verbose_name
+
     def get_show_id(self):
         return f"假單-{str(self.id).zfill(5)}"
+
+    def __str__(self):
+        return self.get_show_id()
+    
+    def hour_day(self,day):#回傳請假時數
+        
 
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
@@ -681,10 +779,6 @@ class Leave_Application(ModifiedModel):
         return total_hours, total_minutes
 
     
-# 假別參數
-from django.db.models.functions import ExtractYear,ExtractMonth
-import math
-
 
 class Leave_Param(ModifiedModel):
     GENDER_TYPE = (
@@ -715,7 +809,7 @@ class Leave_Param(ModifiedModel):
     control = models.BooleanField(blank=True, default=True, verbose_name="假控")
     gender = models.CharField(max_length=5, choices=GENDER_TYPE,blank=True, null=True,verbose_name="性別")
     leave_rules = models.TextField(max_length=1000, blank=True, null=True, verbose_name="請假規定")
-    created_by = models.ForeignKey("Employee",related_name="leave_param_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="leave_param_author", on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         verbose_name = "假別參數"
@@ -964,8 +1058,6 @@ class Requisition(ModifiedModel):
     class Meta:
         verbose_name = "請購單位"
         verbose_name_plural = verbose_name
-
-
 
 
 
