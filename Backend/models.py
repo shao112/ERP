@@ -178,8 +178,8 @@ class Employee(ModifiedModel):
             total_hour-=1
             total_minutes=30
         
-        if results!=[]:
-            print(results)
+        # if results!=[]:
+        #     print(results)
 
         return total_hour,total_minutes ,results
     
@@ -492,16 +492,18 @@ class Clock(models.Model):
 
         for day in range((last_day_of_month - first_day_of_month).days + 1):
 
-            date_to_check = first_day_of_month + timedelta(days=day)
+            date_to_check = (first_day_of_month + timedelta(days=day)).date()
             date_to_check_string = (first_day_of_month + timedelta(days=day)).strftime('%Y/%m/%d')
 
-            total_hour,total_minutes ,results = user.day_status(date_to_check) #今天需要上多久
+            #今天需要上多久
+            total_hour,total_minutes ,results = user.day_status(date_to_check) 
             over_time = timedelta(hours=total_hour, minutes=total_minutes)
+
 
             day_clock_records = day_clocks.filter(clock_date=date_to_check)
             day_clock_records_len= len(day_clock_records)
 
-            if  total_hour==0 and total_minutes==0 : #
+            if  total_hour==0 and total_minutes==0 : 
                 month.append({"date":date_to_check_string,"status":"3","results":results})
                 continue
 
@@ -729,7 +731,7 @@ class Leave_Application(ModifiedModel):
     def hour_day(self,day):#回傳請假時數
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
-        if total_days==0: #只請一天
+        if total_days == 0: #只請一天
             leave_duration = timedelta(hours=self.end_hours_of_leave - self.start_hours_of_leave, 
                                                 minutes=self.end_mins_of_leave - self.start_mins_of_leave)
             total_hours = leave_duration.seconds // 3600
