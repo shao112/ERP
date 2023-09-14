@@ -533,6 +533,7 @@ class Clock(models.Model):
         for day in range((last_day_of_month - first_day_of_month).days + 1):
             date_to_check = first_day_of_month + timedelta(days=day)
             print(date_to_check)
+            #撈當天clock
 
             # if has_records:
             #     # 在这里执行你需要的操作
@@ -733,8 +734,28 @@ class Leave_Application(ModifiedModel):
         return self.get_show_id()
     
     def hour_day(self,day):#回傳請假時數
-        
+        total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
+        if total_days==0: #只請一天
+            leave_duration = timedelta(hours=self.end_hours_of_leave - self.start_hours_of_leave, 
+                                                minutes=self.end_mins_of_leave - self.start_mins_of_leave)
+            total_hours = leave_duration.seconds // 3600
+            total_minutes = (leave_duration.seconds // 60) % 60
+            if total_minutes < 30:
+                total_minutes = 0
+            else:
+                total_minutes = 30
+
+            if self.start_hours_of_leave < 13 and self.end_hours_of_leave >= 13 :
+                total_hours -= 1
+            return total_hours,total_minutes
+        else: #判斷day
+            if self.start_date_of_leave == day:
+               pass
+            elif self.end_date_of_leave == day:
+               pass            
+            else:
+                pass
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
@@ -747,7 +768,8 @@ class Leave_Application(ModifiedModel):
                 total_minutes = 0
             else:
                 total_minutes = 30
-            if self.start_hours_of_leave < 13 and self.end_hours_of_leave >= 13 :   #
+
+            if self.start_hours_of_leave < 13 and self.end_hours_of_leave >= 13 :
                 total_hours -= 1
 
         else:
