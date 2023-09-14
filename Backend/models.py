@@ -751,11 +751,24 @@ class Leave_Application(ModifiedModel):
             return total_hours,total_minutes
         else: #判斷day
             if self.start_date_of_leave == day:
-               pass
+                start_time = timedelta(hours=self.start_hours_of_leave, minutes=self.start_mins_of_leave)
+                start_difference = timedelta(hours=17)- start_time 
+                total_hours = start_difference.seconds // 3600
+                total_minutes = (start_difference.seconds // 60) % 60
+                if self.start_hours_of_leave < 13: #第一天是否在13點前請假
+                    total_hours -= 1
+                return total_hours, total_minutes
             elif self.end_date_of_leave == day:
-               pass            
+                end_time = timedelta(hours=self.end_hours_of_leave, minutes=self.end_mins_of_leave)
+                end_difference = end_time - timedelta(hours=8)
+                total_hours = end_difference.seconds // 3600
+                total_minutes = (end_difference.seconds // 60) % 60
+                if self.end_hours_of_leave >= 13:  # 最後天是否請超過下午
+                        total_hours -= 1
+                return total_hours, total_minutes
             else:
-                pass
+                return 8,0
+
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
@@ -783,10 +796,10 @@ class Leave_Application(ModifiedModel):
             total_hours = total_difference.seconds // 3600
             total_minutes = (total_difference.seconds // 60) % 60
 
-            if self.start_hours_of_leave < 13: #第一天是否在八點前請假
+            if self.start_hours_of_leave < 13: #第一天是否在13點前請假
                 total_hours -= 1
 
-            if self.end_hours_of_leave >= 13:  # 最後天是否在八點前請完
+            if self.end_hours_of_leave >= 13:  # 最後天是否請超過下午
                 total_hours -= 1
             if total_minutes < 30:
                 total_minutes = 0
