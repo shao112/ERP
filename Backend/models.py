@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.db.models.signals import pre_save
 from django.db import models
+from datetime import time
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models.signals import post_save
@@ -154,80 +155,34 @@ class Employee(ModifiedModel):
         verbose_name_plural = verbose_name   #複數
 
     def day_status(self, date): #當天還要上幾小時
-        from datetime import time
 
         leave_applications = self.leave_list.filter(
-        start_date_of_leave__lte=date, 
-        end_date_of_leave__gte=date,
-        Approval__current_status="completed"
+            start_date_of_leave__lte=date,
+            end_date_of_leave__gte=date,
+            Approval__current_status="completed"
         )
+        total_hour = 8
+        total_minutes = 0
+        cost_minutes = 0
         results = []
-
-        work_start_time = timedelta(hours=8)
-        work_end_time = timedelta(hours=17)
-
             
         for leave_application in leave_applications:
-            #當天
-            if leave_application.start_date_of_leave == date and leave_application.end_date_of_leave == date:
-                start_time = timedelta(hours=leave_application.start_hours_of_leave, minutes=leave_application.start_mins_of_leave)
-                end_time = timedelta(hours=leave_application.end_hours_of_leave, minutes=leave_application.end_mins_of_leave)
+            result = leave_application.hour_day(date)
+            total_hour -= result["total_hours"]
+            cost_minutes += result["total_minutes"]
+            results.append(result)       
+        
+        total_hour -= cost_minutes // 60
+        cost_minutes= cost_minutes%60
+        if cost_minutes == 30:
+            total_hour-=1
+            total_minutes=30
+        
+        if results!=[]:
+            print(results)
 
-                if start_time < work_start_time:
-                    start_time = work_start_time
-
-                if end_time > work_end_time:
-                    end_time = work_end_time
-
-                leave_duration = end_time - start_time
-                total_hours = leave_duration.seconds // 3600
-                total_minutes = (leave_duration.seconds // 60) % 60
-
-                if total_minutes < 30:
-                    total_minutes = 0
-                else:
-                    total_minutes = 30
-
-                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
-
-            elif leave_application.start_date_of_leave == date:
-                start_time = timedelta(hours=leave_application.start_hours_of_leave, minutes=leave_application.start_mins_of_leave)
-
-                if start_time < work_start_time:
-                    start_time = work_start_time
-
-                leave_duration = work_end_time - start_time
-                total_hours = leave_duration.seconds // 3600
-                total_minutes = (leave_duration.seconds // 60) % 60
-
-                if total_minutes < 30:
-                    total_minutes = 0
-                else:
-                    total_minutes = 30
-
-                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
-
-            elif leave_application.end_date_of_leave == date:
-                end_time = timedelta(hours=leave_application.end_hours_of_leave, minutes=leave_application.end_mins_of_leave)
-
-                if end_time > work_end_time:
-                    end_time = work_end_time
-
-                leave_duration = end_time - work_start_time
-                total_hours = leave_duration.seconds // 3600
-                total_minutes = (leave_duration.seconds // 60) % 60
-
-                if total_minutes < 30:
-                    total_minutes = 0
-                else:
-                    total_minutes = 30
-
-                results.append({"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": leave_application.type_of_leave})
-
-            elif leave_application.start_date_of_leave < date < leave_application.end_date_of_leave:
-                results.append({"total_hours": 8, "total_minutes": 0, "type_of_leave": leave_application.type_of_leave})
-
-
+        return total_hour,total_minutes ,results
+    
     def __str__(self):
         return self.full_name
 
@@ -295,7 +250,7 @@ class Salary(ModifiedModel):
                 amount_to_add = -amount_to_add  
 
             total_amount += amount_to_add
-        print(total_amount)
+        # print(total_amount)
         return total_amount
 
     class Meta:
@@ -503,7 +458,7 @@ class Clock(models.Model):
     type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, default="1", blank=True, null=True, verbose_name="打卡類別")
     clock_in_or_out = models.BooleanField()
     clock_date = models.DateField(default=timezone.now,verbose_name='打卡時間')
-    clock_time = models.TimeField() #打卡日期
+    clock_time = models.TimeField() #打卡時間
     clock_GPS = models.CharField(max_length=255)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
@@ -511,12 +466,14 @@ class Clock(models.Model):
     class Meta:
         verbose_name = "打卡紀錄"   # 單數
         verbose_name_plural = verbose_name   #複數
+        ordering = ['clock_date',"clock_time"]
+
     def __str__(self):
         return f"{self.employee_id}({self.type_of_clock})"
-    
+
     @classmethod
-    def get_hour_for_month(cls, user,year, month):
-        day_clocks = cls.objects.filter(employee_id=user, clock_date__month=month,clock_date__year=year)
+    def get_hour_for_month(cls, user,year, month):#當月打卡
+        day_clocks = cls.objects.filter(employee_id=user, clock_date__month=month,clock_date__year=year).order_by('clock_time')
         first_day_of_month = datetime(year=year, month=month, day=1)
         if month in [1, 3, 5, 7, 8, 10, 12]:
             last_day_of_month = first_day_of_month.replace(day=31)
@@ -529,18 +486,54 @@ class Clock(models.Model):
         else:
             last_day_of_month = first_day_of_month.replace(day=30)
 
+        month=[]
+        #翹班時數
+        miss_hours,miss_minutes =0,0
 
         for day in range((last_day_of_month - first_day_of_month).days + 1):
+
             date_to_check = first_day_of_month + timedelta(days=day)
-            print(date_to_check)
-            #撈當天clock
+            date_to_check_string = (first_day_of_month + timedelta(days=day)).strftime('%Y/%m/%d')
 
-            # if has_records:
-            #     # 在这里执行你需要的操作
-            #     # 例如：记录有打卡的日期或其他处理
-            #     pass
+            total_hour,total_minutes ,results = user.day_status(date_to_check) #今天需要上多久
+            over_time = timedelta(hours=total_hour, minutes=total_minutes)
 
-        return day_clocks
+            day_clock_records = day_clocks.filter(clock_date=date_to_check)
+            day_clock_records_len= len(day_clock_records)
+
+            if  total_hour==0 and total_minutes==0 : #
+                month.append({"date":date_to_check_string,"status":"3","results":results})
+                continue
+
+            if day_clock_records_len==1:
+                month.append({"date":date_to_check_string,"status":"1","ear_time":day_clock_records})
+                miss_hours+=8
+            elif day_clock_records_len==0:
+                miss_hours+=8
+                month.append({"date":date_to_check_string,"status":"0"})
+            else:
+                ear_time = day_clock_records.earliest('clock_time').clock_time
+                last_time =day_clock_records.latest('clock_time').clock_time
+                first_clock_time = datetime.combine(datetime.today(), ear_time)
+                last_clock_time = datetime.combine(datetime.today(), last_time)
+
+                time_difference = last_clock_time - first_clock_time
+              
+                end_difference = over_time - time_difference
+                hours = end_difference.seconds // 3600
+                minutes = (end_difference.seconds // 60) % 60
+                time_string = f"{hours}時{minutes}分"
+
+                if end_difference.total_seconds() <= 0:
+                    month.append({"date":date_to_check_string,"status":"ok","ear_time":ear_time,"last_time":last_time,"results":results,"hours":time_string})
+                else:
+                    miss_hours+=hours
+                    miss_minutes += minutes
+                    month.append({"date":date_to_check_string,"status":"no","ear_time":ear_time,"last_time":last_time,"hours":time_string,"minutes":minutes,"results":results})
+            # print("xxx")
+        miss_hours += miss_minutes // 60 
+        miss_minutes %= 60  
+        return  {"list":month ,"miss_hours":miss_hours,"miss_minutes":miss_minutes}
 
 
 # 部門
@@ -748,7 +741,8 @@ class Leave_Application(ModifiedModel):
 
             if self.start_hours_of_leave < 13 and self.end_hours_of_leave >= 13 :
                 total_hours -= 1
-            return total_hours,total_minutes
+            return {"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": self.type_of_leave.leave_name,"id":self.get_show_id()}
+
         else: #判斷day
             if self.start_date_of_leave == day:
                 start_time = timedelta(hours=self.start_hours_of_leave, minutes=self.start_mins_of_leave)
@@ -757,7 +751,7 @@ class Leave_Application(ModifiedModel):
                 total_minutes = (start_difference.seconds // 60) % 60
                 if self.start_hours_of_leave < 13: #第一天是否在13點前請假
                     total_hours -= 1
-                return total_hours, total_minutes
+                return {"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": self.type_of_leave.leave_name,"id":self.get_show_id()}
             elif self.end_date_of_leave == day:
                 end_time = timedelta(hours=self.end_hours_of_leave, minutes=self.end_mins_of_leave)
                 end_difference = end_time - timedelta(hours=8)
@@ -765,9 +759,9 @@ class Leave_Application(ModifiedModel):
                 total_minutes = (end_difference.seconds // 60) % 60
                 if self.end_hours_of_leave >= 13:  # 最後天是否請超過下午
                         total_hours -= 1
-                return total_hours, total_minutes
-            else:
-                return 8,0
+                return {"total_hours": total_hours, "total_minutes": total_minutes, "type_of_leave": self.type_of_leave.leave_name,"id":self.get_show_id()}
+            else: #請假整天
+                return {"total_hours": 8, "total_minutes": 0,"type_of_leave": self.type_of_leave.leave_name,"id":self.get_show_id()}
 
     def calculate_leave_duration(self):
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)

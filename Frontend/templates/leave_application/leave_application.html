@@ -97,6 +97,7 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="app" data-sortable="true">簽核</th>
+                    <th data-field="id" data-sortable="true">代號</th>
                     <th data-field="type_of_leave" data-sortable="true">假別項目</th>
                     <th data-field="date_of_leave" data-sortable="true">請假日期</th>
                     <th data-field="time_of_leave" data-sortable="true">請假時間</th>
@@ -114,7 +115,8 @@
                     <td>
                         <a data-target="#leave-application-modal" type="button" data-url="leave_application"
                             data-id="{{ leave_application.id }}" class="sys_get btn btn-sm btn-warning"
-                            data-approval="{{ leave_application.Approval.current_status}}" data-toggle="modal" onclick="LoadData(event)">
+                            data-approval="{{ leave_application.Approval.current_status}}" data-toggle="modal"
+                            onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
@@ -155,7 +157,9 @@
                         {% endif %}
 
                     </td>
-
+                    <td>
+                        {{ leave_application.get_show_id }}
+                    </td>
                     <td>
                         {{ leave_application.type_of_leave }}
                     </td>

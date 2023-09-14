@@ -65,7 +65,7 @@ class ProjectJobAssignAdmin(ImportExportModelAdmin):
 
 # 打卡
 class ClockAdmin(admin.ModelAdmin):
-    list_display = ('employee_id', 'clock_in_or_out', 'clock_time', 'clock_GPS',"created_date")
+    list_display = ('employee_id',"clock_date", 'clock_in_or_out', 'clock_time', 'clock_GPS',"created_date")
 # 公告
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'modified_by')

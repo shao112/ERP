@@ -41,6 +41,8 @@ class SalaryDetailView(ListView):
         month = self.kwargs.get('month')
         user = self.kwargs.get('user')    
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
+        context["work_list"] = Clock.get_hour_for_month(self.request.user.employee,year,int(month))
+        # print( context["work_list"] )
 
         return context
 
@@ -64,7 +66,7 @@ class Director_Index(View):
             for employee in other_employees:
                 employee['clock_data'] = get_weekly_clock_data(employee['id'])
 
-            print(other_employees)
+            # print(other_employees)
             # print(other_employees[0].get_weekly_clock_data())
             context= {"other_employees":other_employees}
             return render(request, 'index/director_Index.html',context)    
@@ -100,11 +102,10 @@ class Index(View):
 
     def get(self,request):
 
-        # print(Clock.get_hour_for_month(request.user.employee,2023,2))
         my_date = date(2023, 9, 13)
-
-        # print(request.user.employee.day_status(my_date))
-        print(Leave_Application.objects.get(id=4).hour_day(my_date))
+        # print(Clock.get_hour_for_month(request.user.employee,2023,9))
+        print(request.user.employee.day_status(my_date))
+        # print(Leave_Application.objects.get(id=4).hour_day(my_date))
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者

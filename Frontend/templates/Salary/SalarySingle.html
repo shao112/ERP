@@ -6,13 +6,15 @@
 
 {% load static%}
 <style>
-    .salary-header a{
+    .salary-header a {
         text-decoration: none;
         color: black;
     }
-    .salary-table td{
+
+    .salary-table td {
         vertical-align: middle;
     }
+
     .select2-container {
         font-size: 14px;
     }
@@ -101,6 +103,77 @@
             </tbody>
         </table>
     </div>
+    <table>
+        <thead>
+            <tr>
+                <th>日期</th>
+                <th>狀態</th>
+                <th>上班時間</th>
+                <th>下班時間</th>
+                <th>工作時間</th>
+                <th>請假</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in work_list.list %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>
+                    {% if entry.status == '1' %}
+                    漏打卡
+                    {% elif entry.status == '0' %}
+                    曠職
+                    {% elif entry.status == 'ok' %}
+                    正常
+                    {% elif entry.status == 'no' %}
+                    少於8小時
+                    {% endif %}
+                </td>
+                <td>
+                    {% if entry.ear_time %}
+                    {{ entry.ear_time }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if entry.last_time %}
+                    {{ entry.last_time }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ entry.hours }}
+                </td>
+            </tr>
+            {% if entry.results %}
+            <tr>
+                <td colspan="6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Total Hours</th>
+                                <th>Total Minutes</th>
+                                <th>Leave Type</th>
+                                <th>Leave ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in entry.results %}
+                            {{result}}
+                            <tr>
+                                <td>{{ result.total_hours }}</td>
+                                <td>{{ result.total_minutes }}</td>
+                                <td>{{ result.type_of_leave }}</td>
+                                <td>{{ result.id }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
 </div>
 
 
@@ -124,6 +197,6 @@
         });
     });
 
-  
+
 </script>
 {% endblock %}
