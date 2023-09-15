@@ -15,7 +15,7 @@ from datetime import date
 import os
 from datetime import timedelta,datetime
 
-from django.db.models import F, Sum
+from django.db.models import F, Sum,Q
 
 LOCATION_CHOICES = [
     ("台東", "台東"),
@@ -124,7 +124,7 @@ class Employee(ModifiedModel):
     ]   
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
-    location_city = models.CharField(max_length=4, choices=LOCATION_CHOICES, null=True, blank=True, verbose_name='居住城市(用於計算津貼)')
+    location_city = models.CharField(max_length=4, choices=LOCATION_CHOICES, null=True, blank=True, verbose_name='居住城市(用於計算)')
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
     full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
@@ -656,11 +656,11 @@ class Project_Job_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
     attendance_date =models.DateField(null=True, blank=True, verbose_name="出勤日期")
+    work_method = models.BooleanField(null=True, blank=True, verbose_name="工作方式(是:出勤、否:文書)",default=True) 
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=4,choices=LOCATION_CHOICES,null=True, blank=True, verbose_name="工作地點")
-    project_type = models.CharField(max_length=100,null=True, blank=True, verbose_name='工作類型')
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
@@ -675,7 +675,50 @@ class Project_Job_Assign(ModifiedModel):
     def get_show_id(self):
         return f"工派-{str(self.id).zfill(5)}"
 
+    @classmethod
+    def get_month_list_day(cls, employee,year,month):#公派當月天數
+        from collections import defaultdict
 
+        employee_location = employee.location_city
+        if employee_location =="":
+            return {"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
+
+        conditions = Q(work_employee=employee) | Q(lead_employee=employee)
+        assignments = cls.objects.filter(conditions, 
+                                         attendance_date__year=year, 
+                                         attendance_date__month=month).distinct()
+
+        print("get")
+        print(assignments)
+
+        allowance_dict = defaultdict(lambda: {"location": "", "day": 0, "money": 0,"error":""})
+
+        for assignment in assignments:
+            print("xx")
+            print(assignment.work_method)  
+            if assignment.work_method:  # 如果是出勤
+                location = assignment.location
+                if location:
+                    try:
+                        get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
+                                                location_city_residence=employee_location,
+                                                location_city_business_trip=location)
+                        base_money = get_Reference_obj.amount
+                        allowance_dict[location]["location"] = location
+                        allowance_dict[location]["day"] += 1
+                        allowance_dict[location]["money"] = base_money
+                    except ReferenceTable.DoesNotExist:
+                        allowance_dict[location]["error"] = "找不到居住及出差地的參照表"
+                    #                        
+            else:
+                pass
+
+
+
+
+        allowance_list = [{"location": data["location"], "day": data["day"], "money": data["money"]} for data in allowance_dict.values() if data["day"] >= 0]
+
+        return allowance_list
     def __str__(self) :
         return   str(self.pk).zfill(5)
 

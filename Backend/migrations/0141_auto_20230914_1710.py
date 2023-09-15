@@ -23,11 +23,6 @@ class Migration(migrations.Migration):
             field=models.TimeField(verbose_name='打卡時間'),
         ),
         migrations.AlterField(
-            model_name='project_confirmation',
-            name='requisition',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='Backend.requisition', verbose_name='請購單位'),
-        ),
-        migrations.AlterField(
             model_name='project_job_assign',
             name='location',
             field=models.CharField(choices=[('台東', '台東'), ('花蓮', '花蓮'), ('宜蘭', '宜蘭'), ('北北基', '北北基'), ('桃園', '桃園'), ('新竹', '新竹'), ('苗栗', '苗栗'), ('台中', '台中'), ('南投', '南投'), ('彰化', '彰化'), ('雲林', '雲林'), ('嘉義', '嘉義'), ('台南', '台南'), ('高雄', '高雄'), ('屏東', '屏東')], default='台東', max_length=4, verbose_name='工作地點'),
