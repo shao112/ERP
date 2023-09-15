@@ -974,14 +974,6 @@ class Work_Overtime_Application(ModifiedModel):
     class Meta:
         verbose_name = "加班申請"
         verbose_name_plural = verbose_name
-    def get_start_hours_of_overtime_zfill(self):
-        return f"{str(self.start_hours_of_overtime).zfill(2)}"
-    def get_start_mins_of_overtime_zfill(self):
-        return f"{str(self.start_mins_of_overtime).zfill(2)}"
-    def get_end_hours_of_overtime_zfill(self):
-        return f"{str(self.end_hours_of_overtime).zfill(2)}"
-    def get_end_mins_of_overtime_zfill(self):
-        return f"{str(self.end_mins_of_overtime).zfill(2)}"
 
 # 補卡申請
 class Clock_Correction_Application(ModifiedModel):
@@ -1010,10 +1002,6 @@ class Clock_Correction_Application(ModifiedModel):
     class Meta:
         verbose_name = "補卡申請"
         verbose_name_plural = verbose_name
-    def get_end_hours_of_clock_zfill(self):
-        return f"{str(self.end_hours_of_clock).zfill(2)}"
-    def get_end_mins_of_clock_zfill(self):
-        return f"{str(self.end_mins_of_clock).zfill(2)}"
 
 
 # 固定資產管理

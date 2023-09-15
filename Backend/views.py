@@ -820,15 +820,6 @@ class Clock_Correction_Application_View(View):
         form = ClockCorrectionApplicationForm(dict_data)
         if form.is_valid():
             getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
-            if "type_of_leave" in dict_data:
-                type_of_leave = dict_data["type_of_leave"]
-                del dict_data["type_of_leave"]
-                getObject.type_of_leave = Leave_Param.objects.get(id=type_of_leave)
-            if "substitute" in dict_data:
-                substitute = dict_data["substitute"]
-                del dict_data["substitute"]
-                getObject.substitute = Employee.objects.get(id=substitute)
-            
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
         else:
@@ -860,16 +851,7 @@ class Work_Overtime_Application_View(View):
         dict_data = convent_dict(request.body) 
         form = WorkOvertimeApplicationForm(dict_data)
         if form.is_valid():
-            getObject = Leave_Application.objects.get(id=dict_data['id'])
-            if "type_of_leave" in dict_data:
-                type_of_leave = dict_data["type_of_leave"]
-                del dict_data["type_of_leave"]
-                getObject.type_of_leave = Leave_Param.objects.get(id=type_of_leave)
-            if "substitute" in dict_data:
-                substitute = dict_data["substitute"]
-                del dict_data["substitute"]
-                getObject.substitute = Employee.objects.get(id=substitute)
-            
+            getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
         else:

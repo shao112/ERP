@@ -99,7 +99,7 @@
                         {{ clock_correction_application.get_type_of_clock_display }}
                     </td>
                     <td>
-                        {{ clock_correction_application.get_end_hours_of_clock_zfill }}:{{ clock_correction_application.get_end_mins_of_clock_zfill }}
+                        {{ clock_correction_application.end_hours_of_clock | stringformat:"02d" }}:{{ clock_correction_application.end_mins_of_clock | stringformat:"02d" }}
                     </td>
                     <td>
                         {{ clock_correction_application.clock_reason }}
