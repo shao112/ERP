@@ -33,6 +33,8 @@ LOCATION_CHOICES = [
     ("台南", "台南"),
     ("高雄", "高雄"),
     ("屏東", "屏東"),
+    ("花蓮", "花蓮"),
+    ("台東", "台東"),
 ]
 
 
@@ -86,7 +88,7 @@ class ModifiedModel(models.Model):
 class ReferenceTable(models.Model):
     location_city_residence = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="居住地")
     location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
-    amount = models.PositiveIntegerField(verbose_name="金額")
+    amount = models.DecimalField(verbose_name="錢/單位",max_digits=10, decimal_places=2)
     name=models.CharField(max_length=10)
 
     class Meta:
