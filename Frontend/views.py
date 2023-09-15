@@ -102,10 +102,6 @@ class Index(View):
 
     def get(self,request):
 
-        my_date = date(2023, 9, 13)
-        # print(Clock.get_hour_for_month(request.user.employee,2023,9))
-        print(request.user.employee.day_status(my_date))
-        # print(Leave_Application.objects.get(id=4).hour_day(my_date))
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者

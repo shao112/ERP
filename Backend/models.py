@@ -503,17 +503,17 @@ class Clock(models.Model):
             day_clock_records = day_clocks.filter(clock_date=date_to_check)
             day_clock_records_len= len(day_clock_records)
 
-            if  total_hour==0 and total_minutes==0 : 
+            if  total_hour==0 and total_minutes==0 : #整天請假
                 month.append({"date":date_to_check_string,"status":"3","results":results})
                 continue
 
-            if day_clock_records_len==1:
+            if day_clock_records_len==1: #只打一次卡
                 month.append({"date":date_to_check_string,"status":"1","ear_time":day_clock_records})
                 miss_hours+=8
-            elif day_clock_records_len==0:
+            elif day_clock_records_len==0:# 沒打卡
                 miss_hours+=8
                 month.append({"date":date_to_check_string,"status":"0"})
-            else:
+            else:#計算早晚打卡時間
                 ear_time = day_clock_records.earliest('clock_time').clock_time
                 last_time =day_clock_records.latest('clock_time').clock_time
                 first_clock_time = datetime.combine(datetime.today(), ear_time)
@@ -532,7 +532,7 @@ class Clock(models.Model):
                     miss_hours+=hours
                     miss_minutes += minutes
                     month.append({"date":date_to_check_string,"status":"no","ear_time":ear_time,"last_time":last_time,"hours":time_string,"minutes":minutes,"results":results})
-            # print("xxx")
+
         miss_hours += miss_minutes // 60 
         miss_minutes %= 60  
         return  {"list":month ,"miss_hours":miss_hours,"miss_minutes":miss_minutes}
