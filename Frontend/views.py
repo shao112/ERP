@@ -140,7 +140,7 @@ def signout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-
+# 工程確認單
 class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     model = Project_Confirmation
     template_name = 'project_confirmation/project_confirmation.html'
@@ -151,7 +151,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = Employee.objects.values('id','user__username')
         context['client_list'] = Client.objects.all()
-        context['requisition_list'] = Requisition.objects.all()
+        context['project_confirmation_form'] = ProjectConfirmationForm()
         context['quotation_list'] = Quotation.objects.all()
         return context
 

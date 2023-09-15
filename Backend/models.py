@@ -616,12 +616,14 @@ class Quotation(ModifiedModel):
         verbose_name = "報價單"
         verbose_name_plural = "報價單"
 
+# def get_default_requisition():
+#     return Requisition.objects.all()[:1].get()
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
     quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
-    requisition = models.CharField(max_length=100, null=True, blank=True, verbose_name='請購單位')
+    requisition = models.ForeignKey('Requisition', on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
@@ -660,7 +662,7 @@ class Project_Job_Assign(ModifiedModel):
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
-    location = models.CharField(max_length=4,choices=LOCATION_CHOICES,null=True, blank=True, verbose_name="工作地點")
+    location = models.CharField(max_length=4,choices=LOCATION_CHOICES, default=LOCATION_CHOICES[0][0],null=False, blank=False, verbose_name="工作地點")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
@@ -1129,6 +1131,8 @@ class Requisition(ModifiedModel):
     class Meta:
         verbose_name = "請購單位"
         verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.requisition_name  
 
 
 

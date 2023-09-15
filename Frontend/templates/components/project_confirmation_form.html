@@ -63,14 +63,8 @@
             <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="requisition_control">請購單位</label>
-                        <select class="form-control form-control-sm" name="requisition" id="requisition_control">
-                            <option value="">請選擇請購單位</option>
-                            {% for requisition in requisition_list %}
-                            <option value="{{ requisition.requisition_name }}">
-                                {{ requisition.requisition_name }}</option>
-                            {% endfor %}
-                        </select>
+                        <label for="requisition">請購單位</label>
+                        {{ project_confirmation_form.requisition }}
                     </div>
                 </div>
                 <div class="col-6">
