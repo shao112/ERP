@@ -27,7 +27,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="start_hours_of_overtime">加班起始小時</label>
-                        <select name="start_hours_of_overtime" class="form-control form-control-sm">
+                        <select name="start_hours_of_overtime" class="form-control form-control-sm" id="start_hours_of_overtime">
                             {% for i in 24range %}
                               <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -37,7 +37,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="start_mins_of_overtime">加班起始分鐘</label>
-                        <select name="start_mins_of_overtime" class="form-control form-control-sm">
+                        <select name="start_mins_of_overtime" class="form-control form-control-sm" id="start_mins_of_overtime">
                             {% for i in 60range %}
                               <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -47,7 +47,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="end_hours_of_overtime">加班結束小時</label>
-                        <select name="end_hours_of_overtime" class="form-control form-control-sm">
+                        <select name="end_hours_of_overtime" class="form-control form-control-sm" id="end_hours_of_overtime">
                             {% for i in 24range %}
                               <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -57,7 +57,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="end_mins_of_overtime">加班結束分鐘</label>
-                        <select name="end_mins_of_overtime" class="form-control form-control-sm">
+                        <select name="end_mins_of_overtime" class="form-control form-control-sm" id="end_mins_of_overtime">
                             {% for i in 60range %}
                               <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -66,21 +66,19 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-4">
                     <div class="form-group">
                         <label for="overtime_hours">申請時數(時)</label>
-                        <input class="form-control form-control-sm" name="overtime_hours" id="overtime_hours" readonly>
+                        <input type="text" class="form-control form-control-sm" name="overtime_hours" id="overtime_hours" value="0" readonly>
                     </div>
                 </div>
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-4">
                     <div class="form-group">
                         <label for="overtime_mins">申請時數(分)</label>
-                        <input class="form-control form-control-sm" name="overtime_mins" id="overtime_mins" readonly>
+                        <input type="text" class="form-control form-control-sm" name="overtime_mins" id="overtime_mins" value="0" readonly>
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-4">
                     <div class="form-group">
                         <label for="carry_over">加班結轉方式</label>
                         {{ work_overtime_application_form.carry_over }}
@@ -91,8 +89,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label for="overtime_reason">加班事由</label>
-                        <textarea class="form-control form-control-sm" name="overtime_reason" id="overtime_reason">
-                        </textarea>
+                        <textarea class="form-control form-control-sm" name="overtime_reason" id="overtime_reason"></textarea>
                     </div>
                 </div>
             </div>
