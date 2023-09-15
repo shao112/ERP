@@ -499,7 +499,6 @@ class Clock(models.Model):
             total_hour,total_minutes ,results = user.day_status(date_to_check) 
             over_time = timedelta(hours=total_hour, minutes=total_minutes)
 
-
             day_clock_records = day_clocks.filter(clock_date=date_to_check)
             day_clock_records_len= len(day_clock_records)
 
@@ -516,22 +515,30 @@ class Clock(models.Model):
             else:#計算早晚打卡時間
                 ear_time = day_clock_records.earliest('clock_time').clock_time
                 last_time =day_clock_records.latest('clock_time').clock_time
-                first_clock_time = datetime.combine(datetime.today(), ear_time)
-                last_clock_time = datetime.combine(datetime.today(), last_time)
-
-                time_difference = last_clock_time - first_clock_time
+                ear_seconds = ear_time.hour * 3600 + ear_time.minute * 60 
+                last_seconds = last_time.hour * 3600 + last_time.minute * 60 
+                #上了多久小時
+                time_difference = last_seconds - ear_seconds
               
-                end_difference = over_time - time_difference
+                hours_worked = time_difference // 3600
+                minutes_worked = (time_difference % 3600) // 60
+                time_string = f"{hours_worked}時{minutes_worked}分"
+                
+                #有沒有滿足
+                end_difference = over_time - timedelta(hours=hours_worked, minutes=minutes_worked)
                 hours = end_difference.seconds // 3600
-                minutes = (end_difference.seconds // 60) % 60
-                time_string = f"{hours}時{minutes}分"
+                minutes = (end_difference.seconds // 60) % 60            
+                print(over_time,timedelta(hours=hours_worked, minutes=minutes_worked),end_difference,time_difference,time_string)
 
+                
                 if end_difference.total_seconds() <= 0:
                     month.append({"date":date_to_check_string,"status":"ok","ear_time":ear_time,"last_time":last_time,"results":results,"hours":time_string})
                 else:
+                    print(hours,minutes,"曠職")
+                    miss_string =f"(miss:{hours}時{minutes}分)"
                     miss_hours+=hours
                     miss_minutes += minutes
-                    month.append({"date":date_to_check_string,"status":"no","ear_time":ear_time,"last_time":last_time,"hours":time_string,"minutes":minutes,"results":results})
+                    month.append({"date":date_to_check_string,"status":"no","ear_time":ear_time,"last_time":last_time,"hours":time_string,"miss":miss_string,"results":results})
 
         miss_hours += miss_minutes // 60 
         miss_minutes %= 60  

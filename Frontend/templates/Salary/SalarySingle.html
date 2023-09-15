@@ -125,24 +125,26 @@
                     漏打卡
                     {% elif entry.status == '0' %}
                     曠職
+                    {% elif entry.status == '3' %}
+                    整天請假
                     {% elif entry.status == 'ok' %}
-                    正常
+                    完成工作
                     {% elif entry.status == 'no' %}
                     少於8小時
                     {% endif %}
                 </td>
                 <td>
                     {% if entry.ear_time %}
-                    {{ entry.ear_time }}
+                    {{ entry.ear_time|time:"H:i" }}
                     {% endif %}
                 </td>
                 <td>
                     {% if entry.last_time %}
-                    {{ entry.last_time }}
+                    {{ entry.last_time|time:"H:i" }}
                     {% endif %}
                 </td>
                 <td>
-                    {{ entry.hours }}
+                    {{ entry.hours }} {{entry.miss}}
                 </td>
             </tr>
             {% if entry.results %}
@@ -159,7 +161,6 @@
                         </thead>
                         <tbody>
                             {% for result in entry.results %}
-                            {{result}}
                             <tr>
                                 <td>{{ result.total_hours }}</td>
                                 <td>{{ result.total_minutes }}</td>
