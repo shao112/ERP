@@ -78,7 +78,7 @@ class ProjectJobAssignResource(resources.ModelResource):
     lead_employee = Field(attribute='lead_employee', column_name=Project_Job_Assign.lead_employee.field.verbose_name)
     vehicle = Field(attribute='vehicle', column_name=Project_Job_Assign.vehicle.field.verbose_name)
     location = Field(attribute='location', column_name=Project_Job_Assign.location.field.verbose_name)
-    project_type = Field(attribute='project_type', column_name=Project_Job_Assign.project_type.field.verbose_name)
+    # project_type = Field(attribute='project_type', column_name=Project_Job_Assign.project_type.field.verbose_name)
     remark = Field(attribute='remark', column_name=Project_Job_Assign.remark.field.verbose_name)
     created_by = Field(attribute='created_by', column_name=Project_Job_Assign.created_by.field.verbose_name)
 

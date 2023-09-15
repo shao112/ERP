@@ -103,6 +103,9 @@ class Index(View):
     def get(self,request):
 
         if not isinstance(request.user, AnonymousUser):
+            x = Project_Job_Assign.get_month_list_day(request.user.employee,2023,9)
+            print(x)
+
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             news = News.objects.all()
             employeeid = request.user.employee

@@ -1107,7 +1107,7 @@ class Job_Assign_View(View):
         dict_data = convent_dict(request.body)
         form = ProjectJobAssignForm(dict_data)
         if form.is_valid():
-            getObject = Project_Job_Assign.objects.get(id=dict_data['id'])
+            getObject = Project_Job_Assign.objects.get(id=int(dict_data['id']))
             process_key =("support_employee","work_employee","lead_employee","project_confirmation")
 
             for key in process_key:#處理特別key
