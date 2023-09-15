@@ -667,7 +667,6 @@ class Project_Job_Assign(ModifiedModel):
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
-    # def get_id():
 
     class Meta:
         verbose_name = "工作派任計畫"   # 單數
@@ -690,14 +689,11 @@ class Project_Job_Assign(ModifiedModel):
                                          attendance_date__year=year, 
                                          attendance_date__month=month).distinct()
 
-        print("get")
         print(assignments)
 
         allowance_dict = defaultdict(lambda: {"location": "", "day": 0, "money": 0,"error":""})
 
         for assignment in assignments:
-            print("xx")
-            print(assignment.work_method)  
             if assignment.work_method:  # 如果是出勤
                 location = assignment.location
                 if location:
@@ -706,7 +702,7 @@ class Project_Job_Assign(ModifiedModel):
                                                 location_city_residence=employee_location,
                                                 location_city_business_trip=location)
                         base_money = get_Reference_obj.amount
-                        allowance_dict[location]["location"] = location
+                        allowance_dict[location]["location"] = f"派工地{location}"
                         allowance_dict[location]["day"] += 1
                         allowance_dict[location]["money"] = base_money
                     except ReferenceTable.DoesNotExist:
