@@ -88,23 +88,40 @@ class Project_Employee_AssignForm(BaseModelForm):
 
 
 # 工作派任計畫
-
 class ProjectJobAssignForm(BaseModelForm):
 
     class Meta:
         model = Project_Job_Assign
         fields = '__all__'
         widgets = {
-            'location': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'belong_to_company_control'}),
+            'location': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location', 'name':'location'}),
         }
     def clean(self):
         cleaned_data = super().clean()
+        # 工作派任計畫必填欄位：工程確認單、出勤日期、工作方式(是:出勤、否:文書)、工作人員、工作地點
         project_confirmation = cleaned_data.get('project_confirmation')
+        attendance_date = cleaned_data.get('attendance_date')
+        work_method = cleaned_data.get('work_method')
+        work_employee = cleaned_data.get('work_employee')
+        location = cleaned_data.get('location')
         errors = {}
 
 
         if project_confirmation == -1:
-            errors.setdefault('project_confirmation', []).append("請選擇有效的工程確認單。")
+            # errors.setdefault('project_confirmation', []).append("請選擇有效的工程確認單。") # 原本寫法
+            errors['project_confirmation'] = "請選擇有效的工程確認單。"
+        if not attendance_date:
+            errors['attendance_date'] = "請選擇出勤日期。"
+
+        if not work_method:
+            errors['work_method'] = "請選擇工作方法。"
+
+        if not work_employee:
+            errors['work_employee'] = "請選擇工作人員。"
+
+        if not location:
+            errors['location'] = "請選擇工作地點。"
+
 
         if errors:
             raise forms.ValidationError(errors)

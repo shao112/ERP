@@ -662,7 +662,7 @@ class Project_Job_Assign(ModifiedModel):
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
-    location = models.CharField(max_length=4,choices=LOCATION_CHOICES, default=LOCATION_CHOICES[0][0],null=False, blank=False, verbose_name="工作地點")
+    location = models.CharField(max_length=4,choices=LOCATION_CHOICES, null=True, blank=True, verbose_name="工作地點")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
     created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')

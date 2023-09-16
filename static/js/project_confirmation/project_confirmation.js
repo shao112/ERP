@@ -8,10 +8,11 @@ quotation_select.addEventListener("change", function () {
   }
 
   var selectedId = selectedOption.value;
-  // console.log('選中的選項 id 為: ' + selectedId);
+  console.log('選中的選項 id 為: ' + selectedId);
 
   const url = "/restful/quotation";
-  formData = { id: getdata["quotation"] };
+  // formData = { id: getdata["quotation"] };
+  formData = { id: selectedId };
 
   $.ajax({
     type: "GET",

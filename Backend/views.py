@@ -1167,6 +1167,7 @@ class Job_Assign_View(View):
             return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
+            print("error_messages: ",error_messages)
             return JsonResponse({"error":error_messages},status=400)
 
     def get(self,request):

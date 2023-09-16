@@ -171,7 +171,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
-        context['project_confirmation_form'] = ProjectJobAssignForm()
+        context['project_job_assign_form'] = ProjectJobAssignForm()
 
 
         context['vehicle'] = Vehicle.objects.all()
