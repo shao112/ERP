@@ -460,8 +460,8 @@ class Clock(models.Model):
     type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, default="1", blank=True, null=True, verbose_name="打卡類別")
     clock_in_or_out = models.BooleanField()
     clock_date = models.DateField(default=timezone.now,verbose_name='打卡日期')
-    clock_time = models.TimeField(verbose_name='打卡時間')
-    clock_GPS = models.CharField(max_length=255)
+    clock_time = models.TimeField(null=True,blank=True,verbose_name='打卡時間')
+    clock_GPS = models.CharField(null=True,blank=True,max_length=255)
     created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
     update_date = models.DateField(auto_now=True, verbose_name='更新日期')
 
@@ -1045,6 +1045,17 @@ class Clock_Correction_Application(ModifiedModel):
     class Meta:
         verbose_name = "補卡申請"
         verbose_name_plural = verbose_name
+    def create_and_update_clock(self, employee, date_of_clock, clock_correction_application_type_of_clock):
+        if clock_correction_application_type_of_clock == "1":
+            true_or_false = True
+        elif clock_correction_application_type_of_clock == "2":
+            true_or_false = False
+        # 找尋條件，XX員工，日期，上班還下班卡，找不到就建立打卡表，打卡類別設補打卡
+        clock, created = Clock.objects.get_or_create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, defaults={'type_of_clock':'2'})
+        print("created: ",created)
+        print("clock: ",clock)
+
+
 
 
 # 固定資產管理

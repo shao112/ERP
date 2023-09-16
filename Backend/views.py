@@ -830,6 +830,13 @@ class Clock_Correction_Application_View(View):
         form = ClockCorrectionApplicationForm(request.POST)
         if form.is_valid():
             newobj = form.save()
+            employee = Employee.objects.get(id=request.user.employee.id)
+            print("newobj: ", newobj)
+            print("employee: ", employee)
+            print("request.user.employeee.id: ", request.user.employee.id)
+            print("view newobj.date_of_clock: ",newobj.date_of_clock)
+            print("view newobj.type_of_clock: ",newobj.type_of_clock)
+            newobj.create_and_update_clock(employee, newobj.date_of_clock, newobj.type_of_clock)
             return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
         else:
             print("is_valid FALSE")
@@ -844,6 +851,17 @@ class Clock_Correction_Application_View(View):
         data = model_to_dict(data)
         # data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
+    
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Clock_Correction_Application.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
 
 class Work_Overtime_Application_View(View):
 
