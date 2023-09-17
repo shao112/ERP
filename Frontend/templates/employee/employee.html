@@ -82,18 +82,13 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="position">職稱</label>
-                                                <input class="form-control form-control-sm" name="position" id="position"></input>
+                                                <input class="form-control form-control-sm" name="position" id="position" required></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="departments">部門</label>
-                                                <select class="form-control form-control-sm" data-placeholder="選擇部門"
-                                                name="departments" id="completion_report_employee_select2">
-                                                <option value="-1">請選擇部門</option>
-                                                {% for department in department_list %}
-                                                <option value="{{ department.id }}">{{ department.department_name }}</option>
-                                                {% endfor %}
+                                                {{ employee_form.departments }}
                                             </select>
                                             </div>
                                         </div>
@@ -101,9 +96,9 @@
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="employee_id_control">員工ID</label>
+                                                <label for="employee_id">員工ID</label>
                                                 <input class="form-control form-control-sm" name="employee_id"
-                                                    id="employee_id_control"></input>
+                                                    id="employee_id" required></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -123,9 +118,9 @@
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="id_number_control">身份證字號</label>
+                                                <label for="id_number">身份證字號</label>
                                                 <input class="form-control form-control-sm" name="id_number"
-                                                    id="id_number_control"></input>
+                                                    id="id_number" required></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -191,6 +186,12 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="location_city">居住城市(用於計算)</label>
+                                                {{ employee_form.location_city }}
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="birth_place_control">出生地</label>
@@ -291,8 +292,8 @@
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
                     <th data-field="position" data-sortable="true">職稱</th>
-                    <th data-field="position" data-sortable="true">手機號碼</th>
-                    <th data-field="position" data-sortable="true">聯絡電話</th>
+                    <th data-field="phone_number" data-sortable="true">手機號碼</th>
+                    <th data-field="contact_number" data-sortable="true">聯絡電話</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">

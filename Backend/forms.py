@@ -148,11 +148,47 @@ class EmployeeForm(BaseModelForm):
         model = Employee
         fields = '__all__'
         widgets = {
-            'gender': forms.Select(attrs={'class': 'form-control form-control-sm'}),
-            'blood_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
-            'marital_status': forms.Select(attrs={'class': 'form-control form-control-sm'}),
-            'military_status': forms.Select(attrs={'class': 'form-control form-control-sm'})
+            'location_city': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location_city', "name":'location_city', 'required': 'true'}),
+            'departments': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'departments', "name":'departments', 'required': 'true'}),
+            'gender': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'gender', "name":'gender', 'required': 'true'}),
+            'blood_type': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'blood_type', "name":'blood_type'}),
+            'marital_status': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'marital_status', "name":'marital_status'}),
+            'military_status': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'military_status', "name":'military_status'})
         }
+        def clean(self):
+            cleaned_data = super().clean()
+            # 員工必填欄位：員工名稱、員工ID、部門名稱、身份證字號、職稱、居住城市(用於計算)
+            full_name = cleaned_data.get('full_name')
+            employee_id = cleaned_data.get('employee_id')
+            departments = cleaned_data.get('departments')
+            id_number = cleaned_data.get('id_number')
+            position = cleaned_data.get('position')
+            location_city = cleaned_data.get('location_city')
+            errors = {}
+            
+            if not full_name:
+                errors['full_name'] = "請輸入員工名稱。"
+
+            if not employee_id:
+                errors['employee_id'] = "請輸入員工ID"
+
+            if not departments:
+                errors['departments'] = "請輸入部門名稱"
+
+            if not id_number:
+                errors['id_number'] = "請輸入身份證字號"
+
+            if not position:
+                errors['position'] = "請輸入職稱"
+
+            if not location_city:
+                errors['location_city'] = "請輸入居住城市"
+
+
+            if errors:
+                raise forms.ValidationError(errors)
+
+            return cleaned_data
 # 員工
 class VehicleForm(BaseModelForm):
 
