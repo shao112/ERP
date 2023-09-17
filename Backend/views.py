@@ -23,6 +23,8 @@ from  django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from datetime import time
+
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
 
@@ -820,7 +822,10 @@ class Clock_Correction_Application_View(View):
         form = ClockCorrectionApplicationForm(dict_data)
         if form.is_valid():
             getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
+            employee = Employee.objects.get(id=request.user.employee.id)
             getObject.update_fields_and_save(**dict_data)
+            clock_time = time(int(getObject.end_hours_of_clock), int(getObject.end_mins_of_clock))
+            getObject.create_and_update_clock(employee, getObject.date_of_clock, getObject.type_of_clock, clock_time)
             return JsonResponse({'data': "完成修改"},status=200)
         else:
             return JsonResponse({"error":form.errors},status=400)
@@ -831,12 +836,8 @@ class Clock_Correction_Application_View(View):
         if form.is_valid():
             newobj = form.save()
             employee = Employee.objects.get(id=request.user.employee.id)
-            print("newobj: ", newobj)
-            print("employee: ", employee)
-            print("request.user.employeee.id: ", request.user.employee.id)
-            print("view newobj.date_of_clock: ",newobj.date_of_clock)
-            print("view newobj.type_of_clock: ",newobj.type_of_clock)
-            newobj.create_and_update_clock(employee, newobj.date_of_clock, newobj.type_of_clock)
+            clock_time = time(newobj.end_hours_of_clock, newobj.end_mins_of_clock)
+            newobj.create_and_update_clock(employee, newobj.date_of_clock, newobj.type_of_clock, clock_time)
             return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
         else:
             print("is_valid FALSE")

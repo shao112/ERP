@@ -1045,15 +1045,25 @@ class Clock_Correction_Application(ModifiedModel):
     class Meta:
         verbose_name = "補卡申請"
         verbose_name_plural = verbose_name
-    def create_and_update_clock(self, employee, date_of_clock, clock_correction_application_type_of_clock):
+    def create_and_update_clock(self, employee, date_of_clock, clock_correction_application_type_of_clock, time):
+
         if clock_correction_application_type_of_clock == "1":
             true_or_false = True
         elif clock_correction_application_type_of_clock == "2":
             true_or_false = False
+            
+        if self.clock is None:
+            print("Clock 建立")
+            clock = Clock.objects.create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, type_of_clock="2", clock_time=time)
+            self.clock = clock
+            self.save()
+        else:
+            print("Clock 更新")
+            self.clock.update(clock_date=date_of_clock, clock_in_or_out=true_or_false, clock_time=time)
         # 找尋條件，XX員工，日期，上班還下班卡，找不到就建立打卡表，打卡類別設補打卡
-        clock, created = Clock.objects.get_or_create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, defaults={'type_of_clock':'2'})
-        print("created: ",created)
-        print("clock: ",clock)
+        # clock, created = Clock.objects.get_or_create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, defaults={'type_of_clock':'2'})
+        # print("created: ",created)
+        # print("clock: ",clock)
 
 
 
