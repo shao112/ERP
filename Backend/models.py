@@ -291,6 +291,15 @@ class Approval_Target(models.Model):
 
     def __str__(self):
         return f"{self.get_name_display()}"
+    
+    def employeeid_to_employee(self):
+        employee_array = []
+        for approval_order_id in self.approval_order:
+            if approval_order_id !="x":
+                employee = Employee.objects.get(id=approval_order_id)
+                employee_array.append(employee)
+            
+        return employee_array
 
 
 class ApprovalModel(models.Model):
@@ -304,7 +313,8 @@ class ApprovalModel(models.Model):
     RELATED_NAME_MAP = {
         'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
         'Leave_Application': 'Leave_Application_Approval',
-        'Work_Overtime_Application':"Work_Overtime_Application_Approval"
+        'Work_Overtime_Application':"Work_Overtime_Application_Approval",
+        'Clock_Correction_Application':"Clock_Correction_Application_Approval"
     }
 
     #對應的model api 網址，會帶入data-model
@@ -312,6 +322,7 @@ class ApprovalModel(models.Model):
         'Project_Employee_Assign': 'project_employee_assign',
         'Leave_Application': 'leave_application',
         'Work_Overtime_Application': 'work_overtime_application',
+        'Clock_Correction_Application': 'clock_correction_application',
     }
 
 
@@ -371,6 +382,7 @@ class ApprovalModel(models.Model):
     def get_approval_employee(self):
         current_index= self.current_index
         approval_order = self.target_approval.approval_order
+        print("approval_order: ",approval_order)
         if approval_order[current_index] !="x":
             return Employee.objects.get(id=approval_order[current_index])
         return "x"
@@ -433,7 +445,7 @@ class ApprovalModel(models.Model):
                     "show_name":show_name,
                     "status": "wait",
                 })
-
+        print("show_list: ",show_list)
         return show_list
 
     class Meta:
@@ -1050,6 +1062,10 @@ class Clock_Correction_Application(ModifiedModel):
     class Meta:
         verbose_name = "補卡申請"
         verbose_name_plural = verbose_name
+    
+    def get_show_id(self):
+        return f"補卡-{str(self.id).zfill(5)}"
+    
     def create_and_update_clock(self, employee, date_of_clock, clock_correction_application_type_of_clock, time):
 
         if clock_correction_application_type_of_clock == "1":
@@ -1065,10 +1081,6 @@ class Clock_Correction_Application(ModifiedModel):
         else:
             print("Clock 更新")
             self.clock.update(clock_date=date_of_clock, clock_in_or_out=true_or_false, clock_time=time)
-        # 找尋條件，XX員工，日期，上班還下班卡，找不到就建立打卡表，打卡類別設補打卡
-        # clock, created = Clock.objects.get_or_create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, defaults={'type_of_clock':'2'})
-        # print("created: ",created)
-        # print("clock: ",clock)
 
 
 

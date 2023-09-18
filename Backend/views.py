@@ -131,8 +131,9 @@ class Approval_View_Process(View):
                 'Project_Employee_Assign': 'Project_Employee_Assign',
                 'Work_Overtime_Application': 'Work_Overtime_Application',
                 'Leave_Application': 'Leave_Application',
+                'Clock_Correction_Application': 'Clock_Correction_Application',
             }
-            print(modeltext)
+            print("modeltext: ", modeltext)
 
             try:
                 get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))

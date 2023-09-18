@@ -89,7 +89,11 @@
                     <tr class="collapse" id="sub-row-{{ a.id }}" style="background:#f1f1f1;">
                         <td></td>
                         <td>
-                            <span class="text-muted">目前無員工</span>
+                            <span class="text-muted"> 
+                                {% for employee in a.employeeid_to_employee %}
+                                    {{ employee }}{% if not forloop.last %}、{% endif %}
+                                {% endfor %}
+                            </span>
                         </td>
                     </tr>
                     {% endfor %}
