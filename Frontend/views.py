@@ -406,7 +406,11 @@ class Approval_Process(UserPassesTestMixin,ListView):
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['vehicle'] = Vehicle.objects.all()
+        context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)   
         return context
+    
 
     def get_queryset(self):
         current_employee = self.request.user.employee

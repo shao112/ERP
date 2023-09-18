@@ -280,8 +280,8 @@ class Approval_Target(models.Model):
     STATUS_CHOICES = [
         ('Project_Employee_Assign', '派工單'),
         ('Leave_Application', '請假單'),
-        ('Work_Overtime_Application', '補卡單'),
-        ('Clock_Correction_Application', '加班單'),
+        ('Work_Overtime_Application', '加班單'), #這個value會對應下面的value
+        ('Clock_Correction_Application', '補卡單'),
     ]
     name =models.CharField(max_length=30,verbose_name="表單名稱",choices=STATUS_CHOICES)
     approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
@@ -304,12 +304,14 @@ class ApprovalModel(models.Model):
     RELATED_NAME_MAP = {
         'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
         'Leave_Application': 'Leave_Application_Approval',
+        'Work_Overtime_Application':"Work_Overtime_Application_Approval"
     }
 
-    #對應的model，會帶入data-model
+    #對應的model api 網址，會帶入data-model
     Modal_URL__MAP = {
         'Project_Employee_Assign': 'project_employee_assign',
         'Leave_Application': 'leave_application',
+        'Work_Overtime_Application': 'work_overtime_application',
     }
 
 
@@ -1017,6 +1019,9 @@ class Work_Overtime_Application(ModifiedModel):
     class Meta:
         verbose_name = "加班申請"
         verbose_name_plural = verbose_name
+
+    def get_show_id(self):
+        return f"加班-{str(self.id).zfill(5)}"
 
 # 補卡申請
 class Clock_Correction_Application(ModifiedModel):

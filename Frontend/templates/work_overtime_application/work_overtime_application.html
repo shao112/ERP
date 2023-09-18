@@ -6,11 +6,12 @@
 
 {% load static%}
 <style>
-    .work-overtime-application-header a{
+    .work-overtime-application-header a {
         text-decoration: none;
         color: black;
     }
-    .work-overtime-application-table td{
+
+    .work-overtime-application-table td {
         vertical-align: middle;
     }
 </style>
@@ -18,12 +19,15 @@
 
 {% endblock %}
 
+{% load custom_tags %}
+
 
 {% block main %}
 
 <div class="main px-3">
     <div id="error-message"></div>
-    <div class="work-overtime-application modal fade" id="work-overtime-application-modal" tabindex="-1" aria-labelledby="work-overtime-application" aria-hidden="true">
+    <div class="work-overtime-application modal fade" id="work-overtime-application-modal" tabindex="-1"
+        aria-labelledby="work-overtime-application" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -47,7 +51,8 @@
             data-filter-control="true">
             <div id="toolbar">
                 <div class="work-overtime-application-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#work-overtime-application-modal">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
+                        data-target="#work-overtime-application-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增加班申請
                     </a>
                     <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('加班申請.xlsx')"
@@ -62,6 +67,7 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-sortable="true" data-field="APP">簽核</th>
                     <th data-field="date_of_overtime" data-sortable="true">加班日期</th>
                     <th data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
                     <th data-field="type_of_overtime" data-sortable="true">加班類別</th>
@@ -74,18 +80,48 @@
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for work_overtime_application in work_overtime_application_list %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ work_overtime_application.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ work_overtime_application.id }}"></td>
                     <td>
-                        <a data-target="#work-overtime-application-modal" type="button" data-url="work_overtime_application" data-id="{{ work_overtime_application.id }}"
+                        <a data-target="#work-overtime-application-modal" type="button"
+                            data-url="work_overtime_application" data-id="{{ work_overtime_application.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        <a data-url="work_overtime_application" data-target="#work-overtime-application-modal" data-id="{{ work_overtime_application.id }}"
-                            type="button" class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                        <a data-url="work_overtime_application" data-target="#work-overtime-application-modal"
+                            data-id="{{ work_overtime_application.id }}" type="button"
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
+                    </td>
+                    <td>
+                        {% if work_overtime_application.Approval %}
+                        {{work_overtime_application.Approval.get_current_status_display}}
+
+                        {% if work_overtime_application.Approval.current_status == "completed" %}
+                        {% if request.user|get_supervisor %}
+                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
+                            onclick="DelApproval(event)">收回(主管)</button>
+                        {% endif %}
+                        {% endif %}
+
+
+                        {% if work_overtime_application.Approval.current_status == "in_progress" %}
+                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
+                            onclick="DelApproval(event)">收回</button>
+                        {% endif %}
+
+                        {% if work_overtime_application.Approval.current_status == "rejected" %}
+                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
+                            onclick="submitApproval(event)">發送新簽核</button>
+                        {% endif %}
+
+                        {% else %}
+                        <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
+                            onclick="submitApproval(event)">開始簽核</button>
+                        {% endif %}
                     </td>
 
                     <td>
@@ -98,7 +134,10 @@
                         {{ work_overtime_application.get_type_of_overtime_display }}
                     </td>
                     <td>
-                        {{ work_overtime_application.start_hours_of_overtime | stringformat:"02d" }}:{{ work_overtime_application.end_hours_of_overtime | stringformat:"02d"  }} - {{ work_overtime_application.start_mins_of_overtime | stringformat:"02d"  }}:{{ work_overtime_application.end_mins_of_overtime | stringformat:"02d"  }}
+                        {{ work_overtime_application.start_hours_of_overtime | stringformat:"02d" }}:{{
+                        work_overtime_application.end_hours_of_overtime | stringformat:"02d" }} - {{
+                        work_overtime_application.start_mins_of_overtime | stringformat:"02d" }}:{{
+                        work_overtime_application.end_mins_of_overtime | stringformat:"02d" }}
                     </td>
                     <td>
                         {{ work_overtime_application.overtime_hours }} 時 {{ work_overtime_application.overtime_mins }} 分
@@ -121,6 +160,7 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/fuc/approval.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
@@ -134,7 +174,7 @@
         });
     });
 
-    async function LoadData(event){
+    async function LoadData(event) {
         console.log("load")
         getdata = await GET_handleClick(event);
 

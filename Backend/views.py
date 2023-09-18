@@ -125,12 +125,14 @@ class Approval_View_Process(View):
             except Http404:
                 return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
             
-            model_name = {
+            model_name = {# 對應Approval_Target的name
                 'project_confirmation': 'Project_Confirmation',
                 'job_assign': 'Project_Job_Assign',
                 'Project_Employee_Assign': 'Project_Employee_Assign',
+                'Work_Overtime_Application': 'Work_Overtime_Application',
                 'Leave_Application': 'Leave_Application',
             }
+            print(modeltext)
 
             try:
                 get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))

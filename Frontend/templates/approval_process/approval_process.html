@@ -68,11 +68,11 @@
                 <ul class="nav nav-tabs" id="myTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1" role="tab"
-                            aria-controls="content1" aria-selected="true">假單</a>
+                            aria-controls="content1" aria-selected="true">請假單</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab"
-                            aria-controls="content2" aria-selected="false">工程派任計畫</a>
+                            aria-controls="content2" aria-selected="false">加班</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="tab3" data-toggle="tab" href="#content3" role="tab"
@@ -85,8 +85,8 @@
                         {% include 'components\leave_application_form.html' %}
                     </div>
                     <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
-                        工程派任計畫
-                        {% include 'components\job_assign_form.html' %}
+                        加班申請
+                        {% include 'components\work_overtime_application_form.html' %}
 
                     </div>
                     <div class="tab-pane fade" id="content3" role="tabpanel" aria-labelledby="tab3">
@@ -119,12 +119,11 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
-                    <td>{{ object.target_approval.name }}</td>
+                    <!-- 應該可以顯示對display捨的 顯示中文 -->
+                    <td>{{ object.target_approval.name }}</td> 
                     <td>
                         {{ object.get_foreignkey.get_show_id }}
-
                     </td>
-
 
                     <td>
                         {% for log in object.get_approval_log_list %}
@@ -172,9 +171,8 @@
             "{% static 'js/project_confirmation/project_confirmation.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
-            "{% static 'js/job-assign/job-assign.js' %}",
             "{% static 'js/fuc/restful.js' %}",
-
+            "{% static 'js/work-overtime-application/work-overtime-application.js' %}",
         ];
 
         scripts.forEach(function (src) {
@@ -200,9 +198,7 @@
             GET_handleClick(button, false).then((data) => {
                 console.log(data)
                 for (var key in data) {
-
                     var input = form.querySelector('[name="' + key + '"]');
-
                     if (input) {
                         let get_value = jsonData[key];
                         input.disabled = true;  // 禁用
@@ -212,14 +208,12 @@
                             continue
                         }
 
-
                         if (typeof (jsonData[key]) == "object" && get_value != null) {//判斷是不是陣列
                             console.log(key)
                             console.log(input)
                             SetSelect2(input, key, get_value);
                             continue
                         }
-
                         input.value = get_value;
                         // console.log("key " + key + " 帶資料:" + get_value);
 
@@ -234,7 +228,7 @@
                 if (modalModel === 'Leave_Application') {
                     // projectConfirmationIdControl.dispatchEvent(change_event);
                     $('#tab1').tab('show');
-                } else if (modalModel === 'job_assign') {
+                } else if (modalModel === 'work_overtime_application') {
                     $('#tab2').tab('show');
                 } else if (modalModel === 'project_employee_assign') {
                     project_job_assign_IdControl.dispatchEvent(change_event);
