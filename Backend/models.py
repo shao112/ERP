@@ -411,6 +411,7 @@ class ApprovalModel(models.Model):
         取得相關的 ApprovalLog 並整理成列表
         """
         get_approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
+        print("get_approval_logs: ",get_approval_logs)
         show_list = []
         current_index = self.current_index
         approval_order = self.target_approval.approval_order

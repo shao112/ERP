@@ -407,6 +407,9 @@ class Approval_Process(UserPassesTestMixin,ListView):
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['vehicle'] = Vehicle.objects.all()
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["leave_application_form"] = LeaveApplicationForm()
+        context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
+
         context["24range"] = range(24)
         context["60range"] = range(60)   
         return context
