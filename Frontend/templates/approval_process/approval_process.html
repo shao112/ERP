@@ -126,7 +126,7 @@
                 {% for object in object_list %}
                 <tr>
                     <!-- 應該可以顯示對display捨的 顯示中文 -->
-                    <td>{{ object.target_approval.name }}</td> 
+                    <td>{{ object.target_approval.get_name_display }}</td> 
                     <td>
                         {{ object.get_foreignkey.get_show_id }}
                     </td>
