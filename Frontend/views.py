@@ -39,7 +39,7 @@ class Project_employee_assign_View(DetailView):
 
 
 
-class SalaryDetailView(ListView):
+class SalaryDetailView(UserPassesTestMixin,ListView):
     model = Salary
     template_name = 'Salary/SalarySingle.html'
     context_object_name = 'salary'
@@ -51,11 +51,14 @@ class SalaryDetailView(ListView):
         user = self.kwargs.get('user')    
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
         context["work_list"] = Clock.get_hour_for_month(self.request.user.employee,year,int(month))
-        # print( context["work_list"] )
-
         return context
 
-class SalaryListView(ListView):
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='財務').exists()    
+
+class SalaryListView(UserPassesTestMixin,ListView):
     model = Salary
     template_name = 'Salary/Salary.html'
     context_object_name = 'salaries'
@@ -64,7 +67,12 @@ class SalaryListView(ListView):
         month = self.kwargs.get('month')
         queryset = Salary.objects.filter(year=year, month=month)
         return queryset
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='財務').exists()    
     
+
 # 首頁
 class Director_Index(View):
     def get(self,request):
@@ -221,7 +229,7 @@ class Employee_list(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+        return self.request.user.groups.filter(name__icontains='管理部').exists()    
 
 
 # 員工出勤
@@ -237,7 +245,7 @@ class Employee_Attendance_list(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+        return self.request.user.groups.filter(name__icontains='管理部').exists()    
 
 
 # 固定資產管理
@@ -248,7 +256,7 @@ class Equipment_ListView(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+        return self.request.user.groups.filter(name__icontains='管理部').exists()    
 
     
 
@@ -297,7 +305,7 @@ class Department_list(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='管理部管理').exists()    
+        return self.request.user.groups.filter(name__icontains='管理部').exists()    
 
 
 
@@ -352,26 +360,17 @@ class News_ListView(ListView):
         return context
 
 # 行事曆
-class Calendar(UserPassesTestMixin,ListView):
+class Calendar(ListView):
     model = Employee
     template_name = 'calendar/calendar.html'
     context_object_name = 'employee'
 
-    def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
 
 
-class Approval_List(UserPassesTestMixin,ListView):
+class Approval_List(ListView):
     model = ApprovalModel
     template_name = 'approval_list/approval_list.html'
     context_object_name = 'approval_list'
-
-    def test_func(self):#有簽核權
-        if settings.PASS_TEST_FUNC:
-            return True
-        return True#self.request.user.groups.filter(name__icontains='工程確認單').exists()    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -395,16 +394,12 @@ class Approval_List(UserPassesTestMixin,ListView):
         return queryset
 
 
-class Approval_Process(UserPassesTestMixin,ListView):
+class Approval_Process(ListView):
     model = ApprovalModel
     template_name = 'approval_process/approval_process.html'
     context_object_name = 'approval_process'
 
-    def test_func(self):#有簽核權
-        if settings.PASS_TEST_FUNC:
-            return True
-        return  True #self.request.user.groups.filter(name__icontains='簽核權').exists()    
-
+   
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees_list"] = employee = Employee.objects.values('id','user__username')
@@ -446,7 +441,7 @@ class Approval_Process(UserPassesTestMixin,ListView):
         return queryset
     
 
-# 簽核權
+# 簽核順序
 class Approval_Group(UserPassesTestMixin,ListView):
     model = Approval_Target
     template_name = 'approval_group/approval_group.html'
@@ -455,7 +450,7 @@ class Approval_Group(UserPassesTestMixin,ListView):
     def test_func(self):#有簽核權
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='簽核權').exists() 
+        return self.request.user.groups.filter(name__icontains='簽核流程管理').exists() 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -478,13 +473,13 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='簽核權').exists()
+        return self.request.user.groups.filter(name__icontains='財務').exists()
 
 # 請假申請
-class Leave_Application_List(UserPassesTestMixin,ListView):
+class Leave_Application_List(ListView):
     model = Leave_Application
     template_name = 'leave_application/leave_application.html'
-    context_object_name = 'leave_application_list'
+    context_object_name = 'leave_application'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -493,51 +488,42 @@ class Leave_Application_List(UserPassesTestMixin,ListView):
         context["60range"] = range(60)
 
         user = self.request.user.employee
-        # x = Leave_Param.objects.get(id=3)
-        # print(x.get_user_leave_applications(user))
+
         context["leave_details"] =Leave_Param.get_leave_param_details(user)
+        context["leave_application_list"] =Leave_Application.objects.filter(applicant=user)
 
         return context
-    
-    def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return  True
+
+
 # 加班申請
-class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
+class Work_Overtime_Application_List(ListView):
     model = Work_Overtime_Application
     template_name = 'work_overtime_application/work_overtime_application.html'
-    context_object_name = 'work_overtime_application_list'
+    context_object_name = 'work_overtime_applicationS'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user.employee
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
-
-        moeny,details = Work_Overtime_Application.get_money_by_user_month(self.request.user.employee,2023,9)
-
+        context["work_overtime_application_list"] =Work_Overtime_Application.objects.filter(created_by=user)
         return context
     
-    def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return True
 # 補卡申請
-class Clock_Correction_Application_List(UserPassesTestMixin,ListView):
+class Clock_Correction_Application_List(ListView):
     model = Clock_Correction_Application
     template_name = 'clock_correction_application/clock_correction_application.html'
-    context_object_name = 'clock_correction_application_list'
+    context_object_name = 'clock_correction_applications'
 
     def get_context_data(self, **kwargs):
+        user = self.request.user.employee
         context = super().get_context_data(**kwargs)
+        context["clock_correction_application_list"] =Clock_Correction_Application.objects.filter(created_by=user)
         context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
         return context
     
-    def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return True
+
 
