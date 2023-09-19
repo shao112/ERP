@@ -50,7 +50,7 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         month = self.kwargs.get('month')
         user = self.kwargs.get('user')    
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
-        context["work_list"] = Clock.get_hour_for_month(self.request.user.employee,year,int(month))
+        context["work_list"] = Clock.get_hour_for_month(Employee.objects.get(id=user),year,int(month))
         return context
 
     def test_func(self):
@@ -490,7 +490,7 @@ class Leave_Application_List(ListView):
         user = self.request.user.employee
 
         context["leave_details"] =Leave_Param.get_leave_param_details(user)
-        context["leave_application_list"] =Leave_Application.objects.filter(applicant=user)
+        context["leave_application_list"] =Leave_Application.objects.filter(created_by=user)
 
         return context
 

@@ -863,7 +863,7 @@ class Leave_Application(ModifiedModel):
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
     attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
-    created_by = models.ForeignKey("Employee",related_name="leave_created", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
+    created_by = models.ForeignKey("Employee",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
 
 
     class Meta:
