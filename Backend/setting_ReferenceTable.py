@@ -1,4 +1,53 @@
 
+#時津
+def get_sleep_json():
+
+    data = [
+    [0, 0.5, 1, 1.5, 2, 2, 2, 2.5, 3, 4, 4.5, 5, 6],
+    [0.5, 0, 0.5, 1, 1.5, 2, 2, 2, 2.5, 3, 4, 4.5, 5],
+    [1, 0.5, 0, 0.5, 1, 1.5, 2, 2, 2, 2.5, 3, 4, 4.5],
+    [1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2, 2, 2.5, 3, 4],
+    [2, 1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2, 2, 2.5, 3],
+    [2, 2, 1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2, 2, 2.5],
+    [2, 2, 2, 1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2, 2],
+    [2.5, 2, 2, 2, 1.5, 1, 0.5, 0, 0.5, 1, 1.5, 2, 2],
+    [3, 2.5, 2, 2, 2, 1.5, 1, 0.5, 0, 0.5, 1, 2, 2],
+    [4, 3, 2.5, 2, 2, 2, 1.5, 1, 0.5, 0, 0.5, 1, 2],
+    [4.5, 4, 3, 2.5, 2, 2, 2, 1.5, 1, 0.5, 0, 0.5, 1],
+    [5, 4.5, 4, 3, 2.5, 2, 2, 2, 2, 1, 0.5, 0, 1],
+    [6, 5, 4.5, 4, 3, 2.5, 2, 2, 2, 2, 1, 1, 0],
+    [5, 6, 7, 7, 6, 5, 5, 5, 5, 5, 4, 3, 2],
+    [2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 6, 5, 4]
+]
+
+    start_points = ["宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東"]
+    business_trip_destinations = ["宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東", "台東", "花蓮"]
+
+    # 生成 JSON 数据
+    matrix = []
+
+    for i in range(len(start_points)):
+        for j in range(len(business_trip_destinations)):
+            print(start_points[i],business_trip_destinations[j])
+            matrix.append({
+                "location_city_residence": start_points[i],
+                "location_city_business_trip": business_trip_destinations[j],
+                "amount": data[j][i],
+                "name": "車程津貼"
+            })
+            print("--")
+
+    
+    for entry in matrix:
+        ReferenceTable.objects.create(
+            location_city_residence=entry["location_city_residence"],
+            location_city_business_trip=entry["location_city_business_trip"],
+            amount=entry["amount"],
+            name=entry["name"]
+        )
+
+
+#出差津貼
 def get_json():
     data = [
             [250, 250, 250, 250, 250, 350, 350, 350, 450, 450, 450, 550, 550],

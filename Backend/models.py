@@ -763,6 +763,13 @@ class Project_Employee_Assign(ModifiedModel):
     def __str__(self):
         return self.get_show_id()
 
+#車程津貼
+class Travel_Application(ModifiedModel):
+    location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
+    applicant = models.ForeignKey("Employee",related_name="travel_applicant", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
+    
+    created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
 
 
 # 請假申請
@@ -779,9 +786,11 @@ class Leave_Application(ModifiedModel):
     substitute = models.ForeignKey("Employee", on_delete=models.SET_NULL,related_name="leave_application_substitute", blank=True, null=True, verbose_name="工作代理人")
     leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
-    created_by = models.ForeignKey("Employee",verbose_name="申請者",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True)
+    applicant = models.ForeignKey("Employee",verbose_name="申請者",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True)
     attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
+    created_by = models.ForeignKey("Employee",related_name="leave_created", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
 
     class Meta:
         verbose_name = "請假申請"
@@ -929,7 +938,7 @@ class Leave_Param(ModifiedModel):
 
     def get_user_leave_applications(self, user,Approval_status=None,year=None,month=None):
 
-        applications = self.lication.filter(created_by=user)        
+        applications = self.lication.filter(applicant=user)        
         if year:
             applications = applications.annotate(year=ExtractYear('start_date_of_leave')).filter(year=year)
         if month:

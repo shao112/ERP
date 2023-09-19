@@ -93,13 +93,17 @@ class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
 
     # list_display = [field.name for field in Project_Employee_Assign._meta.get_fields()]
 
+class ReferenceTableAdmin(admin.ModelAdmin):
+    list_display = ("location_city_residence","location_city_business_trip","amount",'name')
+
+
 admin.site.register(Project_Employee_Assign, ProjectEmployeeAssignAdmin)
 
 # 取消掉默認的 User model，加入擴充的 Employee 重新註冊
 admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(SysMessage)
-admin.site.register(ReferenceTable)
+admin.site.register(ReferenceTable,ReferenceTableAdmin)
 admin.site.register(SalaryDetail)
 admin.site.register(Quotation)
 admin.site.register(Approval_Target)
