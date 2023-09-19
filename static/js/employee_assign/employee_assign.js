@@ -38,7 +38,7 @@ project_job_assign_IdControl.addEventListener("change", function () {
         console.log("quotation_dict[client_name]" + quotation_dict["client_name"])
         document.getElementsByName("project_name")[0].value =quotation_dict["project_name"];
         document.getElementsByName("client_name")[0].value = quotation_dict["client_name"];
-        document.getElementsByName("requisition")[0].value = project_confirmation["requisition"];
+        document.getElementsByName("requisition")[0].value = jsonData["requisition_name"];
         document.getElementsByName("location")[0].value = jsonData["location"];
     },
     error: function (xhr, textStatus, errorThrown) {
