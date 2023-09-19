@@ -1,6 +1,16 @@
 from Backend.models import SysMessage,Client
 from django.contrib.auth.models import AnonymousUser
 
+from django.conf import settings
+
+
+
+
+def pass_test_func(request):
+    pass_test_func = settings.PASS_TEST_FUNC
+
+    return {"pass_test_func":pass_test_func}
+
 def sys_messages(request):
     if  isinstance(request.user, AnonymousUser):
         return {'sys_messages': {}}

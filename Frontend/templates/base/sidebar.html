@@ -1,3 +1,9 @@
+{% load tz %}  {# 導入時區 #}
+{% now "Y" as current_year %}
+{% now "m" as current_month %}
+{% load custom_tags %}
+
+
 <div class="sidebar pl-2 collapse width show" id="sidebarCollapse">
     <div class="sidebar-logo">
         <img src="" alt="">
@@ -38,6 +44,10 @@
                 </ul>
             </div>
         </li>
+
+
+        {% if user|in_group_T_or_F:"主管"  or pass_test_funcS %}
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#directorCollapse" data-toggle="collapse"
                 aria-expanded="false" aria-controls="directorCollapse">
@@ -51,6 +61,11 @@
                 </ul>
             </div>
         </li>
+        {% endif %}
+        
+
+        {% if user|in_group_T_or_F:"工程"  or pass_test_funcS %}
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#engineerCollapse" data-toggle="collapse"
                 aria-expanded="false" aria-controls="engineerCollapse">
@@ -58,18 +73,38 @@
             </a>
             <div class="collapse" id="engineerCollapse">
                 <ul class="nav flex-column ml-4">
+                    
+
+        {% if user|in_group_T_or_F:"工程確認"  or pass_test_funcS %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project-confirmation' %}">工程確認單</a>
                     </li>
+                    {% endif %}
+                    
+
+        {% if user|in_group_T_or_F:"工程派任"  or pass_test_funcS %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project' %}">工作派任計畫</a>
                     </li>
+                    {% endif %}
+                    
+
+        {% if user|in_group_T_or_F:"派工單"  or pass_test_funcS %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_assign' %}">派工單</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </li>
+        {% endif %}
+
+        
+
+        {% if user|in_group_T_or_F:"管理"  or pass_test_funcS %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
@@ -96,6 +131,12 @@
                 </ul>
             </div>
         </li>
+
+        {% endif %}
+
+        {% if user|in_group_T_or_F:"業務"  or pass_test_funcS %}
+
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#salesCollapse" data-toggle="collapse"
                 aria-expanded="false" aria-controls="salesCollapse">
@@ -127,6 +168,10 @@
                 </ul>
             </div>
         </li>
+        {% endif %}
+
+        {% if user|in_group_T_or_F:"財務"  or pass_test_func %}
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#financialCollapse" data-toggle="collapse" aria-expanded="false"
                 aria-controls="financialCollapse">
@@ -138,14 +183,12 @@
                         <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
                     </li>
                     <li class="nav-item">
-                        {% load tz %}  {# 導入時區 #}
-                        {% now "Y" as current_year %}
-                        {% now "m" as current_month %}
                         <a class="nav-link" href="{% url 'salary_list' current_year current_month %}">員工薪水</a>
                     </li>
                 </ul>
             </div>
         </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link collapsed" href="#approvalCollapse" data-toggle="collapse" aria-expanded="false"
                 aria-controls="approvalCollapse">
@@ -161,12 +204,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Approval_List' %}">簽核追蹤</a>
                     </li>
+
+                    {% if user|in_group_T_or_F:"簽核管理"  or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </li>
+
+
+        {% if user|in_group_T_or_F:"公告"  or pass_test_funcS %}
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#newsCollapse" data-toggle="collapse" aria-expanded="false"
                 aria-controls="newsCollapse">
@@ -180,5 +230,6 @@
                 </ul>
             </div>
         </li>
+        {% endif %}
     </ul>
 </div>

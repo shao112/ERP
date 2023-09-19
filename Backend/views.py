@@ -6,7 +6,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import  ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
@@ -1076,6 +1076,11 @@ class Project_Confirmation_View(View):
                 get_completion_report_employee = dict_data["completion_report_employee"]
                 del dict_data["completion_report_employee"]
                 getObject.completion_report_employee.set(get_completion_report_employee)
+
+            if "requisition" in dict_data:
+                get_requisition_id = dict_data["requisition"]
+                del dict_data["requisition"]
+                getObject.requisition = Requisition.objects.get(id=get_requisition_id)
             
             get_Quotation_Object = Quotation.objects.get(id=dict_data['quotation'])
             getObject.quotation = get_Quotation_Object
@@ -1116,9 +1121,14 @@ class Project_Confirmation_View(View):
         data = get_object_or_404(Project_Confirmation, id=id)
         get_id=data.get_show_id()
         project_name=data.quotation.project_name if data.quotation else None
+        requisition_name=data.requisition.requisition_name if data.requisition else None
+        client_name=data.quotation.client.client_name if data.quotation.client else None
+
         data = model_to_dict(data)
+        data['requisition_name'] = requisition_name
         data['project_confirmation_id'] = get_id
         data['project_name'] = project_name
+        data['client_name'] = client_name
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         print(data)
@@ -1182,6 +1192,8 @@ class Job_Assign_View(View):
         #渲染關聯
         selected_fields = ['id','quotation_id', 'quotation', 'client', 'requisition']
         quotation_selected_fields = ['id','project_name',  'client']
+        requisition_name =data.project_confirmation.requisition.requisition_name
+        print(requisition_name)
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
         
         quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)
@@ -1191,6 +1203,7 @@ class Job_Assign_View(View):
         quotation_dict["client_name"] = client_name
 
         data = model_to_dict(data)
+        data["requisition_name"]=requisition_name
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])
         #將外來鍵的關聯 加入dict

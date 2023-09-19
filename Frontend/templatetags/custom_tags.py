@@ -24,6 +24,14 @@ def format_with_zeros(value, width):
     return str(value).zfill(width)
 
 
+
+@register.filter
+def in_group_T_or_F(user, group):
+    is_supervisor = False
+    is_in_group = any(group in user_group.name for user_group in user.groups.all())
+
+    return is_in_group
+
 @register.filter
 def get_supervisor(user):
     is_supervisor = False
