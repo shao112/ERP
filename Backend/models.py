@@ -156,6 +156,10 @@ class Employee(ModifiedModel):
         verbose_name = "員工"   # 單數
         verbose_name_plural = verbose_name   #複數
 
+    def get_hour_salary(self):
+        return  math.ceil(self.default_salary / 240)
+
+
     def day_status(self, date): #當天還要上幾小時
 
         leave_applications = self.leave_list.filter(
@@ -195,6 +199,9 @@ class SalaryDetail(models.Model):
     system_amount = models.PositiveIntegerField(default=0, verbose_name='系統金額')
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
     deduction = models.BooleanField(default=False, verbose_name='扣款項目') #F為補貼、T為請事假、勞保...
+    def save(self, *args, **kwargs):  
+        if self.system_amount != 0:
+            super().save(*args, **kwargs)
 
     def set_name_and_adjustment_amount(self, name, amount,deduction):
         self.name = name
@@ -705,33 +712,52 @@ class Project_Job_Assign(ModifiedModel):
                                          attendance_date__month=month).distinct()
 
         print(assignments)
+        print(employee_location)
 
-        allowance_dict = defaultdict(lambda: {"location": "", "day": 0, "money": 0,"error":""})
+        allowance_dict = defaultdict(lambda: {"location": "", "day": 0, "money": 0,"food":0,"error":"","food_error":""})
+
 
         for assignment in assignments:
             if assignment.work_method:  # 如果是出勤
                 location = assignment.location
                 if location:
+                    allowance_dict[location]["location"] = f"派工地-{location}"
+                    allowance_dict[location]["day"] += 1
                     try:
                         get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
                                                 location_city_residence=employee_location,
                                                 location_city_business_trip=location)
-                        base_money = get_Reference_obj.amount
-                        allowance_dict[location]["location"] = f"派工地{location}"
-                        allowance_dict[location]["day"] += 1
-                        allowance_dict[location]["money"] = base_money
+                        allowance_dict[location]["money"] = get_Reference_obj.amount
                     except ReferenceTable.DoesNotExist:
-                        allowance_dict[location]["error"] = "找不到居住及出差地的參照表"
+                        allowance_dict[location]["error"] = f"找不到{employee_location}對{location}的出差參照表 "
+                    try:
+                        get_Reference_food_obj = ReferenceTable.objects.get(name="伙食津貼",
+                                                location_city_residence=employee_location,
+                                                location_city_business_trip=location)
+                        allowance_dict[location]["food"] = get_Reference_food_obj.amount
+                    except ReferenceTable.DoesNotExist:
+                        allowance_dict[location]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
                     #                        
             else:
                 pass
 
+        allowance_list = [
+            {
+                "location": data["location"],
+                "day": data["day"],
+                "money": data.get("money",0),
+                "food": data.get("food", 0),
+                "error": data.get("error", ""),
+                "food_error": data["food_error"],
+            }
+            for data in allowance_dict.values() if data["day"] >= 0
+        ]
+        total_money =  math.ceil(sum(data["money"] * data["day"] for data in allowance_list))
+        total_food_money = math.ceil(sum(data["food"] * data["day"] for data in allowance_list))
 
-
-
-        allowance_list = [{"location": data["location"], "day": data["day"], "money": data["money"]} for data in allowance_dict.values() if data["day"] >= 0]
-
-        return allowance_list
+        #回傳伙食津貼/出差津貼/明細
+        return total_money,total_food_money, allowance_list
+    
     def __str__(self) :
         return   str(self.pk).zfill(5)
 
@@ -763,12 +789,46 @@ class Project_Employee_Assign(ModifiedModel):
     def __str__(self):
         return self.get_show_id()
 
+
+class ExtraWorkDay(ModifiedModel):
+    DATE_TYPE_CHOICES = [
+        ('extra_work', '補班、額外上班日(這天要上班)'),
+        ('day_off', '平日休假日(這天不用上班)'),
+    ]
+
+    date = models.DateField(verbose_name="日期")
+    date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES, verbose_name="日期類型")
+
+    created_by = models.ForeignKey("Employee",related_name="ExtraWorkDay_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
+    def __str__(self):
+        return f"{self.date} - {self.get_date_type_display()}"
+
 #車程津貼
 class Travel_Application(ModifiedModel):
     location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
+    Application_date = models.DateField(blank=True, null=True, verbose_name="申請時間")
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
     applicant = models.ForeignKey("Employee",related_name="travel_applicant", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
-    
     created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
+    class Meta:
+        verbose_name = "車程申請"   # 單數
+        verbose_name_plural = verbose_name   #複數
+        ordering = ['-id']
+
+    def get_hour(self):        
+        location_city = self.applicant.location_city
+        try:
+            reference_entry = ReferenceTable.objects.get(
+                location_city_business_trip=location_city,
+                location_city_residence=self.location_city_business_trip,
+                name="車程津貼"
+            )
+            return reference_entry.amount
+        except ReferenceTable.DoesNotExist:
+            return None
+    #計算total hour要-16
 
 
 
@@ -927,7 +987,7 @@ class Leave_Param(ModifiedModel):
 
     def calculate_total_leave_cost(self, user,year,month):
         #計算薪水
-        hourly_salary = math.ceil(user.default_salary / 240)
+        hourly_salary =user.get_hour_salary()
         #回傳已請假(簽核)
         total_hours, total_minutes = self.calculate_total_leave_duration(user=user, Approval_status= True,year=year,month=month)
         total_cost = (total_hours * hourly_salary) + (total_minutes * hourly_salary / 2)
@@ -1035,12 +1095,50 @@ class Work_Overtime_Application(ModifiedModel):
     overtime_mins = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(分)")
     carry_over = models.CharField(max_length=100, choices=CARRY_OVER_TYPE, default="1", blank=False, null=False, verbose_name="加班結轉方式")
     overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
-    created_by = models.ForeignKey("Employee",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Work_Overtime_Application_Approval')
 
     class Meta:
         verbose_name = "加班申請"
         verbose_name_plural = verbose_name
+
+
+    def calculate_overtime_hours(self):
+
+        start_time_minutes = self.start_hours_of_overtime * 60 + self.start_mins_of_overtime
+        end_time_minutes = self.end_hours_of_overtime * 60 + self.end_mins_of_overtime
+
+        overtime_minutes = end_time_minutes - start_time_minutes
+
+        overtime_hours = overtime_minutes // 60
+        overtime_minutes %= 60
+
+        return overtime_hours, overtime_minutes
+
+    @classmethod
+    def get_money_by_user_month(cls, user, year, month):
+            
+        overtime_applications = cls.objects.filter(
+            created_by=user,
+            date_of_overtime__year=year,
+            date_of_overtime__month=month,
+            Approval__current_status="completed"
+        )
+
+        total_overtime_hours= 0
+        details=[]
+        for application in overtime_applications:
+            overtime_hours, overtime_minutes = application.calculate_overtime_hours()
+            add_hour=  overtime_hours + overtime_minutes / 60
+            total_overtime_hours += add_hour
+            details.append({"id":application.get_show_id(),"hour":add_hour})
+
+        hourly_salary =user.get_hour_salary()
+        total_overtime_money = math.ceil(total_overtime_hours * hourly_salary *1.34)
+
+        return total_overtime_money,details
+
+
 
     def get_show_id(self):
         return f"加班-{str(self.id).zfill(5)}"

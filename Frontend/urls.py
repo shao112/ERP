@@ -19,8 +19,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 
 
-
-
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
 
@@ -51,6 +49,7 @@ urlpatterns = [
     path('employee_assign/', login_required(views.Employee_Assign_ListView.as_view()), name='employee_assign'),
     path('work_item/', login_required(views.Work_Item_ListView.as_view()), name='work_item_list'),
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
+    path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
     path('accounts/logout/', views.signout, name='logout'),
 ]
 

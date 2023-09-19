@@ -1,0 +1,31 @@
+<form action="/restful/leave_application" name="leave_application" id="form" method="POST" class="pb-4"
+    data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden>
+    <div class="form-row my-2">
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-12 col-lg-6">
+                    <div class="form-group">
+                        <label for="Application_date">申請時間</label>
+                        <input type="date" class="form-control form-control-sm" name="Application_date" id="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Application_date">出差地點</label>
+                        <input type="date" class="form-control form-control-sm" name="Application_date" id="">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% if showbtn %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4" style="color: #fff;background: #1E3050;"
+            data-dismiss="modal">關閉</button>
+    </div>
+    {% endif %}
+</form>

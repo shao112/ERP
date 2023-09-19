@@ -9,7 +9,7 @@ function reset_salary() {
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "確定執行",
-    cancelButtonText: "刪除",
+    cancelButtonText: "取消",
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({

@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 
 from Backend.forms import  ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import ReferenceTable, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -21,6 +21,15 @@ from django.db.models.functions import Concat
 import json
 
 
+
+class TravelApplicationView(ListView):
+    model = Travel_Application
+    template_name = 'Travel_Application/Travel_Application.html'
+    context_object_name = 'Travel_Applications'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Travel_Application_list"] = Travel_Application.objects.filter(applicant=self.request.user.employee)
+        return context
 
 class Project_employee_assign_View(DetailView):
     model = Project_Employee_Assign
@@ -45,7 +54,6 @@ class SalaryDetailView(ListView):
         # print( context["work_list"] )
 
         return context
-
 
 class SalaryListView(ListView):
     model = Salary
@@ -103,8 +111,6 @@ class Index(View):
     def get(self,request):
 
         if not isinstance(request.user, AnonymousUser):
-            x = Project_Job_Assign.get_month_list_day(request.user.employee,2023,9)
-            print(x)
 
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             news = News.objects.all()
@@ -508,6 +514,9 @@ class Work_Overtime_Application_List(UserPassesTestMixin,ListView):
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
+
+        moeny,details = Work_Overtime_Application.get_money_by_user_month(self.request.user.employee,2023,9)
+
         return context
     
     def test_func(self):

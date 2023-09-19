@@ -14,7 +14,8 @@ from urllib.parse import parse_qs
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import create_salary,convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from .salary_utils import create_salary
 import openpyxl
 from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
