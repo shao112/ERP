@@ -519,6 +519,18 @@ class Clock(models.Model):
             date_to_check = (first_day_of_month + timedelta(days=day)).date()
             date_to_check_string = (first_day_of_month + timedelta(days=day)).strftime('%Y/%m/%d')
 
+            #判斷要上班嗎
+            extra_work_day = None
+            try:
+                extra_work_day = ExtraWorkDay.objects.get(date=date_to_check)
+                if extra_work_day.date_type == 'day_off':
+                    continue
+            except ExtraWorkDay.DoesNotExist:
+                pass
+
+            if date_to_check.weekday() >= 5 and extra_work_day ==None :  # 六日 且extra_work_day是None，有資料就是要上班    
+                continue
+
             #今天需要上多久
             total_hour,total_minutes ,results = user.day_status(date_to_check) 
             over_time = timedelta(hours=total_hour, minutes=total_minutes)
@@ -796,11 +808,15 @@ class ExtraWorkDay(ModifiedModel):
         ('day_off', '平日休假日(這天不用上班)'),
     ]
 
-    date = models.DateField(verbose_name="日期")
+    date = models.DateField(verbose_name="調整日期")
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES, verbose_name="日期類型")
 
     created_by = models.ForeignKey("Employee",related_name="ExtraWorkDay_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
+    class Meta:
+        verbose_name = "工作日調整"   # 單數
+        verbose_name_plural = verbose_name   #複數
+        ordering = ['-id']
     def __str__(self):
         return f"{self.date} - {self.get_date_type_display()}"
 
