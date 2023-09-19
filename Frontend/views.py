@@ -28,7 +28,7 @@ class TravelApplicationView(ListView):
     context_object_name = 'Travel_Applications'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["Travel_Application_list"] = Travel_Application.objects.filter(applicant=self.request.user.employee)
+        context["Travel_Application_list"] = Travel_Application.objects.filter(created_by=self.request.user.employee)
         return context
 
 class Project_employee_assign_View(DetailView):
@@ -318,18 +318,6 @@ class Profile(DeleteView):
         # 從request.user中獲取當前用戶的id，然後返回相應的User物件
         return self.request.user
 
-# 工項資料庫
-class Work_Item_ListView(ListView):
-    model = Work_Item
-    template_name = 'work_item/work_item.html'
-    context_object_name = 'work_item'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-
-
-
 
 # 報價單
 class Quotation_ListView(ListView):
@@ -347,6 +335,24 @@ class Quotation_ListView(ListView):
         else:
             context['quotation'] = Quotation.objects.all()
 
+        return context
+    
+# 工項資料庫
+class Work_Item_ListView(ListView):
+    model = Work_Item
+    template_name = 'work_item/work_item.html'
+    context_object_name = 'work_item'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+# 客戶管理
+class Client_ListView(ListView):
+    model = Client
+    template_name = 'client/client.html'
+    context_object_name = 'client_list'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         return context
 
 # 最新消息

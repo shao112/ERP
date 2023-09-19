@@ -1,5 +1,5 @@
 from django import forms
-from .models import Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -57,6 +57,10 @@ class Work_ItemForm(BaseModelForm):
         model = Work_Item
         fields = '__all__'
         
+class ClientForm(BaseModelForm):
+    class Meta:
+        model = Client
+        fields = '__all__'
 
 
 
