@@ -157,6 +157,8 @@ async function GET_handleClick(event, bringdata = true) {
           var errorMessage = xhr.responseJSON.error;
           console.log(errorMessage);
           showSwal("操作失敗", errorMessage, "error", false);
+        } else if (xhr.status === 403) {
+          alert("無權獲得該頁詳細，請聯絡管理員");
         } else {
           alert("系統發生錯誤");
           console.log(errorThrown);
@@ -221,6 +223,8 @@ $("form").on("submit", function (event) {
         console.log(errorMessageHTML);
 
         showSwal("操作失敗", errorMessageHTML, "error", false);
+      } else if (xhr.status === 403) {
+        alert("無權獲得該頁詳細，請聯絡管理員");
       } else {
         alert("系統發生錯誤");
         console.log(errorThrown);

@@ -498,12 +498,13 @@ class Quotation_View(View):
         for item in data.work_item.all():
             item_dict = model_to_dict(item)
             work_item_list.append(item_dict)
-
+        client_name=data.client.client_name if data.client else None
         data = model_to_dict(data)
         print("dict_data")
         print(data)
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
+        data['client_name'] = client_name
         data['invoice_attachment'] = data['invoice_attachment'].url if data['invoice_attachment']  else None
 
 
@@ -1104,7 +1105,13 @@ class Employee_Attendance_View(View):
 
 
 
-class Project_Confirmation_View(View):
+class Project_Confirmation_View(UserPassesTestMixin,View):
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        if self.request.method == 'GET':
+            return self.request.user.groups.filter(name__icontains='工程確認單查看').exists()
+        return self.request.user.groups.filter(name__icontains='工程確認單管理').exists()
 
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -1232,7 +1239,6 @@ class Job_Assign_View(View):
         selected_fields = ['id','quotation_id', 'quotation', 'client', 'requisition']
         quotation_selected_fields = ['id','project_name',  'client']
         requisition_name =data.project_confirmation.requisition.requisition_name
-        print(requisition_name)
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
         
         quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)

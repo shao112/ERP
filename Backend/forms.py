@@ -78,8 +78,9 @@ class ProjectConfirmationForm(BaseModelForm):
         model = Project_Confirmation
         fields = '__all__'
         widgets = {
-            'requisition': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'requisition', 'name':'requisition'}),
+            'requisition': forms.Select(attrs={'class': 'form-control form-control-sm readonly', 'id':'requisition', 'name':'requisition'}),
         }
+
 
 # 派工單
 class Project_Employee_AssignForm(BaseModelForm):

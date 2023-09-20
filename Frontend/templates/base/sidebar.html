@@ -104,7 +104,7 @@
 
 
 
-        {% if user|in_group_T_or_F:"管理" or pass_test_func %}
+        {% if user|in_group_T_or_F:"管理部權限管理" or user|in_group_T_or_F:"管理" or pass_test_func %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
@@ -138,7 +138,6 @@
         {% endif %}
 
         {% if user|in_group_T_or_F:"業務" or pass_test_func %}
-
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#salesCollapse" data-toggle="collapse"
@@ -199,7 +198,6 @@
             <a class="nav-link collapsed" href="#approvalCollapse" data-toggle="collapse" aria-expanded="false"
                 aria-controls="approvalCollapse">
 
-                <!-- <div id="message-count"></div> -->
                 <i class="fa-solid fa-pen" style="color: #ffffff;"></i> 簽核管理
             </a>
             <div class="collapse" id="approvalCollapse">
