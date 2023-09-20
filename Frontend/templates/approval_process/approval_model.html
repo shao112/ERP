@@ -1,0 +1,36 @@
+<ul class="nav nav-tabs" id="myTabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1" role="tab"
+            aria-controls="content1" aria-selected="true">請假單</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab"
+            aria-controls="content2" aria-selected="false">加班</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab3" data-toggle="tab" href="#content3" role="tab"
+            aria-controls="content3" aria-selected="false">派工單</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab4" data-toggle="tab" href="#content4" role="tab"
+            aria-controls="content4" aria-selected="false">補卡</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
+        請假單
+        {% include 'components\leave_application_form.html' %}
+    </div>
+    <div class="tab-pane fade" id="content2" role="tabpane2" aria-labelledby="tab2">
+        加班申請
+        {% include 'components\work_overtime_application_form.html' %}
+    </div>
+    <div class="tab-pane fade" id="content3" role="tabpane3" aria-labelledby="tab3">
+        派工單
+        {% include 'components\emplooyee_assiag_form.html' %}
+    </div>
+    <div class="tab-pane fade" id="content4" role="tabpane4" aria-labelledby="tab4">
+        補卡單
+        {% include 'components\clock_correction_application_form.html' %}
+    </div>
+</div>

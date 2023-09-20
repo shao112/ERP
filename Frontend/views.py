@@ -380,6 +380,17 @@ class Approval_List(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.all()
+        context["all_Equipment"] = Equipment.objects.all()
+        context['project_confirmation_list'] = Project_Confirmation.objects.all()
+        context['vehicle'] = Vehicle.objects.all()
+        context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["leave_application_form"] = LeaveApplicationForm()
+        context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
+
+        context["24range"] = range(24)
+        context["60range"] = range(60)
         return context
 
     def get_queryset(self):

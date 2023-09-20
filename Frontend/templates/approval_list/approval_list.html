@@ -13,7 +13,8 @@
 
 {% block main %}
 
-<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+<div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -34,7 +35,8 @@
                     </div>
                     <div class="form-group">
                         <label for="feedback">回饋</label>
-                        <textarea placeholder="可簡單輸入ok、處理狀態、駁回原因等....." class="form-control" id="feedback" name="feedback" rows="3"></textarea>
+                        <textarea placeholder="可簡單輸入ok、處理狀態、駁回原因等....." class="form-control" id="feedback"
+                            name="feedback" rows="3"></textarea>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                     <button type="button" id="approval_btn" class="btn btn-primary">提交</button>
@@ -54,41 +56,14 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">簽核內容</h5>
 
-                <h5 class="my-auto"><a href="" data-toggle="modal" data-target="#approvalModal">點擊簽核</a></h5>
-                
+
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                
+
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs" id="myTabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="tab1" data-toggle="tab" href="#content1" role="tab" aria-controls="content1" aria-selected="true">工程確認單</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab2" data-toggle="tab" href="#content2" role="tab" aria-controls="content2" aria-selected="false">工程派任計畫</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="tab3" data-toggle="tab" href="#content3" role="tab" aria-controls="content3" aria-selected="false">派工單</a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
-                        工程確認單
-                        {% include 'components\project_confirmation_form.html'  %}                     
-                    </div>
-                    <div class="tab-pane fade" id="content2" role="tabpanel" aria-labelledby="tab2">
-                        工程派任計畫
-                        {% include 'components\job_assign_form.html'  %}
-                     
-                    </div>
-                    <div class="tab-pane fade" id="content3" role="tabpanel" aria-labelledby="tab3">
-                        派工單
-                        {% include 'components\emplooyee_assiag_form.html'  %}
-                     
-                    </div>
-                </div>
+                {% include 'approval_process\approval_model.html' %}
             </div>
         </div>
     </div>
@@ -114,42 +89,43 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
-                    <td>{{  object.target_approval.name }}</td>
+                    <td>{{ object.target_approval.name }}</td>
                     <td>
                         {{ object.get_current_status_display }}
                     </td>
-                    <td> 
+                    <td>
                         {{ object.get_foreignkey.get_show_id }}
                     </td>
                     <td>
                         {% for log in object.get_approval_log_list %}
-                        {{ log.show_name }} - 
-                        {% if   log.status == 'pass' %}
+                        {{ log.show_name }} -
+                        {% if log.status == 'pass' %}
                         【{{log.content}}】
 
                         {% else %}
                         (wait)
                         {% endif %}
-                            {% if not forloop.last %} >{% endif %}
+                        {% if not forloop.last %} >{% endif %}
                         {% empty %}
                         未執行簽核
                         {% endfor %}
                     </td>
-                    
-                        <td>
-                            <a href="" data-Approval_id="{{ object.id }}"   data-id="{{object.get_foreignkey.id}}"   data-url="{{object.model_url}}"  data-toggle="modal" data-target="#myModal">
-                                <i class="fa-solid fa-eye fa-lg"></i>
-                            </a>
-                        </td>
-                   
-                        
+
+                    <td>
+                        <a href="" data-Approval_id="{{ object.id }}" data-id="{{object.get_foreignkey.id}}"
+                            data-url="{{object.model_url}}" data-toggle="modal" data-target="#myModal">
+                            <i class="fa-solid fa-eye fa-lg"></i>
+                        </a>
+                    </td>
+
+
                 </tr>
                 {% endfor %}
-            
+
             </tbody>
         </table>
     </div>
- 
+
 </div>
 
 <script>
@@ -158,8 +134,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/approval_process/approval_process.js' %}",
-            "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/employee_assign/employee_assign.js' %}",
+
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/work-overtime-application/work-overtime-application.js' %}",
 
         ];
 
@@ -170,58 +149,7 @@
         });
     });
 
-    $(document).ready(function () {
-        $('#myTabs').hide();
-        
-        
-        $('#myModal').on('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var modalModel = button.getAttribute('data-url');        
-            Approval_id = button.getAttribute('data-Approval_id');           
-            var form = document.querySelector('form[name="'+ modalModel+'"]');
-            
-            GET_handleClick(button,false).then((data) => {
-                for (var key in data) {
-                    var input = form.querySelector('[name="' + key + '"]');
-
-                    if (input) {
-                        let get_value = jsonData[key];
-                        input.disabled = true;  // 禁用
-                        input.setAttribute("readonly", "true"); //封印修改
-                        
-                        if (input.type == 'file') { 
-                            continue
-                        }
-                        
-                        
-
-                        if (typeof (jsonData[key]) == "object" && get_value != null) {//判斷是不是陣列
-                            SetSelect2(input, key, get_value);
-                            continue
-                        }
-
-                        input.value = get_value;
-                        // console.log("key " + key + " 帶資料:" + get_value);
-
-                    } else {
-                        // console.log("Input not found for key:", key);
-                    }
-                }
-            });
 
 
-        
-            if (modalModel === 'project_confirmation') {
-                console.log("1")
-                $('#tab1').tab('show');
-            } else if (modalModel  === 'job_assign') {
-                console.log("122")
-                $('#tab2').tab('show');
-            } else if (modalModel  === 'project_employee_assign') {
-                console.log("333")
-                $('#tab3').tab('show');
-            }
-        });
-    });
 </script>
 {% endblock %}
