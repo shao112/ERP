@@ -1107,11 +1107,12 @@ class Employee_Attendance_View(View):
 
 class Project_Confirmation_View(UserPassesTestMixin,View):
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
+        op = self.request.user.groups.filter(name__icontains='工程確認單管理').exists() #最高權限
+        if op  or settings.PASS_TEST_FUNC:
             return True
         if self.request.method == 'GET':
             return self.request.user.groups.filter(name__icontains='工程確認單查看').exists()
-        return self.request.user.groups.filter(name__icontains='工程確認單管理').exists()
+
 
     def put(self,request):
         dict_data = convent_dict(request.body)
