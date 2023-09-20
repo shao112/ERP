@@ -118,9 +118,6 @@ class Project_Employee_AssignForm(BaseModelForm):
         model = Project_Employee_Assign
         fields = '__all__'
 
-
-
-
 # 工作派任計畫
 class ProjectJobAssignForm(BaseModelForm):
 
@@ -256,8 +253,8 @@ class LeaveApplicationForm(BaseModelForm):
         model = Leave_Application
         fields = '__all__'
         widgets = {
-            'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm'}),
-            'substitute': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_leave', 'name':'type_of_leave'}),
+            'substitute': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'substitute', 'name':'substitute'}),
         }
 # 加班申請
 class WorkOvertimeApplicationForm(BaseModelForm):

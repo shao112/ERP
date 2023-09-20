@@ -33,7 +33,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="start_hours_of_leave">請假起始小時</label>
-                        <select name="start_hours_of_leave" class="form-control form-control-sm">
+                        <select name="start_hours_of_leave" class="form-control form-control-sm" id="start_hours_of_leave">
                             {% for i in 24range %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -43,7 +43,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="start_mins_of_leave">請假起始分鐘</label>
-                        <select name="start_mins_of_leave" class="form-control form-control-sm">
+                        <select name="start_mins_of_leave" class="form-control form-control-sm" id="start_mins_of_leave">
                             {% for i in 60range %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -53,7 +53,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="end_hours_of_leave">請假結束小時</label>
-                        <select name="end_hours_of_leave" class="form-control form-control-sm">
+                        <select name="end_hours_of_leave" class="form-control form-control-sm" id="end_hours_of_leave">
                             {% for i in 24range %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -63,7 +63,7 @@
                 <div class="col-6 col-lg-3">
                     <div class="form-group">
                         <label for="end_mins_of_leave">請假結束分鐘</label>
-                        <select name="end_mins_of_leave" class="form-control form-control-sm">
+                        <select name="end_mins_of_leave" class="form-control form-control-sm" id="end_mins_of_leave">
                             {% for i in 60range %}
                             <option value="{{ i }}">{{ i }}</option>
                             {% endfor %}
@@ -75,13 +75,13 @@
                 <div class="col-12 col-lg-6">
                     <div class="form-group">
                         <label for="leave_hours">申請時數(時)</label>
-                        <input class="form-control form-control-sm" name="leave_hours" id="leave_hours" readonly>
+                        <input class="readonly form-control form-control-sm" value="0" name="leave_hours" id="leave_hours" readonly>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6">
                     <div class="form-group">
                         <label for="leave_mins">申請時數(分)</label>
-                        <input class="form-control form-control-sm" name="leave_mins" id="leave_mins" readonly>
+                        <input class="readonly form-control form-control-sm" value="0" name="leave_mins" id="leave_mins" readonly>
                     </div>
                 </div>
             </div>
