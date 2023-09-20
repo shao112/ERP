@@ -609,7 +609,7 @@ class Work_Item(ModifiedModel):
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_display_text(self):
-        pn_id = f"WT-{str(self.id).zfill(5)}"
+        pn_id = f"工項-{str(self.id).zfill(5)}"
         return f"{pn_id} | {self.item_name} | {self.item_id} | {self.unit} | {self.unit_price}(價格)"
 
     def get_show_id(self):
@@ -650,8 +650,6 @@ class Quotation(ModifiedModel):
         verbose_name = "報價單"
         verbose_name_plural = "報價單"
 
-# def get_default_requisition():
-#     return Requisition.objects.all()[:1].get()
 # 工程確認單
 class Project_Confirmation(ModifiedModel):
     quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
