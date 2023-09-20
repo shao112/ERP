@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target, Quotation,Work_Item,Project_Job_Assign, Department, Equipment,Project_Confirmation, Employee,News,Project_Employee_Assign, Vehicle,ApprovalModel
+from .models import Requisition,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -62,7 +62,36 @@ class ClientForm(BaseModelForm):
         model = Client
         fields = '__all__'
 
+    def clean(self):
+        cleaned_data = super().clean()
+        client_name = cleaned_data.get('client_name')
+        errors = {}
 
+        if not client_name:
+            errors['client_name'] = "請輸入請購單為名稱"
+
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return cleaned_data
+
+class RequisitionForm(BaseModelForm):
+    class Meta:
+        model = Requisition
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        requisition_name = cleaned_data.get('requisition_name')
+        errors = {}
+
+        if not requisition_name:
+            errors['requisition_name'] = "請輸入請購單為名稱"
+
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return cleaned_data
 
 # 資產確認單
 class EquipmentForm(BaseModelForm):

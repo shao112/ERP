@@ -15,11 +15,11 @@
 {% block main %}
 
 <style>
-    .client-header a{
+    .requisition-header a{
         text-decoration: none;
         color: black;
     }
-    .client-table td{
+    .requisition-table td{
         vertical-align: middle;
     }
     .select2-container {
@@ -31,25 +31,25 @@
 
 <div class="main px-3">
     <div id="error-message"></div>
-    <div class="client modal fade" id="client-modal" tabindex="-1" aria-labelledby="client" aria-hidden="true">
+    <div class="requisition modal fade" id="requisition-modal" tabindex="-1" aria-labelledby="requisition" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="client-label">客戶管理</h5>
+                    <h5 class="modal-title" id="requisition-label">請購單位管理</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
-                        <form action="/restful/client" id="form" method="POST" class="pb-4" data-method="post">
+                        <form action="/restful/requisition" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden />
                             <div class="form-row my-2">
                                 <div class="col-12 col-lg-6">
                                     <div class="form-group">
-                                        <label for="client_name">客戶簡稱</label>
-                                        <input class="form-control form-control-sm" name="client_name"id="client_name" required></input>
+                                        <label for="requisition_name">請購單位</label>
+                                        <input class="form-control form-control-sm" name="requisition_name"id="requisition_name" required></input>
                                     </div>
                                 </div>
                             </div>
@@ -67,20 +67,20 @@
             </div>
         </div>
     </div>
-    <div class="client-table container-fluid shadow-sm table-responsive-lg">
+    <div class="requisition-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
-                <div class="client-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#client-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增客戶
+                <div class="requisition-header container-fluid">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#requisition-modal">
+                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增請購單位
                     </a>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('客戶.xlsx')"
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('請購單位.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
-                        onclick="exportSelectedOptionToExcel('客戶.xlsx')">匯出已選資料</button>
+                        onclick="exportSelectedOptionToExcel('請購單位.xlsx')">匯出已選資料</button>
                 </div>
             </div>
             <thead class="thead-light" style="font-size: 14px;">
@@ -89,28 +89,28 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-field="client_name" data-sortable="true">客戶簡稱</th>
+                    <th data-field="requisition_name" data-sortable="true">請購單位</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
-                {% for client in client_list %}
+                {% for requisition in requisition_list %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ client.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ requisition.id }}"></td>
                     <td>
-                        <a data-target="#client-modal" type="button" data-url="client" data-id="{{ client.id }}"
+                        <a data-target="#requisition-modal" type="button" data-url="requisition" data-id="{{ requisition.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        <a data-url="client" data-target="#client-modal" data-id="{{ client.id }}" type="button"
+                        <a data-url="requisition" data-target="#requisition-modal" data-id="{{ requisition.id }}" type="button"
                             class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
 
                     <td>
-                        {{ client.client_name }}
+                        {{ requisition.requisition_name }}
                     </td>
                 </tr>
                 {% endfor %}

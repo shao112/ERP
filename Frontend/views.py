@@ -354,6 +354,15 @@ class Client_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+# 請購單位管理
+class Requisition_ListView(ListView):
+    model = Requisition
+    template_name = 'requisition/requisition.html'
+    context_object_name = 'requisition_list'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 # 最新消息
 class News_ListView(ListView):
