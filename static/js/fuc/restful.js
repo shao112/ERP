@@ -327,6 +327,8 @@ async function DELETE_handleClick(event) {
       if (xhr.status === 400) {
         var errorMessage = xhr.responseJSON.error;
         showSwal("操作失敗", errorMessage, "error", false);
+      } else if (xhr.status === 403) {
+        alert("無權操作，請聯絡管理員");
       } else {
         alert("系統發生錯誤" + xhr.responseJSON.error);
         console.log(errorThrown);
