@@ -376,10 +376,14 @@ class ApprovalModel(models.Model):
     
     #回傳關聯
     def get_foreignkey(self):
+        print("self.target_approval.name: ",self.target_approval.name)
         related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
+        print(related_name)
         if related_name:
             getobj = getattr(self, related_name, None).all()
+            print("getobj: ",getobj)
             if len(getobj)!=0:
+                print("getattr(self, related_name, None).all()[0]: ",getattr(self, related_name, None).all()[0])
                 return getattr(self, related_name, None).all()[0]
             return None
         return None
@@ -460,15 +464,15 @@ class ApprovalModel(models.Model):
         verbose_name = '簽核執行'
         verbose_name_plural = verbose_name
     
-    def __str__(self):
-        get_foreignkey = self.get_foreignkey()
-        get_show_id =""
-        get_created_by =""
-        if get_foreignkey !="":
-            get_show_id = get_foreignkey.get_show_id()
-            get_created_by =get_foreignkey.created_by
+    # def __str__(self):
+    #     get_foreignkey = self.get_foreignkey()
+    #     get_show_id =""
+    #     get_created_by =""
+    #     if get_foreignkey !="":
+    #         get_show_id = get_foreignkey.get_show_id()
+    #         get_created_by =get_foreignkey.created_by
         
-        return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
+    #     return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
     
 
 
