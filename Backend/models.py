@@ -812,7 +812,6 @@ class ExtraWorkDay(ModifiedModel):
 
     date = models.DateField(verbose_name="調整日期")
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES, verbose_name="日期類型")
-
     created_by = models.ForeignKey("Employee",related_name="ExtraWorkDay_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     class Meta:

@@ -457,7 +457,8 @@ class Approval_Process(ListView):
         for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
             get_employee = Approval.get_approval_employee()
             if get_employee !="x":
-                related_records.append(Approval)
+                if  get_employee ==current_employee :
+                    related_records.append(Approval)
             else:
                 # 取得作者部門
                 get_createdby = Approval.get_created_by
