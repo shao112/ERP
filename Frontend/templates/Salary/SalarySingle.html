@@ -25,6 +25,177 @@
 
 {% block main %}
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab"
+                            aria-controls="tab1" aria-selected="true">打卡扣款 </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2"
+                            aria-selected="false">請假資訊 </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3"
+                            aria-selected="false">出勤津貼 </a>
+                    </li>
+                </ul>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                        曠職: {{work_list.miss_hours}} 時 {{work_list.miss_minutes}} 分
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>狀態</th>
+                                    <th>上班時間</th>
+                                    <th>下班時間</th>
+                                    <th>工作時間</th>
+                                    <th>請假</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in work_list.list %}
+                                {% if entry.status != 'ok' and entry.status != '3' %}
+                                <tr>
+                                    <td>{{ entry.date }}</td>
+                                    <td>
+                                        {% if entry.status == '1' %}
+                                        漏打卡
+                                        {% elif entry.status == '0' %}
+                                        曠職
+                                        {% elif entry.status == '3' %}
+                                        整天請假
+                                        {% elif entry.status == 'ok' %}
+                                        完成工作
+                                        {% elif entry.status == 'no' %}
+                                        少於8小時
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if entry.ear_time %}
+                                        {{ entry.ear_time|time:"H:i" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if entry.last_time %}
+                                        {{ entry.last_time|time:"H:i" }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ entry.hours }} {{entry.miss}}
+                                    </td>
+                                </tr>
+                                {% if entry.results %}
+                                <tr>
+                                    <td colspan="6">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Total Hours</th>
+                                                    <th>Total Minutes</th>
+                                                    <th>Leave Type</th>
+                                                    <th>Leave ID</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for result in entry.results %}
+                                                <tr>
+                                                    <td>{{ result.total_hours }}</td>
+                                                    <td>{{ result.total_minutes }}</td>
+                                                    <td>{{ result.type_of_leave }}</td>
+                                                    <td>{{ result.id }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% endif %}
+
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                        {% for detail in leave_cost_details %}
+                        假別:{{detail.name}} / 扣款: {{detail.cost}} / 總時數: {{detail.total_hours}} 時
+                        {{detail.total_minutes}}分
+                        <br>
+                        {% endfor %}
+
+                        <hr>
+                        明細:
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>假別</th>
+                                    <th>假單編號</th>
+                                    <th>請假時數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in leave_details %}
+                                {% if detail.total_hours != 0 and detail.total_minutes != 0 %}
+                                {% for entry in detail.details %}
+                                <tr>
+                                    <td>{{ detail.name }}</td>
+                                    <td>{{ entry.id }}</td>
+                                    <td>{{ entry.time }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>地點與類型</th>
+                                    <th>出勤對應價格</th>
+                                    <th>伙食補貼價格</th>
+                                    <th>天數</th>
+                                    <th>備註</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in Project_Job_Assign_details %}
+                                <tr>
+                                    <td>{{ detail.location }}</td>
+                                    <td>{{ detail.money }}</td>
+                                    <td>{{ detail.food }}</td>
+                                    <td>{{ detail.day }}</td>
+                                    <td>{{ detail.error }} <br> {{ detail.food_error}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 
@@ -51,6 +222,9 @@
                         <input type="number" class="form-control form-control-sm" id="money">
                         <button onclick="add()">新增</button>
                         <button onclick="reset_salary()">重新計算薪水</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            系統薪水詳細
+                        </button>
                     </div>
                     <div>
                         時薪: {{salary.user.get_hour_salary}}
@@ -106,78 +280,7 @@
         </table>
     </div>
 
-        曠職:    {{work_list.miss_hours}} 時 {{work_list.miss_minutes}} 分
-    <table>
-        <thead>
-            <tr>
-                <th>日期</th>
-                <th>狀態</th>
-                <th>上班時間</th>
-                <th>下班時間</th>
-                <th>工作時間</th>
-                <th>請假</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in work_list.list %}
-            <tr>
-                <td>{{ entry.date }}</td>
-                <td>
-                    {% if entry.status == '1' %}
-                    漏打卡
-                    {% elif entry.status == '0' %}
-                    曠職
-                    {% elif entry.status == '3' %}
-                    整天請假
-                    {% elif entry.status == 'ok' %}
-                    完成工作
-                    {% elif entry.status == 'no' %}
-                    少於8小時
-                    {% endif %}
-                </td>
-                <td>
-                    {% if entry.ear_time %}
-                    {{ entry.ear_time|time:"H:i" }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if entry.last_time %}
-                    {{ entry.last_time|time:"H:i" }}
-                    {% endif %}
-                </td>
-                <td>
-                    {{ entry.hours }} {{entry.miss}}
-                </td>
-            </tr>
-            {% if entry.results %}
-            <tr>
-                <td colspan="6">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Total Hours</th>
-                                <th>Total Minutes</th>
-                                <th>Leave Type</th>
-                                <th>Leave ID</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for result in entry.results %}
-                            <tr>
-                                <td>{{ result.total_hours }}</td>
-                                <td>{{ result.total_minutes }}</td>
-                                <td>{{ result.type_of_leave }}</td>
-                                <td>{{ result.id }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+
 
 </div>
 

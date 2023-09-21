@@ -49,8 +49,15 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         user = self.kwargs.get('user')    
+        user_obj = Employee.objects.get(id=user)
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
-        context["work_list"] = Clock.get_hour_for_month(Employee.objects.get(id=user),year,int(month))
+        context["work_list"] = Clock.get_hour_for_month(user_obj,year,int(month))
+        context["leave_details"] =Leave_Param.get_leave_param_all_details(user= user_obj,year=year,month=month)
+        context["leave_cost_details"] =Leave_Param.get_year_total_cost_list(user= user_obj,year=year,month=month)
+        _,_,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
+
+        context["Project_Job_Assign_details"] = Project_Job_Assign_details
+
         return context
 
     def test_func(self):
@@ -502,6 +509,8 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
         return self.request.user.groups.filter(name__icontains='財務').exists()
 
 # 請假申請
+from datetime import datetime
+
 class Leave_Application_List(ListView):
     model = Leave_Application
     template_name = 'leave_application/leave_application.html'
@@ -514,8 +523,9 @@ class Leave_Application_List(ListView):
         context["60range"] = range(60)
 
         user = self.request.user.employee
+        current_year = datetime.now().year
 
-        context["leave_details"] =Leave_Param.get_leave_param_details(user)
+        context["leave_details"] =Leave_Param.get_leave_param_all_details(user,year=current_year)
         context["leave_application_list"] =Leave_Application.objects.filter(created_by=user)
 
         return context
