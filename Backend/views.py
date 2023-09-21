@@ -144,7 +144,12 @@ class Approval_View_Process(View):
             new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target)
             new_Approval.send_message_to_related_users(f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
             print("new_Approval ",new_Approval)
+
+            if get_obj.Approval !=None:
+                get_obj.Approval.delete()
+
             get_obj.Approval=new_Approval
+
             get_obj.save()
             return JsonResponse({"success":"成功"},status=200)
         except Exception as e:
