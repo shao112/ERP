@@ -414,6 +414,9 @@ class ApprovalModel(models.Model):
             self.update_department_status("completed")
         else:
             current_index+=1
+            employee_id = self.target_approval.approval_order[current_index]
+            employee = Employee.objects.get(id=employee_id)
+            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 單需要簽核")
             self.current_index = current_index
             self.save()
 
@@ -812,6 +815,7 @@ class ExtraWorkDay(ModifiedModel):
 
     date = models.DateField(verbose_name="調整日期")
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES, verbose_name="日期類型")
+
     created_by = models.ForeignKey("Employee",related_name="ExtraWorkDay_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     class Meta:

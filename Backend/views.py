@@ -142,8 +142,11 @@ class Approval_View_Process(View):
                 return JsonResponse({"error": "找不到相應的簽核目標"}, status=404)
 
             new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target)
-            new_Approval.send_message_to_related_users(f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
-            print("new_Approval ",new_Approval)
+            print(new_Approval.target_approval.approval_order[0])
+            employee_id = new_Approval.target_approval.approval_order[0]
+            employee = Employee.objects.get(id=employee_id)
+            # new_Approval.send_message_to_related_users(f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
+            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
 
             if get_obj.Approval !=None:
                 get_obj.Approval.delete()
