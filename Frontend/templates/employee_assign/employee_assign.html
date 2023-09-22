@@ -407,14 +407,14 @@
                     <td>{% for employees_list in p.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}
                     </td>
                     <td>{{ p.construction_date }}</td>
-                    <td>{{ p.completion_date }}</td>
+                    <td>{% if p.completion_date %}{{ p.completion_date }}{% else %}{% endif %}</td>
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
-                    <td>{{ p.client }}</td>
+                    <td>{% if p.project_job_assign.project_confirmation.quotation.client %}{{ p.project_job_assign.project_confirmation.quotation.client }}{% else %}{% endif %}</td>
                     <td>{{ p.requisition }}</td>
                     <td></td>
                     <td>{% for employees_list in p.inspector.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
-                    <td>{{ p.vehicle }}</td>
-                    <td>{{ p.manuscript_return_date }}</td>
+                    <td>{% if p.project_job_assign.vehicle %}{{ p.project_job_assign.vehicle }}{% else %}{% endif %}</td>
+                    <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date }}{% else %}{% endif %}</td>
 
                     <td>{{ p.enterprise_signature }}</td>
                 </tr>

@@ -1356,7 +1356,7 @@ class Calendar_View(View):
                 project.location = "暫無"
             print(project.location)
             data.append({
-                'title': project.project_confirmation.project_name,
+                'title': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,
                 'location': project.location
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),

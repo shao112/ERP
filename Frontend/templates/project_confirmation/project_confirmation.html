@@ -105,8 +105,8 @@
                     <td>{{ p.quotation.get_show_id }}</td>
                     <td>{% if p.id %}{{ p.get_show_id }}{% else %}{% endif %}</td>
                     <td>{% if p.c_a %}{{ p.c_a }}{% else %}{% endif %}</td>
-                    <td>{% if p.project_name %}{{ p.project_name }}{% else %}{% endif %}</td>
-                    <td>{% if p.client %}{{ p.client }}{% else %}{% endif %}</td>
+                    <td>{% if p.quotation.project_name %}{{ p.quotation.project_name }}{% else %}{% endif %}</td>
+                    <td>{% if p.quotation.client %}{{ p.quotation.client }}{% else %}{% endif %}</td>
                     <td>{% if p.requisition %}{{ p.requisition }}{% else %}{% endif %}</td>
                     <td>{% if p.order_id %}{{ p.order_id }}{% else %}{% endif %}</td>
                     <td>{% if p.turnover %}{{ p.turnover }}{% else %}{% endif %}</td>

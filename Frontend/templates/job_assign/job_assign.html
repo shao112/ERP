@@ -96,7 +96,7 @@
                             {{ j.get_show_id }}
                         </td>
                         <td>{{ j.project_confirmation.quotation.project_name }}</td>
-                        <td>{{ j.project_confirmation.c_a }}</td>
+                        <td>{% if j.project_confirmation.c_a %}{{ j.project_confirmation.c_a }}{% else %}{% endif %}</td>
                         <td>
                             {{ j.attendance_date }}
                         </td>
