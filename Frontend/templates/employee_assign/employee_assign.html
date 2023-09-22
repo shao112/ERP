@@ -331,7 +331,8 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
                         列印/下載pdf</th>
 
-                    <th data-field="job" data-sortable="true">工派單</th>
+                    <th data-field="id" data-sortable="true">派工單</th>
+                    <th data-field="job" data-sortable="true">工程派任計畫單</th>
                     <th data-field="quotation_id" data-sortable="true">報價單號</th>
                     <th data-field="project_name" data-sortable="true">工程名稱</th>
                     <th data-field="lead_employee" data-sortable="true">帶班主管</th>
@@ -399,6 +400,7 @@
                     <td><a target="_blank" href="{% url 'project_employee_assign_View' id=p.id %}">點擊</a></td>
 
 
+                    <td>{{ p.get_show_id }}</td>
                     <td>{{ p.project_job_assign.get_show_id }}</td>
                     <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
                     <td>{{ p.project_job_assign.project_confirmation.project_name }}</td>

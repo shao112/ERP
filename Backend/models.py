@@ -713,7 +713,7 @@ class Project_Job_Assign(ModifiedModel):
         ordering = ['-id']
 
     def get_show_id(self):
-        return f"工派-{str(self.id).zfill(5)}"
+        return f"派任-{str(self.id).zfill(5)}"
 
     @classmethod
     def get_month_list_day(cls, employee,year,month):#公派當月天數
