@@ -63,7 +63,7 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='財務').exists()    
+        return self.request.user.groups.filter(name__icontains='薪水管理').exists()    
 
 class SalaryListView(UserPassesTestMixin,ListView):
     model = Salary
@@ -77,7 +77,7 @@ class SalaryListView(UserPassesTestMixin,ListView):
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True
-        return self.request.user.groups.filter(name__icontains='財務').exists()    
+        return self.request.user.groups.filter(name__icontains='薪水管理').exists()    
     
 
 # 首頁
