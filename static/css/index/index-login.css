@@ -115,7 +115,7 @@ header button{
 
 
 
-@media(max-width:767px) {
+@media(max-width:851px) {
     .main{
         width: 100vw;
         margin-left: calc(-1 * var(--sidebar-width));
@@ -129,7 +129,7 @@ header button{
     }
     header button {
         font-size: 0.8rem;
-        width: 80px;
+        width: 100px;
         height: 30px;
     }
     
