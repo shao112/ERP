@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'Backend.context_processors.sys_messages',  
                 'Backend.context_processors.client_list',  
+                'Backend.context_processors.approval_count',  
                 'Backend.context_processors.pass_test_func',  
 
             ],

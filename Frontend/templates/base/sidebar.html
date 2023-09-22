@@ -124,7 +124,7 @@
                     </li>
 
                     {% if user|in_group_T_or_F:"管理部權限管理" or pass_test_func %}
-                    <li class="nav-item">   
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_permission_list'%}">權限管理</a>
                     </li>
                     {% endif %}
@@ -202,6 +202,9 @@
                 aria-controls="approvalCollapse">
 
                 <i class="fa-solid fa-pen" style="color: #ffffff;"></i> 簽核管理
+                {% if approval_count > 0 %}
+                <span class="badge badge-danger">{{ approval_count }}</span>
+                {% endif %}
             </a>
             <div class="collapse" id="approvalCollapse">
                 <ul class="nav flex-column ml-4">

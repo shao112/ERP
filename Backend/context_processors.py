@@ -1,8 +1,35 @@
-from Backend.models import SysMessage,Client
+from Backend.models import SysMessage,Client,ApprovalModel
 from django.contrib.auth.models import AnonymousUser
 
 from django.conf import settings
 
+
+def approval_count(request):
+    if  isinstance(request.user, AnonymousUser):
+        return {'approval_count': 0}
+
+    current_employee = request.user.employee
+
+    related_records = []
+
+    for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
+        get_employee = Approval.get_approval_employee()
+        if get_employee !="x":
+            if  get_employee ==current_employee :
+                related_records.append(Approval)
+        else:
+            # 取得作者部門
+            get_createdby = Approval.get_created_by
+            print(get_createdby)
+            department =get_createdby.departments
+            #撈取主管權限的員工
+            supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
+            #判斷主管是不是在當前user
+            is_supervisor = current_employee.id in supervisor_employees
+            if is_supervisor:            
+                related_records.append(Approval)
+        
+    return {"approval_count":len(related_records)}
 
 
 
