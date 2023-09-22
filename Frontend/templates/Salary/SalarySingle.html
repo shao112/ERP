@@ -26,7 +26,7 @@
 {% block main %}
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -51,7 +51,7 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
                         曠職: {{work_list.miss_hours}} 時 {{work_list.miss_minutes}} 分
-                        <table>
+                        <table class="table table-sm">
                             <thead>
                                 <tr>
                                     <th>日期</th>
@@ -97,7 +97,7 @@
                                 {% if entry.results %}
                                 <tr>
                                     <td colspan="6">
-                                        <table>
+                                        <table class="table table-sm">
                                             <thead>
                                                 <tr>
                                                     <th>Total Hours</th>
@@ -136,7 +136,7 @@
 
                         <hr>
                         明細:
-                        <table>
+                        <table class="table table-sm">
                             <thead>
                                 <tr>
                                     <th>假別</th>
