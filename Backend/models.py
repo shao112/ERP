@@ -412,11 +412,14 @@ class ApprovalModel(models.Model):
         #判斷是不是最後一個
         if current_index ==len(approval_order)-1 :
             self.update_department_status("completed")
+            employee_id = self.target_approval
+            employee = self.get_created_by
+            SysMessage.objects.create(Target_user=employee,content=f"您的 {self.target_approval.get_name_display()} 簽核完畢")
         else:
             current_index+=1
-            employee_id = self.target_approval.approval_order[current_index]
+            employee_id = approval_order[current_index]
             employee = Employee.objects.get(id=employee_id)
-            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 單需要簽核")
+            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 需要簽核")
             self.current_index = current_index
             self.save()
 
