@@ -179,10 +179,10 @@
                         {{ leave_application.substitute }}
                     </td>
                     <td>
-                        {{ leave_application.leave_reason }}
+                        {% if leave_application.leave_reason %}{{ leave_application.leave_reason }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ leave_application.backlog }}
+                        {% if leave_application.backlog %}{{ leave_application.backlog }}{% else %}{% endif %}
                     </td>
 
                 </tr>
