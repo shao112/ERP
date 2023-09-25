@@ -1085,6 +1085,8 @@ class Profile_View(View):
             print("成功")
             return JsonResponse({'status': 'success'},status=200)
         else:
+            print("request.POST:", request.POST)
+            print("request.user:", request.user)
             form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
                 newobj =form.save()
