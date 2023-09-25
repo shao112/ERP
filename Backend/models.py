@@ -71,6 +71,16 @@ class ModifiedModel(models.Model):
 
     class Meta:
         abstract = True
+
+    def delete(self, *args, **kwargs):
+        if hasattr(self, 'Approval'):  
+            if self.Approval:
+                current_status = self.Approval.current_status
+                if current_status == 'completed' or current_status == 'in_process':
+                    raise PermissionDenied("簽核中或簽核完成禁止刪除")
+
+        super().delete(*args, **kwargs)
+
     def save(self, *args, **kwargs):
         user = get_current_authenticated_user()
         
@@ -87,7 +97,7 @@ class ModifiedModel(models.Model):
             if self.Approval:
                 current_status = self.Approval.current_status
                 if current_status == 'completed' or current_status == 'in_process':
-                    raise PermissionDenied("簽核中禁止修改.")
+                    raise PermissionDenied("簽核中或簽核完成禁止修改.")
 
 
         for key, value in kwargs.items():
