@@ -22,6 +22,8 @@ function submitApproval(event) {
     cache: false,
     success: function (response) {
       alert("操作成功");
+
+      location.reload();
     },
     error: function (error) {
       //   alert("簽核失敗");
@@ -57,7 +59,7 @@ function DelApproval(event) {
       cache: false,
       success: function (response) {
         alert("操作成功");
-
+        location.reload();
       },
       error: function (error) {
         //   alert("簽核失敗");

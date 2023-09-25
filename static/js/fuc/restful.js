@@ -153,7 +153,9 @@ async function GET_handleClick(event, bringdata = true) {
         }
       },
       error: function (xhr, textStatus, errorThrown) {
-        if (xhr.status === 400) {
+        console.log("xx");
+        console.log(xhr.status);
+        if (xhr.status == 400 || xhr.status == 404) {
           var errorMessage = xhr.responseJSON.error;
           console.log(errorMessage);
           showSwal("操作失敗", errorMessage, "error", false);
@@ -321,7 +323,9 @@ async function DELETE_handleClick(event) {
     },
     data: formData,
     success: function (response) {
-      showSwal("操作說明", "成功刪除", "success", false);
+      showSwal("操作說明", "成功刪除", "success", false).then(() => {
+        location.reload();
+      });
     },
     error: function (xhr, textStatus, errorThrown) {
       if (xhr.status === 400) {

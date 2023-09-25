@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 from Backend.forms import  ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
@@ -519,7 +520,6 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
         return self.request.user.groups.filter(name__icontains='財務').exists()
 
 # 請假申請
-from datetime import datetime
 
 class Leave_Application_List(ListView):
     model = Leave_Application

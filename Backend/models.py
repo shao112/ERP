@@ -382,10 +382,12 @@ class ApprovalModel(models.Model):
         if related_name:
             getobj = getattr(self, related_name, None).all()
             print("getobj: ",getobj)
-            if len(getobj)!=0:
+            if  getobj:
                 print("getattr(self, related_name, None).all()[0]: ",getattr(self, related_name, None).all()[0])
                 return getattr(self, related_name, None).all()[0]
             return None
+        else:
+            print("error 找不到對應的related_name")
         return None
     
 
@@ -470,16 +472,18 @@ class ApprovalModel(models.Model):
         verbose_name = '簽核執行'
         verbose_name_plural = verbose_name
     
-    # def __str__(self):
-    #     get_foreignkey = self.get_foreignkey()
-    #     get_show_id =""
-    #     get_created_by =""
-    #     if get_foreignkey !="":
-    #         get_show_id = get_foreignkey.get_show_id()
-    #         get_created_by =get_foreignkey.created_by
-        
-    #     return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
-    
+    def __str__(self):
+        try:
+            get_foreignkey = self.get_foreignkey()
+            get_show_id =""
+            get_created_by =""
+            if get_foreignkey !="":
+                get_show_id = get_foreignkey.get_show_id()
+                get_created_by =get_foreignkey.created_by
+            
+            return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
+        except:
+            return f"{self.id},{self.target_approval.name},erorr"        
 
 
 
@@ -888,7 +892,7 @@ class Leave_Application(ModifiedModel):
     def __str__(self):
         return self.get_show_id()
     
-    def hour_day(self,day):#回傳請假時數
+    def hour_day(self,day):#回傳這筆 請了多久，並附上詳細資訊
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
         if total_days == 0: #只請一天
@@ -925,7 +929,7 @@ class Leave_Application(ModifiedModel):
             else: #請假整天
                 return {"total_hours": 8, "total_minutes": 0,"type_of_leave": self.type_of_leave.leave_name,"id":self.get_show_id()}
 
-    def calculate_leave_duration(self):
+    def calculate_leave_duration(self): #回傳這筆Leave_Application 請了多久小時 分鐘
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
         if total_days==0:  # 請假只有一天
@@ -1011,19 +1015,8 @@ class Leave_Param(ModifiedModel):
         return self.leave_name
     
 
-    #計算單一請假花費
-    def calculate_total_leave_cost(self, user,year,month):
-        hourly_salary =user.get_hour_salary()
-        #回傳已請假(簽核)
-        total_hours, total_minutes ,_= self.calculate_total_leave_duration(user=user, Approval_status= True,year=year,month=month)
-        total_cost = (total_hours * hourly_salary) + (total_minutes * hourly_salary / 2)
-        #百分比
-        deduction_percentage = self.deduct_percentage / 100
-        total_cost *= deduction_percentage 
-        return math.ceil(total_cost),total_hours,total_minutes
-
-    #回傳今年今月某user 申請的obj
-    def get_user_leave_applications(self, user,Approval_status=None,year=None,month=None):
+    #根據YMD與user、核准狀況的參數 回傳Leave_Application arrays
+    def get_user_leave_applications_by_YM_or_Total(self, user,Approval_status=None,year=None,month=None):
         applications = self.lication.filter(created_by=user)        
         if year:
             applications = applications.annotate(year=ExtractYear('start_date_of_leave')).filter(year=year)
@@ -1033,23 +1026,24 @@ class Leave_Param(ModifiedModel):
         if Approval_status:
             applications = applications.filter(Approval__current_status="completed")
         return applications
+
     
 
-    #計算這個請假參數，使用幾小時
-    def calculate_total_leave_duration(self, user,Approval_status=None,year=None,month=None):
+    #傳入YM，計算範圍內的Leave_Application使用幾小時
+    def calculate_leave_duration_by_YM_or_Total(self, user,Approval_status=None,year=None,month=None):
         total_hours = 0
         total_minutes = 0
         details =[]
         
-        user_leave_applications = self.get_user_leave_applications(user=user,Approval_status=Approval_status,year=year,month=month)
+        user_leave_applications = self.get_user_leave_applications_by_YM_or_Total(user=user,Approval_status=Approval_status,year=year,month=month)
         
         for leave_application in user_leave_applications:
             leave_hours, leave_minutes = leave_application.calculate_leave_duration()
             details.append({
                 "id":leave_application.get_show_id(),
                 "time":f"{leave_hours} : {leave_minutes}",
-
             })
+
             total_hours += leave_hours
             total_minutes += leave_minutes
 
@@ -1058,10 +1052,23 @@ class Leave_Param(ModifiedModel):
         total_minutes %= 60
 
         return total_hours, total_minutes,details
+
+    #計算核准通過的請假扣款，根據傳入YM
+    def calculate_leave_cost_by_YM_or_Total(self, user,year,month):
+        hourly_salary =user.get_hour_salary()
+        #回傳已請假(簽核)
+        total_hours, total_minutes ,_= self.calculate_leave_duration_by_YM_or_Total(user=user, Approval_status= True,year=year,month=month)
+        total_cost = (total_hours * hourly_salary) + (total_minutes * hourly_salary / 2)
+        #百分比
+        deduction_percentage = self.deduct_percentage / 100
+        total_cost *= deduction_percentage 
+        return math.ceil(total_cost),total_hours,total_minutes
     
-    #判斷能不能請假
-    def exceeds_leave_quantity(self, leave_application,user):
-        total_hours, total_minutes ,_= self.calculate_total_leave_duration(user)
+
+    #傳入新申請obj，判斷今年能不能請假
+    def exceeds_leave_quantity_by_year(self, leave_application,user):
+        year = leave_application.start_date_of_leave.year
+        total_hours, total_minutes ,_= self.calculate_leave_duration_by_YM_or_Total(user,year=year)
         total_hours += total_minutes / 60
     
         leave_application_hours, leave_application_minutes = leave_application.calculate_leave_duration()
@@ -1069,13 +1076,13 @@ class Leave_Param(ModifiedModel):
 
         return  self.leave_quantity > total_hours
 
-    @classmethod #撈全部請假參數，請了多久小時，回傳已經使用多久小時的參數list
+    @classmethod #撈全部請假參數，範圍YM，每個參數請了多久小時，回傳已經使用多久小時的參數list
     def get_year_total_cost_list(cls, user,year,month):
         leave_param_details = []
         leave_params = cls.objects.all()
 
         for leave_param in leave_params:
-            cost,total_hours, total_minutes  = leave_param.calculate_total_leave_cost(user=user,year=year,month=month)
+            cost,total_hours, total_minutes  = leave_param.calculate_leave_cost_by_YM_or_Total(user=user,year=year,month=month)
             if cost!=0:
                 leave_param_details.append({
                     'id': leave_param.id,
@@ -1094,7 +1101,7 @@ class Leave_Param(ModifiedModel):
         leave_params = cls.objects.all()#取得請假參數
 
         for leave_param in leave_params:#根據請假參數撈取 user請了多久小時
-            total_hours, total_minutes , details = leave_param.calculate_total_leave_duration(user=user,year=year,month=month)
+            total_hours, total_minutes , details = leave_param.calculate_leave_duration_by_YM_or_Total(user=user,year=year,month=month)
 
             leave_param_details.append({
                 'id': leave_param.id,

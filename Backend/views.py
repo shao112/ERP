@@ -37,7 +37,7 @@ class SalaryDetailView(View):
         try:
             get_obj = get_object_or_404(SalaryDetail, id=id)
         except Http404:
-            return JsonResponse({"error": "找不到相應的明細 obj"}, status=404)
+            return JsonResponse({"error": "找不到相應的明細 obj"}, status=400)
         get_obj.delete()
         return JsonResponse({"ok":"ok"},status=200)
 
@@ -50,12 +50,12 @@ class SalaryDetailView(View):
         adjustmentAmount = int(dict_data.get('adjustmentAmount'))
 
         if adjustmentAmount <0:
-            return JsonResponse({"error": "調整金額需大於0，如需扣款請勾選為扣款項"}, status=404)
+            return JsonResponse({"error": "調整金額需大於0，如需扣款請勾選為扣款項"}, status=400)
 
         try:
             get_obj = get_object_or_404(SalaryDetail, id=id)
         except Http404:
-            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
         get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction)  
 
@@ -70,7 +70,7 @@ class SalaryDetailView(View):
         try:
             get_salary =Salary.objects.get(user=user, year=year, month=month)
         except Http404:
-            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
         SalaryDetail.objects.create(
             salary=get_salary,
@@ -113,6 +113,8 @@ class SysMessage_API(View):
 
 class Approval_View_Process(View):
     def post(self,request):
+        new_Approval=None
+        
         try:
             id = request.POST.get('id')
             modeltext = request.POST.get('model')
@@ -124,7 +126,7 @@ class Approval_View_Process(View):
             try:
                 get_obj = get_object_or_404(getmodel, id=id)
             except Http404:
-                return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+                return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
             
             model_name = {# 對應Approval_Target的name
                 'project_confirmation': 'Project_Confirmation',
@@ -139,23 +141,33 @@ class Approval_View_Process(View):
             try:
                 get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))
             except Http404:
-                return JsonResponse({"error": "找不到相應的簽核目標"}, status=404)
+                return JsonResponse({"error": "找不到相應的簽核目標"}, status=400)
 
             new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target)
-            print(new_Approval.target_approval.approval_order[0])
-            employee_id = new_Approval.target_approval.approval_order[0]
-            employee = Employee.objects.get(id=employee_id)
-            # new_Approval.send_message_to_related_users(f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
-            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
-
             if get_obj.Approval !=None:
                 get_obj.Approval.delete()
-
             get_obj.Approval=new_Approval
-
             get_obj.save()
+            print("save!!!")
+
+            employee_id = new_Approval.target_approval.approval_order[0]
+            if  employee_id !="x":
+                sender = Employee.objects.get(id=employee_id)
+                SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
+
+            else:
+                print("new_Approval")
+                print(new_Approval.get_created_by)
+
+                senders = new_Approval.get_created_by.departments.employees.filter(user__groups__name='主管')
+                for sender in senders:
+                    SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
+
+
             return JsonResponse({"success":"成功"},status=200)
         except Exception as e:
+            if new_Approval !=None: #刪除出錯的簽核執行obj
+                new_Approval.delete()
             print(str(e))
             return JsonResponse({"error": f"系統發生錯誤, {str(e)} "}, status=500)
 
@@ -172,7 +184,7 @@ class Approval_View_Process(View):
         try:
             get_obj = get_object_or_404(getmodel, id=id)
         except Http404:
-            return JsonResponse({"error": "找不到相應的ID obj"}, status=404)
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
         
         user = request.user.employee
         approval_obj = get_obj.Approval
@@ -212,7 +224,7 @@ class Approval_Process_Log(View):
         try:
             approval_instance = get_object_or_404(ApprovalModel, id=approval_id)
         except Http404:
-            return JsonResponse({"error": "找不到相應的ApprovalModel"}, status=404)
+            return JsonResponse({"error": "找不到相應的ApprovalModel"}, status=400)
 
         ApprovalLog.objects.create(
             approval=approval_instance,
@@ -921,12 +933,15 @@ class Leave_Application_View(View):
             get_leave_id = form.cleaned_data["type_of_leave"].id
             newobj =form.save(commit=False)
             leave_obj =Leave_Param.objects.get(id=get_leave_id)
-            can_leave = leave_obj.exceeds_leave_quantity(newobj,request.user.employee)
+            print("xx")
+            can_leave = leave_obj.exceeds_leave_quantity_by_year(newobj,request.user.employee)
+            print(can_leave)
+            print("xccc")
             if can_leave:
                 newobj.save()
                 return JsonResponse({'data': "完成新增","id":newobj.id},status=200)
             else:
-                return JsonResponse({"error":"無法請假，已沒有請假時數"},status=404)
+                return JsonResponse({"error":"無法請假，已沒有請假時數"},status=400)
         else:
             print("is_valid FALSE")
             error_messages = form.get_error_messages()

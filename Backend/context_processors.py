@@ -20,14 +20,15 @@ def approval_count(request):
         else:
             # 取得作者部門
             get_createdby = Approval.get_created_by
-            print(get_createdby)
-            department =get_createdby.departments
-            #撈取主管權限的員工
-            supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
-            #判斷主管是不是在當前user
-            is_supervisor = current_employee.id in supervisor_employees
-            if is_supervisor:            
-                related_records.append(Approval)
+            if get_createdby:
+                print(get_createdby)
+                department =get_createdby.departments
+                #撈取主管權限的員工
+                supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
+                #判斷主管是不是在當前user
+                is_supervisor = current_employee.id in supervisor_employees
+                if is_supervisor:            
+                    related_records.append(Approval)
         
     return {"approval_count":len(related_records)}
 

@@ -28,6 +28,7 @@ function handleApproval() {
         cache: false, 
         success: function (response) {
             alert("操作成功");
+            location.reload();
         },
         error: function(error) {
             alert("簽核失敗")

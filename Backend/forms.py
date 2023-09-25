@@ -258,7 +258,7 @@ class LeaveApplicationForm(BaseModelForm):
         model = Leave_Application
         fields = '__all__'
         widgets = {
-            'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_leave', 'name':'type_of_leave'}),
+            'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_leave', 'name':'type_of_leave','required': True}),
             'substitute': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'substitute', 'name':'substitute'}),
         }
 # 加班申請
