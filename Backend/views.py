@@ -6,8 +6,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
-from Backend.forms import RequisitionForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.models import  ExtraWorkDay,Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.forms import ExtraWorkDayForm,RequisitionForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
@@ -603,6 +603,43 @@ class Client_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Client, id=id)
+        data = model_to_dict(data)
+        return JsonResponse({"data":data}, status=200,safe = False)
+    
+class ExtraWorkDay_View(View):
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = ExtraWorkDayForm(dict_data)
+        if form.is_valid():
+            ExtraWorkDay.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            ExtraWorkDay.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            return JsonResponse({"error":str(e)},status=500)
+
+    def post(self,request):
+        form = ExtraWorkDayForm(request.POST)
+        if form.is_valid():
+            newobj = form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(ExtraWorkDay, id=id)
         data = model_to_dict(data)
         return JsonResponse({"data":data}, status=200,safe = False)
     

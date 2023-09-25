@@ -122,6 +122,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_attendance' %}">員工出勤</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
+                    </li>
 
                     {% if user|in_group_T_or_F:"管理部權限管理" or pass_test_func %}
                     <li class="nav-item">
@@ -209,7 +212,7 @@
             <div class="collapse" id="approvalCollapse">
                 <ul class="nav flex-column ml-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Approval_Process' %}">待簽核處理</a>
+                        <a class="nav-link" href="{% url 'Approval_Process' %">待簽核處理</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Approval_List' %}">簽核追蹤</a>

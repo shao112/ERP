@@ -199,7 +199,7 @@ $("form").on("submit", function (event) {
       }
 
       showSwal("操作說明", jsonData, "success", false).then(() => {
-        // location.reload();
+        location.reload();
       });
     },
     error: function (xhr, textStatus, errorThrown) {

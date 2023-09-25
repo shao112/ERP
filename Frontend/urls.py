@@ -31,6 +31,7 @@ urlpatterns = [
     path('salary/<int:year>/<int:month>', views.SalaryListView.as_view(), name='salary_list'),
 
     path('approval_list', views.Approval_List.as_view(), name="Approval_List"),
+    path('ExtraWorkDay', views.ExtraWorkDay_ListView.as_view(), name="ExtraWorkDay"),
     path('approval_group', views.Approval_Group.as_view(), name="Approval_Group"),
     path('leave_application', views.Leave_Application_List.as_view(), name="Leave_Application"),
     path('work_overtime_application', views.Work_Overtime_Application_List.as_view(), name="Work_Overtime_Application"),

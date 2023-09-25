@@ -813,18 +813,22 @@ class Project_Employee_Assign(ModifiedModel):
 class ExtraWorkDay(ModifiedModel):
     DATE_TYPE_CHOICES = [
         ('extra_work', '補班、額外上班日(這天要上班)'),
-        ('day_off', '平日休假日(這天不用上班)'),
+        ('day_off', '國定假日、平日休假日(這天不用上班)'),
     ]
 
     date = models.DateField(verbose_name="調整日期")
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES, verbose_name="日期類型")
-
     created_by = models.ForeignKey("Employee",related_name="ExtraWorkDay_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     class Meta:
         verbose_name = "工作日調整"   # 單數
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
+
+    def get_show_id(self):
+        return f"調假-{str(self.id).zfill(5)}"
+
+
     def __str__(self):
         return f"{self.date} - {self.get_date_type_display()}"
 

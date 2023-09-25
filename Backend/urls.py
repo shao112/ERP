@@ -38,6 +38,7 @@ urlpatterns = [
     path('quotation', views.Quotation_View.as_view(), name="quotation_api"),
     path('work_item', views.Work_Item_View.as_view(), name="work_item_api"),
     path('client', views.Client_View.as_view(), name="client_api"),
+    path('ExtraWorkDay', views.ExtraWorkDay_View.as_view(), name="ExtraWorkDay_api"),
     path('requisition', views.Requisition_View.as_view(), name="requisition_api"),
     #計算當月所有薪資明細
     path('salary/<int:year>/<int:month>', views.SalaryListView.as_view(), name="salary_api"),

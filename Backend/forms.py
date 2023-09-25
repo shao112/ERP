@@ -1,5 +1,5 @@
 from django import forms
-from .models import Requisition,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
+from .models import ExtraWorkDay,Requisition,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -49,6 +49,11 @@ class NewsForm(BaseModelForm):
 class QuotationForm(BaseModelForm):
     class Meta:
         model = Quotation
+        fields = '__all__'
+
+class ExtraWorkDayForm(BaseModelForm):
+    class Meta:
+        model = ExtraWorkDay
         fields = '__all__'
         
 
