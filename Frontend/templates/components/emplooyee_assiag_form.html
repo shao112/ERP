@@ -32,7 +32,7 @@
                                     id="lead_employee_select2" multiple>
                                     {% for employee in employees_list %}
                                     <option value="{{ employee.id }}">
-                                        {{employee.user__username}}
+                                        {{employee.full_name}}
                                     </option>
                                     {% endfor %}
                                 </select>
@@ -118,7 +118,7 @@
                                     id="inspector_select2" multiple>
                                     {% for employee in employees_list %}
                                     <option value="{{ employee.id }}">
-                                        {{employee.user__username}}
+                                        {{employee.full_name}}
                                     </option>
                                     {% endfor %}
                                 </select>

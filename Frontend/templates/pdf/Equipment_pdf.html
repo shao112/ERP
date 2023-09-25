@@ -43,9 +43,8 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
         }
 
 
-        /* .signature-box {
-            border: 2px solid black;
-            width: 200px;
+        .signature-box {
+            width: 100%;
             height: 150px;
             margin-top: 20px;
             padding: 10px;
@@ -53,7 +52,13 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
             display: flex;
             justify-content: center;    
             align-items: center;
-        } */
+        }
+
+.signature-box img {
+    max-width: 100%; /* 讓圖片不超過div的寬度 */
+    max-height: 100%; /* 讓圖片不超過div的高度 */
+    object-fit: contain; /* 保持圖片的寬高比例，完全顯示在div內 */
+}
 
         #show td.chinese, table th {
             background-color: #f2f2f2;
@@ -149,7 +154,9 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                     <td></td> -->
                     <td>
                         <div class="signature-box" style="height: 100px;">
-                            
+                            {% if project_employee_assign.enterprise_signature %}
+    <img src="{{ project_employee_assign.enterprise_signature.url }}" alt="企業簽名">
+{% endif %}
                         </div>
                     </td>
                 </tbody>

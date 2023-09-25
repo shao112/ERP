@@ -190,7 +190,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
     context_object_name = 'job_assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["employees_list"] = Employee.objects.values('id','full_name')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['project_job_assign_form'] = ProjectJobAssignForm()
 
@@ -210,7 +210,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     context_object_name = 'Project_Employee_Assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =  Employee.objects.values('id','user__username')
+        context["employees_list"] =  Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         return context
@@ -396,7 +396,7 @@ class Approval_List(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["employees_list"] = Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
@@ -435,7 +435,7 @@ class Approval_Process(ListView):
    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = employee = Employee.objects.values('id','user__username')
+        context["employees_list"] = Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()

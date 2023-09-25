@@ -132,7 +132,7 @@
                                                             name="lead_employee" id="lead_employee_select2" multiple>
                                                             {% for employee in employees_list %}
                                                             <option value="{{ employee.id }}">
-                                                                {{employee.user__username}}
+                                                                {{employee.full_name}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -220,7 +220,7 @@
                                                             name="inspector" id="inspector_select2" multiple>
                                                             {% for employee in employees_list %}
                                                             <option value="{{ employee.id }}">
-                                                                {{employee.user__username}}
+                                                                {{employee.full_name}}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
@@ -340,8 +340,6 @@
                     <th data-field="completion_date" data-sortable="true">完工日期</th>
                     <th data-field="is_completed" data-sortable="true">是否完工</th>
                     <th data-field="client" data-sortable="true">客戶名稱</th>
-                    <th data-field="requisition" data-sortable="true">請購單位</th>
-                    <th data-field="construction_location" data-sortable="true">施工地點</th>
                     <th data-field="inspector" data-sortable="true">檢測人員</th>
                     <th data-field="vehicle" data-sortable="true">使用車輛</th>
                     <th data-field="manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
@@ -402,19 +400,17 @@
 
                     <td>{{ p.get_show_id }}</td>
                     <td>{{ p.project_job_assign.get_show_id }}</td>
-                    <td>{{ p.project_job_assign.project_confirmation.quotation_id }}</td>
-                    <td>{{ p.project_job_assign.project_confirmation.project_name }}</td>
+                    <td>{{ p.project_job_assign.project_confirmation.quotation.get_show_id }}</td>
+                    <td>{{ p.project_job_assign.project_confirmation.quotation.project_name }}</td>
                     <td>{% for employees_list in p.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}
                     </td>
-                    <td>{{ p.construction_date }}</td>
-                    <td>{% if p.completion_date %}{{ p.completion_date }}{% else %}{% endif %}</td>
+                    <td>{{ p.construction_date|date:"Y/m/d" }}</td>
+                    <td>{% if p.completion_date %}{{ p.completion_date|date:"Y/m/d" }}{% else %}{% endif %}</td>
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>{% if p.project_job_assign.project_confirmation.quotation.client %}{{ p.project_job_assign.project_confirmation.quotation.client }}{% else %}{% endif %}</td>
-                    <td>{{ p.requisition }}</td>
-                    <td></td>
                     <td>{% for employees_list in p.inspector.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                     <td>{% if p.project_job_assign.vehicle %}{{ p.project_job_assign.vehicle }}{% else %}{% endif %}</td>
-                    <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date }}{% else %}{% endif %}</td>
+                    <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date|date:"Y/m/d" }}{% else %}{% endif %}</td>
 
                     <td>{{ p.enterprise_signature }}</td>
                 </tr>

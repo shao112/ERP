@@ -92,7 +92,7 @@
                         <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"
                             id="lead_employee_select2" multiple>
                             {% for employee in employees_list %}
-                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            <option value="{{ employee.id }}">{{ employee.full_name }}
                             </option>
                             {% endfor %}
                         </select>
@@ -104,7 +104,7 @@
                         <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
                             id="work_employee_select2" multiple>
                             {% for employee in employees_list %}
-                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            <option value="{{ employee.id }}">{{ employee.full_name }}
                             </option>
                             {% endfor %}
                         </select>

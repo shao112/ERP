@@ -63,7 +63,6 @@
                         <th data-sortable="true" data-filter-control="input" data-field="job_confirmation_id">工確單編號</th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
                         <th data-sortable="true" data-field="project_name">工程名稱</th>
-                        <th data-sortable="true" data-field="c_a">母案編號</th>
                         <th data-sortable="true" data-field="attendance_date">出勤日期</th>
                         <th data-sortable="true" data-field="work_employee">工作人員</th>
                         <th data-sortable="true" data-field="lead_employee">帶班人員</th>
@@ -95,10 +94,9 @@
                         <td>
                             {{ j.get_show_id }}
                         </td>
-                        <td>{{ j.project_confirmation.quotation.project_name }}</td>
-                        <td>{% if j.project_confirmation.c_a %}{{ j.project_confirmation.c_a }}{% else %}{% endif %}</td>
+                        <td>{{ j.project_confirmation.quotation.project_name  }}</td>
                         <td>
-                            {{ j.attendance_date }}
+                            {{ j.attendance_date |date:"Y/m/d" }}
                         </td>
                         <td>{% for employees_list in j.work_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                         <td>{% for employees_list in j.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
