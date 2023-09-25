@@ -401,12 +401,14 @@ class Project_Employee_Assign_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
         get_id=data.get_show_id()
+        location = data.project_job_assign.location
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
         data["lead_employee"] = convent_employee(data["lead_employee"])
         carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
         data["carry_equipments"] = list(carry_equipments_ids)
-        data["quotation"] = get_id
+        data["show_id"] = get_id
+        data["location"] = location
         
 
         if  data['enterprise_signature']:

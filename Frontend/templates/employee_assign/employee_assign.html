@@ -127,15 +127,9 @@
                                                 </div>
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
-                                                        <label for="lead_employee">帶班主管</label>
-                                                        <select class="select2" data-placeholder="選擇帶班主管"
-                                                            name="lead_employee" id="lead_employee_select2" multiple>
-                                                            {% for employee in employees_list %}
-                                                            <option value="{{ employee.id }}">
-                                                                {{employee.full_name}}
-                                                            </option>
-                                                            {% endfor %}
-                                                        </select>
+                                                        <label for="show_id">派工單編號(系統產生)</label>
+                                                        <input class="readonly form-control form-control-sm" name="show_id"
+                                                            id="show_id" readonly></input>
                                                     </div>
                                                 </div>
                                             </div>
@@ -179,6 +173,19 @@
                                                             id="location" readonly></input>
                                                     </div>
                                                 </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="lead_employee">帶班主管</label>
+                                                        <select class="select2" data-placeholder="選擇帶班主管"
+                                                            name="lead_employee" id="lead_employee_select2" multiple>
+                                                            {% for employee in employees_list %}
+                                                            <option value="{{ employee.id }}">
+                                                                {{employee.full_name}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-6">
@@ -198,6 +205,7 @@
                                                             id="completion_date"></input>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-12 col-md-6">

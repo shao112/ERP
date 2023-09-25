@@ -839,9 +839,9 @@ class ExtraWorkDay(ModifiedModel):
 #車程津貼
 class Travel_Application(ModifiedModel):
     location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
-    Application_date = models.DateField(blank=True, null=True, verbose_name="申請時間")
+    employee_Assign =  models.ForeignKey(Project_Employee_Assign, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_users')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+    created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
 
     class Meta:
         verbose_name = "車程申請"   # 單數
