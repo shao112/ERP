@@ -74,8 +74,8 @@
                         <div class="col-6">
                             {% for project in projects %}
                             <li href=""
-                                onclick="showjobassign('{{ project.project_confirmation.project_confirmation_id }}|{{ project.project_confirmation.project_name}}')">
-                                {{ project.project_confirmation.project_confirmation_id }}
+                                onclick="showjobassign('{{ project.project_confirmation.quotation.project_name }}|上班地點:{% if project.get_work_method_display %} 出勤(外地) {% else %} 公司 {% endif %} ')">
+                                {{ project.project_confirmation.quotation.project_name }}
                             </li>
                             <br>
                             {% endfor %}
