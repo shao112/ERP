@@ -1025,31 +1025,31 @@ class Work_Overtime_Application_View(View):
 
 class Leave_Param_View(View):
     def post(self,request):
-        # data = request.POST
-        # getid = request.POST['id']
-        # getleave_name = request.POST['leave_name']
-        # getleave_quantity = request.POST['leave_quantity']
-        # print(getid)
-        # print(getleave_name)
-        # print(getleave_quantity)
-        # dict_data = convent_dict(request.body)
-        # data = request.POST
-        # for field in data.getlist("leave_name"):
-        #     leave_param = Leave_Param.objects.get(leave_name=field)
-        #     print("原內容: ", leave_param.leave_name)
-        #     print("新內容: ", data.get("leave_name"))
-            # leave_param.leave_name = data.get("leave_name")
-            # leave_param.save()
-        # dict_data = convent_dict(request.body)
-        # print("dict_data ",dict_data)
-        # form = LeaveParamModelForm(dict_data)
-        # if form.is_valid():
-        #     Leave_Param.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
-        # print(dict_data)
-        return JsonResponse({'data': "修改成功"},status=200)
-        # else:
-        #     error_messages = form.get_error_messages()
-        #     return JsonResponse({"error":error_messages},status=400)
+        id = request.POST.get("id")
+        form = LeaveParamModelForm(request.POST)
+
+
+        if form.is_valid():
+            is_audit = request.POST.get('is_audit') == 'true'
+            is_attachment = request.POST.get('is_attachment') == 'true'
+            data = {
+                'leave_name': request.POST['leave_name'],
+                'leave_quantity': request.POST['leave_quantity'],
+                'minimum_leave_number': request.POST['minimum_leave_number'],
+                'minimum_leave_unit': request.POST['minimum_leave_unit'],
+                'is_audit': is_audit,
+                'is_attachment': is_attachment,
+                'deduct_percentage': request.POST['deduct_percentage']
+            }
+            getobj = Leave_Param.objects.get(id=id)
+            getobj.update_fields_and_save(**data)    
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+
+
 class Profile_View(View):
     # 同一個post要處理更新照片以及更新密碼
     def post(self,request):

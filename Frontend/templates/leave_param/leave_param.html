@@ -6,7 +6,7 @@
 
 {% load static%}
 <style>
-    .leave-param-table td{
+    .leave-param-table td {
         vertical-align: middle;
     }
 </style>
@@ -25,6 +25,7 @@
                 </div>
                 <thead class="thead-light text-center">
                     <tr class="text-nowrap" style="font-size: 14px;">
+                        <th>送出修改</th>
                         <th>假別代碼</th>
                         <th>假別名稱</th>
                         <th>項目類別</th>
@@ -42,7 +43,8 @@
                 </thead>
                 <tbody class="text-nowrap text-center" style="font-size: 14px;">
                     {% for l in leave_param %}
-                    <div class="modal fade" id="leaveRulesModal" tabindex="-1" role="dialog" aria-labelledby="leaveRulesModal" aria-hidden="true">
+                    <div class="modal fade" id="leaveRulesModal" tabindex="-1" role="dialog"
+                        aria-labelledby="leaveRulesModal" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -58,118 +60,150 @@
                         </div>
                     </div>
                     <tr>
+                        <td>
+                            <button class="modify" data-id="{{ l.id}}">修改</button>
+                        </td>
+
                         <td>{{ l.get_show_id}}</td>
                         <td>
-                            <input type="text" name="leave_name" class="form-control form-control-sm" value="{{ l.leave_name }}">
+                            <input type="text" name="leave_name" class="form-control form-control-sm"
+                                value="{{ l.leave_name }}">
                         </td>
                         <td>{{ l.leave_type }}</td>
                         <td>
-                            <input type="text" name="leave_quantity" class="form-control form-control-sm" value="{{ l.leave_quantity }}">
+                            <input type="text" name="leave_quantity" class="form-control form-control-sm"
+                                value="{{ l.leave_quantity }}">
                         </td>
                         <td>
-                            <input type="text" name="minimum_leave_number" class="form-control form-control-sm" value="{{ l.minimum_leave_number }}" >
+                            <input type="text" name="minimum_leave_number" class="form-control form-control-sm"
+                                value="{{ l.minimum_leave_number }}">
                         </td>
                         <td>
-                            <input type="text" name="minimum_leave_unit" class="form-control form-control-sm" value="{{ l.minimum_leave_unit }}" >
+                            <input type="text" name="minimum_leave_unit" class="form-control form-control-sm"
+                                value="{{ l.minimum_leave_unit }}">
                         </td>
                         <td>{{ l.unit }}</td>
                         <td>
-                            <input type="checkbox" name="is_audit" value="{{ l.is_audit }}"{% if l.is_audit %}checked{% endif %}>
+                            <input type="checkbox" name="is_audit" 
+                            value="{{ l.is_audit }}" {% if l.is_audit %}checked{% endif %}>
                         </td>
                         <td>
                             <input type="checkbox" name="is_attachment" value="{{ l.is_attachment }}">
                         </td>
+
                         <td>
-                            <input type="text" name="deduct_percentage" class="form-control form-control-sm" value="{{ l.deduct_percentage }}" >
+                            <input type="text" name="deduct_percentage" class="form-control form-control-sm"
+                                value="{{ l.deduct_percentage }}">
                         </td>
+
                         <td>{% if l.control %}是{% else %}否{% endif %}</td>
                         <td>
                             {{ l.gender }}
                         </td>
                         <td>
                             <a href="#" data-toggle="modal" data-target="#leaveRulesModal">規定</a>
-                            <input name="id" hidden value="{{ l.id }}"/>
+                            <input name="id" hidden value="{{ l.id }}" />
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="13">
-                            <button type="submit" class="btn border border-dark rounded" style="color: #fff;background: #1E3050;">送出</button>
-                        </td>
-                    </tr>
-                </tfoot>
+
             </table>
         </form>
-        
+
     </div>
 </div>
 
 <script>
-    
-$("form").on("submit", function (event) {
-    event.preventDefault();
-    var form = $(this);
-    var url = form.attr("action");
 
-    var id_arr = []
-    var leave_name_arr = []
-    var leave_quantity_arr = []
-    var formData = new FormData();
-    form.find(":input").each(function () {
-        var inputElement = $(this);
-        var inputName = inputElement.attr("name");
-        if(inputName == "id"){
-            id_arr.push(inputElement.attr("value"))
-        }else if(inputName == "leave_name"){
-            leave_name_arr.push(inputElement.attr("value"))
-        }else if(inputName == "leave_quantity"){
-            leave_quantity_arr.push(inputElement.attr("value"))
-        }
-    })
-    formData.append("id",id_arr)
-    formData.append("leave_name",leave_name_arr)
-    formData.append("leave_quantity",leave_quantity_arr)
-    formData.forEach((key, value) => {
-        console.log(key, value);
-    });
-    // function getValueForLoop(inputElement){
-    //     for(let i = 0; i < inputElement.length; i++){
-    //         console.log(inputElement[i].value);
-    //         console.log(inputElement[i].name);
-    //         formData.append(inputElement[i].name, inputElement[i].value);
-    //         console.log(formData) // formData放不進去內容
-    //     }
-    // }
+    $('.modify').on('click', function () {
+        event.preventDefault();
+        var $row = $(this).closest('tr'); // 找到最近的 tr 元素
+        var leave_name = $row.find('[name="leave_name"]').val(); // 獲取 input 中的值
 
-    // var leave_name_input = document.getElementsByName("leave_name")
-    // getValueForLoop(leave_name_input)
-    // formData.append("leave_name", leave_name);
-    // formData.append("leave_quantity", leave_quantity);
-    // formData.append("minimum_leave_number", minimum_leave_number);
-    // formData.append("minimum_leave_unit", minimum_leave_unit);
-    // formData.append("is_audit", is_audit);
-    // formData.append("is_attachment", is_attachment);
-    // formData.append("deduct_percentage", deduct_percentage);
+        Swal.fire({
+            title: '小心執行',
+            html: `準備調整<strong>${leave_name}</strong>欄資料!<br>影響程度：薪資計算!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '確定執行',
+            cancelButtonText: '取消'
+        }).then((result) => {
+            if (result.isConfirmed) {
 
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: formData,
+
+        var id = $row.find('[data-id]').data('id'); // 獲取按鈕上的 data-id 屬性
+        var leave_quantity = $row.find('[name="leave_quantity"]').val(); // 獲取相對應的 input 中的值
+        var minimum_leave_number = $row.find('[name="minimum_leave_number"]').val(); // 獲取相對應的 input 中的值
+        var minimum_leave_unit = $row.find('[name="minimum_leave_unit"]').val(); // 獲取相對應的 input 中的值
+        var is_audit = $row.find('[name="is_audit"]').prop('checked'); // 獲取 checkbox 的狀態
+        var is_attachment = $row.find('[name="is_attachment"]').prop('checked'); // 獲取 checkbox 的狀態
+        var deduct_percentage = $row.find('[name="deduct_percentage"]').val(); // 獲取 input 中的值
+
+        var jsonData = {
+            id: id,
+            leave_name: leave_name,
+            leave_quantity: leave_quantity,
+            minimum_leave_number: minimum_leave_number,
+            minimum_leave_unit: minimum_leave_unit,
+            is_audit: is_audit,
+            is_attachment: is_attachment,
+            deduct_percentage: deduct_percentage
+        };
+        console.log(jsonData);
+
+
+        $.ajax({
+        url: '/restful/leave_param',
+        type: 'POST',
+        dataType: 'json',
         headers: {
-            "X-CSRFToken": csrftoken,
+            'X-CSRFToken': csrftoken
         },
-        processData : false,
-        success: function (response) {
-            jsonData = response.data;
-            console.log(jsonData)
+        data: jsonData,
+        success: function(response) {
+            
+            Swal.fire("操作成功", "成功", false).then(() => {
+        location.reload();
+      });
         },
-        error: function (error) {
-            alert("錯誤", error);
-        },
+        error: function (xhr, textStatus, errorThrown) {
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                console.log(errorMessage);
+
+                var errorMessageHTML = "<ul>";
+
+                if (typeof errorMessage == "string") {
+                errorMessageHTML += "<li>" + errorMessage + "</li>";
+                } else {
+                Object.entries(errorMessage).map(([key, errors]) => {
+                    errors.forEach((error) => {
+                    errorMessageHTML += "<li>" + error + "</li>";
+                    });
+                });
+                }
+
+                errorMessageHTML += "</ul>";
+                console.log(errorMessageHTML);
+
+                showSwal("操作失敗", errorMessageHTML, "error", false);
+            } else if (xhr.status === 403) {
+                alert("無權獲得該頁詳細，請聯絡管理員");
+            } else {
+                alert("系統發生錯誤");
+                console.log(errorThrown);
+            }
+            },
+        });
+    }});
+
     });
-})
+
+    
+
 </script>
 
 
