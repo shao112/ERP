@@ -61,6 +61,8 @@ class UploadedFile(models.Model):
     def __str__(self):
         return self.name
 
+from django.core.exceptions import PermissionDenied
+
 #紀錄修改者
 class ModifiedModel(models.Model):
     modified_by = models.ForeignKey("Employee", on_delete=models.SET_NULL, null=True, blank=True)
@@ -81,6 +83,13 @@ class ModifiedModel(models.Model):
         super().save(*args, **kwargs)
 
     def update_fields_and_save(self, **kwargs):
+        if hasattr(self, 'Approval'):
+            if self.Approval:
+                current_status = self.Approval.current_status
+                if current_status == 'completed' or current_status == 'in_process':
+                    raise PermissionDenied("簽核中禁止修改.")
+
+
         for key, value in kwargs.items():
             setattr(self, key, value)
         self.save()
@@ -889,7 +898,6 @@ class Travel_Application(ModifiedModel):
 
             if status:
                 total_amount += detail
-
         if total_amount >17:
             total_amount =total_amount  - 16
             return total_amount ,math.ceil(total_amount*get_hour_salary*1.34), details

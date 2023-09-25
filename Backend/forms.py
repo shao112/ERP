@@ -142,7 +142,8 @@ class ProjectJobAssignForm(BaseModelForm):
         # 工作派任計畫必填欄位：工程確認單、出勤日期、工作方式(是:出勤、否:文書)、工作人員、工作地點
         project_confirmation = cleaned_data.get('project_confirmation')
         attendance_date = cleaned_data.get('attendance_date')
-        work_method = cleaned_data.get('work_method')
+        work_method = cleaned_data.get('work_method',"")
+        print(work_method)
         work_employee = cleaned_data.get('work_employee')
         location = cleaned_data.get('location')
         errors = {}
@@ -154,7 +155,7 @@ class ProjectJobAssignForm(BaseModelForm):
         if not attendance_date:
             errors['attendance_date'] = "請選擇出勤日期。"
 
-        if not work_method:
+        if  work_method =="":
             errors['work_method'] = "請選擇工作方法。"
 
 

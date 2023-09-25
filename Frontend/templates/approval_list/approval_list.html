@@ -92,7 +92,7 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
-                    <td>{{ object.target_approval.name }}</td>
+                    <td>{{ object.target_approval.get_name_display }}</td>
                     <td>
                         {{ object.get_current_status_display }}
                     </td>
