@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -58,6 +58,17 @@ def create_salary(employee,year,month):
             adjustment_amount=food_money,
             deduction=False
         )
+
+    print("車程津貼")
+    _,tr_cost,_ = Travel_Application.get_time_cost_details_by_YM(employee,year=year,month=month)
+    SalaryDetail.objects.create(
+            salary=salary,
+            name="車程津貼",
+            system_amount=tr_cost,  
+            adjustment_amount=tr_cost,
+            deduction=False
+        )
+    
 
     #請假單
     print("請假單")

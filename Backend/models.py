@@ -870,6 +870,7 @@ class Travel_Application(ModifiedModel):
     @classmethod
     def get_time_cost_details_by_YM(cls, user, year, month):
         total_amount = 0
+        get_hour_salary =user.get_hour_salary()
         details = []
 
         travel_apps = cls.objects.filter(
@@ -890,9 +891,10 @@ class Travel_Application(ModifiedModel):
                 total_amount += detail
 
         if total_amount >17:
-            return total_amount - 16, details
+            total_amount =total_amount  - 16
+            return total_amount ,math.ceil(total_amount*get_hour_salary*1.34), details
         else:
-            return 0, details
+            return 0,0, details
 
 
 
