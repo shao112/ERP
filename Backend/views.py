@@ -1077,7 +1077,7 @@ class Profile_View(View):
             employee = get_object_or_404(Employee, id=request.user.employee.id)
             print(employee.profile_image.path)
             print(employee)
-            now = datetime.now()
+            now = datetime.datetime.now()
             date_time_string = now.strftime("%Y%m%d_%H%M%S")
             file_extension = os.path.splitext(uploaded_image.name)[1]
             new_file_name = f"{date_time_string}{file_extension}"
@@ -1085,8 +1085,8 @@ class Profile_View(View):
             print("成功")
             return JsonResponse({'status': 'success'},status=200)
         else:
-            print("request.POST:", request.POST)
-            print("request.user:", request.user)
+            print("xx")
+            print(request.POST)
             form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
                 newobj =form.save()
