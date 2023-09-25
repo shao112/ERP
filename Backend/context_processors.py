@@ -17,6 +17,8 @@ def approval_count(request):
         if get_employee !="x":
             if  get_employee ==current_employee :
                 related_records.append(Approval)
+        elif get_employee =="clean":
+            pass
         else:
             # 取得作者部門
             get_createdby = Approval.get_created_by

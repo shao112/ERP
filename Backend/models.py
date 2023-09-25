@@ -417,6 +417,8 @@ class ApprovalModel(models.Model):
         current_index= self.current_index
         approval_order = self.target_approval.approval_order
         # print("approval_order: ",approval_order)
+        if len(approval_order)==0:
+            return "clean"
         if approval_order[current_index] !="x":
             return Employee.objects.get(id=approval_order[current_index])
         return "x"
