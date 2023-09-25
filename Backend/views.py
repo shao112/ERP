@@ -6,8 +6,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  ExtraWorkDay,Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
-from Backend.forms import ExtraWorkDayForm,RequisitionForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.models import Travel_Application, ExtraWorkDay,Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.forms import Travel_ApplicationForm,ExtraWorkDayForm,RequisitionForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
@@ -1356,6 +1356,57 @@ class Job_Assign_View(View):
         data['quotation_dict'] = quotation_dict
         data['job_assign_id'] = show_data_id
         return JsonResponse({"data":data}, status=200,safe = False)
+
+
+class Travel_Application_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = Travel_ApplicationForm(dict_data)
+        if form.is_valid():
+            getObject = Travel_Application.objects.get(id=int(dict_data['id']))
+            if  "job_assign" in dict_data:
+                job_assign_obj = Project_Job_Assign.objects.get(pk=int(dict_data["job_assign"]))
+                getObject.job_assign = job_assign_obj
+                getObject.save()
+                
+
+            return JsonResponse({'data': "完成修改"},status=200)
+        else:
+            return JsonResponse({"error":form.errors},status=400)
+
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Travel_Application.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
+
+    def post(self,request):
+        form = Travel_ApplicationForm(request.POST)
+
+        if form.is_valid():
+            newobj =form.save()
+            return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print("error_messages: ",error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Travel_Application, id=id)
+        show_data_id= data.get_show_id()
+        data = model_to_dict(data)
+        data["show_data_id"]=show_data_id
+
+        return JsonResponse({"data":data}, status=200,safe = False)
+
 
 
 

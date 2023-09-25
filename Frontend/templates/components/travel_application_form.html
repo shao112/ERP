@@ -1,4 +1,4 @@
-<form action="/restful/leave_application" name="leave_application" id="form" method="POST" class="pb-4"
+<form action="/restful/Travel_Application" name="leave_application" id="form" method="POST" class="pb-4"
     data-method="post">
     {% csrf_token %}
     <input name="id" hidden>
@@ -6,17 +6,20 @@
         <div class="col-12">
             <div class="form-row">
                 <div class="col-12 col-lg-6">
-                    <div class="form-group">
-                        <label for="Application_date">申請時間</label>
-                        <input type="date" class="form-control form-control-sm" name="Application_date" id="">
-                    </div>
+                    <label for="project_confirmation_control">工程派任計畫</label>
+                    <select class="form-control form-control-sm" name="job_assign" id="project_job_assign_location">
+                        <option value="-1">請選擇工作派任計畫</option>
+                        {% for job_assign in Project_location_list %}
+                        <option value="{{ job_assign.id }}">
+                            {{job_assign.get_show_id }} - {{job_assign.location}}
+                        </option>
+                        {% endfor %}
+                    </select>
 
-                    <div class="form-group">
-                        <label for="Application_date">出差地點</label>
-                        <input type="date" class="form-control form-control-sm" name="Application_date" id="">
-                    </div>
                 </div>
             </div>
+
+           
 
         </div>
     </div>

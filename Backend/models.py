@@ -395,7 +395,7 @@ class ApprovalModel(models.Model):
     def get_approval_employee(self):
         current_index= self.current_index
         approval_order = self.target_approval.approval_order
-        print("approval_order: ",approval_order)
+        # print("approval_order: ",approval_order)
         if approval_order[current_index] !="x":
             return Employee.objects.get(id=approval_order[current_index])
         return "x"
@@ -657,8 +657,8 @@ class Quotation(ModifiedModel):
         return f"報價-{str(self.id).zfill(5)}"
 
 
-    def __str__(self):
-        return self.project_name
+    # def __str__(self):
+    #     return self.project_name
 
     class Meta:
         verbose_name = "報價單"
@@ -721,6 +721,8 @@ class Project_Job_Assign(ModifiedModel):
 
     def get_show_id(self):
         return f"派任-{str(self.id).zfill(5)}"
+
+
 
     @classmethod
     def get_month_list_day(cls, employee,year,month):#公派當月天數
@@ -838,8 +840,7 @@ class ExtraWorkDay(ModifiedModel):
 
 #車程津貼
 class Travel_Application(ModifiedModel):
-    location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
-    employee_Assign =  models.ForeignKey(Project_Employee_Assign, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_users')
+    job_assign =  models.ForeignKey(Project_Job_Assign, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_users')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
     created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
 
@@ -848,18 +849,44 @@ class Travel_Application(ModifiedModel):
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id']
 
+    def get_show_id(self):
+        return f"車程-{str(self.id).zfill(5)}"
+
+
     def get_hour(self):        
         location_city = self.created_by.location_city
         try:
             reference_entry = ReferenceTable.objects.get(
                 location_city_business_trip=location_city,
-                location_city_residence=self.location_city_business_trip,
+                location_city_residence=self.job_assign.location,
                 name="車程津貼"
             )
-            return reference_entry.amount
+            return True,reference_entry.amount
         except ReferenceTable.DoesNotExist:
-            return None
-    #計算total hour要-16
+            return False,f"找不到{location_city}對{self.job_assign.location}的出差參照表 "
+
+    @classmethod
+    def get_time_cost_details_by_YM(cls, user, year, month):
+        total_amount = 0
+        details = []
+
+        travel_apps = cls.objects.filter(
+            created_by=user,
+            job_assign__attendance_date__year=year,
+            job_assign__attendance_date__month=month
+        )
+
+        for app in travel_apps:
+            status, detail = app.get_hour()
+            details.append({
+                'id': app.id,
+                'detail': detail
+            })
+
+            if status:
+                total_amount += detail
+
+        return total_amount, details
 
 
 

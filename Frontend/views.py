@@ -28,8 +28,12 @@ class TravelApplicationView(ListView):
     template_name = 'Travel_Application/Travel_Application.html'
     context_object_name = 'Travel_Applications'
     def get_context_data(self, **kwargs):
+        employee = self.request.user.employee
+        print(Travel_Application.get_time_cost_details_by_YM(employee,2023,9))
         context = super().get_context_data(**kwargs)
         context["Travel_Application_list"] = Travel_Application.objects.filter(created_by=self.request.user.employee)
+        context["Project_location_list"] = Project_Job_Assign.objects.filter(lead_employee__in=[employee])|Project_Job_Assign.objects.filter(    work_employee__in=[employee]        )
+        
         return context
 
 class Project_employee_assign_View(DetailView):

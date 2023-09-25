@@ -46,6 +46,7 @@
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
+               員工居住地: {{ user.employee.location_city }}
                 <div class="clock-correction-application-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#clock-correction-application-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增車程申請
@@ -63,8 +64,9 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-sortable="true" data-field="APP">簽核</th>
-                    <th data-field="time_of_clock" data-sortable="true">申請時間</th>
+                    <th data-field="time_of_clock" data-sortable="true">工程派任單</th>
                     <th data-field="clock_reason" data-sortable="true">出差地點</th>
+                    <th data-field="time" data-sortable="true">時數</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -72,13 +74,13 @@
                 <tr>
                     <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ obj.id }}"></td>
                     <td>
-                        <a data-target="#clock-correction-application-modal" type="button" data-url="clock_correction_application" data-id="{{ obj.id }}"
+                        <a data-target="#clock-correction-application-modal" type="button" data-url="Travel_Application" data-id="{{ obj.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
-                        <a data-url="clock_correction_application" data-target="#clock-correction-application-modal" data-id="{{ obj.id }}" type="button"
+                        <a data-url="Travel_Application" data-target="#clock-correction-application-modal" data-id="{{ obj.id }}" type="button"
                             class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
@@ -112,10 +114,13 @@
                     </td>
 
                     <td>
-                        {{ obj.Application_date|date:"Y-m-d" }}
+                        {{ obj.job_assign.get_show_id }}
                     </td>
                     <td>
-                        {{ obj.location_city_business_trip }}
+                        {{ obj.job_assign.location }}
+                    </td>
+                    <td>
+                        {{ user.employee.location_city|Travel_show:obj.job_assign.location }}
                     </td>
                 </tr>
                 {% endfor %}

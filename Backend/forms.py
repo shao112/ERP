@@ -51,6 +51,11 @@ class QuotationForm(BaseModelForm):
         model = Quotation
         fields = '__all__'
 
+class Travel_ApplicationForm(BaseModelForm):
+    class Meta:
+        model = Travel_Application
+        fields = '__all__'
+
 class ExtraWorkDayForm(BaseModelForm):
     class Meta:
         model = ExtraWorkDay
@@ -130,7 +135,7 @@ class ProjectJobAssignForm(BaseModelForm):
         model = Project_Job_Assign
         fields = '__all__'
         widgets = {
-            'location': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location', 'name':'location'}),
+            'location': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location', 'name':'location',"required":"true"}),
         }
     def clean(self):
         cleaned_data = super().clean()
@@ -152,8 +157,6 @@ class ProjectJobAssignForm(BaseModelForm):
         if not work_method:
             errors['work_method'] = "請選擇工作方法。"
 
-        if not work_employee:
-            errors['work_employee'] = "請選擇工作人員。"
 
         if not location:
             errors['location'] = "請選擇工作地點。"

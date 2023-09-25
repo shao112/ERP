@@ -1,9 +1,12 @@
 from django import template
 from datetime import datetime
 from datetime import date
-
+from Backend.models import ReferenceTable
 
 register = template.Library()
+
+
+
 
 @register.filter(name='highlight_date')
 def highlight_date(date_str):
@@ -22,6 +25,18 @@ def highlight_date(date_str):
 @register.filter
 def format_with_zeros(value, width):
     return str(value).zfill(width)
+
+@register.filter
+def Travel_show(user_location_city, location_city):
+    try:
+        reference_entry = ReferenceTable.objects.get(
+            location_city_business_trip=user_location_city,
+            location_city_residence=location_city,
+            name="車程津貼"
+        )
+        return reference_entry.amount
+    except ReferenceTable.DoesNotExist:
+        return f"找不到{location_city}對{user_location_city}的車程津貼參照表 "
 
 
 
