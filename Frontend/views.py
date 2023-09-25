@@ -428,7 +428,7 @@ class Approval_List(ListView):
     def get_queryset(self):
         current_employee = self.request.user.employee
 
-        all_approval_models = ApprovalModel.objects.all()
+        all_approval_models = ApprovalModel.objects.all().order_by("-id")
 
         related_approval_models = [
             approval_model for approval_model in all_approval_models

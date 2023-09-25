@@ -1,3 +1,4 @@
+let api_method ="post";
 function showSwal(title, text, icon, showCancelButton) {
   setting_dict = {
     title: title,
@@ -65,6 +66,7 @@ function cleanform() {
 
   $("#form")[0].reset();
   $("#form").attr("data-method", "POST");
+  api_method="post";
 }
 
 // 新增表單時使用post
@@ -88,7 +90,7 @@ document.querySelectorAll(".sys_get").forEach((element) => {
  */
 async function GET_handleClick(event, bringdata = true) {
   cleanform();
-
+  api_method="put";
   try {
     var clickedElement = event.target.closest("[data-id]");
     var url = "/restful/" + clickedElement.getAttribute("data-url");
@@ -177,13 +179,18 @@ $("form").on("submit", function (event) {
   var form = $(this);
   var url = form.attr("action");
   var formData = form.serialize();
-  var method = form.data("method");
+  var method =  api_method;//form.data("method");
 
   console.log("form data");
   console.log(formData);
   console.log(method);
 
   var idValue = form.find('input[name="id"]').val();
+
+  if(formData==[]){
+    alert("簽核完成或是簽核中，請勿修改。")
+    return
+  }
 
   $.ajax({
     type: method,
@@ -224,7 +231,13 @@ $("form").on("submit", function (event) {
         errorMessageHTML += "</ul>";
         console.log(errorMessageHTML);
 
-        showSwal("操作失敗", errorMessageHTML, "error", false);
+        Swal.fire({
+          title: '操作失敗',
+          html: errorMessageHTML,
+          icon: 'error',
+          confirmButtonText: '確定'
+        });
+
       } else if (xhr.status === 403) {
         alert("無權獲得該頁詳細，請聯絡管理員");
       } else {
