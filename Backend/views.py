@@ -958,6 +958,16 @@ class Leave_Application_View(View):
         data = model_to_dict(data)
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Leave_Application.objects.get(id=int(dict_data['id'])).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
 
 class Clock_Correction_Application_View(View):
 

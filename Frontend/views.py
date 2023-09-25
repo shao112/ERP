@@ -475,9 +475,9 @@ class Approval_Process(ListView):
         related_records = []
     
         for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
-            get_employee = Approval.get_approval_employee()
+            get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
             if get_employee !="x":
-                if  get_employee ==current_employee :
+                if  get_employee == current_employee :
                     related_records.append(Approval)
             else:
                 # 取得作者部門

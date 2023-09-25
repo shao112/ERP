@@ -66,14 +66,15 @@ $("#myModal").on("show.bs.modal", function (event) {
 
         if (input.type == "file") {
           var element = document.getElementById(key);
-          if (get_value != "") {
+          console.log(key,get_value)
+          if ( get_value !=null ) {
             element.href = get_value;
             element.target = "_blank";
             element.textContent = "下載";
           } else {
-            linkElement.href = "#";
-            linkElement.target = "_self";
-            element.textContent = "未提供";
+            element.href = "#";
+            element.target = "_self";
+            element.textContent = "未提供檔案";
           }
           continue;
         }

@@ -104,7 +104,7 @@
 
 
 
-        {% if user|in_group_T_or_F:"管理部權限管理" or user|in_group_T_or_F:"管理" or pass_test_func %}
+        {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
@@ -113,6 +113,8 @@
             </a>
             <div class="collapse" id="personnelCollapse">
                 <ul class="nav flex-column ml-4">
+                    
+                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'department' %}">部門管理</a>
                     </li>
@@ -125,15 +127,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'equipment' %}">固定資產管理</a>
+                    </li>
+                    {% endif %}
+
 
                     {% if user|in_group_T_or_F:"管理部權限管理" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_permission_list'%}">權限管理</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'equipment' %}">固定資產管理</a>
-                    </li>
                 </ul>
             </div>
         </li>
