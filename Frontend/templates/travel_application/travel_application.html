@@ -91,24 +91,24 @@
 
                         {% if obj.Approval.current_status == "completed" %}
                         {% if request.user|get_supervisor %}
-                        / <button data-id="{{ obj.id }}" data-model="Clock_Correction_Application"
+                        / <button data-id="{{ obj.id }}" data-model="Travel_Application"
                             onclick="DelApproval(event)">收回(主管)</button>
                         {% endif %}
                         {% endif %}
 
 
                         {% if obj.Approval.current_status == "in_progress" %}
-                        / <button data-id="{{ obj.id }}" data-model="Clock_Correction_Application"
+                        / <button data-id="{{ obj.id }}" data-model="Travel_Application"
                             onclick="DelApproval(event)">收回</button>
                         {% endif %}
 
                         {% if obj.Approval.current_status == "rejected" %}
-                        / <button data-id="{{ obj.id }}" data-model="Clock_Correction_Application"
+                        / <button data-id="{{ obj.id }}" data-model="Travel_Application"
                             onclick="submitApproval(event)">發送新簽核</button>
                         {% endif %}
 
                         {% else %}
-                        <button data-id="{{ obj.id }}" data-model="Clock_Correction_Application"
+                        <button data-id="{{ obj.id }}" data-model="Travel_Application"
                             onclick="submitApproval(event)">開始簽核</button>
                         {% endif %}
                     </td>

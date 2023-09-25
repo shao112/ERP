@@ -15,6 +15,10 @@
         <a class="nav-link" id="tab4" data-toggle="tab" href="#content4" role="tab"
             aria-controls="content4" aria-selected="false">補卡</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab5" data-toggle="tab" href="#content5" role="tab"
+            aria-controls="content5" aria-selected="false">車程津貼</a>
+    </li>
 </ul>
 <div class="tab-content">
     <div class="tab-pane fade show active" id="content1" role="tabpanel" aria-labelledby="tab1">
@@ -32,5 +36,9 @@
     <div class="tab-pane fade" id="content4" role="tabpane4" aria-labelledby="tab4">
         補卡單
         {% include 'components\clock_correction_application_form.html' %}
+    </div>
+    <div class="tab-pane fade" id="content5" role="tabpane5" aria-labelledby="tab5">
+        車程津貼
+        {% include 'components\travel_application_form.html' %}
     </div>
 </div>

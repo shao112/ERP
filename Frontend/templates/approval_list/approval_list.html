@@ -55,7 +55,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="myModalLabel">簽核內容</h5>
+                <h5 id="set_author"> 申請人:王王王</h5>
 
+                
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -83,6 +85,7 @@
                     <th data-sortable="true" data-field="status">狀態</th>
                     <th data-sortable="true" data-field="content">編號</th>
                     <th data-sortable="true" data-field="progress">簽核進度</th>
+                    <th data-sortable="true" data-field="author">申請人</th>
                     <th data-sortable="true" data-field="watch">查看</th>
                 </tr>
             </thead>
@@ -96,6 +99,7 @@
                     <td>
                         {{ object.get_foreignkey.get_show_id }}
                     </td>
+
                     <td>
                         {% for log in object.get_approval_log_list %}
                         {{ log.show_name }} -
@@ -110,9 +114,12 @@
                         未執行簽核
                         {% endfor %}
                     </td>
-
                     <td>
-                        <a href="" data-Approval_id="{{ object.id }}" data-id="{{object.get_foreignkey.id}}"
+                        {{ object.get_foreignkey.created_by }}
+                    </td>
+                    <td>
+                        <a href="" data-Approval_id="{{ object.id }}"  data-created_by="{{ object.get_foreignkey.created_by }}"
+                        data-id="{{object.get_foreignkey.id}}"
                             data-url="{{object.model_url}}" data-toggle="modal" data-target="#myModal">
                             <i class="fa-solid fa-eye fa-lg"></i>
                         </a>
@@ -130,13 +137,12 @@
 
 <script>
 
-
+    
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/approval_process/approval_process.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
-
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/work-overtime-application/work-overtime-application.js' %}",
 
@@ -146,6 +152,7 @@
             var script = document.createElement('script');
             script.src = src;
             document.body.appendChild(script);
+
         });
     });
 

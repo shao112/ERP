@@ -135,6 +135,7 @@ class Approval_View_Process(View):
                 'Work_Overtime_Application': 'Work_Overtime_Application',
                 'Leave_Application': 'Leave_Application',
                 'Clock_Correction_Application': 'Clock_Correction_Application',
+                'Travel_Application': 'Travel_Application',
             }
             print("modeltext: ", modeltext)
 

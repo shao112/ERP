@@ -289,6 +289,7 @@ class Approval_Target(models.Model):
         ('Leave_Application', '請假單'),
         ('Work_Overtime_Application', '加班單'), #這個value會對應下面的value
         ('Clock_Correction_Application', '補卡單'),
+        ('Travel_Application', '車程津貼單'),
     ]
     name =models.CharField(max_length=30,verbose_name="表單名稱",choices=STATUS_CHOICES)
     approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
@@ -321,7 +322,8 @@ class ApprovalModel(models.Model):
         'Project_Employee_Assign': 'Project_Employee_Assign_Approval',
         'Leave_Application': 'Leave_Application_Approval',
         'Work_Overtime_Application':"Work_Overtime_Application_Approval",
-        'Clock_Correction_Application':"Clock_Correction_Application_Approval"
+        'Clock_Correction_Application':"Clock_Correction_Application_Approval",
+        'Travel_Application':"Travel_Application_Approval",
     }
 
     #對應的model api 網址，會帶入data-model
@@ -330,6 +332,7 @@ class ApprovalModel(models.Model):
         'Leave_Application': 'leave_application',
         'Work_Overtime_Application': 'work_overtime_application',
         'Clock_Correction_Application': 'clock_correction_application',
+        'Travel_Application': 'Travel_Application',
     }
 
 
@@ -376,14 +379,13 @@ class ApprovalModel(models.Model):
     
     #回傳關聯
     def get_foreignkey(self):
-        print("self.target_approval.name: ",self.target_approval.name)
+        # print("self.target_approval.name: ",self.target_approval.name)
         related_name = self.RELATED_NAME_MAP.get(self.target_approval.name)
-        print(related_name)
         if related_name:
             getobj = getattr(self, related_name, None).all()
-            print("getobj: ",getobj)
+            # print("getobj: ",getobj)
             if  getobj:
-                print("getattr(self, related_name, None).all()[0]: ",getattr(self, related_name, None).all()[0])
+                # print("getattr(self, related_name, None).all()[0]: ",getattr(self, related_name, None).all()[0])
                 return getattr(self, related_name, None).all()[0]
             return None
         else:
@@ -430,7 +432,7 @@ class ApprovalModel(models.Model):
         取得相關的 ApprovalLog 並整理成列表
         """
         get_approval_logs = self.approval_logs.all().order_by('id')  # 根據 ID 順序排序
-        print("get_approval_logs: ",get_approval_logs)
+        # print("get_approval_logs: ",get_approval_logs)
         show_list = []
         current_index = self.current_index
         approval_order = self.target_approval.approval_order
@@ -465,7 +467,7 @@ class ApprovalModel(models.Model):
                     "show_name":show_name,
                     "status": "wait",
                 })
-        print("show_list: ",show_list)
+        # print("show_list: ",show_list)
         return show_list
 
     class Meta:
@@ -873,20 +875,24 @@ class Travel_Application(ModifiedModel):
         travel_apps = cls.objects.filter(
             created_by=user,
             job_assign__attendance_date__year=year,
-            job_assign__attendance_date__month=month
+            job_assign__attendance_date__month=month,
+            Approval__current_status="completed"
         )
 
         for app in travel_apps:
             status, detail = app.get_hour()
             details.append({
-                'id': app.id,
+                'id': app.get_show_id(),
                 'detail': detail
             })
 
             if status:
                 total_amount += detail
 
-        return total_amount, details
+        if total_amount >17:
+            return total_amount - 16, details
+        else:
+            return 0, details
 
 
 
