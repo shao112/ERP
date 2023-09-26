@@ -104,7 +104,7 @@
 
 
 
-        {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
+        {% if user|in_group_T_or_F:"簽核流程管理"  or user|in_group_T_or_F:"管理部" or pass_test_func %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
@@ -136,6 +136,12 @@
                     {% if user|in_group_T_or_F:"管理部權限管理" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_permission_list'%}">權限管理</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if user|in_group_T_or_F:"簽核流程管理" or pass_test_func %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -222,11 +228,6 @@
                         <a class="nav-link" href="{% url 'Approval_List' %}">簽核追蹤</a>
                     </li>
 
-                    {% if user|in_group_T_or_F:"簽核管理" or pass_test_func %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
-                    </li>
-                    {% endif %}
                 </ul>
             </div>
         </li>
