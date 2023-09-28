@@ -56,6 +56,11 @@ function add() {
   console.log("Money Value: " + moneyValue);
   console.log(data);
 
+  if(moneyValue<=0){
+    alert("請輸入金額，或是輸入金額至少大於零。如需扣款請勾選為扣款項")
+    return
+  }
+
   $.ajax({
     url: api_url,
     method: "POST",
@@ -111,6 +116,12 @@ function save(itemid) {
     itemid: itemid,
     deduction: deduction,
   };
+  
+  if(adjustmentAmount<=0){
+    alert("輸入金額至少大於零。如需扣款請勾選為扣款項")
+    return
+  }
+  
   $.ajax({
     url: api_url,
     method: "PUT",

@@ -63,7 +63,10 @@ class SalaryDetailView(View):
 
     def post(self, request, *args, **kwargs):
         dict_data = convent_dict(request.body)
-        moneyValue = dict_data.get('moneyValue')
+        moneyValue = dict_data.get('moneyValue',0)
+        if int(moneyValue) <= 0:
+            return JsonResponse({"error": "金額需大於0，如需扣款請後續更改為扣款項"}, status=400)
+
         name = dict_data.get('name')
         deductionValue = dict_data.get('deductionValue')
         year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
@@ -1351,7 +1354,9 @@ class Job_Assign_View(View):
         #渲染關聯
         selected_fields = ['id','quotation_id', 'quotation', 'client', 'requisition']
         quotation_selected_fields = ['id','project_name',  'client']
-        requisition_name =data.project_confirmation.requisition.requisition_name
+        requisition_name = ""
+        if data.project_confirmation.requisition:
+            requisition_name =data.project_confirmation.requisition.requisition_name
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
         
         quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)
