@@ -17,10 +17,19 @@ def get_weekly_clock_data(userid):
     weekdays = get_weekdays(5)
     weekly_clock_data = []
     for weekday in weekdays:
-        clock_records = Clock.objects.filter(created_date=weekday).filter(employee_id=userid).order_by('clock_time')
-        check_in = clock_records.first().clock_time.strftime('%H:%M') if clock_records else ''
-        check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
-            # check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records else ''
+        clock_records = Clock.objects.filter(clock_date=weekday).filter(employee_id=userid).order_by('clock_time')
+        clock_records_list = list(clock_records.values_list('type_of_clock', flat=True) if clock_records else '')
+        # print("clock_records_list: ",clock_records_list)
+        # 2 代表補打卡，直接抓 clock_time
+        if '2' in clock_records_list:
+            # print("使用type_of_clock=2的clock_time")
+            # print(clock_records.filter(type_of_clock='2').filter(clock_in_or_out=True))
+            # print(clock_records.filter(type_of_clock='2').filter(clock_in_or_out=False))
+            check_in = clock_records.filter(type_of_clock='2').filter(clock_in_or_out=True).first().clock_time.strftime('%H:%M') if clock_records else ''
+            check_out = clock_records.filter(type_of_clock='2').filter(clock_in_or_out=False).last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
+        else:
+            check_in = clock_records.first().clock_time.strftime('%H:%M') if clock_records else ''
+            check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
         daily_data = {
             'day': weekday.strftime('%m%d'),
             'checkin': check_in,
