@@ -29,7 +29,7 @@
                         <label for="start_hours_of_overtime">加班起始小時</label>
                         <select name="start_hours_of_overtime" class="form-control form-control-sm" id="start_hours_of_overtime">
                             {% for i in 24range %}
-                              <option value="{{ i }}">{{ i }}</option>
+                              <option value="{{ i }}" {% if i == 8 %} selected {% endif %}>{{ i }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -49,7 +49,7 @@
                         <label for="end_hours_of_overtime">加班結束小時</label>
                         <select name="end_hours_of_overtime" class="form-control form-control-sm" id="end_hours_of_overtime">
                             {% for i in 24range %}
-                              <option value="{{ i }}">{{ i }}</option>
+                              <option value="{{ i }}" {% if i == 17 %} selected {% endif %}>{{ i }}</option>
                             {% endfor %}
                         </select>
                     </div>

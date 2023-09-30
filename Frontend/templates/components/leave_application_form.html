@@ -35,7 +35,7 @@
                         <label for="start_hours_of_leave">請假起始小時</label>
                         <select name="start_hours_of_leave" class="form-control form-control-sm" id="start_hours_of_leave">
                             {% for i in 24range %}
-                            <option value="{{ i }}">{{ i }}</option>
+                            <option value="{{ i }}" {% if i == 8 %} selected {% endif %}>{{ i }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -108,7 +108,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 ">
-                    <label>完工重派附件</label>
+                    <label>請假附件</label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" data-modal="Leave_Application" name="attachment"
                             id="reassignment_attachment_control">

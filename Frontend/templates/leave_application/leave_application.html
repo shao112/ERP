@@ -158,10 +158,10 @@
 
                     </td>
                     <td>
-                        {{ leave_application.get_show_id }}
+                        {% if leave_application.get_show_id %}{{ leave_application.get_show_id }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ leave_application.type_of_leave }}
+                        {% if leave_application.type_of_leave %}{{ leave_application.type_of_leave }}{% else %}{% endif %}
                     </td>
                     <td>
                         {{ leave_application.start_date_of_leave|date:"Y-m-d" }} -
@@ -176,7 +176,7 @@
                         {{leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分
                     </td>
                     <td>
-                        {{ leave_application.substitute }}
+                        {% if leave_application.substitute %}{{ leave_application.substitute }}{% else %}{% endif %}
                     </td>
                     <td>
                         {% if leave_application.leave_reason %}{{ leave_application.leave_reason }}{% else %}{% endif %}

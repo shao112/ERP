@@ -35,7 +35,7 @@
                         <label for="end_hours_of_clock">補卡小時</label>
                         <select name="end_hours_of_clock" class="form-control form-control-sm">
                             {% for i in 24range %}
-                              <option value="{{ i }}">{{ i }}</option>
+                              <option value="{{ i }}" {% if i == 8 %} selected {% endif %}>{{ i }}</option>
                             {% endfor %}
                         </select>
                     </div>

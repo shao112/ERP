@@ -3,7 +3,7 @@ from import_export.fields import Field
 
 from django.conf import settings # 要取得 BASE_URL
 
-from .models import Department, Project_Confirmation, Project_Job_Assign, Project_Employee_Assign
+from .models import Employee, Department, Project_Confirmation, Project_Job_Assign, Project_Employee_Assign
 
 # 匯出布林值欄位只會顯示 1 跟 0，要特別處理布林值
 class BooleanWidget(widgets.BooleanWidget):
@@ -102,3 +102,20 @@ class ProjectEmployeeAssignResource(resources.ModelResource):
     class Meta:
         model = Project_Employee_Assign
         exclude = ['modified_by','created_date','update_date','Approval']
+
+class EmployeeResource(resources.ModelResource):
+    id = Field(attribute='id', column_name="編號", widget=EmployeeAssignIDWidget())
+    project_job_assign = Field(attribute='project_job_assign', column_name=Project_Employee_Assign.project_job_assign.field.verbose_name)
+    construction_date = Field(attribute='construction_date', column_name=Project_Employee_Assign.construction_date.field.verbose_name)
+    completion_date = Field(attribute='completion_date', column_name=Project_Employee_Assign.completion_date.field.verbose_name)
+    is_completed = Field(attribute='is_completed', column_name=Project_Employee_Assign.is_completed.field.verbose_name, widget=BooleanWidget())
+    inspector = Field(attribute='inspector', column_name=Project_Employee_Assign.inspector.field.verbose_name)
+    manuscript_return_date = Field(attribute='manuscript_return_date', column_name=Project_Employee_Assign.manuscript_return_date.field.verbose_name)
+    lead_employee = Field(attribute='lead_employee', column_name=Project_Employee_Assign.lead_employee.field.verbose_name)
+    enterprise_signature = Field(attribute='enterprise_signature', column_name=Project_Employee_Assign.enterprise_signature.field.verbose_name)
+    carry_equipments = Field(attribute='carry_equipments', column_name=Project_Employee_Assign.carry_equipments.field.verbose_name)
+    created_by = Field(attribute='created_by', column_name=Project_Employee_Assign.created_by.field.verbose_name)
+
+    class Meta:
+        model = Project_Employee_Assign
+        exclude = ['uploaded_files','profile_image','modified_by','created_date','update_date','Approval']
