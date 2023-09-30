@@ -27,16 +27,16 @@ def format_with_zeros(value, width):
     return str(value).zfill(width)
 
 @register.filter
-def Travel_show(user_location_city, location_city):
+def Travel_show(location_city_go, location_city_end):
     try:
         reference_entry = ReferenceTable.objects.get(
-            location_city_business_trip=user_location_city,
-            location_city_residence=location_city,
+            location_city_business_trip=location_city_go,
+            location_city_residence=location_city_end,
             name="車程津貼"
         )
         return reference_entry.amount
     except ReferenceTable.DoesNotExist:
-        return f"找不到{location_city}對{user_location_city}的車程津貼參照表 "
+        return f"找不到{location_city_end}對{location_city_go}的車程津貼參照表 "
 
 
 

@@ -867,7 +867,9 @@ class ExtraWorkDay(ModifiedModel):
 
 #車程津貼
 class Travel_Application(ModifiedModel):
-    job_assign =  models.ForeignKey(Project_Job_Assign, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_users')
+    date = models.DateField(verbose_name="申請日期",blank=True, null=True) 
+    location_city_go = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="出發地")
+    location_city_end = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="到達")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
     created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
 
@@ -879,18 +881,16 @@ class Travel_Application(ModifiedModel):
     def get_show_id(self):
         return f"車程-{str(self.id).zfill(5)}"
 
-
     def get_hour(self):        
-        location_city = self.created_by.location_city
         try:
             reference_entry = ReferenceTable.objects.get(
-                location_city_business_trip=location_city,
-                location_city_residence=self.job_assign.location,
+                location_city_business_trip=self.location_city_go,
+                location_city_residence=self.location_city_end,
                 name="車程津貼"
             )
             return True,reference_entry.amount
         except ReferenceTable.DoesNotExist:
-            return False,f"找不到{location_city}對{self.job_assign.location}的出差參照表 "
+            return False,f"找不到{self.location_city_go}對{self.location_city_end}的出差參照表 "
 
     @classmethod
     def get_time_cost_details_by_YM(cls, user, year, month):
@@ -900,8 +900,8 @@ class Travel_Application(ModifiedModel):
 
         travel_apps = cls.objects.filter(
             created_by=user,
-            job_assign__attendance_date__year=year,
-            job_assign__attendance_date__month=month,
+            date__year=year,
+            date__month=month,
             Approval__current_status="completed"
         )
 
@@ -909,7 +909,10 @@ class Travel_Application(ModifiedModel):
             status, detail = app.get_hour()
             details.append({
                 'id': app.get_show_id(),
-                'detail': detail
+                'detail': detail,
+                'date':app.date,
+                'location_city_go':app.location_city_go,
+                'location_city_end':app.location_city_end,
             })
 
             if status:

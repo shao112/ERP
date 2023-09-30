@@ -6,7 +6,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import  ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import  Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -29,11 +29,10 @@ class TravelApplicationView(ListView):
     context_object_name = 'Travel_Applications'
     def get_context_data(self, **kwargs):
         employee = self.request.user.employee
-        print(Travel_Application.get_time_cost_details_by_YM(employee,2023,9))
         context = super().get_context_data(**kwargs)
         context["Travel_Application_list"] = Travel_Application.objects.filter(created_by=self.request.user.employee)
         context["Project_location_list"] = Project_Job_Assign.objects.filter(lead_employee__in=[employee])|Project_Job_Assign.objects.filter(    work_employee__in=[employee]        )
-        
+        context['Travel_ApplicationForm'] = Travel_ApplicationForm()
         return context
 
 class Project_employee_assign_View(DetailView):
@@ -60,8 +59,10 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         context["leave_details"] =Leave_Param.get_leave_param_all_details(user= user_obj,year=year,month=month)
         context["leave_cost_details"] =Leave_Param.get_year_total_cost_list(user= user_obj,year=year,month=month)
         _,_,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
+        _,_,Travel_Application_details =  Travel_Application.get_time_cost_details_by_YM(user_obj,year=year,month=month)
 
         context["Project_Job_Assign_details"] = Project_Job_Assign_details
+        context["Travel_Application_details"] = Travel_Application_details
 
         return context
 
@@ -419,6 +420,7 @@ class Approval_List(ListView):
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['vehicle'] = Vehicle.objects.all()
+        context['Travel_ApplicationForm'] = Travel_ApplicationForm()
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
         context["leave_application_form"] = LeaveApplicationForm()
         context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
@@ -439,9 +441,6 @@ class Approval_List(ListView):
             if approval_model.get_created_by == current_employee
         ]
 
-        print(related_approval_models)
-
-
 
         queryset = related_approval_models
         return queryset
@@ -456,6 +455,7 @@ class Approval_Process(ListView):
     def get_context_data(self, **kwargs):
         employee = self.request.user.employee
         context = super().get_context_data(**kwargs)
+        context['Travel_ApplicationForm'] = Travel_ApplicationForm()
         context["employees_list"] = Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
@@ -477,8 +477,8 @@ class Approval_Process(ListView):
         current_employee = self.request.user.employee
     
         related_records = []
-    
-        for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
+        get_objs = ApprovalModel.objects.filter(current_status="in_progress").order_by("-id")
+        for Approval in get_objs:            
             get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
             if get_employee !="x":
                 if  get_employee == current_employee :

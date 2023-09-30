@@ -8,26 +8,37 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="show_data_id">車程申請編號(系統產生)</label>
-                        <input class="readonly form-control form-control-sm" name="show_data_id"
-                            id="" readonly></input>
+                        <input class="readonly form-control form-control-sm" name="show_data_id" id="" readonly></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="show_data_id">申請日期</label>
+                        <input class="readonly form-control form-control-sm" type="date" name="date" id="" ></input>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="location_city_go">出發城市</label>
+                        {{ Travel_ApplicationForm.location_city_go }}
                     </div>
                 </div>
 
-                <div class="col-12 col-lg-6">
-                    <label for="project_confirmation_control">工程派任計畫</label>
-                    <select class="form-control form-control-sm" name="job_assign" id="project_job_assign_location">
-                        <option value="-1">請選擇工作派任計畫</option>
-                        {% for job_assign in Project_location_list %}
-                        <option value="{{ job_assign.id }}">
-                            {{job_assign.get_show_id }} - {{job_assign.location}}
-                        </option>
-                        {% endfor %}
-                    </select>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="location_city_end">目的地城市</label>
+                        {{ Travel_ApplicationForm.location_city_end }}
+                    </div>
 
                 </div>
             </div>
 
-           
+
+
 
         </div>
     </div>

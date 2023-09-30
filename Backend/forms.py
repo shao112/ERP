@@ -55,6 +55,10 @@ class Travel_ApplicationForm(BaseModelForm):
     class Meta:
         model = Travel_Application
         fields = '__all__'
+        widgets = {
+            'location_city_go': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location_city_go', "name":'location_city_go', 'required': 'true'}),
+            'location_city_end': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location_city_end', "name":'location_city_end', 'required': 'true'}),
+            }
 
 class ExtraWorkDayForm(BaseModelForm):
     class Meta:

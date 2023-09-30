@@ -46,7 +46,6 @@
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
-               員工居住地: {{ user.employee.location_city }}
                 <div class="clock-correction-application-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#clock-correction-application-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增車程申請
@@ -64,9 +63,10 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-sortable="true" data-field="APP">簽核</th>
-                    <th data-field="job" data-sortable="true">工程派任單</th>
-                    <th data-field="time_of_clock" data-sortable="true">出勤時間</th>
-                    <th data-field="clock_reason" data-sortable="true">出差地點</th>
+                    <th data-field="go_id" data-sortable="true">編號</th>
+                    <th data-field="job" data-sortable="true">申請時間</th>
+                    <th data-field="time_of_clock" data-sortable="true">出發城市</th>
+                    <th data-field="clock_reason" data-sortable="true">目的地城市</th>
                     <th data-field="time" data-sortable="true">時數</th>
                 </tr>
             </thead>
@@ -115,16 +115,20 @@
                     </td>
 
                     <td>
-                        {{ obj.job_assign.get_show_id }}
+                        {{ obj.get_show_id }}
+                    </td>
+
+                    <td>
+                        {{ obj.date |date:"Y/m/d" }}
                     </td>
                     <td>
-                        {{ obj.job_assign.attendance_date |date:"Y/m/d" }}
+                        {{ obj.location_city_go }}
                     </td>
                     <td>
-                        {{ obj.job_assign.location }}
+                        {{ obj.location_city_end }}
                     </td>
                     <td>
-                        {{ user.employee.location_city|Travel_show:obj.job_assign.location }}
+                        {{ obj.location_city_go|Travel_show:obj.location_city_end }}
                     </td>
                 </tr>
                 {% endfor %}
