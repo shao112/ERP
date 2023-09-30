@@ -149,10 +149,14 @@ class Index(View):
                         else:
                             grouped_projects[date_str] = [project]
             sorted_grouped_projects = dict(sorted(grouped_projects.items()))
+
+            work_list= Clock.get_hour_for_month(employeeid,date.today().year,date.today().month)
+
             
             context = {
                 'clock_inout':clock_inout,
                 'news':news,
+                'work_list':work_list,
                 "grouped_projects":sorted_grouped_projects,
             }
             return render(request, 'index/index-login.html', context)

@@ -553,6 +553,9 @@ class Clock(models.Model):
         for day in range((last_day_of_month - first_day_of_month).days + 1):
 
             date_to_check = (first_day_of_month + timedelta(days=day)).date()
+            if date_to_check >= datetime.today().date():
+                continue #不去計算當天跟之後
+
             date_to_check_string = (first_day_of_month + timedelta(days=day)).strftime('%Y/%m/%d')
 
             #判斷要上班嗎
@@ -604,9 +607,11 @@ class Clock(models.Model):
 
                 
                 if end_difference.total_seconds() <= 0:
-                    month.append({"date":date_to_check_string,"status":"ok","ear_time":ear_time,"last_time":last_time,"results":results,"hours":time_string})
+                    pass
+                    # if not pass_8_hoour:
+                    #     month.append({"date":date_to_check_string,"status":"ok","ear_time":ear_time,"last_time":last_time,"results":results,"hours":time_string})
                 else:
-                    print(hours,minutes,"曠職")
+                    # print(hours,minutes,"曠職")
                     miss_string =f"(miss:{hours}時{minutes}分)"
                     miss_hours+=hours
                     miss_minutes += minutes
