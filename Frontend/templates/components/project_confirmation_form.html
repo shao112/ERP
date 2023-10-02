@@ -112,7 +112,7 @@
                         <select class="select2" data-placeholder="選擇完工回報人" name="completion_report_employee"
                             id="completion_report_employee_select2" multiple>
                             {% for employee in employees_list %}
-                            <option value="{{ employee.id }}">{{ employee.user__username }}
+                            <option value="{{ employee.id }}">{{ employee.full_name }}
                             </option>
                             {% endfor %}
                         </select>

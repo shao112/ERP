@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
+from django.views.generic.base import  TemplateView
+
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import  Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -21,6 +23,21 @@ from django.db.models import Q,Value,CharField
 from django.db.models.functions import Concat
 import json
 
+
+# 工程確認單
+class Salary_Employees_ListView(UserPassesTestMixin,View):
+
+    def get(self,request):
+        context ={}
+        context["employees_list"] = Employee.objects.values('id','full_name')
+        context["SalaryEmployeeForm"] =SalaryEmployeeForm 
+        return render(request, 'Salary/Salary_Employees.html', context)
+
+    def test_func(self):
+        if settings.PASS_TEST_FUNC:
+            return True
+        return self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+    
 
 
 class TravelApplicationView(ListView):
@@ -180,7 +197,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.values('id','user__username')
+        context["employees_list"] = Employee.objects.values('id','full_name')
         context['client_list'] = Client.objects.all()
         context['project_confirmation_form'] = ProjectConfirmationForm()
         context['quotation_list'] = Quotation.objects.all()
@@ -294,7 +311,7 @@ class Employee_Permission_list(UserPassesTestMixin,ListView):
        
         Groups = Group.objects.all().order_by('name')
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =  Employee.objects.values('user__id','user__username')
+        context["employees_list"] =  Employee.objects.values('user__id','full_name')
         context['groups'] = sorted_groups
         return context
     def test_func(self):

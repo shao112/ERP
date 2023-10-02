@@ -1,0 +1,73 @@
+<form action="/restful/employee" name="employee" id="form" method="POST" class="pb-4"
+    data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden>
+    <div class="form-row my-2">
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="full_name">調整人</label>
+                        <input class="readonly form-control form-control-sm" name="full_name" id="" readonly></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-6">
+                    <label for="id_default_salary">基本薪資</label>
+                    <input type="number" class="form-control" id="id_default_salary" name="default_salary" required >
+                </div>
+                <div class="col-6">
+                    <label for="id_job_addition">職務加給</label>
+                    <input type="number" class="form-control" id="id_job_addition" name="job_addition" required >
+                </div>
+            </div>
+        
+            <div class="form-row">
+                <div class="col-6">
+                    <label for="id_phone_addition">手機加給</label>
+                    <input type="number" class="form-control" id="id_phone_addition" name="phone_addition" required >
+                </div>
+                <div class="col-6">
+                    <label for="id_food_addition">伙食津貼</label>
+                    <input type="number" class="form-control" id="id_food_addition" name="food_addition" required >
+                </div>
+            </div>
+        
+            <div class="form-row">
+                <div class="col-6">
+                    <label for="id_certificates_addition">證照加給</label>
+                    <input type="number" class="form-control" id="id_certificates_addition" name="certificates_addition" required >
+                </div>
+                <div class="col-6">
+                    <label for="id_labor_protection">勞保</label>
+                    <input type="number" class="form-control" id="id_labor_protection" name="labor_protection" required >
+                </div>
+            </div>
+        
+            <div class="form-row">
+                <div class="col-6">
+                    <label for="id_health_insurance">健保</label>
+                    <input type="number" class="form-control" id="id_health_insurance" name="health_insurance" required >
+                </div>
+                <div class="col-6">
+                    <label for="id_labor_pension">勞退比例(%)</label>
+                    <input type="number" class="form-control" id="id_labor_pension" name="labor_pension" required value="6">
+                </div>
+            </div>
+        
+
+        </div>
+    </div>
+    {% if showbtn %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4" style="color: #fff;background: #1E3050;"
+            data-dismiss="modal">關閉</button>
+    </div>
+    {% endif %}
+</form>

@@ -151,7 +151,7 @@ class Employee(ModifiedModel):
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
     contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
-    start_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
+    start_work_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
     seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
     id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
     birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
@@ -169,7 +169,14 @@ class Employee(ModifiedModel):
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
     emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
-    default_salary = models.IntegerField(default=27000, null=True, blank=True, verbose_name="薪資")#預設薪資
+    default_salary = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="基本薪資")
+    job_addition = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="職務加給")
+    phone_addition = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="手機加給")
+    food_addition = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="伙食津貼")
+    certificates_addition = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="證照加給")
+    labor_protection = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="勞保")
+    health_insurance = models.PositiveIntegerField(default=27000, null=True, blank=True, verbose_name="健保")
+    labor_pension = models.PositiveIntegerField(default=6, null=True, blank=True, verbose_name="勞退比例(%)")
 
     class Meta:
         verbose_name = "員工"   # 單數
@@ -209,7 +216,7 @@ class Employee(ModifiedModel):
         return total_hour,total_minutes ,results
     
     def __str__(self):
-        return self.full_name
+        return f"{self.full_name}" 
 
 
 class SalaryDetail(models.Model):

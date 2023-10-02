@@ -115,7 +115,7 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {{ object.get_foreignkey.created_by }}
+                        {{ object.get_foreignkey.created_by.full_name }}
                     </td>
                     <td>
                         <a href="" data-Approval_id="{{ object.id }}"  data-created_by="{{ object.get_foreignkey.created_by }}"
