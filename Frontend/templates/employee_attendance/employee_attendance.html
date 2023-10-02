@@ -92,7 +92,11 @@
                             if(key === "clock_GPS"){
                                 const link = document.createElement("a");
                                 link.href = "https://www.google.com/maps?q=" + jsonData[i][key] + "&hl=zh-TW&label=Custom%20Marker";
-                                link.innerText = "地圖";
+                                if(jsonData[i][key]==null){
+                                    link.innerText = "補卡無GPS";
+                                }else{
+                                    link.innerText = "地圖";
+                                }
                                 link.target = "_blank";
                                 td.appendChild(link);
                             }else if(key === "clock_inout"){

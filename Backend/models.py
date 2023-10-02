@@ -852,7 +852,7 @@ class Project_Employee_Assign(ModifiedModel):
     class Meta:
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數
-        ordering = ['-id']
+        ordering = ['-id'] 
     def __str__(self):
         return self.get_show_id()
 

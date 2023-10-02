@@ -124,9 +124,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_attendance' %}">員工出勤</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'equipment' %}">固定資產管理</a>
                     </li>
@@ -139,11 +137,7 @@
                     </li>
                     {% endif %}
                     
-                    {% if user|in_group_T_or_F:"簽核流程管理" or pass_test_func %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
-                    </li>
-                    {% endif %}
+                  
                 </ul>
             </div>
         </li>
@@ -200,9 +194,7 @@
             </a>
             <div class="collapse" id="financialCollapse">
                 <ul class="nav flex-column ml-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
-                    </li>
+                 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'salary_list' current_year current_month %}">員工薪水</a>
                     </li>
@@ -248,6 +240,38 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'news' %}">公告設置</a>
                     </li>
+                </ul>
+            </div>
+        </li>
+        {% endif %}
+
+        {% if  pass_test_func %}
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#OP" data-toggle="collapse" aria-expanded="false"
+                aria-controls="OP">
+                <i class="fa-solid fa-bullhorn" style="color: #ffffff;"></i> 參數調整
+            </a>
+            <div class="collapse" id="OP">
+                <ul class="nav flex-column ml-4">
+                    {% if user|in_group_T_or_F:"簽核流程管理" or pass_test_func %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
+                    </li>
+                    {% endif %}
+                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
+                    </li>
+                    
+                    {% endif %}
+                    {% if user|in_group_T_or_F:"財務部" or pass_test_func %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
+                    </li>
+                    {% endif %}
+
                 </ul>
             </div>
         </li>
