@@ -267,8 +267,20 @@ class LeaveApplicationForm(BaseModelForm):
         fields = '__all__'
         widgets = {
             'type_of_leave': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_leave', 'name':'type_of_leave','required': True}),
-            'substitute': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'substitute', 'name':'substitute'}),
+            'substitute': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'substitute', 'name':'substitute','required': True}),
         }
+        def clean(self):
+            cleaned_data = super().clean()
+            substitute = cleaned_data.get('substitute')
+            errors = {}
+            
+            if not substitute:
+                errors['substitute'] = "請選擇代理人。"
+            if errors:
+                raise forms.ValidationError(errors)
+
+            return cleaned_data
+
 # 加班申請
 class WorkOvertimeApplicationForm(BaseModelForm):
 

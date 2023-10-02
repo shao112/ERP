@@ -146,19 +146,29 @@ class Approval_View_Process(View):
                 get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))
             except Http404:
                 return JsonResponse({"error": "找不到相應的簽核目標"}, status=400)
+            
+            get_order = get_Approval_Target.approval_order
 
-            new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target)
+            if modeltext =="Leave_Application": #請假單
+                get_user = get_obj.substitute
+                if get_user :
+                    get_user_id= get_user.id
+                    get_order.insert(0, get_user_id ) #先給代理人簽核
+                else:
+                    return JsonResponse({"error": "請選擇代理人"}, status=400)
+
+
+
+            new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target,order=get_order)
             if get_obj.Approval !=None:
                 get_obj.Approval.delete()
             get_obj.Approval=new_Approval
             get_obj.save()
-            print("save!!!")
 
             employee_id = new_Approval.target_approval.approval_order[0]
             if  employee_id !="x":
                 sender = Employee.objects.get(id=employee_id)
                 SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {new_Approval.target_approval.get_name_display()} 單需要簽核")
-
             else:
                 print("new_Approval")
                 print(new_Approval.get_created_by)

@@ -358,6 +358,8 @@ class ApprovalModel(models.Model):
     current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_progress')
     #目前待簽index
     current_index = models.IntegerField( verbose_name="待簽核index",default=0,blank=True,null=True)
+    #簽核流程
+    order =  models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
     #依附簽核
     target_approval = models.ForeignKey(Approval_Target,verbose_name="依附簽核",blank=True,null=True, on_delete=models.CASCADE, related_name='approvals')
 
@@ -378,9 +380,9 @@ class ApprovalModel(models.Model):
     def send_message_to_related_users(self, content):
             senders = {self.get_created_by}
 
-            for employee_id in self.target_approval.approval_order:
+            for employee_id in self.order:
                 if employee_id == "x":
-                    department_employees = self.get_created_by.departments.employees.all()
+                    department_employees = self.get_created_by.departments.employees.filter(user__groups__name='主管')
                     senders.update(department_employees)
                 else:
                     try:
@@ -415,7 +417,7 @@ class ApprovalModel(models.Model):
 
     def get_approval_employee(self):
         current_index= self.current_index
-        approval_order = self.target_approval.approval_order
+        approval_order = self.order
         if approval_order==None or  current_index > len(approval_order)-1 :
             return "clean"
         if approval_order[current_index] !="x":
@@ -431,7 +433,7 @@ class ApprovalModel(models.Model):
 
     def find_and_update_parent_department(self):
         current_index = self.current_index
-        approval_order = self.target_approval.approval_order
+        approval_order = self.order
         
         #判斷是不是最後一個
         if current_index ==len(approval_order)-1 :
@@ -440,10 +442,15 @@ class ApprovalModel(models.Model):
             employee = self.get_created_by
             SysMessage.objects.create(Target_user=employee,content=f"您的 {self.target_approval.get_name_display()} 簽核完畢")
         else:
-            current_index+=1
+            current_index+=1            
             employee_id = approval_order[current_index]
-            employee = Employee.objects.get(id=employee_id)
-            SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 需要簽核")
+            if employee_id =="x":
+                senders = self.get_created_by.departments.employees.filter(user__groups__name='主管')
+                for sender in senders:
+                    SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {self.target_approval.get_name_display()} 單需要簽核")
+            else:
+                employee = Employee.objects.get(id=employee_id)
+                SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 需要簽核")
             self.current_index = current_index
             self.save()
 
@@ -455,9 +462,9 @@ class ApprovalModel(models.Model):
         # print("get_approval_logs: ",get_approval_logs)
         show_list = []
         current_index = self.current_index
-        approval_order = self.target_approval.approval_order
+        approval_order = self.order
         
-        for index, log in enumerate(get_approval_logs): #處理簽過LOG
+        for _, log in enumerate(get_approval_logs): #處理簽過LOG
             show_list.append({
                 "show_name": log.user.full_name,
                 "department": log.user.departments.department_name,
