@@ -16,20 +16,27 @@ def get_weekdays(to_week):
 def get_weekly_clock_data(userid):
     weekdays = get_weekdays(5)
     weekly_clock_data = []
-    for weekday in weekdays:
+    for weekday in weekdays:        
         clock_records = Clock.objects.filter(clock_date=weekday).filter(employee_id=userid).order_by('clock_time')
-        clock_records_list = list(clock_records.values_list('type_of_clock', flat=True) if clock_records else '')
-        # print("clock_records_list: ",clock_records_list)
-        # 2 代表補打卡，直接抓 clock_time
-        if '2' in clock_records_list:
-            # print("使用type_of_clock=2的clock_time")
-            # print(clock_records.filter(type_of_clock='2').filter(clock_in_or_out=True))
-            # print(clock_records.filter(type_of_clock='2').filter(clock_in_or_out=False))
-            check_in = clock_records.filter(type_of_clock='2').filter(clock_in_or_out=True).first().clock_time.strftime('%H:%M') if clock_records else ''
-            check_out = clock_records.filter(type_of_clock='2').filter(clock_in_or_out=False).last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
-        else:
-            check_in = clock_records.first().clock_time.strftime('%H:%M') if clock_records else ''
-            check_out = clock_records.last().clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
+        new_clock_records = []
+        for record in clock_records:
+
+            if record.type_of_clock =="2":
+                get_approval = record.clock_correction.all()[0].Approval
+                if get_approval :
+                    print(get_approval.current_status)
+                    if get_approval.current_status =="completed":
+                        print(get_approval.current_status)
+                        new_clock_records.append(record)
+            else:
+                new_clock_records.append(record)
+                
+
+        clock_records = new_clock_records
+        print("clock_records_list: ",clock_records)
+        check_in = clock_records[0].clock_time.strftime('%H:%M') if clock_records else ''
+        check_out = clock_records[-1].clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
+ 
         daily_data = {
             'day': weekday.strftime('%m%d'),
             'checkin': check_in,
@@ -170,37 +177,3 @@ def match_excel_content(model):
         case _:
             return "error"
     
-
-def create_salary(employee,year,month):
-    salary, created = Salary.objects.get_or_create(user=employee, year=year, month=month)
-    print("xxxx")
-    print(created)
-    if not created:#清除所有明細
-        SalaryDetail.objects.filter(salary=salary).delete()
-
-    SalaryDetail.objects.create(
-        salary=salary,
-        name='基本薪資',
-        system_amount=employee.default_salary,
-        adjustment_amount=employee.default_salary,
-        deduction=False
-    )
-
-    SalaryDetail.objects.create(
-        salary=salary,
-        name='伙食加給',
-        system_amount=2400,  
-        adjustment_amount=2400,
-        deduction=False
-    )
-    #請假單
-    print("請假單")
-    cost_list = Leave_Param.get_year_total_cost_list(employee,year=year,month=month)
-    for item in cost_list:
-        SalaryDetail.objects.create(
-            salary=salary,
-            name=item['name'],
-            system_amount=item['cost'],  
-            adjustment_amount=item['cost'],
-            deduction=True
-        )

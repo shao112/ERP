@@ -1273,7 +1273,7 @@ class Clock_Correction_Application(ModifiedModel):
     end_hours_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡小時")
     end_mins_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡分鐘")
     clock_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="補卡事由")
-    clock = models.ForeignKey("Clock",related_name="clock_correction_application", on_delete=models.SET_NULL, null=True, blank=True)
+    clock = models.ForeignKey("Clock",related_name="clock_correction", on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
 

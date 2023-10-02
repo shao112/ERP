@@ -77,7 +77,7 @@
                     <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ clock_correction_application.id }}"></td>
                     <td>
                         <a data-target="#clock-correction-application-modal" type="button" data-url="clock_correction_application" data-id="{{ clock_correction_application.id }}"
-                            class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
+                        data-approval="{{ clock_correction_application.Approval.current_status}}"          class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
@@ -159,6 +159,13 @@
     });
 
     async function LoadData(event){
+        const approvalStatus = event.currentTarget.getAttribute('data-approval');
+
+        if (approvalStatus == "in_progress" || approvalStatus == "completed") {
+            lock_input();
+        } else {
+            unlock_input();
+        }
         console.log("load")
         getdata = await GET_handleClick(event);
 
