@@ -796,24 +796,32 @@ class Project_Job_Assign(ModifiedModel):
                 
             if assignment.work_method:  # 如果是出勤
                 
-                    allowance_dict[get_show_id]["location"] = f"派工地-{location}"
-                    allowance_dict[get_show_id]["day"] += 1
-                    try:
-                        get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
-                                                location_city_residence=employee_location,
-                                                location_city_business_trip=location)
-                        allowance_dict[get_show_id]["money"] = get_Reference_obj.amount
-                    except ReferenceTable.DoesNotExist:
-                        allowance_dict[get_show_id]["error"] = f"找不到{employee_location}對{location}的出差參照表 "
-                    try:
-                        get_Reference_food_obj = ReferenceTable.objects.get(name="伙食津貼",
-                                                location_city_residence=employee_location,
-                                                location_city_business_trip=location)
-                        allowance_dict[get_show_id]["food"] = get_Reference_food_obj.amount
-                    except ReferenceTable.DoesNotExist:
-                        allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
+                allowance_dict[get_show_id]["location"] = f"派工地-{location}"
+                allowance_dict[get_show_id]["day"] += 1
+                try:
+                    get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
+                                            location_city_residence=employee_location,
+                                            location_city_business_trip=location)
+                    allowance_dict[get_show_id]["money"] = get_Reference_obj.amount
+                except ReferenceTable.DoesNotExist:
+                    allowance_dict[get_show_id]["error"] = f"找不到{employee_location}對{location}的出差參照表 "
+                try:
+                    get_Reference_food_obj = ReferenceTable.objects.get(name="派工-伙食津貼",
+                                            location_city_residence=employee_location,
+                                            location_city_business_trip=location)
+                    allowance_dict[get_show_id]["food"] = get_Reference_food_obj.amount
+                except ReferenceTable.DoesNotExist:
+                    allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
             else:
-                pass
+                allowance_dict[get_show_id]["location"] = f"非派工地-{location}"
+                allowance_dict[get_show_id]["day"] += 1
+                try:
+                    get_Reference_food_obj = ReferenceTable.objects.get(name="非派工-伙食津貼",
+                                            location_city_residence=employee_location,
+                                            location_city_business_trip=location)
+                    allowance_dict[get_show_id]["food"] = get_Reference_food_obj.amount
+                except ReferenceTable.DoesNotExist:
+                    allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
 
         allowance_list = [
             {

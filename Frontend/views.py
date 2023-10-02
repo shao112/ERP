@@ -150,6 +150,7 @@ class Index(View):
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
+            
             news = News.objects.all()
             employeeid = request.user.employee
             clock_inout = get_weekly_clock_data(employeeid)
