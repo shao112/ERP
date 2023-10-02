@@ -47,7 +47,7 @@ def get_sleep_json():
         )
 
 
-#出差津貼
+# 出差津貼
 def get_json():
     data = [
             [250, 250, 250, 250, 250, 350, 350, 350, 450, 450, 450, 550, 550],
@@ -127,9 +127,94 @@ def get_json():
 
     for entry in location_city:
         ReferenceTable.objects.create(
-    location_city_residence=entry["location_city_residence"],
-    location_city_business_trip=entry["location_city_business_trip"],
-    amount=entry["amount"],
-    name=entry["name"]
-    )
+            location_city_residence=entry["location_city_residence"],
+            location_city_business_trip=entry["location_city_business_trip"],
+            amount=entry["amount"],
+            name=entry["name"]
+        )
+        
+# 派工-伙食津貼
+def get_p_allowance_json():
+    data = [
+        [150, 150, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
+        [150, 150, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 150]
+    ]
+
+    start_points = ["花蓮", "台東", "宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東"]
+    business_trip_destinations = ["花蓮", "台東", "宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東"]
+
+    matrix = []
+
+    for i in range(len(start_points)):
+        for j in range(len(business_trip_destinations)):
+            matrix.append({
+                "location_city_residence": start_points[i],
+                "location_city_business_trip": business_trip_destinations[j],
+                "amount": data[j][i],
+                "name": "派工-伙食津貼"
+            })
+
+    for entry in matrix:
+        ReferenceTable.objects.create(
+            location_city_residence=entry["location_city_residence"],
+            location_city_business_trip=entry["location_city_business_trip"],
+            amount=entry["amount"],
+            name=entry["name"]
+        )
+
+
+# 非派工-伙食津貼
+def get_nonp_allowance_json():
+    data = [
+        [0, 150, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
+        [150, 0, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300, 300],
+        [300, 300, 0, 150, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 0, 150, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 0, 150, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 0, 150, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 0, 150, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 0, 150, 300, 300, 300, 300, 300, 300],
+        [300, 300, 150, 150, 150, 150, 150, 150, 0, 300, 300, 300, 300, 300, 300],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 0, 150, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 0, 150, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 0, 150, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 0, 150, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 0, 150],
+        [300, 300, 300, 300, 300, 300, 300, 300, 300, 150, 150, 150, 150, 150, 0]
+    ]
+
+    start_points = ["花蓮", "台東", "宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東"]
+    business_trip_destinations = ["花蓮", "台東", "宜蘭", "北北基", "桃園", "新竹", "苗栗", "台中", "南投", "彰化", "雲林", "嘉義", "台南", "高雄", "屏東"]
+
+    matrix = []
+
+    for i in range(len(start_points)):
+        for j in range(len(business_trip_destinations)):
+            matrix.append({
+                "location_city_residence": start_points[i],
+                "location_city_business_trip": business_trip_destinations[j],
+                "amount": data[j][i],
+                "name": "非派工-伙食津貼"
+            })
+
+    for entry in matrix:
+        ReferenceTable.objects.create(
+            location_city_residence=entry["location_city_residence"],
+            location_city_business_trip=entry["location_city_business_trip"],
+            amount=entry["amount"],
+            name=entry["name"]
+        )
 

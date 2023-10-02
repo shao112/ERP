@@ -677,6 +677,7 @@ class Work_Item(ModifiedModel):
 
 #報價單
 class Quotation(ModifiedModel):
+    quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='報價單編號')
     client = models.ForeignKey("Client",related_name="Quotation", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='客戶名稱')
     project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
@@ -695,7 +696,7 @@ class Quotation(ModifiedModel):
     invoice_attachment = models.FileField(upload_to="Invoice", null=True, blank=True, verbose_name="請款單")
 
     def get_show_id(self):
-        return f"報價-{str(self.id).zfill(5)}"
+        return self.quotation_id
 
 
     # def __str__(self):

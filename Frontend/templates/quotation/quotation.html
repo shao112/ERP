@@ -34,6 +34,12 @@
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
+                                                <label for="quotation_id">報價單編號</label>
+                                                <input class="form-control form-control-sm" name="quotation_id" id="quotation_id">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
                                                 <label for="client">客戶名稱</label>
                                                 <select class="form-control form-control-sm" name="client" id="client" readonly>
                                                     <option value="{{ client.id }}" selected>{{ client.client_name }}</option>
@@ -46,14 +52,14 @@
                                                 <input class="form-control form-control-sm" name="tax_id" id="tax_id">
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="project_name">專案名稱</label>
                                                 <input required class="form-control form-control-sm" name="project_name" id="project_name">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="quote_validity_period">報價單有效期</label>
@@ -61,7 +67,7 @@
                                                     name="quote_validity_period" id="quote_validity_period">
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-8">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="address">地址</label>
                                                 <input class="form-control form-control-sm" name="address" id="address">
@@ -213,7 +219,7 @@
                     </td>
 
                     <td>
-                        {{ item.get_show_id}}
+                        {{ item.quotation_id}}
                     </td>
                     <td>
                         {{ item.project_name}}
