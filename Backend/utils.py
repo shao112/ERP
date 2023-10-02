@@ -16,9 +16,11 @@ def get_weekdays(to_week):
 def get_weekly_clock_data(userid):
     weekdays = get_weekdays(5)
     weekly_clock_data = []
+
     for weekday in weekdays:        
         clock_records = Clock.objects.filter(clock_date=weekday).filter(employee_id=userid).order_by('clock_time')
-        new_clock_records = []
+        clock_in_records = []
+        clock_out_records = []
         for record in clock_records:
 
             if record.type_of_clock =="2":
@@ -26,19 +28,21 @@ def get_weekly_clock_data(userid):
                 if get_approval :
                     print(get_approval.current_status)
                     if get_approval.current_status =="completed":
-                        print(get_approval.current_status)
-                        new_clock_records.append(record)
+                        if record.clock_in_or_out:
+                            clock_in_records.append(record)   
+                        else:         
+                            clock_out_records.append(record)   
             else:
-                new_clock_records.append(record)
-                
-
-        clock_records = new_clock_records
-        print("clock_records_list: ",clock_records)
-        check_in = clock_records[0].clock_time.strftime('%H:%M') if clock_records else ''
-        check_out = clock_records[-1].clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
- 
+                if record.clock_in_or_out:
+                    clock_in_records.append(record)   
+                else:         
+                    clock_out_records.append(record)   
+        print(clock_in_records)
+        check_in = clock_in_records[0].clock_time.strftime('%H:%M') if clock_records else ''
+        check_out = clock_out_records[-1].clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
+      
         daily_data = {
-            'day': weekday.strftime('%m%d'),
+            'day': weekday.strftime('%m/%d'),
             'checkin': check_in,
             'checkout': check_out
         }

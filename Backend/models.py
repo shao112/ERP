@@ -530,7 +530,7 @@ class Clock(models.Model):
     )
     employee_id = models.ForeignKey("Employee", related_name="clock",on_delete=models.CASCADE)
     type_of_clock = models.CharField(max_length=1, choices=CLOCK_TYPE, default="1", blank=True, null=True, verbose_name="打卡類別")
-    clock_in_or_out = models.BooleanField()
+    clock_in_or_out = models.BooleanField(verbose_name="勾起來上班，沒勾下班")
     clock_date = models.DateField(default=timezone.now,verbose_name='打卡日期')
     clock_time = models.TimeField(null=True,blank=True,verbose_name='打卡時間')
     clock_GPS = models.CharField(null=True,blank=True,max_length=255)
@@ -548,6 +548,22 @@ class Clock(models.Model):
     @classmethod
     def get_hour_for_month(cls, user,year, month):#當月打卡
         day_clocks = cls.objects.filter(employee_id=user, clock_date__month=month,clock_date__year=year).order_by('clock_time')
+        #
+        # new_clock_records = []
+        # for record in clock_records:
+        #     if record.type_of_clock =="2":
+        #         get_approval = record.clock_correction.all()[0].Approval
+        #         if get_approval :
+        #             print(get_approval.current_status)
+        #             if get_approval.current_status =="completed":
+        #                 print(get_approval.current_status)
+        #                 new_clock_records.append(record)
+        #     else:
+        #         new_clock_records.append(record)
+                
+
+        # clock_records = new_clock_records
+
         first_day_of_month = datetime(year=year, month=month, day=1)
         if month in [1, 3, 5, 7, 8, 10, 12]:
             last_day_of_month = first_day_of_month.replace(day=31)
