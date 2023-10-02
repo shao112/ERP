@@ -33,14 +33,15 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="project_name_control">工程名稱</label>
-                        <input class="readonly form-control form-control-sm" name="project_name" id="project_name_control"
-                            readonly></input>
+                        <input class="readonly form-control form-control-sm" name="project_name"
+                            id="project_name_control" readonly></input>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
                         <label for="c_a_control">母案編號</label>
-                        <input class="readonly form-control form-control-sm" name="c_a" readonly id="c_a_control"></input>
+                        <input class="readonly form-control form-control-sm" name="c_a" readonly
+                            id="c_a_control"></input>
                     </div>
                 </div>
             </div>
@@ -48,7 +49,8 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label for="client_control">客戶名稱</label>
-                        <input class="form-control readonly form-control-sm" name="client" id="client_control" readonly></input>
+                        <input class="form-control readonly form-control-sm" name="client" id="client_control"
+                            readonly></input>
                     </div>
                 </div>
                 <div class="col-6">
@@ -64,13 +66,20 @@
                     <div class="form-group">
                         <label for="location">工作地點</label>
                         {{ project_job_assign_form.location }}
+
+
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-
+                        <label for="work_method">工作方法</label>
+                        <select class="form-control form-control-sm" name="work_method" id="work_method_select2">
+                            <option value="true">派工</option>
+                            <option value="false">非派工</option>
+                        </select>
                     </div>
                 </div>
+
             </div>
             <div class="form-row">
                 <div class="col-12">
@@ -133,18 +142,15 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <div class="form-group">
 
-                        <label for="work_method">工作方法</label>
-                        <select class="form-control form-control-sm" name="work_method" id="work_method_select2">
-                            <option value="true">派工/出勤</option>
-                            <option value="false">在公司工作</option>
-                        </select>
-                    </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="col-12">
+                    派工種類:派工、現場場勘、外部會議、儀器(點交/送校/維修)、外派公務、派訓上課
+
+                    <br>
+                    非派工種類:文書處理、進廠送件、儀器整理、環境整理、洗車、內部會議、其他庶務性工作
 
                 </div>
             </div>
