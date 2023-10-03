@@ -216,7 +216,7 @@ class Employee(ModifiedModel):
         return total_hour,total_minutes ,results
     
     def __str__(self):
-        return f"{self.full_name}" 
+        return f"{self.full_name}" or ''
 
 
 class SalaryDetail(models.Model):
@@ -856,7 +856,7 @@ class Project_Job_Assign(ModifiedModel):
         return total_money,total_food_money, allowance_list
     
     def __str__(self) :
-        return   str(self.pk).zfill(5)
+        return   str(self.pk).zfill(5) or ''
 
 
 # 派工單
@@ -1416,7 +1416,7 @@ class Equipment(ModifiedModel):
         verbose_name_plural = verbose_name
     
     def __str__(self):
-        return self.equipment_name  
+        return self.equipment_name or ''
         
 
 # 車輛
