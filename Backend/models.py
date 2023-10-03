@@ -216,7 +216,7 @@ class Employee(ModifiedModel):
         return total_hour,total_minutes ,results
     
     def __str__(self):
-        return f"{self.full_name}" or ''
+        return f"{self.full_name}"
 
 
 class SalaryDetail(models.Model):
@@ -856,7 +856,7 @@ class Project_Job_Assign(ModifiedModel):
         return total_money,total_food_money, allowance_list
     
     def __str__(self) :
-        return   str(self.pk).zfill(5) or ''
+        return   str(self.pk).zfill(5)
 
 
 # 派工單
@@ -914,6 +914,7 @@ class Travel_Application(ModifiedModel):
     date = models.DateField(verbose_name="申請日期",blank=True, null=True) 
     location_city_go = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="出發地")
     location_city_end = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="到達")
+    attachment = models.FileField(upload_to="Travel_Application_Attachment", null=True, blank=True, verbose_name="車程津貼附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
     created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
 
@@ -1270,6 +1271,7 @@ class Work_Overtime_Application(ModifiedModel):
     overtime_mins = models.IntegerField(default=0,blank=True, null=True, verbose_name="申請時數(分)")
     carry_over = models.CharField(max_length=100, choices=CARRY_OVER_TYPE, default="1", blank=False, null=False, verbose_name="加班結轉方式")
     overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
+    attachment = models.FileField(upload_to="Work_Overtime_Application_Attachment", null=True, blank=True, verbose_name="加班附件")
     created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Work_Overtime_Application_Approval')
 
@@ -1338,6 +1340,7 @@ class Clock_Correction_Application(ModifiedModel):
     end_hours_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡小時")
     end_mins_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡分鐘")
     clock_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="補卡事由")
+    attachment = models.FileField(upload_to="Clock_Correction_Application_Attachment", null=True, blank=True, verbose_name="補卡附件")
     clock = models.ForeignKey("Clock",related_name="clock_correction", on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
@@ -1416,7 +1419,8 @@ class Equipment(ModifiedModel):
         verbose_name_plural = verbose_name
     
     def __str__(self):
-        return self.equipment_name or ''
+        # return self.equipment_name or ''
+        return self.equipment_name
         
 
 # 車輛
