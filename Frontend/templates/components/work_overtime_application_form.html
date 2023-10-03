@@ -78,11 +78,20 @@
                         <input type="text" class="readonly form-control form-control-sm" name="overtime_mins" id="overtime_mins" value="0" readonly>
                     </div>
                 </div> -->
-                <div class="col-12 col-lg-4">
+                <div class="col-12 col-lg-6">
                     <div class="form-group">
                         <label for="carry_over">加班結轉方式</label>
                         {{ work_overtime_application_form.carry_over }}
                     </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label>加班附件</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" data-modal="Work_Overtime_Application" name="attachment"
+                            id="attachment">
+                        <label class="custom-file-label" for="attachment">Choose file</label>
+                    </div>
+                    <a href="#" id="attachment">下載附件</a>    
                 </div>
             </div>
             <div class="form-row">
@@ -92,6 +101,7 @@
                         <textarea class="form-control form-control-sm" name="overtime_reason" id="overtime_reason"></textarea>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>

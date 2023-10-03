@@ -203,7 +203,7 @@ $("form").on("submit", function (event) {
     success: function (response) {
       jsonData = response.data;
 
-      if (method == "POST") {
+      if (method == "post") {
         idValue = response.id;
       }
 

@@ -30,7 +30,7 @@
                         {{ clock_correction_application_form.type_of_clock }}
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-4">
                     <div class="form-group">
                         <label for="end_hours_of_clock">補卡小時</label>
                         <select name="end_hours_of_clock" class="form-control form-control-sm">
@@ -40,7 +40,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-4">
                     <div class="form-group">
                         <label for="end_mins_of_clock">補卡分鐘</label>
                         <select name="end_mins_of_clock" class="form-control form-control-sm">
@@ -49,6 +49,17 @@
                             {% endfor %}
                         </select>
                     </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <label>補卡附件</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" data-modal="Clock_Correction_Application" name="attachment"
+                            id="attachment">
+                        <label class="custom-file-label" for="attachment">Choose file</label>
+                    </div>
+                    <a href="#" id="attachment">下載附件</a>    
                 </div>
             </div>
             <div class="form-row">

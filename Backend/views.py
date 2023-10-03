@@ -809,6 +809,8 @@ class FormUploadFileView(View):
                     model=Quotation.objects.get(id=getid)
                 case "Leave_Application":
                     model=Leave_Application.objects.get(id=getid)
+                case "travel_application":
+                    model=Travel_Application.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
@@ -818,7 +820,6 @@ class FormUploadFileView(View):
                 uploaded_file_obj = UploadedFile.objects.create(name=filename, file=uploaded_file)
                 related_field.add(uploaded_file_obj)
             else:
-
                 setattr(model, getname, uploaded_file)
                 model.save()
             return JsonResponse({'status': 'success'},status=200)

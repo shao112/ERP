@@ -18,9 +18,7 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-row">
-
                 <div class="col-6">
                     <div class="form-group">
                         <label for="location_city_go">出發城市</label>
@@ -33,13 +31,19 @@
                         <label for="location_city_end">目的地城市</label>
                         {{ Travel_ApplicationForm.location_city_end }}
                     </div>
-
                 </div>
             </div>
-
-
-
-
+            <div class="form-row">
+                <div class="col-12">
+                    <label>車程津貼附件</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" data-modal="travel_application" name="attachment"
+                            id="attachment">
+                        <label class="custom-file-label" for="attachment">Choose file</label>
+                    </div>
+                    <a href="#" id="attachment">下載附件</a>    
+                </div>
+            </div>
         </div>
     </div>
     {% if showbtn %}
