@@ -949,10 +949,12 @@ class Leave_Application_View(View):
             get_leave_id = form.cleaned_data["type_of_leave"].id
             newobj =form.save(commit=False)
             leave_obj =Leave_Param.objects.get(id=get_leave_id)
-            print("xx")
+
+             
             can_leave = leave_obj.exceeds_leave_quantity_by_year(newobj,request.user.employee)
-            print(can_leave)
+            
             print("xccc")
+            
             if can_leave:
                 newobj.save()
                 return JsonResponse({'data': "完成新增","id":newobj.id},status=200)

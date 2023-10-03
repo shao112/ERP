@@ -35,8 +35,9 @@
                 <ul>
                     {% for detail in leave_details %}
                     <li>
-                        假別: {{ detail.name }} 已使用: {{ detail.total_hours }} 時 {{ detail.total_minutes }} 分
+                        假別: {{ detail.name }} 可請：{{detail.all_hour}} 已使用: {{ detail.total_hours }} 時 {{ detail.total_minutes }} 分  剩餘：{{detail.remaining_time}} 
                         <br>
+
                     </li>
                     {% endfor %}
                 </ul>
