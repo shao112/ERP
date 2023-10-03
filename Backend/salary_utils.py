@@ -13,6 +13,7 @@ def create_salary(employee,year,month):
     if not created:#清除所有明細
         SalaryDetail.objects.filter(salary=salary).delete()
 
+    #基本項目
     SalaryDetail.objects.create(
         salary=salary,
         name='基本薪資',
@@ -20,6 +21,15 @@ def create_salary(employee,year,month):
         adjustment_amount=employee.default_salary,
         deduction=False
     )
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='基本薪資',
+        system_amount=employee.default_salary,
+        adjustment_amount=employee.default_salary,
+        deduction=False
+    )
+
 
     SalaryDetail.objects.create(
         salary=salary,

@@ -548,21 +548,19 @@ class Clock(models.Model):
     @classmethod
     def get_hour_for_month(cls, user,year, month):#當月打卡
         day_clocks = cls.objects.filter(employee_id=user, clock_date__month=month,clock_date__year=year).order_by('clock_time')
-        #
-        # new_clock_records = []
-        # for record in clock_records:
-        #     if record.type_of_clock =="2":
-        #         get_approval = record.clock_correction.all()[0].Approval
-        #         if get_approval :
-        #             print(get_approval.current_status)
-        #             if get_approval.current_status =="completed":
-        #                 print(get_approval.current_status)
-        #                 new_clock_records.append(record)
-        #     else:
-        #         new_clock_records.append(record)
+
+        new_clock_records_id = []
+        for record in day_clocks:
+            if record.type_of_clock =="2":
+                get_approval = record.clock_correction.all()[0].Approval
+                if get_approval :
+                    if get_approval.current_status =="completed":
+                        new_clock_records_id.append(record.id)
+            else:
+                new_clock_records_id.append(record.id)
                 
 
-        # clock_records = new_clock_records
+        day_clocks = cls.objects.filter(id__in = new_clock_records_id)
 
         first_day_of_month = datetime(year=year, month=month, day=1)
         if month in [1, 3, 5, 7, 8, 10, 12]:

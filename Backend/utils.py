@@ -26,7 +26,6 @@ def get_weekly_clock_data(userid):
             if record.type_of_clock =="2":
                 get_approval = record.clock_correction.all()[0].Approval
                 if get_approval :
-                    print(get_approval.current_status)
                     if get_approval.current_status =="completed":
                         if record.clock_in_or_out:
                             clock_in_records.append(record)   
@@ -37,7 +36,6 @@ def get_weekly_clock_data(userid):
                     clock_in_records.append(record)   
                 else:         
                     clock_out_records.append(record)   
-        print(clock_in_records)
         check_in = clock_in_records[0].clock_time.strftime('%H:%M') if clock_records else ''
         check_out = clock_out_records[-1].clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
       
