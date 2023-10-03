@@ -6,21 +6,25 @@
     <title>專案派任詳情</title>
 
     {% load static %}
-<!-- Bootstrap CSS 4.2.1 -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- Bootstrap CSS 4.2.1 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <style>
         body {
             font-family: '標楷體', sans-serif;
             font-size: 0.9rem;
-            width: 21cm; 
-            height: 29.7cm; 
+            width: 21cm;
+            height: 29.7cm;
             margin: 0 auto;
         }
+
         /* @import url('https://fonts.cdnfonts.com/css/strong'); */
         /* @import url('{% static ' fonts/stsong.ttf' %}');*/
 
-        
+        .border-black {
+            border: 2px solid black;
+        }
+
 
         table {
             border-collapse: collapse;
@@ -34,8 +38,9 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
             padding: 4px 8px;
             text-align: center;
             width: 50px;
-            
+
         }
+
         td:not(.chinese) {
             /* text-wrap:nowrap; */
             /* width: 60px; */
@@ -50,27 +55,26 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
             padding: 10px;
             text-align: center;
             display: flex;
-            justify-content: center;    
+            justify-content: center;
             align-items: center;
         }
 
-.signature-box img {
-    max-width: 100%; /* 讓圖片不超過div的寬度 */
-    max-height: 100%; /* 讓圖片不超過div的高度 */
-    object-fit: contain; /* 保持圖片的寬高比例，完全顯示在div內 */
-}
+        .signature-box img {
+            max-width: 100%;
+            /* 讓圖片不超過div的寬度 */
+            max-height: 100%;
+            /* 讓圖片不超過div的高度 */
+            object-fit: contain;
+            /* 保持圖片的寬高比例，完全顯示在div內 */
+        }
 
-        #show td.chinese, table th {
+        #show td.chinese,
+        table th {
             background-color: #f2f2f2;
             /* 灰色背景顏色 */
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-        integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 </head>
 
@@ -94,13 +98,14 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                         <td class="chinese">請購單位<br>(業主)</td>
                         <td>{{ project_employee_assign.project_job_assign.project_confirmation.requisition }}</td>
                         <td class="chinese">訂單編號</td>
-                        <td >{{ project_employee_assign.order_number }}</td>
+                        <td>{{ project_employee_assign.order_number }}</td>
                         <td class="chinese">完工日期</td>
                         <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">工程名稱</td>
-                        <td colspan="5">{{ project_employee_assign.project_job_assign.project_confirmation.project_name }}</td>
+                        <td colspan="5">{{ project_employee_assign.project_job_assign.project_confirmation.project_name
+                            }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">施工地點</td>
@@ -111,12 +116,13 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                         <td>{{ project_employee_assign.manuscript_return_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
-                        <td  class="chinese">使用車輛: </td>
-                        <td colspan="3" >{{ project_employee_assign.vehicle }}</td>
-                        <td  class="chinese">檢測人員</td>
-                        <td colspan="3" >
+                        <td class="chinese">使用車輛: </td>
+                        <td colspan="3">{{ project_employee_assign.vehicle }}</td>
+                        <td class="chinese">檢測人員</td>
+                        <td colspan="3">
                             {% for inspector in project_employee_assign.inspectors.all %}
-                            {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %}, {% endif %}
+                            {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %},
+                            {%endif %}
                             {% endfor %}
                         </td>
                     </tr>
@@ -137,8 +143,39 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                     </tr>
                     {% endfor %}
                 </tbody>
-                
+
             </table>
+
+            <div class="row border-black">
+                <div class="col-md-4">
+                    <h6>檢查項目</h6>
+                    <table class="">
+                        <tbody>
+                            {% for item in project_employee_assign.test_items_split %}
+                            <tr>
+                                <td>{{ item }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="row border-black">
+                        <div class="col-md-12">
+                            <h6>檢查項目敘述</h6>
+                            {{ project_employee_assign.test_description }}
+                        </div>
+                    </div>
+                    <div class="row border-black">
+                        <h6>接交/備註</h6>
+                        <div class="col-md-12">
+                            {{ project_employee_assign.remark }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <table class="signature_table">
                 <thead>
                     <!-- <th>總經理</th>
@@ -155,24 +192,30 @@ integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706t
                     <td>
                         <div class="signature-box" style="height: 100px;">
                             {% if project_employee_assign.enterprise_signature %}
-    <img src="{{ project_employee_assign.enterprise_signature.url }}" alt="企業簽名">
-{% endif %}
+                            <img src="{{ project_employee_assign.enterprise_signature.url }}" alt="企業簽名">
+                            {% endif %}
                         </div>
                     </td>
                 </tbody>
             </table>
-            
-            
+
+
         </div>
     </div>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        print()
+        // print()
     });
 
 

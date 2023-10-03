@@ -873,9 +873,13 @@ class Project_Employee_Assign(ModifiedModel):
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
+    test_description = models.TextField( verbose_name="檢查項目描述",null="",blank=True)
+    test_items = models.TextField( verbose_name="檢查項目",null="",blank=True)
+    remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
-
+    def test_items_split(self):
+        return self.test_items.split(",")
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
 
@@ -883,6 +887,7 @@ class Project_Employee_Assign(ModifiedModel):
         verbose_name = "派工單"   # 單數
         verbose_name_plural = verbose_name   #複數
         ordering = ['-id'] 
+
     def __str__(self):
         return self.get_show_id()
 
@@ -1420,7 +1425,7 @@ class Equipment(ModifiedModel):
     
     def __str__(self):
         # return self.equipment_name or ''
-        return self.equipment_name
+        return self.equipment_name or "1"
         
 
 # 車輛

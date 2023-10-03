@@ -362,6 +362,12 @@ class Project_Employee_Assign_View(View):
                 get_Project_Employee_Assign.project_job_assign = project_job_assign_instance
                 del dict_data["project_job_assign"]
 
+            if "test_items" in dict_data:
+                get_Project_Employee_Assign.test_items = ','.join(map(str, dict_data["test_items"]))
+                del dict_data["test_items"]
+            else:
+                get_Project_Employee_Assign.test_items = ""
+
             if "carry_equipments" in dict_data:
                 get_carry_equipments = dict_data["carry_equipments"]
                 get_carry_equipments = [int(item) for item in get_carry_equipments]
@@ -400,10 +406,14 @@ class Project_Employee_Assign_View(View):
 
 
     def post(self,request):
+        print(request.POST)
+        get_test_items = request.POST.getlist("test_items")
         form = Project_Employee_AssignForm(request.POST)
 
         if form.is_valid():
             newobj =form.save()
+            newobj.test_items = ','.join(map(str, get_test_items))
+            newobj.save()
             return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -415,6 +425,7 @@ class Project_Employee_Assign_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
         get_id=data.get_show_id()
+        test_items=data.test_items.split(',')
         location = data.project_job_assign.location
         data = model_to_dict(data)
         data["inspector"] = convent_employee(data["inspector"])
@@ -423,6 +434,7 @@ class Project_Employee_Assign_View(View):
         data["carry_equipments"] = list(carry_equipments_ids)
         data["show_id"] = get_id
         data["location"] = location
+        data["test_items"] = test_items
         
 
         if  data['enterprise_signature']:

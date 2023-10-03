@@ -28,8 +28,8 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="show_id">派工單編號(系統產生)</label>
-                                <input class="readonly form-control form-control-sm" name="show_id"
-                                    id="show_id" readonly></input>
+                                <input class="readonly form-control form-control-sm" name="show_id" id="show_id"
+                                    readonly></input>
                             </div>
                         </div>
 
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-12 col-md-6">
+                        <div class="col-6 col-md-6">
                             <div class="form-group">
                                 <label for="is_completed">是否完工</label>
                                 <select class="form-control form-control-sm" name="is_completed" id="is_completed"
@@ -115,6 +115,10 @@
                                     <option value="false">否</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <label>交接/備註</label>
+                            <textarea name="remark"></textarea>
                         </div>
 
                     </div>
@@ -147,26 +151,48 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="col-12 col-md-12">
                     <div class="form-row">
-                        <div class="col-12 col-md-12">
+                        <div class="col-5 col-md-5">
                             <div class="form-group">
-                                <label for="carry_equipments">攜帶資產選擇</label>
-
-                                <select multiple id="carry_equipments_select2" name="carry_equipments" class="select2">
-                                    {% for e in all_Equipment %}
-                                    <option value="{{ e.pk }}">
-                                        {{e.equipment_id}}-{{e.order_id}}-{{e.equipment_category}}</option>
-                                    {% endfor %}
+                                <label for="test_items">檢測項目</label>
+                                <select multiple id="test_items" data-placeholder="選擇檢測項目" class="select2"
+                                    name="test_items">
+                                    <option value="11888888888888">11888888888888</option>
+                                    <option value="22">22</option>
                                 </select>
+                            </div>
 
-
+                        </div>
+                        <div class="col-7 col-md-7">
+                            <div class="form-group">
+                                <label>檢測詳情</label>
+                                <textarea name="test_description"></textarea>
                             </div>
                         </div>
+
                     </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-md-12">
+                        <div class="form-group">
+                            <label for="carry_equipments">攜帶資產選擇</label>
+
+                            <select multiple id="carry_equipments_select2" name="carry_equipments" class="select2">
+                                {% for e in all_Equipment %}
+                                <option value="{{ e.pk }}">
+                                    {{e.equipment_id}}-{{e.order_id}}-{{e.equipment_name}}</option>
+                                {% endfor %}
+                            </select>
 
 
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
         </div>
 

@@ -149,6 +149,16 @@ class Project_Employee_AssignForm(BaseModelForm):
         model = Project_Employee_Assign
         fields = '__all__'
 
+    def clean(self):
+        cleaned_data = super().clean()
+        construction_date = cleaned_data.get('construction_date')
+        errors={}
+        if  construction_date =="":
+            errors['construction_date'] = "請選擇施工日期"
+        if errors:
+            raise forms.ValidationError(errors)
+
+
 # 工作派任計畫
 class ProjectJobAssignForm(BaseModelForm):
 
@@ -167,6 +177,7 @@ class ProjectJobAssignForm(BaseModelForm):
         print(work_method)
         work_employee = cleaned_data.get('work_employee')
         location = cleaned_data.get('location')
+        construction_date = cleaned_data.get('construction_date')
         errors = {}
 
 
@@ -182,7 +193,6 @@ class ProjectJobAssignForm(BaseModelForm):
 
         if not location:
             errors['location'] = "請選擇工作地點。"
-
 
         if errors:
             raise forms.ValidationError(errors)

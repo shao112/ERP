@@ -82,14 +82,14 @@ class RequisitionAdmin(admin.ModelAdmin):
     list_display = ('requisition_name', 'created_date', 'update_date')
 #派工單
 class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
-    list_display = ('project_job_assign', 'modified_by')
+    list_display = ("id",'project_job_assign',"test_items", 'modified_by')
     def display_inspector(self, obj):
         return ', '.join([str(item) for item in obj.inspector.all()])
     display_inspector.short_description = '多對多_檢測人員'
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
     display_lead_employee.short_description = '多對多_帶班主管'
-    resource_class = ProjectEmployeeAssignResource
+    # resource_class = ProjectEmployeeAssignResource
 
     # list_display = [field.name for field in Project_Employee_Assign._meta.get_fields()]
 
