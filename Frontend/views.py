@@ -53,7 +53,7 @@ class TravelApplicationView(ListView):
 
 class Project_employee_assign_View(DetailView):
     model = Project_Employee_Assign
-    template_name = 'pdf/Equipment_pdf.html'
+    template_name = 'pdf/employee_assign_pdf.html'
     context_object_name = 'project_employee_assign'
     pk_url_kwarg = 'id'  # This is where the 'id' parameter is mapped
 

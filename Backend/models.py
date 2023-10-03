@@ -878,7 +878,8 @@ class Project_Employee_Assign(ModifiedModel):
     remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
-
+    def test_items_split(self):
+        return self.test_items.split(",")
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
 
