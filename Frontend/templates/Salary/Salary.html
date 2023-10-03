@@ -6,13 +6,15 @@
 
 {% load static%}
 <style>
-    .salary-header a{
+    .salary-header a {
         text-decoration: none;
         color: black;
     }
-    .salary-table td{
+
+    .salary-table td {
         vertical-align: middle;
     }
+
     .select2-container {
         font-size: 14px;
     }
@@ -23,15 +25,21 @@
 
 {% block main %}
 
-{% now "Y" as current_year %}
-{% now "m" as current_month %}
 
 
 
 <div class="main px-3">
     <div id="error-message"></div>
 
-    {{current_year}}/{{current_month}} 薪資處理
+    {{year}}/{{month}} 薪資處理
+    <div>
+        <a href="{% url 'salary_list' year=prev_year month=prev_month %}">
+            <i class="fa-solid fa-arrow-left" style="color: #000000;"></i> 上一個月
+        </a>
+        <a href="{% url 'salary_list' year=next_year month=next_month %}">
+            <i class="fa-solid fa-arrow-right" style="color: #000000;"></i> 下一個月
+        </a>
+    </div>
 
     <div class="salary-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
@@ -113,8 +121,8 @@
         });
     });
 
-    var currentYear = "{{ current_year }}";
-    var currentMonth = parseInt("{{ current_month }}");
+    var currentYear = "{{ year }}";
+    var currentMonth = parseInt("{{ month }}");
 
     function set_month_salary() {
         Swal.fire({
@@ -130,7 +138,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "post",
-                    url: "{% url 'salary_api' current_year current_month %}",
+                    url: "{% url 'salary_api' year month %}",
                     headers: {
                         "X-CSRFToken": csrftoken,
                     },

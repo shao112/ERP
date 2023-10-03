@@ -185,7 +185,7 @@
                                     <td>{{ detail.money }}</td>
                                     <td>{{ detail.food }}</td>
                                     <td>{{ detail.day }}</td>
-                                    <td>{{ detail.error }}  {{ detail.food_error}}</td>
+                                    <td>{{ detail.error }} {{ detail.food_error}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -243,19 +243,40 @@
                 <h4>
                     {{salary.user.full_name}}的薪水明細
                 </h4>
+                明細名稱可自行新增(在搜尋欄輸入名稱後按下送出)
                 <div class="salary-header container-fluid">
                     <div>
+                        <div class="container mt-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="salary-details-select">明細名稱</label>
+                                        <select class="select2 form-control form-control-sm" id="salary-details-select">
+                                            <optgroup label="加項">
+                                            </optgroup>
+                                            <optgroup label="扣項">
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="money">輸入金額</label>
+                                        <input type="number" class="form-control form-control-sm" id="money">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex justify-content-center align-items-center">
+                                    <button onclick="add()" class="btn btn-primary">新增</button>
 
-                        <select class="select2 form-control form-control-sm" id="salary-details-select">
-                            <optgroup label="加項">
-                            </optgroup>
-                            <optgroup label="扣項">
-                            </optgroup>
-                        </select>
-                        <input type="number" class="form-control form-control-sm" id="money">
-                        <button onclick="add()">新增</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
                         <button onclick="reset_salary()">重新計算薪水</button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                        <button type="button" data-toggle="modal" data-target="#myModal">
                             系統薪水詳細
                         </button>
                     </div>

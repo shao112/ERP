@@ -24,7 +24,7 @@ from django.db.models.functions import Concat
 import json
 
 
-# 工程確認單
+# 員工薪水調整
 class Salary_Employees_ListView(UserPassesTestMixin,View):
 
     def get(self,request):
@@ -97,6 +97,35 @@ class SalaryListView(UserPassesTestMixin,ListView):
         month = self.kwargs.get('month')
         queryset = Salary.objects.filter(year=year, month=month)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        prev_month = month - 1
+        prev_year = year
+
+        if prev_month == 0:
+            prev_month = 12
+            prev_year -= 1
+        context["year"] = year
+        context["month"] = month
+        next_month = month + 1
+        next_year = year
+
+        if next_month > 12:
+            next_month = 1
+            next_year += 1
+        elif next_month < 1:
+            next_month = 12
+            next_year -= 1
+
+        context["next_year"] = next_year
+        context["next_month"] = next_month
+        context["prev_year"] = prev_year
+        context["prev_month"] = prev_month
+
+        return context    
     def test_func(self):
         if settings.PASS_TEST_FUNC:
             return True

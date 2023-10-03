@@ -3,7 +3,7 @@ from .models import Travel_Application,Clock_Correction_Application, Work_Overti
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
-
+import math
 
 
 
@@ -24,22 +24,65 @@ def create_salary(employee,year,month):
 
     SalaryDetail.objects.create(
         salary=salary,
-        name='基本薪資',
-        system_amount=employee.default_salary,
-        adjustment_amount=employee.default_salary,
+        name='職務加給',
+        system_amount=employee.job_addition,
+        adjustment_amount=employee.job_addition,
         deduction=False
     )
-
 
     SalaryDetail.objects.create(
         salary=salary,
-        name='伙食加給',
-        system_amount=2400,  
-        adjustment_amount=2400,
+        name='手機加給',
+        system_amount=employee.phone_addition,
+        adjustment_amount=employee.phone_addition,
         deduction=False
     )
 
-    
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='伙食津貼',
+        system_amount=employee.food_addition,
+        adjustment_amount=employee.food_addition,
+        deduction=False
+    )
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='證照加給',
+        system_amount=employee.certificates_addition,
+        adjustment_amount=employee.certificates_addition,
+        deduction=False
+    )
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='勞保',
+        system_amount=employee.labor_protection,
+        adjustment_amount=employee.labor_protection,
+        deduction=True
+    )
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='健保',
+        system_amount=employee.health_insurance,
+        adjustment_amount=employee.health_insurance,
+        deduction=True
+    )
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name=f'勞退({employee.labor_pension}%)',
+        system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
+        adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
+        deduction=True
+    )
+
+
+
+
+
+
     print("加班費")
     work_moeny ,_ = Work_Overtime_Application.get_money_by_user_month(employee,year=year,month=month)
     SalaryDetail.objects.create(
