@@ -1424,7 +1424,7 @@ class Equipment(ModifiedModel):
     
     def __str__(self):
         # return self.equipment_name or ''
-        return self.equipment_name
+        return self.equipment_name or "1"
         
 
 # 車輛
