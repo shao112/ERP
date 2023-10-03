@@ -2,7 +2,14 @@ from datetime import date, timedelta
 from .models import Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
+from django.conf import settings
 
+#
+def Check_Permissions(user,name):
+    if settings.PASS_TEST_FUNC or user.groups.filter(name__icontains='最高權限').exists() :
+        return True
+    return user.groups.filter(name__icontains='薪水管理').exists()  
+    
 #取得當周日期
 def get_weekdays(to_week):
     weekdays = []

@@ -18,10 +18,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import date
 from django.views.defaults import permission_denied
-from Backend.utils import convent_employee,get_weekly_clock_data
+from Backend.utils import convent_employee,get_weekly_clock_data,Check_Permissions
 from django.db.models import Q,Value,CharField
 from django.db.models.functions import Concat
 import json
+
 
 
 # 員工薪水調整
@@ -34,9 +35,7 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
         return render(request, 'Salary/Salary_Employees.html', context)
 
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+        return Check_Permissions(self.request.user,"薪水管理")
     
 
 
@@ -84,9 +83,8 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='薪水管理').exists()    
+        return Check_Permissions(self.request.user,"薪水管理")
+
 
 class SalaryListView(UserPassesTestMixin,ListView):
     model = Salary
@@ -127,9 +125,8 @@ class SalaryListView(UserPassesTestMixin,ListView):
 
         return context    
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='薪水管理').exists()    
+        return Check_Permissions(self.request.user,"薪水管理")
+
     
 
 # 首頁
@@ -233,9 +230,8 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='工程確認單').exists()    
+        return Check_Permissions(self.request.user,"工程確認")
+
     
 
 
@@ -255,9 +251,8 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='工程派任計畫').exists()    
+        return Check_Permissions(self.request.user,"工程派任計畫")
+
 
 # 派工單
 class Employee_Assign_ListView(UserPassesTestMixin,ListView):
@@ -272,9 +267,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='工程派工單').exists()    
+        return Check_Permissions(self.request.user,"工程派工單")
 
     
 
@@ -290,10 +283,7 @@ class Employee_list(UserPassesTestMixin,ListView):
         context['employee_form'] = EmployeeForm()
         return context
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='管理部').exists()    
-
+        return Check_Permissions(self.request.user,"管理部")
 
 # 員工出勤
 class Employee_Attendance_list(UserPassesTestMixin,ListView):
@@ -306,10 +296,7 @@ class Employee_Attendance_list(UserPassesTestMixin,ListView):
         context["departments"] = Department.objects.all()
         return context
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='管理部').exists()    
-
+        return Check_Permissions(self.request.user,"管理部")
 
 # 固定資產管理
 class Equipment_ListView(UserPassesTestMixin,ListView):
@@ -317,10 +304,7 @@ class Equipment_ListView(UserPassesTestMixin,ListView):
     template_name = 'equipment/equipment.html'
     context_object_name = 'equipment'
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='管理部').exists()    
-
+        return Check_Permissions(self.request.user,"管理部")
     
 
 
@@ -344,9 +328,7 @@ class Employee_Permission_list(UserPassesTestMixin,ListView):
         context['groups'] = sorted_groups
         return context
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='管理部權限管理').exists()    
+        return Check_Permissions(self.request.user,"管理部權限管理")
 
 
 
@@ -366,11 +348,7 @@ class Department_list(UserPassesTestMixin,ListView):
         }
         return render(request, 'department/department.html', context)
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='管理部').exists()    
-
-
+        return Check_Permissions(self.request.user,"管理部")       
 
 # 基本資料(無法使用別人的id)
 class Profile(DeleteView):
@@ -551,10 +529,8 @@ class Approval_Group(UserPassesTestMixin,ListView):
     template_name = 'approval_group/approval_group.html'
     context_object_name = 'approval_group'
 
-    def test_func(self):#有簽核權
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='簽核流程管理').exists() 
+    def test_func(self):
+        return Check_Permissions(self.request.user,"簽核流程管理")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -575,9 +551,7 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
         return context
     
     def test_func(self):
-        if settings.PASS_TEST_FUNC:
-            return True
-        return self.request.user.groups.filter(name__icontains='財務').exists()
+        return Check_Permissions(self.request.user,"財務")
 
 # 請假申請
 
