@@ -111,7 +111,7 @@
                                     <div class="form-row my-2">
                                         <div class="col-12 col-md-6">
                                             <div class="form-row">
-                                                <div class="col-12 col-md-6">
+                                                <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="project_confirmation_control">工程派任計畫</label>
                                                         <select class="form-control form-control-sm"
@@ -119,21 +119,21 @@
                                                             <option value="-1">請選擇工作派任計畫</option>
                                                             {% for job_assign in all_project_job_assign %}
                                                             <option value="{{ job_assign.id }}">
-                                                                {{job_assign.get_show_id }}
+                                                                {{job_assign.get_show_id }}-{{job_assign.project_confirmation.quotation.project_name }}-{{job_assign.project_confirmation.quotation.client }}
                                                             </option>
                                                             {% endfor %}
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-6">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="show_id">派工單編號(系統產生)</label>
                                                         <input class="readonly form-control form-control-sm"
                                                             name="show_id" id="show_id" readonly></input>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="quotation_id_control">報價單號</label>
@@ -141,6 +141,8 @@
                                                             id="quotation_id"></input>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="form-row">
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="project_name">工程名稱</label>
@@ -148,8 +150,6 @@
                                                             name="project_name" readonly id="project_name"></input>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="client_name">客戶名稱</label>
@@ -157,6 +157,8 @@
                                                             name="client_name" readonly id="client_name"></input>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="form-row">
                                                 <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="requisition">請購單位</label>
@@ -164,16 +166,69 @@
                                                             name="requisition" readonly id="requisition"></input>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-12 col-md-6">
+                                                <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="location">施工地點</label>
                                                         <input class="form-control readonly form-control-sm"
                                                             name="location" id="location" readonly></input>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-6">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="test_items">檢測項目</label>
+                                                        <select multiple id="test_items"
+                                                        data-placeholder="選擇檢測項目"
+                                                        class="select2" name="test_items">
+                                                            <option value="11888888888888">11888888888888</option>
+                                                            <option value="22">22</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="equipment_type_control">施工日期</label>
+                                                        <input type="date" class="form-control form-control-sm"
+                                                            name="construction_date" required
+                                                            id="construction_date_control"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="equipment_name_control">完工日期</label>
+                                                        <input type="date" class="form-control form-control-sm" name="completion_date"
+                                                            id="completion_date"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label for="manuscript_return_date">手稿預計回傳日</label>
+                                                        <input class="form-control form-control-sm" name="manuscript_return_date"
+                                                            type="date" id="manuscript_return_date"></input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                
+                                                
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-12 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label for="is_completed">是否完工</label>
+                                                        <select class="form-control form-control-sm" name="is_completed"
+                                                            id="is_completed" required>
+                                                            <option value="true">是</option>
+                                                            <option value="false">否</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-5">
                                                     <div class="form-group">
                                                         <label for="lead_employee">帶班主管</label>
                                                         <select class="select2" data-placeholder="選擇帶班主管"
@@ -186,46 +241,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <div class="form-row">
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="equipment_type_control">施工日期</label>
-                                                        <input type="date" class="form-control form-control-sm"
-                                                            name="construction_date" required
-                                                            id="construction_date_control"></input>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="equipment_name_control">完工日期</label>
-                                                        <input type="date" class="form-control" name="completion_date"
-                                                            id="completion_date"></input>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-6 col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="is_completed">是否完工</label>
-                                                        <select class="form-control form-control-sm" name="is_completed"
-                                                            id="is_completed" required>
-                                                            <option value="true">是</option>
-                                                            <option value="false">否</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6 col-md-6">
-                                                    <label>交接/備註</label>
-                                                    <textarea name="remark"></textarea>
-                                                </div>
-
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-12 col-md-6">
+                                                <div class="col-12 col-lg-5">
                                                     <div class="form-group">
                                                         <label for="inspector_select2">檢測人員</label>
                                                         <select class="select2" data-placeholder="選擇工作人員"
@@ -238,46 +254,26 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-md-6">
-
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="remark_control" class="col-form-label-sm">交接/備註</label>
+                                                        <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
-
-                                                <div class="col-12 col-md-6">
+                                                
+                                                <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="manuscript_return_date">手稿預計回傳日</label>
-                                                        <input class="form-control" name="manuscript_return_date"
-                                                            type="date" id="manuscript_return_date"></input>
+                                                        <label for="remark_control" class="col-form-label-sm">檢測詳情</label>
+                                                        <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
-                                        <div class="col-12 col-md-12">
-                                            <div class="form-row">
-                                                <div class="col-5 col-md-5">
-                                                    <div class="form-group">
-                                                        <label for="test_items">檢測項目</label>
-                                                        <select multiple id="test_items"
-                                                        data-placeholder="選擇檢測項目"
-                                                        class="select2" name="test_items">
-                                                            <option value="11888888888888">11888888888888</option>
-                                                            <option value="22">22</option>
-                                                        </select>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="col-7 col-md-7">
-                                                    <div class="form-group">
-                                                        <label>檢測詳情</label>
-                                                        <textarea name="test_description"></textarea>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                        
                                     </div>
 
                                 </div>

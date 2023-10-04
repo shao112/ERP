@@ -3,11 +3,11 @@
     <input name="id" hidden />
     <div class="form-row my-2">
         <div class="col-12 col-md-6">
-            <h5 style="font-size: 1.2rem;">
+            <!-- <h5 style="font-size: 1.2rem;">
                 <kbd>派任計畫描述</kbd>
-            </h5>
+            </h5> -->
             <div class="form-row">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="form-group">
                         <label for="project_confirmation">工程確認單編號</label>
                         <select class="form-control form-control-sm" name="project_confirmation"
@@ -15,12 +15,14 @@
                             <option value="-1">請選擇工確單編號</option>
                             {% for project_confirmation in project_confirmation_list %}
                             <option value="{{ project_confirmation.pk }}">
-                                {{ project_confirmation.get_show_id }}
+                                {{ project_confirmation.get_show_id }}-{{ project_confirmation.quotation.project_name }}-{{ project_confirmation.quotation.client }}
                             </option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="job_assign_id_control">工派單編號(系統產生)</label>
@@ -28,8 +30,6 @@
                             id="job_assign_id_control"></input>
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="project_name_control">工程名稱</label>
@@ -37,6 +37,8 @@
                             id="project_name_control" readonly></input>
                     </div>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="c_a_control">母案編號</label>
@@ -44,8 +46,6 @@
                             id="c_a_control"></input>
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="client_control">客戶名稱</label>
@@ -53,6 +53,8 @@
                             readonly></input>
                     </div>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="requisition_control">請購單位</label>
@@ -66,8 +68,6 @@
                     <div class="form-group">
                         <label for="location">工作地點</label>
                         {{ project_job_assign_form.location }}
-
-
                     </div>
                 </div>
                 <div class="col-6">
@@ -91,9 +91,9 @@
             </div>
         </div>
         <div class="col-12 col-md-6">
-            <h5 style="font-size:1.2rem;">
+            <!-- <h5 style="font-size:1.2rem;">
                 <kbd>人力跟資源</kbd>
-            </h5>
+            </h5> -->
             <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
@@ -132,17 +132,12 @@
                         </select>
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
                         <label for="attendance_date">出勤日期</label>
                         <input type="date" class="form-control form-control-sm" name="attendance_date"
                             id="attendance_date" required />
                     </div>
-                </div>
-                <div class="col-6">
-
                 </div>
             </div>
             <div class="form-row">
