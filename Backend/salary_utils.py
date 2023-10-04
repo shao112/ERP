@@ -40,14 +40,6 @@ def create_salary(employee,year,month):
 
     SalaryDetail.objects.create(
         salary=salary,
-        name='伙食津貼',
-        system_amount=employee.food_addition,
-        adjustment_amount=employee.food_addition,
-        deduction=False
-    )
-
-    SalaryDetail.objects.create(
-        salary=salary,
         name='證照加給',
         system_amount=employee.certificates_addition,
         adjustment_amount=employee.certificates_addition,

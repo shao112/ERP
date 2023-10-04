@@ -39,6 +39,11 @@
                             aria-selected="false">請假資訊 </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" id="tab5-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="ta53"
+                            aria-selected="false">加班費用 </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3"
                             aria-selected="false">出勤津貼 </a>
                     </li>
@@ -159,6 +164,37 @@
                                 </tr>
                                 {% endfor %}
                                 {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="tab5" role="tabpanel" aria-labelledby="tab5-tab">
+                          平日補班費{{weekdays_overtime.weekdays_overtime_money}} / 平日加班小時{{weekdays_overtime.weekdays_overtime_hours}}
+                      假日補班費{{weekdays_overtime.holiday_overtime_money}} / 假日加班小時{{weekdays_overtime.holiday_overtime_hours}}
+                        <br>
+                        <hr>
+                        明細:
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>補卡單</th>
+                                    <th>日期</th>
+                                    <th>時數</th>
+                                    <th>費用</th>
+                                    <th>倍率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in weekdays_overtime.details %}
+                                <tr>
+                                    <td>{{ detail.id }}</td>
+                                    <td>{{ detail.date }}</td>
+                                    <td>{{ detail.hour }}</td>
+                                    <td>{{ detail.money }}</td>
+                                    <td>{{ detail.magnification }}</td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

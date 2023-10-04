@@ -103,8 +103,8 @@ class SalaryDetailView(View):
 
         id = int(dict_data.get('itemid'))
         name = dict_data.get('name') 
-        deduction = dict_data.get('deduction') 
-        tax_deduction = dict_data.get('tax_deduction') 
+        deduction = dict_data.get('deduction')
+        tax_deduction = dict_data.get('tax_deduction')
         adjustmentAmount = int(dict_data.get('adjustmentAmount'))
 
         if adjustmentAmount <0:
@@ -123,7 +123,7 @@ class SalaryDetailView(View):
         dict_data = convent_dict(request.body)
         moneyValue = dict_data.get('moneyValue',0)
         if int(moneyValue) <= 0:
-            return JsonResponse({"error": "金額需大於0，如需扣款請後續更改為扣款項"}, status=400)
+            return JsonResponse({"error": "金額需大於0"}, status=400)
 
         name = dict_data.get('name')
         deductionValue = dict_data.get('deduction')
@@ -1135,7 +1135,7 @@ class Work_Overtime_Application_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Work_Overtime_Application, id=id)
         data = model_to_dict(data)
-        # data['attachment'] = data['attachment'].url if data['attachment']  else None
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
 

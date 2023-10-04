@@ -76,9 +76,11 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         context["leave_cost_details"] =Leave_Param.get_year_total_cost_list(user= user_obj,year=year,month=month)
         _,_,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
         _,_,Travel_Application_details =  Travel_Application.get_time_cost_details_by_YM(user_obj,year=year,month=month)
-
+        weekdays_overtime =  Work_Overtime_Application.get_money_by_user_month(user=user_obj,year=year,month=month)
+        print(weekdays_overtime)
         context["Project_Job_Assign_details"] = Project_Job_Assign_details
         context["Travel_Application_details"] = Travel_Application_details
+        context["weekdays_overtime"] = weekdays_overtime
 
         return context
 
@@ -584,6 +586,10 @@ class Work_Overtime_Application_List(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user.employee
+
+        x = Work_Overtime_Application.get_money_by_user_month(user,2023,10)
+        print(x)
+
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)

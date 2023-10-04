@@ -36,12 +36,11 @@ class BaseModelForm(forms.ModelForm):
 class SalaryEmployeeForm(BaseModelForm):
     class Meta:
         model = Employee
-        fields = ['default_salary', 'job_addition', 'phone_addition', 'food_addition', 'certificates_addition', 'labor_protection', 'health_insurance', 'labor_pension']
+        fields = ['default_salary', 'job_addition', 'phone_addition',  'certificates_addition', 'labor_protection', 'health_insurance', 'labor_pension']
         widgets = {
             'default_salary': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'default_salary', 'required': 'required', 'value': '0'}),
             'job_addition': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'job_addition', 'required': 'required', 'value': '0'}),
             'phone_addition': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'phone_addition', 'required': 'required', 'value': '0'}),
-            'food_addition': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'food_addition', 'required': 'required', 'value': '0'}),
             'certificates_addition': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'certificates_addition', 'required': 'required', 'value': '0'}),
             'labor_protection': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'labor_protection', 'required': 'required', 'value': '0'}),
             'health_insurance': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'name': 'health_insurance', 'required': 'required', 'value': '0'}),

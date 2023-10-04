@@ -72,7 +72,6 @@
                     <th data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
                     <th data-field="type_of_overtime" data-sortable="true">加班類別</th>
                     <th data-field="work_overtime_time" data-sortable="true">加班時間</th>
-                    <th data-field="work_overtime_hours" data-sortable="true">申請時數</th>
                     <th data-field="carry_over" data-sortable="true">加班結轉方式</th>
                     <th data-field="overtime_reason" data-sortable="true">加班事由</th>
                 </tr>
@@ -139,9 +138,6 @@
                         {{ work_overtime_application.start_mins_of_overtime | stringformat:"02d" }} -
                         {{ work_overtime_application.end_hours_of_overtime | stringformat:"02d" }}:
                         {{ work_overtime_application.end_mins_of_overtime | stringformat:"02d" }}
-                    </td>
-                    <td>
-                        {{ work_overtime_application.overtime_hours }} 時 {{ work_overtime_application.overtime_mins }} 分
                     </td>
                     <td>
                         {{ work_overtime_application.get_carry_over_display }}
