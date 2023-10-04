@@ -77,7 +77,6 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         _,_,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
         _,_,Travel_Application_details =  Travel_Application.get_time_cost_details_by_YM(user_obj,year=year,month=month)
         weekdays_overtime =  Work_Overtime_Application.get_money_by_user_month(user=user_obj,year=year,month=month)
-        print(weekdays_overtime)
         context["Project_Job_Assign_details"] = Project_Job_Assign_details
         context["Travel_Application_details"] = Travel_Application_details
         context["weekdays_overtime"] = weekdays_overtime

@@ -66,7 +66,7 @@ def create_salary(employee,year,month):
     if get_employee_labor_pension <=6:
         SalaryDetail.objects.create(
             salary=salary,
-            name=f'勞退({employee.labor_pension}%)',
+            name=f'勞退',
             system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
             adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
             deduction=True
@@ -74,7 +74,7 @@ def create_salary(employee,year,month):
     else:# > 6
         SalaryDetail.objects.create(
             salary=salary,
-            name='勞退(6%)',
+            name='勞退',
             system_amount=math.ceil(employee.default_salary*6/100),
             adjustment_amount= math.ceil(employee.default_salary*6/100),
             deduction=True
@@ -83,7 +83,7 @@ def create_salary(employee,year,month):
         employee_labor_pension_by_self = employee.labor_pension-6
         SalaryDetail.objects.create(
             salary=salary,
-            name=f'自提勞退({employee_labor_pension_by_self}%)',
+            name=f'勞退自提({employee_labor_pension_by_self}%)',
             system_amount=math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
             adjustment_amount= math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
             deduction=True
@@ -94,12 +94,23 @@ def create_salary(employee,year,month):
 
 
     print("加班費")
-    work_moeny ,_ = Work_Overtime_Application.get_money_by_user_month(employee,year=year,month=month)
+    weekdays_overtime = Work_Overtime_Application.get_money_by_user_month(employee,year=year,month=month)
+    overtime_pay=weekdays_overtime.get("overtime_pay")#
+    work_allowance=weekdays_overtime.get("work_allowance")
+
     SalaryDetail.objects.create(
             salary=salary,
-            name="加班費",
-            system_amount=work_moeny,  
-            adjustment_amount=work_moeny,
+            name="免稅加班",
+            system_amount=overtime_pay,  
+            adjustment_amount=overtime_pay,
+            deduction=False
+        )
+    
+    SalaryDetail.objects.create(
+            salary=salary,
+            name="工作津貼",
+            system_amount=work_allowance,  
+            adjustment_amount=work_allowance,
             deduction=False
         )
     

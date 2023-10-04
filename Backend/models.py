@@ -1333,6 +1333,7 @@ class Work_Overtime_Application(ModifiedModel):
         ).order_by("date_of_overtime")
 
         use_id = []
+        
 
         weekdays_overtime_hours= 0
         weekdays_overtime_money = 0
@@ -1341,12 +1342,11 @@ class Work_Overtime_Application(ModifiedModel):
         details=[]
         hourly_salary =user.get_hour_salary()
 
+
         for application in overtime_applications:
-            money=0
             overtime_hours,start_to_7pm,after_7pm_to_end = application.calculate_overtime_hours()
             weekdays_overtime_hours += overtime_hours
             day_of_week = application.date_of_overtime.weekday()
-
 
             #判斷倍率
             if  day_of_week < 5: #平日
@@ -1368,7 +1368,6 @@ class Work_Overtime_Application(ModifiedModel):
                 applications = None
 
                 show_date =date
-
                 if day_of_week==5:
                     date_next = date + timedelta(days=1)
                     show_date =str(date) + " " + str(date_next) 
@@ -1405,18 +1404,41 @@ class Work_Overtime_Application(ModifiedModel):
                     holiday_overtime_money +=eigth_money
                     details.append({"id":id_str,"date":show_date+"(假日結算)","hour":total_time,"money":eigth_money,"magnification":1.67})
 
-                # #當找到一個假日的，
-                # if is_weekday==5: #週六
-                #     money =  math.ceil(start_to_7pm*1. *hourly_salary  + after_7pm_to_end * 1.67*hourly_salary)
-                # else:
-                #     details.append({"id":application.get_show_id(),"hour":add_hour,"money":money})
+        
+        total_money = sum(item['money'] for item in details)
+        total_hour = sum(item['hour'] for item in details)
+
+        avg_money = total_money / 2
+        avg_hour = total_hour / 2
+
+        group1 = []
+        group2 = []
+
+        current_money = 0
+        current_hour = 0
+
+        for item in details:
+            if current_money + item['money'] <= avg_money and current_hour + item['hour'] <= avg_hour:
+                group1.append(item)
+                current_money += item['money']
+                current_hour += item['hour']
+            else:
+                group2.append(item)
+        overtime_pay= sum(item['money'] for item in group1)
+        work_allowance= sum(item['money'] for item in group2)
+
         result = {
+            'total_money': weekdays_overtime_money+holiday_overtime_money,
             'weekdays_overtime_money': weekdays_overtime_money,
             'holiday_overtime_money': holiday_overtime_money,
             'weekdays_overtime_hours': weekdays_overtime_hours,
             'holiday_overtime_hours': holiday_overtime_hours,
-            'details': details
+            'details': details,
+            'overtime_pay': overtime_pay,
+            'work_allowance': work_allowance,
         }
+
+
         return result
 
 
