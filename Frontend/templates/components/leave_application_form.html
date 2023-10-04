@@ -55,7 +55,7 @@
                         <label for="end_hours_of_leave">請假結束小時</label>
                         <select name="end_hours_of_leave" class="form-control form-control-sm" id="end_hours_of_leave">
                             {% for i in 24range %}
-                            <option value="{{ i }}">{{ i }}</option>
+                            <option value="{{ i }}" {% if i == 17 %} selected {% endif %}>{{ i }}</option>
                             {% endfor %}
                         </select>
                     </div>
