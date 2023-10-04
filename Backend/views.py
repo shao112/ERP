@@ -1148,7 +1148,6 @@ class Leave_Param_View(View):
         id = request.POST.get("id")
         form = LeaveParamModelForm(request.POST)
 
-
         if form.is_valid():
             is_audit = request.POST.get('is_audit') == 'true'
             is_attachment = request.POST.get('is_attachment') == 'true'

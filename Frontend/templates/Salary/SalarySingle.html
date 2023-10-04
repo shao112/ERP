@@ -137,9 +137,10 @@
 
                     </div>
                     <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+
+                        {{get_year_total_cost_list}}
                         {% for detail in leave_cost_details %}
-                        假別:{{detail.name}} / 扣款: {{detail.cost}} / 總時數: {{detail.total_hours}} 時
-                        {{detail.total_minutes}}分
+                        假別:{{detail.name}} 扣款金額:{{detail.cost}} 
                         <br>
                         {% endfor %}
 
@@ -154,16 +155,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 {% for detail in leave_details %}
-                                {% if detail.total_hours != 0 and detail.total_minutes != 0 %}
-                                {% for entry in detail.details %}
-                                <tr>
-                                    <td>{{ detail.name }}</td>
-                                    <td>{{ entry.id }}</td>
-                                    <td>{{ entry.time }}</td>
-                                </tr>
-                                {% endfor %}
-                                {% endif %}
+                                    {% if detail.total_hours != 0 or detail.total_minutes != 0 %}
+                                        {% for entry in detail.details %}
+                                        <tr>
+                                            <td>{{ detail.name }}</td>
+                                            <td>{{ entry.id }}</td>
+                                            <td>{{ entry.time }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -205,6 +207,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                        伙食津貼{{job_money}} / 出差津貼{{job_food_money}}
                         <table>
                             <thead>
                                 <tr>
@@ -232,7 +235,10 @@
 
                     </div>
 
+
                     <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+                        總和:{{Travel_Application_details_total_amount}}
+                        車程津貼:{{Travel_Application_details_total_money}} 時
                         <table>
                             <thead>
                                 <tr>
@@ -332,6 +338,7 @@
                     </div>
                     <div>
                         時薪: {{salary.user.get_hour_salary}}
+                        曠職: {{work_list.miss_hours}} 時 {{work_list.miss_minutes}} 分
                         <br>
                         加項: {{salary.calculate_adjustment_addition}}
                         扣項: {{salary.calculate_adjustment_deduction}}

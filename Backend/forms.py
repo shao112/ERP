@@ -284,6 +284,19 @@ class LeaveParamModelForm(BaseModelForm):
     class Meta:
         model = Leave_Param
         fields = '__all__'
+        def clean(self):
+            cleaned_data = super().clean()
+            start_hours_of_leave = cleaned_data.get('start_hours_of_leave')
+            errors = {}
+            
+            if start_hours_of_leave <=5:
+                errors['start_hours_of_leave'] = "起始時間請至少6點。"
+
+
+            if errors:
+                raise forms.ValidationError(errors)
+
+            return cleaned_data
 
 # 請假申請
 class LeaveApplicationForm(BaseModelForm):

@@ -190,7 +190,7 @@ class Employee(ModifiedModel):
         leave_applications = self.leave_list.filter(
             start_date_of_leave__lte=date,
             end_date_of_leave__gte=date,
-            Approval__current_status="completed"
+            # Approval__current_status="completed"
         )
         total_hour = 8
         total_minutes = 0
@@ -578,7 +578,7 @@ class Clock(models.Model):
         month=[]
         #翹班時數
         miss_hours,miss_minutes =0,0
-
+        
         for day in range((last_day_of_month - first_day_of_month).days + 1):
 
             date_to_check = (first_day_of_month + timedelta(days=day)).date()
@@ -648,6 +648,8 @@ class Clock(models.Model):
 
         miss_hours += miss_minutes // 60 
         miss_minutes %= 60  
+
+
         return  {"list":month ,"miss_hours":miss_hours,"miss_minutes":miss_minutes}
 
 
@@ -922,6 +924,8 @@ class ExtraWorkDay(ModifiedModel):
         return f"{self.date} - {self.get_date_type_display()}"
 
 #車程津貼
+import decimal
+
 class Travel_Application(ModifiedModel):
     date = models.DateField(verbose_name="申請日期",blank=True, null=True) 
     location_city_go = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="出發地")
@@ -959,7 +963,7 @@ class Travel_Application(ModifiedModel):
             created_by=user,
             date__year=year,
             date__month=month,
-            Approval__current_status="completed"
+            # Approval__current_status="completed"
         )
 
         for app in travel_apps:
@@ -974,9 +978,10 @@ class Travel_Application(ModifiedModel):
 
             if status:
                 total_amount += detail
+
         if total_amount >17:
             total_amount =total_amount  - 16
-            return total_amount ,math.ceil(total_amount*get_hour_salary*1.34), details
+            return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
         else:
             return 0,0, details
 
@@ -1085,7 +1090,8 @@ class Leave_Application(ModifiedModel):
             else:
                 total_minutes = 30
 
-            sleep_day =  total_days-2
+
+            sleep_day =  total_days-1
             if sleep_day > 0:
                 total_hours +=sleep_day *8
 
@@ -1152,8 +1158,8 @@ class Leave_Param(ModifiedModel):
         if month:
             applications = applications.annotate(month=ExtractMonth('start_date_of_leave')).filter(month=month)
 
-        if Approval_status:
-            applications = applications.filter(Approval__current_status="completed")
+        # if Approval_status:
+        #     applications = applications.filter(Approval__current_status="completed")
         return applications
 
     
@@ -1165,10 +1171,14 @@ class Leave_Param(ModifiedModel):
         details =[]
         
         user_leave_applications = self.get_user_leave_applications_by_YM_or_Total(user=user,Approval_status=Approval_status,year=year,month=month)
-        
+
         for leave_application in user_leave_applications:
             leave_hours, leave_minutes = leave_application.calculate_leave_duration()
             details.append({
+                "id":leave_application.get_show_id(),
+                "time":f"{leave_hours} : {leave_minutes}",
+            })
+            print({
                 "id":leave_application.get_show_id(),
                 "time":f"{leave_hours} : {leave_minutes}",
             })
@@ -1250,12 +1260,13 @@ class Leave_Param(ModifiedModel):
                 remaining_minutes = 60 - total_minutes
 
             leave_param_details.append({
-                'id': leave_param.id,
+                'id': leave_param.get_show_id(),
                 'name': leave_param.leave_name,
                 'total_hours': total_hours,
                 'total_minutes': total_minutes,
                 'all_hour': can_use_hour,
                 'remaining_time': f"{remaining_hours}時{remaining_minutes}分",
+                "details":details
             })
 
         return leave_param_details

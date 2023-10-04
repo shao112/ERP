@@ -49,6 +49,7 @@ class TravelApplicationView(ListView):
         context["Travel_Application_list"] = Travel_Application.objects.filter(created_by=self.request.user.employee)
         context["Project_location_list"] = Project_Job_Assign.objects.filter(lead_employee__in=[employee])|Project_Job_Assign.objects.filter(    work_employee__in=[employee]        )
         context['Travel_ApplicationForm'] = Travel_ApplicationForm()
+
         return context
 
 class Project_employee_assign_View(DetailView):
@@ -74,12 +75,17 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         context["work_list"] = Clock.get_hour_for_month(user_obj,year,int(month))
         context["leave_details"] =Leave_Param.get_leave_param_all_details(user= user_obj,year=year,month=month)
         context["leave_cost_details"] =Leave_Param.get_year_total_cost_list(user= user_obj,year=year,month=month)
-        _,_,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
-        _,_,Travel_Application_details =  Travel_Application.get_time_cost_details_by_YM(user_obj,year=year,month=month)
+        job_money,job_food_money,Project_Job_Assign_details =  Project_Job_Assign.get_month_list_day(user_obj,year=year,month=month)
+        Travel_Application_details_total_amount,Travel_Application_details_total_money,Travel_Application_details =  Travel_Application.get_time_cost_details_by_YM(user_obj,year=year,month=month)
         weekdays_overtime =  Work_Overtime_Application.get_money_by_user_month(user=user_obj,year=year,month=month)
         context["Project_Job_Assign_details"] = Project_Job_Assign_details
+        context["job_money"] = job_money
+        context["job_food_money"] = job_food_money
         context["Travel_Application_details"] = Travel_Application_details
+        context["Travel_Application_details_total_amount"] = Travel_Application_details_total_amount
+        context["Travel_Application_details_total_money"] = Travel_Application_details_total_money
         context["weekdays_overtime"] = weekdays_overtime
+
 
         return context
 
