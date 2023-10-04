@@ -42,7 +42,8 @@ def salaryFile(get_salary):
     year,month,user = get_salary.year, get_salary.month,get_salary.user
     full_name,employee_id,departments_name=user.full_name,user.employee_id,user.departments.department_name
     sheet = workbook.active
-
+    #http://localhost:8000/restful/salaryfile/2023/10/2
+    
     #基本資料
     sheet['B4'] = departments_name
     sheet['D4'] = employee_id
