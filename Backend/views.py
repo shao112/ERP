@@ -883,6 +883,10 @@ class FormUploadFileView(View):
                     model=Leave_Application.objects.get(id=getid)
                 case "travel_application":
                     model=Travel_Application.objects.get(id=getid)
+                case "Work_Overtime_Application":
+                    model=Work_Overtime_Application.objects.get(id=getid)
+                case "Clock_Correction_Application":
+                    model=Clock_Correction_Application.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
@@ -1092,7 +1096,7 @@ class Clock_Correction_Application_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Clock_Correction_Application, id=id)
         data = model_to_dict(data)
-        # data['attachment'] = data['attachment'].url if data['attachment']  else None
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
     
     def delete(self,request):
@@ -1507,6 +1511,7 @@ class Travel_Application_View(View):
         show_data_id= data.get_show_id()
         data = model_to_dict(data)
         data["show_data_id"]=show_data_id
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
 
         return JsonResponse({"data":data}, status=200,safe = False)
 

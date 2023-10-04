@@ -131,13 +131,23 @@ async function GET_handleClick(event, bringdata = true) {
           var input = document.getElementsByName(key)[0];
           if (input) {
             let get_value = jsonData[key];
-            if (input.type == "file" && get_value != null) {
-              console.log(get_value);
+            if (input.type == "file" ) {
               var element = document.getElementById(key);
-              element.href = get_value;
-              element.target = "_blank";
-              element.textContent = "下載";
 
+              console.log("g111111111et_value");
+              console.log(get_value);
+              console.log(key);
+              console.log(element);
+              if(get_value != null){
+                element.href = get_value;
+                element.target = "_blank";
+                element.textContent = "下載";
+              }else{
+                element.href = "#";
+                element.target = "";
+                element.textContent = "未上傳";
+                
+              }
               continue;
             }
 

@@ -65,8 +65,9 @@ $("#myModal").on("show.bs.modal", function (event) {
         input.setAttribute("readonly", "true"); //封印修改
 
         if (input.type == "file") {
-          var element = document.getElementById(key);
-          console.log(key,get_value)
+          var element = form.querySelector('#' + key);
+          console.log("FILE")
+          console.log(key,get_value);
           if ( get_value !=null ) {
             element.href = get_value;
             element.target = "_blank";
@@ -95,7 +96,7 @@ $("#myModal").on("show.bs.modal", function (event) {
 
     const change_event = new Event("change");
 
-    if (modalModel === "Leave_Application") {
+    if (modalModel === "leave_application") {
       // projectConfirmationIdControl.dispatchEvent(change_event);
       $("#tab1").tab("show");
     } else if (modalModel === "work_overtime_application") {
@@ -108,6 +109,8 @@ $("#myModal").on("show.bs.modal", function (event) {
     } else if (modalModel === "Travel_Application") {
       console.log("xxxx");
       $("#tab5").tab("show");
+    }else{
+      alert("沒對應的TAB")
     }
   });
 });
