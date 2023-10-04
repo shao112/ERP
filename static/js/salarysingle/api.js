@@ -38,26 +38,27 @@ function add() {
   var selectedValue = selectedOption.value;
   var moneyInput = document.getElementById("money");
   var moneyValue = moneyInput.value;
-
-  var deductionValue = salaryDetails.find(
-    (detail) => detail.name === selectedValue
-  )?.deduction;
-  if (deductionValue == undefined) {
-    deductionValue = false;
+  var detail_type = document.getElementById("detail_type");
+  var detail_typeValue = detail_type.value;
+  if(detail_typeValue<=0){
+    alert("請選擇類型")
+    return
   }
+
+  var deduction = detail_typeValue.includes('加項') ? false : true;
+  var tax_deduction = detail_typeValue.includes('應稅') ? true : false;
+  
+
   data = {
     name: selectedValue,
     moneyValue: moneyValue,
-    deductionValue: deductionValue,
-  };
-
-  console.log("Selected Value: " + selectedValue);
-  console.log("deductionValue Value: " + deductionValue);
-  console.log("Money Value: " + moneyValue);
+    deduction: deduction,
+    tax_deduction: tax_deduction,
+  };  
   console.log(data);
 
   if(moneyValue<=0){
-    alert("請輸入金額，或是輸入金額至少大於零。如需扣款請勾選為扣款項")
+    alert("請輸入金額，或是輸入金額至少大於零。")
     return
   }
 
@@ -109,12 +110,15 @@ function save(itemid) {
   var deduction = row.find('input[name="deduction"]').val();
   var deductionCheckbox = row.find('input[name="deduction"]');
   var deduction = deductionCheckbox.is(":checked");
+  var tax_deductionCheckbox = row.find('input[name="tax_deduction"]');
+  var tax_deduction = tax_deductionCheckbox.is(":checked");
 
   data = {
     name: name,
     adjustmentAmount: adjustmentAmount,
     itemid: itemid,
     deduction: deduction,
+    tax_deduction: tax_deduction,
   };
   
   if(adjustmentAmount<=0){

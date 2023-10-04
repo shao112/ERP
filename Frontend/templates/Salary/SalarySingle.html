@@ -248,7 +248,7 @@
                     <div>
                         <div class="container mt-4">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="salary-details-select">明細名稱</label>
                                         <select class="select2 form-control form-control-sm" id="salary-details-select">
@@ -259,10 +259,21 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="money">輸入金額</label>
                                         <input type="number" class="form-control form-control-sm" id="money">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="money">類型</label>
+                                        <select class="form-control form-control-sm select2" name="" id="detail_type">
+                                            <option>應稅加項</option>
+                                            <option>免稅加項</option>
+                                            <option>應稅扣項</option>
+                                            <option>免稅扣項</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-2 d-flex justify-content-center align-items-center">
@@ -299,7 +310,8 @@
                     <th data-field="quotation_id" data-sortable="true">明細</th>
                     <th data-field="tax_id" data-sortable="true">系統薪資</th>
                     <th data-field="project_name" data-sortable="true">調整薪資</th>
-                    <th data-field="TorF" data-sortable="true">是否為扣款項</th>
+                    <th data-field="TorF" data-sortable="true">是否為扣款項目</th>
+                    <th data-field="Tax" data-sortable="true">是否為應稅項目</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -325,6 +337,10 @@
                     </td>
                     <td>
                         <input type="checkbox" class="form-control" name="deduction" value="1" {% if item.deduction%}
+                            checked{% endif %}>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="form-control" name="tax_deduction" value="1" {% if item.tax_deduction%}
                             checked{% endif %}>
                     </td>
 

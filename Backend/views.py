@@ -51,6 +51,7 @@ def salaryFile(get_salary):
     sheet['H4'] = f"{year}年{month}月"
 
 
+
     deduction_items = get_details.filter(deduction=True)
     addition_items = get_details.filter(deduction=False)
 
@@ -103,6 +104,7 @@ class SalaryDetailView(View):
         id = int(dict_data.get('itemid'))
         name = dict_data.get('name') 
         deduction = dict_data.get('deduction') 
+        tax_deduction = dict_data.get('tax_deduction') 
         adjustmentAmount = int(dict_data.get('adjustmentAmount'))
 
         if adjustmentAmount <0:
@@ -113,7 +115,7 @@ class SalaryDetailView(View):
         except Http404:
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
-        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction)  
+        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction,tax_deduction)  
 
         return JsonResponse({"ok":"ok"},status=200)
 
@@ -124,7 +126,8 @@ class SalaryDetailView(View):
             return JsonResponse({"error": "金額需大於0，如需扣款請後續更改為扣款項"}, status=400)
 
         name = dict_data.get('name')
-        deductionValue = dict_data.get('deductionValue')
+        deductionValue = dict_data.get('deduction')
+        tax_deduction = dict_data.get('tax_deduction')
         year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
         try:
             get_salary =Salary.objects.get(user=user, year=year, month=month)
@@ -136,7 +139,8 @@ class SalaryDetailView(View):
             name=name,
             system_amount=moneyValue,  
             adjustment_amount=moneyValue,
-            deduction=deductionValue
+            deduction=deductionValue,
+            tax_deduction=tax_deduction
         )
         return JsonResponse({"ok":"ok"},status=200)
 
