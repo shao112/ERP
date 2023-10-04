@@ -46,11 +46,12 @@
     {% block import %}
 
     {% endblock %}
+    <link rel="icon" href="{% static 'img/logo/logo_compress.jpg' %}" type="image/jpeg">
+
 </head>
 
 
 <style>
-    /* 样式用于浮动视窗 */
     .sys-message-popup {
         position: fixed;
         bottom: 70px;
@@ -61,7 +62,6 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         transition: bottom 1.5s ease;
         z-index: 2147483647;
-        /* 添加过渡效果 */
     }
 </style>
 

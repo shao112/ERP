@@ -47,5 +47,7 @@ urlpatterns = [
     path('salary/<int:year>/<int:month>/<int:user_id>/reset', views.SalaryListView.as_view(), name="salary_only_one_api"),
     #處理明細單頁的API處理
     path('salary/<int:year>/<int:month>/<int:user>', views.SalaryDetailView.as_view(), name='salary_detail'),
+    #建立薪水檔案的api
+    path('salaryfile/<int:year>/<int:month>/<int:user>', views.SalaryFileView.as_view(), name='salary_file'),
 
 ]

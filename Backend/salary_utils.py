@@ -70,14 +70,32 @@ def create_salary(employee,year,month):
         deduction=True
     )
 
-    SalaryDetail.objects.create(
-        salary=salary,
-        name=f'勞退({employee.labor_pension}%)',
-        system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
-        adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
-        deduction=True
-    )
-
+    get_employee_labor_pension = employee.labor_pension
+    if get_employee_labor_pension <=6:
+        SalaryDetail.objects.create(
+            salary=salary,
+            name=f'勞退({employee.labor_pension}%)',
+            system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
+            adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
+            deduction=True
+        )
+    else:# > 6
+        SalaryDetail.objects.create(
+            salary=salary,
+            name='勞退(6%)',
+            system_amount=math.ceil(employee.default_salary*6/100),
+            adjustment_amount= math.ceil(employee.default_salary*6/100),
+            deduction=True
+        )
+        #自提
+        employee_labor_pension_by_self = employee.labor_pension-6
+        SalaryDetail.objects.create(
+            salary=salary,
+            name=f'自提勞退({employee_labor_pension_by_self}%)',
+            system_amount=math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
+            adjustment_amount= math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
+            deduction=True
+        )
 
 
 

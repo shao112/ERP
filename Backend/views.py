@@ -17,6 +17,8 @@ from django.views import View
 from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
 from .salary_utils import create_salary
 import openpyxl
+from openpyxl import load_workbook
+
 from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
 import random,os,re
@@ -27,6 +29,59 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import time
 
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
+
+def salaryFile(get_salary):
+    get_details = get_salary.details.all()
+    file_path = 'static/files/salary.xlsx'
+    try:
+        workbook = load_workbook(filename=file_path)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": str(e)}, status=400)
+
+    year,month,user = get_salary.year, get_salary.month,get_salary.user
+    full_name,employee_id,departments_name=user.full_name,user.employee_id,user.departments.department_name
+    sheet = workbook.active
+
+    #基本資料
+    sheet['B4'] = departments_name
+    sheet['D4'] = employee_id
+    sheet['F4'] = full_name
+    sheet['H4'] = f"{year}年{month}月"
+
+
+    deduction_items = get_details.filter(deduction=True)
+    addition_items = get_details.filter(deduction=False)
+
+
+    for index, item in enumerate(addition_items):
+        sheet[f'A{index+6}'] = item.name
+        sheet[f'B{index + 6}'] = item.adjustment_amount
+
+    # 設定扣項的資料
+    for index, item in enumerate(deduction_items):
+        sheet[f'C{index+6}'] = item.name
+        sheet[f'D{index+6}'] = item.adjustment_amount
+    new_file=f"static/files/salary_{full_name}_{employee_id}.xlsx"
+    workbook.save(new_file)
+    
+
+
+class SalaryFileView(View):
+
+    def get(self, request, *args, **kwargs):
+        year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
+        try:
+            get_salary =Salary.objects.get(user=user, year=year, month=month)
+        except Http404:
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+       
+        x = salaryFile(get_salary)
+        print(x)
+      
+
+        return JsonResponse({"ok":"ok"},status=200)
+
 
 
 class SalaryDetailView(View):
@@ -750,7 +805,7 @@ class FileUploadView(View):
              return JsonResponse({'error': '請上傳檔案'}, status=500)
         #檢查type，回傳上傳正確檔案
 
-        workbook = openpyxl.load_workbook(uploaded_file)
+        workbook = load_workbook(uploaded_file)
         worksheet = workbook.active
         get_dicts,get_model = convent_excel_dict(worksheet,modelstr)
         error_str=""

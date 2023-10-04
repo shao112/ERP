@@ -146,7 +146,7 @@ class Employee(ModifiedModel):
     location_city = models.CharField(max_length=4, choices=LOCATION_CHOICES, null=True, blank=True, verbose_name='居住城市(用於計算)')
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
     full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
-    employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工ID')
+    employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工編號')
     departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
@@ -224,7 +224,7 @@ class SalaryDetail(models.Model):
     name = models.CharField(max_length=100, verbose_name='名稱')
     system_amount = models.PositiveIntegerField(default=0, verbose_name='系統金額')
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
-    deduction = models.BooleanField(default=False, verbose_name='扣款項目') #F為補貼、T為請事假、勞保...
+    deduction = models.BooleanField(default=False, verbose_name='扣款項目') #T是扣項，F是加項
     def save(self, *args, **kwargs):  
         if self.system_amount != 0:
             super().save(*args, **kwargs)
@@ -866,7 +866,6 @@ class Project_Employee_Assign(ModifiedModel):
     construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
     completion_date = models.DateField(null=True, blank=True, verbose_name="完工日期")
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
-    # construction_location = models.CharField(max_length=100,null=True, blank=True, verbose_name='施工地點')
     inspector = models.ManyToManyField('Employee', related_name='employee_assign_work_employee', blank=True, verbose_name='檢測人員')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
@@ -877,6 +876,13 @@ class Project_Employee_Assign(ModifiedModel):
     test_items = models.TextField( verbose_name="檢查項目",null="",blank=True)
     remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
+    def enterprise_signature_link(self):
+        if self.enterprise_signature:
+            download_link = "<a href='{}' download>下載</a>".format(self.enterprise_signature.url)
+            return mark_safe(download_link)
+        else:
+            return ""
 
     def test_items_split(self):
         return self.test_items.split(",")
@@ -1212,7 +1218,7 @@ class Leave_Param(ModifiedModel):
 
         for leave_param in leave_params:
             cost,total_hours, total_minutes  = leave_param.calculate_leave_cost_by_YM_or_Total(user=user,year=year,month=month)
-            get_leave_param_hour = leave_param.leave_hours()
+            get_leave_param_hour = leave_param.leave_hours(user)
 
             if cost!=0:
                 leave_param_details.append({
