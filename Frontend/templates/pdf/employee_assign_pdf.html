@@ -88,24 +88,27 @@
                 <tbody>
                     <tr>
                         <td class="chinese">客戶名稱</td>
-                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.client }}</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.quotation.client }}</td>
                         <td class="chinese">報價單號</td>
-                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.quotation_id }}</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.quotation.quotation_id }}</td>
                         <td class="chinese">施工日期</td>
                         <td>{{ project_employee_assign.construction_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">請購單位<br>(業主)</td>
-                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.requisition }}</td>
+                        <td>
+                            {% if project_employee_assign.project_job_assign.project_confirmation.requisition %}
+                            {{ project_employee_assign.project_job_assign.project_confirmation.requisition }}
+                            {% else %}{% endif %}
+                        </td>
                         <td class="chinese">訂單編號</td>
-                        <td>{{ project_employee_assign.order_number }}</td>
+                        <td>{{ project_employee_assign.project_job_assign.project_confirmation.requisition.order_id }}</td>
                         <td class="chinese">完工日期</td>
                         <td>{{ project_employee_assign.completion_date|date:"Y/m/d" }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">工程名稱</td>
-                        <td colspan="5">{{ project_employee_assign.project_job_assign.project_confirmation.project_name
-                            }}</td>
+                        <td colspan="5">{{ project_employee_assign.project_job_assign.project_confirmation.quotation.project_name }}</td>
                     </tr>
                     <tr>
                         <td class="chinese">施工地點</td>
@@ -145,36 +148,34 @@
                 </tbody>
 
             </table>
-
-            <div class="row border-black">
-                <div class="col-md-4">
-                    <h6>檢查項目</h6>
-                    <table class="">
-                        <tbody>
-                            {% for item in project_employee_assign.test_items_split %}
-                            <tr>
-                                <td>{{ item }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="col-md-8">
-                    <div class="row border-black">
-                        <div class="col-md-12">
-                            <h6>檢查項目敘述</h6>
-                            {{ project_employee_assign.test_description }}
-                        </div>
-                    </div>
-                    <div class="row border-black">
-                        <h6>接交/備註</h6>
-                        <div class="col-md-12">
-                            {{ project_employee_assign.remark }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="test_table">
+                <thead>
+                    <th>檢查項目</th>
+                </thead>
+                <tbody>
+                    <tr><td>
+                        {% for item in project_employee_assign.test_items_split %}
+                        {{ item }}{% if not forloop.last %}、{% endif %}{% endfor %}
+                    </td></tr>
+                    
+                </tbody>
+            </table>
+            <table class="test_table">
+                <thead>
+                    <th>檢查項目敘述</th>
+                </thead>
+                <tbody>
+                    <tr><td>{{ project_employee_assign.test_description }}</td></tr>
+                </tbody>
+            </table>
+            <table class="test_table">
+                <thead>
+                    <th>接交/備註</th>
+                </thead>
+                <tbody>
+                    <tr><td>{{ project_employee_assign.remark }}</td></tr>
+                </tbody>
+            </table>
 
             <table class="signature_table">
                 <thead>
