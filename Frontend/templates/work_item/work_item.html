@@ -38,41 +38,50 @@
                             <div class="form-row my-2">
                                 <div class="col-12">
                                     <div class="form-row">
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="work_item_id">工項編號(自動產生)</label>
                                                 <input class="readonly form-control form-control-sm" name="work_item_id"
                                                     id="work_item_id" readonly></input>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="item_name">品名規格</label>
                                                 <input class="form-control form-control-sm" name="item_name"
-                                                    id="item_name"></input>
+                                                required   id="item_name"></input>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="item_id">編號</label>
                                                 <input class="form-control form-control-sm" name="item_id"
-                                                    id="item_id"></input>
+                                                required       id="item_id"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                     
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="unit_price">數量</label>
+                                                <input type="number" class="form-control form-control-sm"
+                                               required     name="count" id="count"></input>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="unit_price">單價</label>
+                                                <input type="number" class="form-control form-control-sm"
+                                                required    name="unit_price" id="unit_price"></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit">單位</label>
                                                 <input class="form-control form-control-sm" name="unit"
-                                                    id="unit"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="unit_price">單價</label>
-                                                <input type="number" class="form-control form-control-sm"
-                                                    name="unit_price" id="unit_price"></input>
+                                                required        id="unit"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -117,8 +126,9 @@
                     <th data-field="work_item_id" data-sortable="true">工項編號</th>
                     <th data-field="item_name" data-sortable="true">品名規格</th>
                     <th data-field="item_id" data-sortable="true">編號</th>
-                    <th data-field="unit" data-sortable="true">單位</th>
+                    <th data-field="count" data-sortable="true">數量</th>
                     <th data-field="unit_price" data-sortable="true">單價</th>
+                    <th data-field="unit" data-sortable="true">單位</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -148,10 +158,13 @@
                        {{ item.item_id }}
                     </td>
                     <td>
-                       {{ item.unit }}
+                       {{ item.count }}
                     </td>
                     <td>
                        {{ item.unit_price }}
+                    </td>
+                    <td>
+                       {{ item.unit }}
                     </td>
                     
                 </tr>

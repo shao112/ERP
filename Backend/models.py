@@ -690,13 +690,14 @@ class Department(ModifiedModel):
 class Work_Item(ModifiedModel):
     item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="品名規格")
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="編號")
+    unit_price = models.IntegerField(blank=True, null=True, verbose_name="數量")
+    count = models.IntegerField(blank=True, null=True, verbose_name="單價")
     unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
-    unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_display_text(self):
         pn_id = f"工項-{str(self.id).zfill(5)}"
-        return f"{pn_id} | {self.item_name} | {self.item_id} | {self.unit} | {self.unit_price}(價格)"
+        return f"{pn_id} | {self.item_name} | {self.item_id} | {self.count} | {self.unit} | {self.unit_price}(價格)"
 
     def get_show_id(self):
         return f"工項-{str(self.id).zfill(5)}"
