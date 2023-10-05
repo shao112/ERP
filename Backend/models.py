@@ -340,7 +340,7 @@ class Approval_Target(models.Model):
 class ApprovalModel(models.Model):
     STATUS_CHOICES = [
         ('completed', '完成'),
-        ('in_progress', '進行中'),
+        ('in_process', '進行中'),
         ('rejected', '駁回'),
     ]
 
@@ -363,7 +363,7 @@ class ApprovalModel(models.Model):
     }
 
 
-    current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_progress')
+    current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_process')
     #目前待簽index
     current_index = models.IntegerField( verbose_name="待簽核index",default=0,blank=True,null=True)
     #簽核流程
@@ -982,11 +982,12 @@ class Travel_Application(ModifiedModel):
             if status:
                 total_amount += detail
 
-        if total_amount >17:
-            total_amount =total_amount  - 16
-            return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
-        else:
-            return 0,0, details
+        return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
+        # if total_amount >17:
+        #     total_amount =total_amount  - 16
+        #     return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
+        # else:
+        #     return 0,0, details
 
 
 
