@@ -56,7 +56,7 @@
                     員工編號：{{ user.employee.employee_id }}
                 </div>
                 <div class="form-group">
-                    目前年資：{{ user.employee.calSeniority }}
+                    目前年資：{{ user.employee.seniority }}
                 </div>
             </div>
             <div class="col-6 col-md-3">
@@ -180,7 +180,6 @@
             const newPassword1 = document.getElementById('new-password-form-control').value;
             const newPassword2 = document.getElementById('confirm-password-form-control').value;
 
-            // 构建 JSON 对象
             const jsonData = {
                 "old_password": oldPassword,
                 "new_password1": newPassword1,

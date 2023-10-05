@@ -217,6 +217,17 @@ class Employee(ModifiedModel):
     def __str__(self):
         return f"{self.full_name}"
 
+    def seniority(self):
+        start_work_date= self.start_work_date
+        if start_work_date == None :
+            return "人資單位未填寫入值日"
+        today = datetime.today().date()
+        total_months = (today.year - start_work_date.year) * 12 + (today.month - start_work_date.month)
+
+        seniority_value = total_months / 12
+
+        return seniority_value
+
 
 class SalaryDetail(models.Model):
     salary = models.ForeignKey("Salary",related_name="details",on_delete=models.CASCADE, verbose_name="依附薪資單",null=True, blank=True)
