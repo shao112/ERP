@@ -128,10 +128,10 @@
                 
                 <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
                 <div class="clock-inout-record-content my-3">
-                    {% if work_list.list|length == 0 %}
+                    {% if work_list.error_time == 0 %}
                     無異常
                     {% else %}
-                    異常天數:{{work_list.list|length }}
+                    異常天數:{{work_list.error_time }}
                     <a href="" data-toggle="modal" data-target="#myModal">系統薪水詳細</a>
                     {% endif %}
                 </div>

@@ -647,10 +647,13 @@ class Clock(models.Model):
                     month.append({"date":date_to_check_string,"status":"no","ear_time":ear_time,"last_time":last_time,"hours":time_string,"miss":miss_string,"results":results})
 
         miss_hours += miss_minutes // 60 
-        miss_minutes %= 60  
+        miss_minutes %= 60 
+
+        error_time= sum(1 for item in month if item["status"] in ["1", "0", "no"])
+ 
 
 
-        return  {"list":month ,"miss_hours":miss_hours,"miss_minutes":miss_minutes}
+        return  {"list":month ,"miss_hours":miss_hours,"miss_minutes":miss_minutes,"error_time":error_time}
 
 
 # 部門
