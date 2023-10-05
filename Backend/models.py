@@ -77,7 +77,7 @@ class ModifiedModel(models.Model):
             if self.Approval:
                 current_status = self.Approval.current_status
                 if current_status == 'completed' or current_status == 'in_process':
-                    raise PermissionDenied("簽核中或簽核完成禁止刪除")
+                        raise PermissionDenied("簽核中或簽核完成禁止刪除")
 
         super().delete(*args, **kwargs)
 
@@ -340,7 +340,7 @@ class Approval_Target(models.Model):
 class ApprovalModel(models.Model):
     STATUS_CHOICES = [
         ('completed', '完成'),
-        ('in_progress', '進行中'),
+        ('in_process', '進行中'),
         ('rejected', '駁回'),
     ]
 
@@ -363,7 +363,7 @@ class ApprovalModel(models.Model):
     }
 
 
-    current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_progress')
+    current_status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='in_process')
     #目前待簽index
     current_index = models.IntegerField( verbose_name="待簽核index",default=0,blank=True,null=True)
     #簽核流程

@@ -1488,11 +1488,7 @@ class Travel_Application_View(View):
         form = Travel_ApplicationForm(dict_data)
         if form.is_valid():
             getObject = Travel_Application.objects.get(id=int(dict_data['id']))
-            if  "job_assign" in dict_data:
-                job_assign_obj = Project_Job_Assign.objects.get(pk=int(dict_data["job_assign"]))
-                getObject.job_assign = job_assign_obj
-                getObject.save()
-                
+            getObject.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "完成修改"},status=200)
         else:
