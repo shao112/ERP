@@ -20,19 +20,19 @@ def approval_count(request):
         elif get_employee =="clean":
             pass
         else:
-            pass
+            try:
             # 取得作者部門
-            # get_createdby = Approval.get_created_by
-            # if get_createdby:
-            #     print(get_createdby)
-            #     department =get_createdby.departments
-            #     #撈取主管權限的員工
-            #     supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
-            #     #判斷主管是不是在當前user
-            #     is_supervisor = current_employee.id in supervisor_employees
-            #     if is_supervisor:            
-            #         related_records.append(Approval)
-        
+                get_createdby = Approval.get_created_by
+                if get_createdby:
+                    department =get_createdby.departments
+                    #撈取主管權限的員工
+                    supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
+                    #判斷主管是不是在當前user
+                    is_supervisor = current_employee.id in supervisor_employees
+                    if is_supervisor:            
+                        related_records.append(Approval)
+            except Exception as e:
+                return {"approval_count":"未輸入部門"}
     return {"approval_count":len(related_records)}
 
 

@@ -1070,7 +1070,7 @@ class Clock_Correction_Application_View(View):
             getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
             if(getObject.Approval ):
                 if(getObject.Approval.current_status=="completed" or getObject.Approval.current_status=="in_process" ):            
-                    return JsonResponse({"error":"禁止修改"},status=400)
+                    return JsonResponse({"error":"簽核進行或完成禁止修改"},status=400)
 
             employee = Employee.objects.get(id=request.user.employee.id)
             getObject.update_fields_and_save(**dict_data)
@@ -1116,6 +1116,18 @@ class Clock_Correction_Application_View(View):
             return JsonResponse({"error":str(e)},status=500)
 
 class Work_Overtime_Application_View(View):
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            Work_Overtime_Application.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
+
 
     def put(self,request):
         dict_data = convent_dict(request.body) 

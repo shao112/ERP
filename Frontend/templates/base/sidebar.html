@@ -213,6 +213,9 @@
                 {% if approval_count > 0 %}
                 <span class="badge badge-danger">{{ approval_count }}</span>
                 {% endif %}
+                {% if approval_count == "x" %}
+                <span class="badge badge-danger">錯誤</span>
+                {% endif %}
             </a>
             <div class="collapse" id="approvalCollapse">
                 <ul class="nav flex-column ml-4">

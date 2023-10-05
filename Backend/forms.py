@@ -75,6 +75,18 @@ class Travel_ApplicationForm(BaseModelForm):
             'location_city_go': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location_city_go', "name":'location_city_go', 'required': 'true'}),
             'location_city_end': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'location_city_end', "name":'location_city_end', 'required': 'true'}),
             }
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        errors = {}
+        print(date)
+        if date==None:
+            errors['date'] = "請輸入申請日期"
+
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return cleaned_data
 
 class ExtraWorkDayForm(BaseModelForm):
     class Meta:
@@ -331,6 +343,18 @@ class WorkOvertimeApplicationForm(BaseModelForm):
             'type_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_overtime', "name":'type_of_overtime'}),
             'carry_over': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'carry_over', "name":'carry_over'}),
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        date_of_overtime = cleaned_data.get('date_of_overtime')
+        errors = {}
+        
+        if not date_of_overtime:
+            errors['date_of_overtime'] = "請選擇加班日期。"
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return cleaned_data
+
 # 補卡申請
 class ClockCorrectionApplicationForm(BaseModelForm):
 
@@ -342,3 +366,15 @@ class ClockCorrectionApplicationForm(BaseModelForm):
             'category_of_clock': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'type_of_clock': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date_of_clock = cleaned_data.get('date_of_clock')
+        errors = {}
+        
+        if not date_of_clock:
+            errors['date_of_clock'] = "請選擇補卡日期。"
+        if errors:
+            raise forms.ValidationError(errors)
+
+        return cleaned_data
