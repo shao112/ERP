@@ -40,6 +40,9 @@ function add() {
   var moneyValue = moneyInput.value;
   var detail_type = document.getElementById("detail_type");
   var detail_typeValue = detail_type.value;
+  var checkbox = document.getElementById('five');
+  var fiveisChecked = checkbox.checked;
+
   if(detail_typeValue<=0){
     alert("請選擇類型")
     return
@@ -54,6 +57,7 @@ function add() {
     moneyValue: moneyValue,
     deduction: deduction,
     tax_deduction: tax_deduction,
+    five:fiveisChecked,
   };  
   console.log(data);
 
@@ -112,6 +116,8 @@ function save(itemid) {
   var deduction = deductionCheckbox.is(":checked");
   var tax_deductionCheckbox = row.find('input[name="tax_deduction"]');
   var tax_deduction = tax_deductionCheckbox.is(":checked");
+  var fiveCheckbox = row.find('input[name="five"]');
+  var five = fiveCheckbox.is(":checked");
 
   data = {
     name: name,
@@ -119,6 +125,7 @@ function save(itemid) {
     itemid: itemid,
     deduction: deduction,
     tax_deduction: tax_deduction,
+    five: five,
   };
   
   if(adjustmentAmount<=0){

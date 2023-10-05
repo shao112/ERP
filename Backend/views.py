@@ -11,6 +11,7 @@ from Backend.forms import Travel_ApplicationForm,ExtraWorkDayForm,RequisitionFor
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
+from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
@@ -30,9 +31,9 @@ from datetime import time
 
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
-def salaryFile(get_salary):
+def salaryFile(get_salary,title):
     get_details = get_salary.details.all()
-    file_path = 'static/files/salary.xlsx'
+    file_path = 'static/files/salary_test.xlsx'
     try:
         workbook = load_workbook(filename=file_path)
     except Exception as e:
@@ -42,47 +43,66 @@ def salaryFile(get_salary):
     year,month,user = get_salary.year, get_salary.month,get_salary.user
     full_name,employee_id,departments_name=user.full_name,user.employee_id,user.departments.department_name
     sheet = workbook.active
-    #http://localhost:8000/restful/salaryfile/2023/10/2
     
-    #基本資料
-    sheet['B4'] = departments_name
-    sheet['D4'] = employee_id
-    sheet['F4'] = full_name
-    sheet['H4'] = f"{year}年{month}月"
-
-
-
     deduction_items = get_details.filter(deduction=True)
     addition_items = get_details.filter(deduction=False)
 
+    #http://localhost:8000/restful/salaryfile/2023/10/2/%E8%96%AA%E8%B3%87%E5%96%AE
+    try:
+        for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
+            
+            for index, cell_value in enumerate(row, start=1):
+                if cell_value == "YM":
+                    sheet.cell(row=i, column=index, value=f"{year}年{month}月")
+                if cell_value == "Title":
+                    sheet.cell(row=i, column=index, value=title)
+                elif cell_value == "E_ID":
+                    sheet.cell(row=i, column=index, value=employee_id)
+                elif cell_value == "DT":
+                    sheet.cell(row=i, column=index, value=departments_name)
+                elif cell_value == "NAME":
+                    sheet.cell(row=i, column=index, value=full_name)
+                if cell_value == "ADD_LIST":
+                    for next_index, item in enumerate(addition_items):
+                        sheet.cell(row=i+next_index, column=index, value= item.name)
+                        sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
+                if cell_value == "COST_LIST":
+                    for next_index, item in enumerate(deduction_items):
+                        sheet.cell(row=i+next_index, column=index, value= item.name)
+                        sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
+    except ValueError as e:
+        return True,"遇到欄位合併的錯誤"
+    except Exception as e: 
+        return True,"系統無法分析此樣板，出現意外錯誤"
 
-    for index, item in enumerate(addition_items):
-        sheet[f'A{index+6}'] = item.name
-        sheet[f'B{index + 6}'] = item.adjustment_amount
-
-    # 設定扣項的資料
-    for index, item in enumerate(deduction_items):
-        sheet[f'C{index+6}'] = item.name
-        sheet[f'D{index+6}'] = item.adjustment_amount
     new_file=f"static/files/salary_{full_name}_{employee_id}.xlsx"
     workbook.save(new_file)
-    
+    return False,new_file
 
 
 class SalaryFileView(View):
 
     def get(self, request, *args, **kwargs):
         year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
+        title =  self.kwargs.get('title')
         try:
-            get_salary =Salary.objects.get(user=user, year=year, month=month)
+            get_salary = Salary.objects.get(user=user, year=year, month=month)
         except Http404:
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
        
-        x = salaryFile(get_salary)
-        print(x)
-      
+        error,obj = salaryFile(get_salary,title)
 
-        return JsonResponse({"ok":"ok"},status=200)
+        if error:
+            return JsonResponse({"error":obj},status=400)
+
+
+        with open(obj, 'rb') as file:
+            filename = f"{get_salary.user.full_name}_{year}_{month}.xlsx"
+            print(filename)
+            response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={quote(filename)}'
+
+        return response
 
 
 
@@ -105,6 +125,7 @@ class SalaryDetailView(View):
         name = dict_data.get('name') 
         deduction = dict_data.get('deduction')
         tax_deduction = dict_data.get('tax_deduction')
+        five = dict_data.get('five')
         adjustmentAmount = int(dict_data.get('adjustmentAmount'))
 
         if adjustmentAmount <0:
@@ -115,7 +136,7 @@ class SalaryDetailView(View):
         except Http404:
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
-        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction,tax_deduction)  
+        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction,tax_deduction,five)  
 
         return JsonResponse({"ok":"ok"},status=200)
 
@@ -128,6 +149,7 @@ class SalaryDetailView(View):
         name = dict_data.get('name')
         deductionValue = dict_data.get('deduction')
         tax_deduction = dict_data.get('tax_deduction')
+        five = dict_data.get('five')
         year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
         try:
             get_salary =Salary.objects.get(user=user, year=year, month=month)
@@ -140,7 +162,8 @@ class SalaryDetailView(View):
             system_amount=moneyValue,  
             adjustment_amount=moneyValue,
             deduction=deductionValue,
-            tax_deduction=tax_deduction
+            tax_deduction=tax_deduction,
+            five=five,
         )
         return JsonResponse({"ok":"ok"},status=200)
 

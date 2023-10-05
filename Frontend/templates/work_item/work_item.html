@@ -48,40 +48,40 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="item_name">品名規格</label>
-                                                <input class="form-control form-control-sm" name="item_name"
-                                                required   id="item_name"></input>
+                                                <input class="form-control form-control-sm" name="item_name" required
+                                                    id="item_name"></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="item_id">編號</label>
-                                                <input class="form-control form-control-sm" name="item_id"
-                                                required       id="item_id"></input>
+                                                <input class="form-control form-control-sm" name="item_id" required
+                                                    id="item_id"></input>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                     
+
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit_price">數量</label>
-                                                <input type="number" class="form-control form-control-sm"
-                                               required     name="count" id="count"></input>
+                                                <input type="number" class="form-control form-control-sm" required
+                                                    name="count" id="count"></input>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit_price">單價</label>
-                                                <input type="number" class="form-control form-control-sm"
-                                                required    name="unit_price" id="unit_price"></input>
+                                                <input type="number" class="form-control form-control-sm" required
+                                                    name="unit_price" id="unit_price"></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="unit">單位</label>
-                                                <input class="form-control form-control-sm" name="unit"
-                                                required        id="unit"></input>
+                                                <input class="form-control form-control-sm" name="unit" required
+                                                    id="unit"></input>
                                             </div>
                                         </div>
                                     </div>
@@ -134,7 +134,8 @@
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for item in work_item %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ item.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ item.id }}"></td>
                     <td>
                         <a data-target="#employee-modal" type="button" data-url="work_item" data-id="{{ item.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -149,24 +150,24 @@
                         </a>
                     </td>
                     <td>
-                       {{ item.get_show_id }}
+                        {{ item.get_show_id }}
                     </td>
                     <td>
-                       {{ item.item_name }}
+                        {{ item.item_name }}
                     </td>
                     <td>
-                       {{ item.item_id }}
+                        {{ item.item_id }}
                     </td>
                     <td>
-                       {{ item.count }}
+                        {{ item.count }}
                     </td>
                     <td>
-                       {{ item.unit_price }}
+                        {{ item.unit_price }}
                     </td>
                     <td>
-                       {{ item.unit }}
+                        {{ item.unit }}
                     </td>
-                    
+
                 </tr>
                 {% endfor %}
             </tbody>

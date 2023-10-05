@@ -236,12 +236,15 @@ class SalaryDetail(models.Model):
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
     deduction = models.BooleanField(default=False, verbose_name='扣款項目') #T是扣項，F是加項
     tax_deduction = models.BooleanField(default=False, verbose_name='應稅項目') #T是扣項，F是加項
+    five = models.BooleanField(default=False, verbose_name='五號發薪') #T是5，F是10
+
     def save(self, *args, **kwargs):  
         if self.system_amount != 0:
             super().save(*args, **kwargs)
 
-    def set_name_and_adjustment_amount(self, name, amount,deduction,tax_deduction):
+    def set_name_and_adjustment_amount(self, name, amount,deduction,tax_deduction,five):
         self.name = name
+        self.five = five
         self.deduction = deduction
         self.adjustment_amount = amount
         self.tax_deduction = tax_deduction
