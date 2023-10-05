@@ -1068,9 +1068,14 @@ class Clock_Correction_Application_View(View):
         form = ClockCorrectionApplicationForm(dict_data)
         if form.is_valid():
             getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
+            if(getObject.Approval ):
+                if(getObject.Approval.current_status=="completed" or getObject.Approval.current_status=="in_process" ):            
+                    return JsonResponse({"error":"禁止修改"},status=400)
+
             employee = Employee.objects.get(id=request.user.employee.id)
             getObject.update_fields_and_save(**dict_data)
             clock_time = time(int(getObject.end_hours_of_clock), int(getObject.end_mins_of_clock))
+
             getObject.create_and_update_clock(employee, getObject.date_of_clock, getObject.type_of_clock, clock_time)
             return JsonResponse({'data': "完成修改"},status=200)
         else:

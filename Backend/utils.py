@@ -43,8 +43,18 @@ def get_weekly_clock_data(userid):
                     clock_in_records.append(record)   
                 else:         
                     clock_out_records.append(record)   
-        check_in = clock_in_records[0].clock_time.strftime('%H:%M') if clock_records else ''
-        check_out = clock_out_records[-1].clock_time.strftime('%H:%M') if clock_records and len(clock_records) > 1 else ""
+
+        if len(clock_in_records)==0:
+            check_in = ""
+        else:
+            check_in =clock_in_records[0].clock_time.strftime('%H:%M') 
+
+        if len(clock_out_records)==0:
+            check_out = ""
+        else:
+            check_out = clock_out_records[-1].clock_time.strftime('%H:%M') 
+
+
       
         daily_data = {
             'day': weekday.strftime('%m/%d'),

@@ -1497,14 +1497,16 @@ class Clock_Correction_Application(ModifiedModel):
             true_or_false = False
             
         if self.clock is None:
-            print("Clock 建立")
             clock = Clock.objects.create(employee_id=employee, clock_date=date_of_clock, clock_in_or_out=true_or_false, type_of_clock="2", clock_time=time)
             self.clock = clock
             self.save()
         else:
             print("Clock 更新")
-            self.clock.update(clock_date=date_of_clock, clock_in_or_out=true_or_false, clock_time=time)
-
+            print(self.clock)
+            self.clock.clock_date=date_of_clock
+            self.clock. clock_in_or_out=true_or_false
+            self.clock.clock_time=time
+            self.clock.save()
 
 
 
