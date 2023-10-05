@@ -77,7 +77,7 @@ class ModifiedModel(models.Model):
             if self.Approval:
                 current_status = self.Approval.current_status
                 if current_status == 'completed' or current_status == 'in_process':
-                        raise PermissionDenied("簽核中或簽核完成禁止刪除")
+                    raise PermissionDenied("簽核中或簽核完成禁止刪除")
 
         super().delete(*args, **kwargs)
 
@@ -982,11 +982,12 @@ class Travel_Application(ModifiedModel):
             if status:
                 total_amount += detail
 
-        if total_amount >17:
-            total_amount =total_amount  - 16
-            return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
-        else:
-            return 0,0, details
+        return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
+        # if total_amount >17:
+        #     total_amount =total_amount  - 16
+        #     return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
+        # else:
+        #     return 0,0, details
 
 
 
