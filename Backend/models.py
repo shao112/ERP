@@ -611,7 +611,7 @@ class Clock(models.Model):
                 continue
 
             if day_clock_records_len==1: #只打一次卡
-                month.append({"date":date_to_check_string,"status":"1","ear_time":day_clock_records})
+                month.append({"date":date_to_check_string,"status":"1","ear_time":day_clock_records[0].clock_time})
                 miss_hours+=8
             elif day_clock_records_len==0:# 沒打卡
                 miss_hours+=8
