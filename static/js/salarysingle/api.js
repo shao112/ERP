@@ -118,6 +118,10 @@ function save(itemid) {
   var tax_deduction = tax_deductionCheckbox.is(":checked");
   var fiveCheckbox = row.find('input[name="five"]');
   var five = fiveCheckbox.is(":checked");
+  console.log("tax_deduction")
+  console.log(tax_deduction)
+  console.log(tax_deductionCheckbox)
+  console.log(five)
 
   data = {
     name: name,

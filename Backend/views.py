@@ -15,7 +15,7 @@ from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
 from .salary_utils import create_salary
 import openpyxl
 from openpyxl import load_workbook
@@ -31,78 +31,78 @@ from datetime import time
 
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
 
-def salaryFile(get_salary,title):
-    get_details = get_salary.details.all()
-    file_path = 'static/files/salary_test.xlsx'
-    try:
-        workbook = load_workbook(filename=file_path)
-    except Exception as e:
-        print(e)
-        return JsonResponse({"error": str(e)}, status=400)
 
-    year,month,user = get_salary.year, get_salary.month,get_salary.user
-    full_name,employee_id,departments_name=user.full_name,user.employee_id,user.departments.department_name
-    sheet = workbook.active
-    
-    deduction_items = get_details.filter(deduction=True)
-    addition_items = get_details.filter(deduction=False)
-
-    #http://localhost:8000/restful/salaryfile/2023/10/2/%E8%96%AA%E8%B3%87%E5%96%AE
-    try:
-        for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
-            
-            for index, cell_value in enumerate(row, start=1):
-                if cell_value == "YM":
-                    sheet.cell(row=i, column=index, value=f"{year}年{month}月")
-                if cell_value == "Title":
-                    sheet.cell(row=i, column=index, value=title)
-                elif cell_value == "E_ID":
-                    sheet.cell(row=i, column=index, value=employee_id)
-                elif cell_value == "DT":
-                    sheet.cell(row=i, column=index, value=departments_name)
-                elif cell_value == "NAME":
-                    sheet.cell(row=i, column=index, value=full_name)
-                if cell_value == "ADD_LIST":
-                    for next_index, item in enumerate(addition_items):
-                        sheet.cell(row=i+next_index, column=index, value= item.name)
-                        sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
-                if cell_value == "COST_LIST":
-                    for next_index, item in enumerate(deduction_items):
-                        sheet.cell(row=i+next_index, column=index, value= item.name)
-                        sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
-    except ValueError as e:
-        return True,"遇到欄位合併的錯誤"
-    except Exception as e: 
-        return True,"系統無法分析此樣板，出現意外錯誤"
-
-    new_file=f"static/files/salary_{full_name}_{employee_id}.xlsx"
-    workbook.save(new_file)
-    return False,new_file
+import zipfile
 
 
 class SalaryFileView(View):
 
     def get(self, request, *args, **kwargs):
         year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
-        title =  self.kwargs.get('title')
-        try:
-            get_salary = Salary.objects.get(user=user, year=year, month=month)
-        except Http404:
-            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+        use_type =  self.kwargs.get('use_type')
+        use_type = bool(int(use_type))
+        title=""
+        if use_type:
+            title = "薪資條"
+        else:
+            title = "激勵性獎金"
+        
+        if user==0:#全員
+            getEm = Employee.objects.all()
+            error_msg=""
+            file_paths=[]
+            for employee in getEm:
+                try:
+                    get_salary = Salary.objects.get(user=employee, year=year, month=month)
+                except Http404:
+                    error_msg +=f"找不到{employee.full_name}的當月薪資單 \n"
+                    continue
+                except Exception as e:
+                    error_msg +=f"找不到{employee.full_name} 其他錯誤，如沒有部門 \n"
+                    continue
+                       
+                error,obj = salaryFile(get_salary,use_type)
+
+                if error:
+                    error_msg += f"{obj} \n"
+                else:      
+                    file_paths.append(obj)
+                
+            filename = f'media/salary_files/全員_{year}_{month}_{title}.zip'
+            quoted_filename = quote(filename)
+
+            with zipfile.ZipFile(filename, 'w') as archive:
+                for file_path in file_paths:
+                    # archive.write(file_path, arcname=file_path)
+                    archive.write(file_path)
+
+            with open(filename, 'rb') as file:
+                response = HttpResponse(file, content_type='application/zip')
+                response['Content-Disposition'] = f'attachment; filename="{quoted_filename}"'
+                response['Content-Length'] = os.path.getsize(filename)
+
+            print(error_msg)
+            return response
+
+        else:
+            try:
+                get_salary = Salary.objects.get(user=user, year=year, month=month)
+            except Http404:
+                return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
        
-        error,obj = salaryFile(get_salary,title)
+            error,obj = salaryFile(get_salary,use_type)
 
-        if error:
-            return JsonResponse({"error":obj},status=400)
+            if error:
+                return JsonResponse({"error":obj},status=400)
+         
 
+            with open(obj, 'rb') as file:
+                filename = f"{get_salary.user.full_name}_{year}_{month}_{title}.xlsx"
+                print(filename)
+                response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                response['Content-Disposition'] = f'attachment; filename={quote(filename)}'
 
-        with open(obj, 'rb') as file:
-            filename = f"{get_salary.user.full_name}_{year}_{month}.xlsx"
-            print(filename)
-            response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = f'attachment; filename={quote(filename)}'
-
-        return response
+            return response
 
 
 
@@ -136,7 +136,7 @@ class SalaryDetailView(View):
         except Http404:
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
-        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction,tax_deduction,five)  
+        get_obj.set_name_and_adjustment_amount(name, adjustmentAmount,deduction,tax_deduction=tax_deduction,five=five)  
 
         return JsonResponse({"ok":"ok"},status=200)
 

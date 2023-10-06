@@ -67,9 +67,10 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        user = self.kwargs.get('user')    
+        year, month, user = self.kwargs.get('year'), self.kwargs.get('month'), self.kwargs.get('user')
+        context["year"] = self.kwargs.get('year')
+        context["month"] = self.kwargs.get('month')
+        context["user"] = self.kwargs.get('user')
         user_obj = Employee.objects.get(id=user)
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
         context["work_list"] = Clock.get_hour_for_month(user_obj,year,int(month))

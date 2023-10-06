@@ -236,7 +236,7 @@ class SalaryDetail(models.Model):
     adjustment_amount = models.PositiveIntegerField(default=0, verbose_name='調整金額')
     deduction = models.BooleanField(default=False, verbose_name='扣款項目') #T是扣項，F是加項
     tax_deduction = models.BooleanField(default=False, verbose_name='應稅項目') #T是扣項，F是加項
-    five = models.BooleanField(default=False, verbose_name='五號發薪') #T是5，F是10
+    five = models.BooleanField(default=False, verbose_name='薪資單發放') #T是5，F是10
 
     def save(self, *args, **kwargs):  
         if self.system_amount != 0:
@@ -646,7 +646,7 @@ class Clock(models.Model):
                 end_difference = over_time - timedelta(hours=hours_worked, minutes=minutes_worked)
                 hours = end_difference.seconds // 3600
                 minutes = (end_difference.seconds // 60) % 60            
-                print(over_time,timedelta(hours=hours_worked, minutes=minutes_worked),end_difference,time_difference,time_string)
+                # print(over_time,timedelta(hours=hours_worked, minutes=minutes_worked),end_difference,time_difference,time_string)
 
                 
                 if end_difference.total_seconds() <= 0:
@@ -814,8 +814,8 @@ class Project_Job_Assign(ModifiedModel):
                                          attendance_date__year=year, 
                                          attendance_date__month=month).distinct()
 
-        print(assignments)
-        print(employee_location)
+        # print(assignments)
+        # print(employee_location)
 
         allowance_dict = defaultdict(lambda: {"id":"","location": "", "day": 0, "money": 0,"food":0,"error":"","food_error":""})
 
