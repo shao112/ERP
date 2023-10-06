@@ -19,7 +19,8 @@ def create_salary(employee,year,month):
         name='基本薪資',
         system_amount=employee.default_salary,
         adjustment_amount=employee.default_salary,
-        deduction=False
+        deduction=False,
+        five=True,
     )
 
     SalaryDetail.objects.create(
@@ -27,7 +28,8 @@ def create_salary(employee,year,month):
         name='職務加給',
         system_amount=employee.job_addition,
         adjustment_amount=employee.job_addition,
-        deduction=False
+        deduction=False,
+        five=True,
     )
 
     SalaryDetail.objects.create(
@@ -35,7 +37,8 @@ def create_salary(employee,year,month):
         name='手機加給',
         system_amount=employee.phone_addition,
         adjustment_amount=employee.phone_addition,
-        deduction=False
+        deduction=False,
+        five=True,
     )
 
     SalaryDetail.objects.create(
@@ -43,7 +46,8 @@ def create_salary(employee,year,month):
         name='證照加給',
         system_amount=employee.certificates_addition,
         adjustment_amount=employee.certificates_addition,
-        deduction=False
+        deduction=False,
+        five=True,
     )
 
     SalaryDetail.objects.create(
@@ -51,7 +55,8 @@ def create_salary(employee,year,month):
         name='勞保',
         system_amount=employee.labor_protection,
         adjustment_amount=employee.labor_protection,
-        deduction=True
+        deduction=True,
+        five=True,
     )
 
     SalaryDetail.objects.create(
@@ -59,7 +64,8 @@ def create_salary(employee,year,month):
         name='健保',
         system_amount=employee.health_insurance,
         adjustment_amount=employee.health_insurance,
-        deduction=True
+        deduction=True,
+        five=True,
     )
 
     get_employee_labor_pension = employee.labor_pension
@@ -69,7 +75,8 @@ def create_salary(employee,year,month):
             name=f'勞退',
             system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
             adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
-            deduction=True
+            deduction=True,
+        five=True,
         )
     else:# > 6
         SalaryDetail.objects.create(
@@ -77,7 +84,8 @@ def create_salary(employee,year,month):
             name='勞退',
             system_amount=math.ceil(employee.default_salary*6/100),
             adjustment_amount= math.ceil(employee.default_salary*6/100),
-            deduction=True
+            deduction=True,
+        five=True,
         )
         #自提
         employee_labor_pension_by_self = employee.labor_pension-6
@@ -86,7 +94,8 @@ def create_salary(employee,year,month):
             name=f'勞退自提({employee_labor_pension_by_self}%)',
             system_amount=math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
             adjustment_amount= math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
-            deduction=True
+            deduction=True,
+        five=True,
         )
 
 
@@ -103,7 +112,8 @@ def create_salary(employee,year,month):
             name="免稅加班",
             system_amount=overtime_pay,  
             adjustment_amount=overtime_pay,
-            deduction=False
+            deduction=False,
+        five=False,
         )
     
     SalaryDetail.objects.create(
@@ -111,7 +121,8 @@ def create_salary(employee,year,month):
             name="工作津貼",
             system_amount=work_allowance,  
             adjustment_amount=work_allowance,
-            deduction=False
+            deduction=False,
+            five=False,
         )
     
     print("出差 伙食")
@@ -122,7 +133,8 @@ def create_salary(employee,year,month):
             name="出差津貼",
             system_amount=location_money,  
             adjustment_amount=location_money,
-            deduction=False
+            deduction=False,
+        five=False,            
         )
     
     SalaryDetail.objects.create(
@@ -130,7 +142,8 @@ def create_salary(employee,year,month):
             name="伙食津貼",
             system_amount=food_money,  
             adjustment_amount=food_money,
-            deduction=False
+            deduction=False,
+        five=False,            
         )
 
     print("車程津貼")
@@ -140,7 +153,8 @@ def create_salary(employee,year,month):
             name="車程津貼",
             system_amount=tr_cost,  
             adjustment_amount=tr_cost,
-            deduction=False
+            deduction=False,
+        five=False,            
         )
     
 
@@ -153,5 +167,6 @@ def create_salary(employee,year,month):
             name=item['name'],
             system_amount=item['cost'],  
             adjustment_amount=item['cost'],
-            deduction=True
+            deduction=True,
+                    five=True,            
         )
