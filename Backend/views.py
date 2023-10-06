@@ -66,15 +66,16 @@ class SalaryFileView(View):
                 if error:
                     error_msg += f"{obj} \n"
                 else:      
-                    file_paths.append(obj)
+                    file_paths.append({"file_name":obj,"name":f"{year}_{month}_{title}/{employee.full_name}_{year}_{month}_{title}.xlsx"})
                 
             filename = f'media/salary_files/全員_{year}_{month}_{title}.zip'
             quoted_filename = quote(filename)
 
             with zipfile.ZipFile(filename, 'w') as archive:
-                for file_path in file_paths:
-                    # archive.write(file_path, arcname=file_path)
-                    archive.write(file_path)
+                for file_info in file_paths:
+                    file_name = file_info["file_name"]
+                    name = file_info["name"]
+                    archive.write(file_name, arcname=name)
 
             with open(filename, 'rb') as file:
                 response = HttpResponse(file, content_type='application/zip')

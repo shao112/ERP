@@ -262,6 +262,7 @@
                         <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
                     </li>
                     {% endif %}
+                    
                     {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
                     
                     <li class="nav-item">
@@ -269,6 +270,15 @@
                     </li>
                     
                     {% endif %}
+                    
+                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'LaborHealthInfo' %}">勞健保級距對照表</a>
+                    </li>
+                    
+                    {% endif %}
+                    
                     {% if user|in_group_T_or_F:"財務部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>

@@ -217,7 +217,8 @@ $("form").on("submit", function (event) {
         idValue = response.id;
       }
 
-      showSwal("操作說明", jsonData, "success", false).then(() => {
+
+          Swal.fire("操作成功", "", false).then(() => {
         location.reload();
       });
     },
@@ -346,7 +347,7 @@ async function DELETE_handleClick(event) {
     },
     data: formData,
     success: function (response) {
-      showSwal("操作說明", "成功刪除", "success", false).then(() => {
+      Swal.fire("操作成功", "", false).then(() => {
         location.reload();
       });
     },

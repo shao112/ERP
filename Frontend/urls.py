@@ -40,6 +40,7 @@ urlpatterns = [
     path('leave_param', views.Leave_Param_List.as_view(), name="Leave_Param"),
     path('calendar', views.Calendar.as_view(), name="calendar"),
     path('director_Index', views.Director_Index.as_view(), name="director_Index"),
+    path('LaborHealthInfo', views.LaborHealthInfo_ListView.as_view(), name="LaborHealthInfo"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('department/', login_required(views.Department_list.as_view()), name='department'),

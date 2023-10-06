@@ -1612,6 +1612,28 @@ class Requisition(ModifiedModel):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.requisition_name  
+    
+#勞健保參照
+class LaborHealthInfo(ModifiedModel):
+    salary_low = models.IntegerField(verbose_name="薪資(低)")
+    salary_high = models.IntegerField(verbose_name="薪資(高)")
+    labor_insurance_personal = models.IntegerField(verbose_name="勞保個人自付")
+    labor_insurance_employer = models.IntegerField(verbose_name="勞保單位負擔")
+    retirement_benefit = models.IntegerField(verbose_name="勞退公提")
+    health_insurance_personal = models.IntegerField(verbose_name="健保個人自付")
+    health_insurance_employer = models.IntegerField(verbose_name="健保單位負擔")
+
+
+    def __str__(self):
+        return f"{self.salary_low} ~ {self.salary_high}"
+
+    class Meta:
+        verbose_name = "勞健保參照"
+        verbose_name_plural = "勞健保參照"
+    
+    @classmethod
+    def get_salary_range(cls, salary):
+        return cls.objects.filter(salary_low__lte=salary, salary_high__gte=salary).first()
 
 
 
@@ -1649,3 +1671,4 @@ class News(ModifiedModel):
     def save(self, *args, **kwargs):
         # Call the save method of the parent class (ModifiedModel) using super()
         super().save(*args, **kwargs)
+

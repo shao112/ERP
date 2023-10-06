@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.views.generic.base import  TemplateView
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 from Backend.forms import SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -18,11 +18,40 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import date
 from django.views.defaults import permission_denied
-from Backend.utils import convent_employee,get_weekly_clock_data,Check_Permissions
+from Backend.utils import convent_employee,get_weekly_clock_data,Check_Permissions,convent_dict
 from django.db.models import Q,Value,CharField
 from django.db.models.functions import Concat
 import json
+from django.shortcuts import get_object_or_404
 
+
+
+class LaborHealthInfo_ListView(UserPassesTestMixin,View):
+
+    def post(self,request):
+        dict_data = convent_dict(request.body)
+
+        try:
+            get_obj = get_object_or_404(LaborHealthInfo, id=dict_data['id'])
+        except Exception as e:
+            return JsonResponse({"error": "找不到相應的勞健保級距 obj"}, status=400)
+        get_obj.update_fields_and_save(**dict_data)
+
+        print(dict_data)
+        print(type(dict_data))
+       
+        return JsonResponse({"ok":"ok"},status=200)
+    
+    def get(self,request):
+        context ={}
+        
+        context["LaborHealth_list"] = LaborHealthInfo.objects.all()
+     
+        return render(request, 'LaborHealth/LaborHealth.html', context)
+
+    def test_func(self):
+        return Check_Permissions(self.request.user,"薪水管理")
+    
 
 
 # 員工薪水調整
@@ -32,6 +61,7 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
         context ={}
         context["employees_list"] = Employee.objects.values('id','full_name')
         context["SalaryEmployeeForm"] =SalaryEmployeeForm 
+     
         return render(request, 'Salary/Salary_Employees.html', context)
 
     def test_func(self):
