@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import LaborHealthInfo,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
@@ -50,11 +50,15 @@ def create_salary(employee,year,month):
         five=True,
     )
 
+    #勞建保
+    labor_insurance_personal = LaborHealthInfo.get_salary_range(employee.labor_protection,"labor_insurance_personal")
+    health_insurance_personal = LaborHealthInfo.get_salary_range(employee.health_insurance,"health_insurance_personal")
+
     SalaryDetail.objects.create(
         salary=salary,
         name='勞保',
-        system_amount=employee.labor_protection,
-        adjustment_amount=employee.labor_protection,
+        system_amount=labor_insurance_personal,
+        adjustment_amount=labor_insurance_personal,
         deduction=True,
         five=True,
     )
@@ -62,38 +66,30 @@ def create_salary(employee,year,month):
     SalaryDetail.objects.create(
         salary=salary,
         name='健保',
-        system_amount=employee.health_insurance,
-        adjustment_amount=employee.health_insurance,
+        system_amount=health_insurance_personal,
+        adjustment_amount=health_insurance_personal,
         deduction=True,
         five=True,
     )
 
+    labor_pension_moeny =employee.labor_pension_moeny
     get_employee_labor_pension = employee.labor_pension
-    if get_employee_labor_pension <=6:
-        SalaryDetail.objects.create(
-            salary=salary,
-            name=f'勞退',
-            system_amount=math.ceil(employee.default_salary*employee.labor_pension/100),
-            adjustment_amount= math.ceil(employee.default_salary*employee.labor_pension/100),
-            deduction=True,
-        five=True,
-        )
-    else:# > 6
-        SalaryDetail.objects.create(
+    SalaryDetail.objects.create(
             salary=salary,
             name='勞退',
-            system_amount=math.ceil(employee.default_salary*6/100),
-            adjustment_amount= math.ceil(employee.default_salary*6/100),
+            system_amount=math.ceil(employee.labor_pension_moeny*6/100),
+            adjustment_amount= math.ceil(employee.labor_pension_moeny*6/100),
             deduction=True,
         five=True,
-        )
+    )
+    if get_employee_labor_pension >6:
         #自提
-        employee_labor_pension_by_self = employee.labor_pension-6
+        employee_labor_pension_by_self = get_employee_labor_pension-6
         SalaryDetail.objects.create(
             salary=salary,
             name=f'勞退自提({employee_labor_pension_by_self}%)',
-            system_amount=math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
-            adjustment_amount= math.ceil(employee.default_salary*employee_labor_pension_by_self/100),
+            system_amount=math.ceil(employee.labor_pension_moeny*employee_labor_pension_by_self/100),
+            adjustment_amount= math.ceil(employee.labor_pension_moeny*employee_labor_pension_by_self/100),
             deduction=True,
         five=True,
         )

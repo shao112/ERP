@@ -1257,6 +1257,11 @@ class Employee_View(View):
         form = EmployeeForm(dict_data)
         if form.is_valid():
             getObject=Employee.objects.get(id=dict_data['id'])
+            if "labor_pension" in dict_data:
+                if int(dict_data['labor_pension']) <6:
+                    return JsonResponse({"error":"勞退比例至少要為6%"},status=400)
+
+
             if "departments" in dict_data:
                 Department_instance = Department.objects.get(pk=int(dict_data["departments"]))
                 getObject.departments = Department_instance

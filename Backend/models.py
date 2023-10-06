@@ -173,8 +173,9 @@ class Employee(ModifiedModel):
     job_addition = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="職務加給")
     phone_addition = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="手機加給")
     certificates_addition = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="證照加給")
-    labor_protection = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="勞保")
-    health_insurance = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="健保")
+    labor_protection = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="勞保級距")
+    health_insurance = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="健保級距")
+    labor_pension_moeny = models.PositiveIntegerField(default=6, null=True, blank=True, verbose_name="勞退級距")
     labor_pension = models.PositiveIntegerField(default=6, null=True, blank=True, verbose_name="勞退比例(%)")
 
     class Meta:
@@ -1632,8 +1633,11 @@ class LaborHealthInfo(ModifiedModel):
         verbose_name_plural = "勞健保參照"
     
     @classmethod
-    def get_salary_range(cls, salary):
-        return cls.objects.filter(salary_low__lte=salary, salary_high__gte=salary).first()
+    def get_salary_range(cls, salary,name):
+        getobj = cls.objects.filter(salary_low__lte=salary, salary_high__gte=salary)
+        if len(getobj) == 0:
+            return 0
+        return getattr(getobj.first(), name, 0)
 
 
 
