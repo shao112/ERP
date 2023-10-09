@@ -216,9 +216,7 @@ $("form").on("submit", function (event) {
       if (method == "post") {
         idValue = response.id;
       }
-
-
-          Swal.fire("操作成功", "", false).then(() => {
+        Swal.fire("操作成功", "完成").then(() => {
         location.reload();
       });
     },
@@ -347,7 +345,7 @@ async function DELETE_handleClick(event) {
     },
     data: formData,
     success: function (response) {
-      Swal.fire("操作成功", "", false).then(() => {
+      Swal.fire("操作成功", "").then(() => {
         location.reload();
       });
     },

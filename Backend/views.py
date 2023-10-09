@@ -455,7 +455,7 @@ class Project_Employee_Assign_View(View):
             if "carry_equipments" in dict_data:
                 get_carry_equipments = dict_data["carry_equipments"]
                 get_carry_equipments = [int(item) for item in get_carry_equipments]
-                print(get_carry_equipments)
+                print(get_carry_equipments) 
                 del dict_data["carry_equipments"]
                 get_Project_Employee_Assign.carry_equipments.set(get_carry_equipments)
 
