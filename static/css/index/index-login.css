@@ -76,6 +76,7 @@ header button{
     position: fixed;
     overflow: hidden;
     z-index: 2;
+    overflow-y: scroll;
 }
 .sidebar.collapsing {
     width: 0;
@@ -85,7 +86,7 @@ header button{
 }
 .sidebar a{
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 .sidebar .nav-link[data-toggle].collapsed:after {
     content: "\25BE";
