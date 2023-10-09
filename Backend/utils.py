@@ -3,8 +3,10 @@ from .models import Travel_Application,Clock_Correction_Application, Work_Overti
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 from django.conf import settings
-
+from django.http import HttpResponse
+import openpyxl
 from openpyxl import load_workbook
+from urllib.parse import quote
 from django.db.models import Sum
 
 
@@ -87,6 +89,110 @@ def salaryFile(get_salary,get_type):
     new_file=f"media/salary_files/{full_name}_{employee_id}_{title}.xlsx"
     workbook.save(new_file)
     return False,new_file
+
+def quotationFile(quotation_obj):
+    quotation_id = "" if quotation_obj.quotation_id is None else quotation_obj.quotation_id
+    client = "" if quotation_obj.client is None else quotation_obj.client
+    project_name = "" if quotation_obj.project_name is None else quotation_obj.project_name
+    tax_id = "" if quotation_obj.tax_id is None else quotation_obj.tax_id
+    contact_person = "" if quotation_obj.contact_person is None else quotation_obj.contact_person
+    business_assistant = "" if quotation_obj.business_assistant is None else quotation_obj.business_assistant
+    address = "" if quotation_obj.address is None else quotation_obj.address
+    tel = "" if quotation_obj.tel is None else quotation_obj.tel
+    mobile = "" if quotation_obj.mobile is None else quotation_obj.mobile
+    fax = "" if quotation_obj.fax is None else quotation_obj.fax
+    email = "" if quotation_obj.email is None else quotation_obj.email
+    quote_validity_period = "" if quotation_obj.quote_validity_period is None else quotation_obj.quote_validity_period
+    business_tel = "" if quotation_obj.business_tel is None else quotation_obj.business_tel
+
+    item_list = quotation_obj.work_item.all()
+    print("item_list: ",item_list)
+    # quotation_id = quotation_obj.quotation_id
+    # client = quotation_obj.client
+    # project_name = quotation_obj.project_name
+    # tax_id = quotation_obj.tax_id
+    # contact_person = quotation_obj.contact_person
+    # business_assistant = quotation_obj.business_assistant
+    # address = quotation_obj.address
+    # tel = quotation_obj.tel
+    # mobile = quotation_obj.mobile
+    # fax = quotation_obj.fax
+    # email = quotation_obj.email
+    # quote_validity_period = quotation_obj.quote_validity_period
+    # business_tel = quotation_obj.business_tel
+    file_path = 'static/files/quotation_template.xlsx'
+    print("client ", client)
+    try:
+        workbook = load_workbook(filename=file_path)
+    except Exception as e:
+        return True,"檔案位置發生問題"
+
+
+    sheet = workbook.active
+
+
+    try:
+        for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
+            
+            for index, cell_value in enumerate(row, start=1):
+                if cell_value == "CLIENT":
+                    sheet.cell(row=i, column=index, value=str(client))
+                elif cell_value == "QUOTATION_ID":
+                    sheet.cell(row=i, column=index, value=quotation_id)
+                elif cell_value == "TAX_ID":
+                    sheet.cell(row=i, column=index, value=tax_id)
+                elif cell_value == "MOBILE":
+                    sheet.cell(row=i, column=index, value=mobile)
+                elif cell_value == "CONTACT_PERSON":
+                    sheet.cell(row=i, column=index, value=contact_person)
+                elif cell_value == "BUSINESS_ASSISTANT":
+                    sheet.cell(row=i, column=index, value=business_assistant)
+                elif cell_value == "PROJECT_NAME":
+                    sheet.cell(row=i, column=index, value=project_name)
+                elif cell_value == "TEL":
+                    sheet.cell(row=i, column=index, value=tel)
+                elif cell_value == "FAX":
+                    sheet.cell(row=i, column=index, value=fax)
+                elif cell_value == "EMAIL":
+                    sheet.cell(row=i, column=index, value=email)
+                elif cell_value == "ADDRESS":
+                    sheet.cell(row=i, column=index, value=address)
+                elif cell_value == "QUOTE_VALIDITY_PERIOD":
+                    sheet.cell(row=i, column=index, value=quote_validity_period)
+                elif cell_value == "BUSINESS_TEL":
+                    sheet.cell(row=i, column=index, value=business_tel)
+                elif cell_value == "ITEM_LIST":
+                    if  len(item_list)==0:
+                        sheet.cell(row=i, column=index, value="")
+                        sheet.cell(row=i, column=index+1, value="")
+                        sheet.cell(row=i, column=index+2, value="")
+                        sheet.cell(row=i, column=index+3, value="")
+                        sheet.cell(row=i, column=index+4, value="")
+                        sheet.cell(row=i, column=index+5, value="")
+                    else:
+                        for next_index, item in enumerate(item_list):
+                            print("item.item_id: ",item.item_id)
+                            print("item.item_name: ",item.item_name)
+                            print("item.unit: ",item.unit)
+                            print("item.count: ",item.count)
+                            print("item.unit_price: ",item.unit_price)
+                            sheet.cell(row=i+next_index, column=index, value= item.item_id)
+                            sheet.cell(row=i+next_index, column=index+1, value=item.item_name)
+                            sheet.cell(row=i+next_index, column=index+2, value=item.unit)
+                            sheet.cell(row=i+next_index, column=index+3, value=item.count)
+                            sheet.cell(row=i+next_index, column=index+4, value=item.unit_price)
+                            sheet.cell(row=i+next_index, column=index+5, value=(item.count)*(item.unit_price))
+    except ValueError as e:
+        return True,"遇到欄位合併的錯誤"
+    except Exception as e: 
+        return True,"系統無法分析此樣板，出現意外錯誤"
+
+    filename = f"【報價單】 {quotation_id}-{client}-{project_name}.xlsx"
+    quoted_filename = quote(filename)
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] =  f'attachment; filename="{quoted_filename}"'
+    workbook.save(response)
+    return response
 
 
 

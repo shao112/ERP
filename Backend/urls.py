@@ -49,6 +49,8 @@ urlpatterns = [
     path('salary/<int:year>/<int:month>/<int:user>', views.SalaryDetailView.as_view(), name='salary_detail'),
     #建立薪水檔案的api
     path('salaryfile/<int:year>/<int:month>/<int:user>/<int:use_type>', views.SalaryFileView.as_view(), name='salary_file'),
+    # 報價單匯出excel api
+    path('quotationfile/<int:id>', views.QuotationFileView.as_view(), name='quotation_file'),
     # 派工單檢測項目 api
     path('test_items', views.Employee_Assign_Test_Items_View.as_view(), name='employee_assign_test_items_api'),
 

@@ -193,6 +193,7 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">列印/下載pdf</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
                     <th data-field="tax_id" data-sortable="true">客戶名稱</th>
@@ -217,7 +218,7 @@
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
-
+                    <td><a target="_blank" href="{% url 'quotation_file' id=item.id %}">點擊</a></td>
                     <td>
                         {{ item.quotation_id}}
                     </td>

@@ -15,7 +15,7 @@ from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import quotationFile,convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
 from .salary_utils import create_salary
 import openpyxl
 from openpyxl import load_workbook
@@ -35,6 +35,27 @@ from django.utils.text import get_valid_filename # 確保file檔名是合法的�
 import zipfile
 
 
+class QuotationFileView(View):
+
+    def get(self, request, *args, **kwargs):
+        obj_id = self.kwargs.get('id')
+        print("id ",obj_id)
+        
+        if id:
+            error_msg=""
+            try:
+                quotaion_obj = Quotation.objects.get(id=obj_id)
+                print("quotaion_obj ",quotaion_obj)
+            except Exception as e:
+                error_msg +=f"找不到\n"
+            
+            return quotationFile(quotaion_obj)
+
+        else:
+            print("error 找不到相應的ID obj")
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+       
+        
 class SalaryFileView(View):
 
     def get(self, request, *args, **kwargs):
