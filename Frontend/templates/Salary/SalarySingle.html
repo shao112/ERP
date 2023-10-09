@@ -347,11 +347,11 @@
                         </button>
                         <button type="button">
                             <a
-                                href="{% url 'salary_file' year=year month=month user=user use_type=1 %}">
+                                href="{% url 'salary_file' year=year month=month user=user_id use_type=1 %}">
                                 薪資單</a>
                         </button>
                         <button type="button">
-                            <a href="{% url 'salary_file' year=year month=month user=user use_type=0 %}">
+                            <a href="{% url 'salary_file' year=year month=month user=user_id use_type=0 %}">
                                 激勵性獎金</a>
                         </button>
                     </div>

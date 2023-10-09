@@ -68,6 +68,7 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-sortable="true" data-field="APP">簽核</th>
+                    <th data-sortable="true" data-field="id">加班編號</th>
                     <th data-field="date_of_overtime" data-sortable="true">加班日期</th>
                     <th data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
                     <th data-field="type_of_overtime" data-sortable="true">加班類別</th>
@@ -124,6 +125,9 @@
                         {% endif %}
                     </td>
 
+                    <td>
+                        {{ work_overtime_application.get_show_id }}
+                    </td>
                     <td>
                         {{ work_overtime_application.date_of_overtime|date:"Y-m-d" }}
                     </td>

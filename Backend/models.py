@@ -1198,10 +1198,6 @@ class Leave_Param(ModifiedModel):
                 "id":leave_application.get_show_id(),
                 "time":f"{leave_hours} : {leave_minutes}",
             })
-            print({
-                "id":leave_application.get_show_id(),
-                "time":f"{leave_hours} : {leave_minutes}",
-            })
 
             total_hours += leave_hours
             total_minutes += leave_minutes
@@ -1328,9 +1324,21 @@ class Work_Overtime_Application(ModifiedModel):
         start_time_minutes = self.start_hours_of_overtime * 60 + self.start_mins_of_overtime
         end_time_minutes = self.end_hours_of_overtime * 60 + self.end_mins_of_overtime
 
-        overtime_minutes = end_time_minutes - start_time_minutes
-        if overtime_minutes > 480:#最多8小時
-            overtime_minutes = 480
+        deduction=0        
+        if self.start_hours_of_overtime < 13 and self.end_hours_of_overtime >= 13 :
+            deduction = 60
+        else:
+            if self.start_hours_of_overtime == 12:
+                deduction += self.start_mins_of_overtime
+            if self.end_hours_of_overtime == 12:
+                deduction += self.end_mins_of_overtime
+
+        print(self.get_show_id())
+        print(deduction)
+        print(self.start_hours_of_overtime )
+        print(self.start_hours_of_overtime )
+        print(self.start_hours_of_overtime < 13 and self.start_mins_of_overtime >= 13)
+        overtime_minutes = end_time_minutes - start_time_minutes - deduction
 
         
         day_of_week = self.date_of_overtime.weekday()
