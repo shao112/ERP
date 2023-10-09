@@ -1340,7 +1340,7 @@ class Employee_Attendance_View(View):
             # 篩選簽到還是簽退以及有無包含過來的日期
             for clock in employee.clock.filter(clock_in_or_out__in=[clock_inout]).filter(created_date__icontains=clock_time_date):
                 data.append({
-                    'clock_date':clock.created_date,
+                    'clock_date':clock.clock_date,
                     'department': employee.departments.department_name,
                     'employee_id': employee.employee_id,
                     'full_name': employee.full_name,

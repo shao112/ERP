@@ -444,7 +444,7 @@
                     <td>{{ p.project_job_assign.project_confirmation.quotation.get_show_id }}</td>
                     <td>{{ p.project_job_assign.project_confirmation.quotation.project_name }}</td>
                     <td>{% for employees_list in p.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}
-                    </td>
+                    </td>   
                     <td>{{ p.construction_date|date:"Y/m/d" }}</td>
                     <td>{% if p.completion_date %}{{ p.completion_date|date:"Y/m/d" }}{% else %}{% endif %}</td>
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>

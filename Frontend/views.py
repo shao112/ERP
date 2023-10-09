@@ -45,8 +45,7 @@ class LaborHealthInfo_ListView(UserPassesTestMixin,View):
     def get(self,request):
         context ={}
         
-        context["LaborHealth_list"] = LaborHealthInfo.objects.all()
-     
+        context["LaborHealth_list"] = LaborHealthInfo.objects.all().order_by("salary_low") 
         return render(request, 'LaborHealth/LaborHealth.html', context)
 
     def test_func(self):
