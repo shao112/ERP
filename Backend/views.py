@@ -6,7 +6,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import Travel_Application, ExtraWorkDay,Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import Test_Items_Description, Travel_Application, ExtraWorkDay,Requisition,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import Travel_ApplicationForm,ExtraWorkDayForm,RequisitionForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
@@ -869,6 +869,35 @@ class Employee_assign_update_signature(View):
         else:
             return JsonResponse({"data":"error"}, status=400,safe=False)
 
+# 派工單的檢測項目
+class Employee_Assign_Test_Items_View(View):
+   def post(self, request, *args, **kwargs):
+        getid = request.POST.get("id")
+        test_items = request.POST.get("test_items")
+        test_date = request.POST.get("test_date")
+        test_location = request.POST.get("test_location")
+        format_and_voltage = request.POST.get("format_and_voltage")
+        level = request.POST.get("level")
+        number = request.POST.get("number")
+        print("getid:", getid)
+        print("test_items:", test_items)
+        print("test_date:", test_date)
+        print("test_location:", test_location)
+        if(getid):
+            model=Project_Employee_Assign.objects.get(id=getid)
+            # test_items_obj = Test_Items_Description.objects.create(
+            #     test_items = test_items,
+            #     test_date = test_date,
+            #     test_location = test_location,
+            #     format_and_voltage = format_and_voltage,
+            #     level = level,
+            #     number = number
+            # )
+            # model.test_items = test_items_obj
+            # model.save()
+            return JsonResponse({'status': 'success'},status=200)
+        else:
+            return JsonResponse({"data":"error"}, status=400,safe=False)
 
 
 class FormUploadFileView(View):

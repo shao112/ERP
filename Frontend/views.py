@@ -8,7 +8,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import Test_Items_DescriptionF_orm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -87,6 +87,8 @@ class Project_employee_assign_View(DetailView):
     template_name = 'pdf/employee_assign_pdf.html'
     context_object_name = 'project_employee_assign'
     pk_url_kwarg = 'id'  # This is where the 'id' parameter is mapped
+        
+    
 
 
 
@@ -302,6 +304,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
         context["employees_list"] =  Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
+        context['Test_Items_DescriptionF_orm'] = Test_Items_DescriptionF_orm()
         return context
 
     def test_func(self):

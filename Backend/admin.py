@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import  LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import  Test_Items_Description,Test_Items,LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -82,13 +82,16 @@ class RequisitionAdmin(admin.ModelAdmin):
     list_display = ('requisition_name', 'created_date', 'update_date')
 #派工單
 class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
-    list_display = ("id",'project_job_assign',"test_items", 'modified_by')
+    list_display = ("id",'project_job_assign', 'modified_by')
     def display_inspector(self, obj):
         return ', '.join([str(item) for item in obj.inspector.all()])
     display_inspector.short_description = '多對多_檢測人員'
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
     display_lead_employee.short_description = '多對多_帶班主管'
+    def display_test_items(self, obj):
+        return ', '.join([str(item) for item in obj.test_items.all()])
+    display_test_items.short_description = '多對多_檢測項目'
     # resource_class = ProjectEmployeeAssignResource
 
     # list_display = [field.name for field in Project_Employee_Assign._meta.get_fields()]
@@ -113,6 +116,8 @@ admin.site.register(Approval_Target)
 admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)
 admin.site.register(News)
+admin.site.register(Test_Items)
+admin.site.register(Test_Items_Description)
 admin.site.register(Equipment)
 admin.site.register(UploadedFile)
 admin.site.register(Vehicle, VehicleAdmin)
