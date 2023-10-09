@@ -488,11 +488,12 @@ class ApprovalModel(models.Model):
         approval_order = self.order
         
         for _, log in enumerate(get_approval_logs): #處理簽過LOG
+
             show_list.append({
                 "show_name": log.user.full_name,
                 "department": log.user.departments.department_name,
                 "department_pk": log.user.departments.pk,
-                "content": log.content, 
+                "content": log.content,
                 "status": "pass"
             })
 
@@ -534,8 +535,8 @@ class ApprovalModel(models.Model):
                 get_created_by =get_foreignkey.created_by
             
             return f"{self.target_approval.name} - {get_created_by} - {get_show_id}"
-        except:
-            return f"{self.id},{self.target_approval.name},erorr"        
+        except Exception as e:
+            return f"{self.id},{self.target_approval.name},erorr: {e}"        
 
 
 

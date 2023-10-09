@@ -86,7 +86,6 @@
                     // 第一個迴圈遍歷Employee建tr，第二個遍歷要的資料建td
                     for (let i = 0; i < jsonData.length; i++) {
                         const tr = document.createElement("tr");
-                        // console.log("jsonData[i]: " + jsonData[i])
                         for (const key in jsonData[i]) {
                             const td = document.createElement("td");
                             if(key === "clock_GPS"){
@@ -101,6 +100,11 @@
                                 td.appendChild(link);
                             }else if(key === "clock_inout"){
                                 if(jsonData[i][key]==="True"){td.innerText="簽到"}else{td.innerText="簽退"}
+                            }
+                            else if(key === "clock_out"){
+                                var show_time= jsonData[i][key].replace(/\.\d+$/, '');
+                                console.log(show_time);
+                                td.innerText = show_time;
                             }
                             else{
                                 td.innerText = jsonData[i][key];

@@ -80,7 +80,12 @@
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
             data-pagination="true" data-page-size="25" data-page-list="[25, All]" data-show-columns-toggle-all="true"
             data-filter-control="true">
-            <div id="toolbar"></div>
+            <div id="toolbar">
+                {% if error_related_records %}
+                {{error_related_records}}
+                {% endif %}
+
+            </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th data-sortable="true" data-field="type">類型</th>
@@ -91,7 +96,7 @@
                 </tr>
             </thead>
             <tbody class="" style="font-size: 14px;">
-                {% for object in object_list %}
+                {% for object in related_records %}
                 <tr>
                     <!-- 應該可以顯示對display捨的 顯示中文 -->
                     <td>{{ object.target_approval.get_name_display }}</td>

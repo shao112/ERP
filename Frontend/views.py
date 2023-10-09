@@ -45,8 +45,7 @@ class LaborHealthInfo_ListView(UserPassesTestMixin,View):
     def get(self,request):
         context ={}
         
-        context["LaborHealth_list"] = LaborHealthInfo.objects.all()
-     
+        context["LaborHealth_list"] = LaborHealthInfo.objects.all().order_by("salary_low") 
         return render(request, 'LaborHealth/LaborHealth.html', context)
 
     def test_func(self):
@@ -118,7 +117,6 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         context["Travel_Application_details_total_amount"] = Travel_Application_details_total_amount
         context["Travel_Application_details_total_money"] = Travel_Application_details_total_money
         context["weekdays_overtime"] = weekdays_overtime
-
 
         return context
 
@@ -504,7 +502,6 @@ class Approval_List(ListView):
             if approval_model.get_created_by == current_employee
         ]
 
-
         queryset = related_approval_models
         return queryset
 
@@ -530,33 +527,39 @@ class Approval_Process(ListView):
         context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)   
+
+        current_employee = self.request.user.employee
+    
+        related_records = []        
+        error_related_records = []        
+        get_objs = ApprovalModel.objects.filter(current_status="in_progress").order_by("-id")
+        for Approval in get_objs:            
+            try:
+                get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
+                if get_employee !="x":
+                    if  get_employee == current_employee :
+                        related_records.append(Approval)
+                else:
+                    # 取得作者部門
+                    get_createdby = Approval.get_created_by
+                    print(Approval)
+                    print(get_createdby)
+                    department =get_createdby.departments
+                    #撈取主管權限的員工
+                    supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
+                    #判斷主管是不是在當前user
+                    is_supervisor = current_employee.id in supervisor_employees
+                    if is_supervisor:            
+                        related_records.append(Approval)
+            except:
+                error_related_records.append(Approval.get_showid())
+                continue
+        context["related_records"] = related_records
+        context["error_related_records"] = error_related_records
+
         return context
     
 
-    def get_queryset(self):
-        current_employee = self.request.user.employee
-    
-        related_records = []
-        get_objs = ApprovalModel.objects.filter(current_status="in_progress").order_by("-id")
-        for Approval in get_objs:            
-            get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
-            if get_employee !="x":
-                if  get_employee == current_employee :
-                    related_records.append(Approval)
-            else:
-                # 取得作者部門
-                get_createdby = Approval.get_created_by
-                print(get_createdby)
-                department =get_createdby.departments
-                #撈取主管權限的員工
-                supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
-                #判斷主管是不是在當前user
-                is_supervisor = current_employee.id in supervisor_employees
-                if is_supervisor:            
-                   related_records.append(Approval)
-
-        queryset=related_records
-        return queryset
     
 
 # 簽核順序
