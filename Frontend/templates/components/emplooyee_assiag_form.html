@@ -153,39 +153,7 @@
 
                 </div>
 
-                <div class="col-12 col-md-12">
-                    <div class="form-row">
-                        <div class="col-5 col-md-5">
-                            <div class="form-group">
-                                <label for="test_items">檢測項目</label>
-                                <select multiple id="test_items"
-                                data-placeholder="選擇檢測項目"
-                                class="select2" name="test_items">
-                                    <option value="絕緣電阻">絕緣電阻</option>
-                                    <option value="吸收比">吸收比</option>
-                                    <option value="Tan Delta測試">Tan Delta測試</option>
-                                    <option value="D.VLF測試">D.VLF測試</option>
-                                    <option value="變壓器測試">變壓器測試</option>
-                                    <option value="DAC測試">DAC測試</option>
-                                    <option value="套管測試">套管測試</option>
-                                    <option value="接續拆裝">接續拆裝</option>
-                                    <option value="電纜拆裝">電纜拆裝</option>
-                                    <option value="電纜拆裝(含固定座拆裝)">電纜拆裝(含固定座拆裝)</option>
-                                    <option value="J.SF6濃度含水量">J.SF6濃度含水量</option>
-                                    <option value="施做電纜頭">施做電纜頭</option>
-                                </select>
-                            </div>
 
-                        </div>
-                        <div class="col-7 col-md-7">
-                            <div class="form-group">
-                                <label>檢測詳情</label>
-                                <textarea class="readonly" name="test_description"></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <div class="form-row">
                     <div class="col-12 col-md-12">
                         <div class="form-group">
@@ -202,6 +170,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-row">
+                <table id="worklist" style="border:3px #cccccc solid;">
+                    <thead>
+                      <tr>
+                        <th >檢測項目</th>
+                        <th>廠牌規格/額定電壓</th>
+                        <th>檢驗日期</th>
+                        <th>加壓等級</th>
+                        <th>試驗地點</th>
+                        <th>數量</th>
+                      </tr>
+                    </thead>
+                    <tbody id="worklist_tbody">
+                    </tbody>
+                  </table>
+        
             </div>
 
 

@@ -98,7 +98,7 @@
                         {% endif %}
 
 
-                        {% if obj.Approval.current_status == "in_progress" %}
+                        {% if obj.Approval.current_status == "in_process" %}
                         / <button data-id="{{ obj.id }}" data-model="Travel_Application"
                             onclick="DelApproval(event)">收回</button>
                         {% endif %}

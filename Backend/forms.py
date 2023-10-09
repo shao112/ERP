@@ -1,5 +1,5 @@
 from django import forms
-from .models import Test_Items_Description,ExtraWorkDay,Requisition,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
+from .models import ExtraWorkDay,Requisition,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -142,15 +142,6 @@ class EquipmentForm(BaseModelForm):
         model = Equipment
         fields = '__all__'
 
-# 派工單，檢測項目
-class Test_Items_DescriptionF_orm(BaseModelForm):
-
-    class Meta:
-        model = Test_Items_Description
-        fields = '__all__'
-        widgets = {
-            'test_items': forms.Select(attrs={'class': 'select2', 'id':'test_items', 'name':'test_items', 'multiple':'true'}),
-        }
 
 # 工程確認單
 class ProjectConfirmationForm(BaseModelForm):

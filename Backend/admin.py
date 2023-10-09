@@ -4,7 +4,7 @@ from .resources import DepartmentResource, ProjectConfirmationResource, ProjectE
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import  Test_Items_Description,Test_Items,LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import  LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -116,8 +116,6 @@ admin.site.register(Approval_Target)
 admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)
 admin.site.register(News)
-admin.site.register(Test_Items)
-admin.site.register(Test_Items_Description)
 admin.site.register(Equipment)
 admin.site.register(UploadedFile)
 admin.site.register(Vehicle, VehicleAdmin)

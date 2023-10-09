@@ -99,7 +99,7 @@
                         {% endif %}
 
 
-                        {% if clock_correction_application.Approval.current_status == "in_progress" %}
+                        {% if clock_correction_application.Approval.current_status == "in_process" %}
                         / <button data-id="{{ clock_correction_application.id }}" data-model="Clock_Correction_Application"
                             onclick="DelApproval(event)">收回</button>
                         {% endif %}
@@ -161,7 +161,7 @@
     async function LoadData(event){
         const approvalStatus = event.currentTarget.getAttribute('data-approval');
 
-        if (approvalStatus == "in_progress" || approvalStatus == "completed") {
+        if (approvalStatus == "in_process" || approvalStatus == "completed") {
             lock_input();
         } else {
             unlock_input();
