@@ -1,4 +1,5 @@
 from django.db.models.functions import ExtractYear,ExtractMonth,ExtractDay
+import json
 import math
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -486,9 +487,7 @@ class ApprovalModel(models.Model):
         show_list = []
         current_index = self.current_index
         approval_order = self.order
-        
         for _, log in enumerate(get_approval_logs): #處理簽過LOG
-
             show_list.append({
                 "show_name": log.user.full_name,
                 "department": log.user.departments.department_name,
@@ -896,19 +895,23 @@ class Project_Employee_Assign(ModifiedModel):
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
-    test_items = models.ManyToManyField('Test_Items_Description', related_name='employee_assign_test_items', verbose_name="檢查項目", blank=True)
+    test_items_str = models.TextField( verbose_name="檢查項目字串", blank=True)
     remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+
+    def test_items_ary(self):
+        try:
+            return json.loads(self.test_items_str)
+        except json.JSONDecodeError:
+            return []
 
     def enterprise_signature_link(self):
         if self.enterprise_signature:
             download_link = "<a href='{}' download>下載</a>".format(self.enterprise_signature.url)
             return mark_safe(download_link)
         else:
-            return ""
+            return ""        
 
-    def test_items_split(self):
-        return self.test_items.split(",")
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
 
@@ -1623,31 +1626,8 @@ class Requisition(ModifiedModel):
     def __str__(self):
         return self.requisition_name  
 
-# 檢查項目
-class Test_Items(ModifiedModel):
-    test_item = models.CharField(max_length=300, blank=True, null=True, verbose_name="檢查項目")
 
-    class Meta:
-        verbose_name = "檢查項目"
-        verbose_name_plural = verbose_name
-    def __str__(self):
-        return self.test_item  
 
-# 檢查項目描述
-class Test_Items_Description(ModifiedModel):
-    test_items = models.CharField(max_length=300, blank=True, verbose_name="檢查項目")
-    test_date = models.DateField(blank=True, null=True, verbose_name='檢驗日期')
-    test_location = models.CharField(max_length=300, blank=True, null=True, verbose_name="試驗地點")
-    format_and_voltage = models.CharField(max_length=300, blank=True, null=True, verbose_name="廠牌規格/額定電壓")
-    level = models.CharField(max_length=300, blank=True, null=True, verbose_name="加壓等級")
-    number = models.CharField(max_length=300, blank=True, null=True, verbose_name="數量")
-
-    class Meta:
-        verbose_name = "檢查項目描述"
-        verbose_name_plural = verbose_name
-    def __str__(self):
-        return self.test_items  
-    
 #勞健保參照
 class LaborHealthInfo(ModifiedModel):
     salary_low = models.IntegerField(verbose_name="薪資(低)")

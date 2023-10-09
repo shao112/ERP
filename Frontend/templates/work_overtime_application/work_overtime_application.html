@@ -109,7 +109,7 @@
                         {% endif %}
 
 
-                        {% if work_overtime_application.Approval.current_status == "in_progress" %}
+                        {% if work_overtime_application.Approval.current_status == "in_process" %}
                         / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
                             onclick="DelApproval(event)">收回</button>
                         {% endif %}

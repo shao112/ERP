@@ -165,7 +165,6 @@ async function GET_handleClick(event, bringdata = true) {
         }
       },
       error: function (xhr, textStatus, errorThrown) {
-        console.log("xx");
         console.log(xhr.status);
         if (xhr.status == 400 || xhr.status == 404) {
           var errorMessage = xhr.responseJSON.error;
@@ -216,9 +215,7 @@ $("form").on("submit", function (event) {
       if (method == "post") {
         idValue = response.id;
       }
-
-
-          Swal.fire("操作成功", "", false).then(() => {
+        Swal.fire("操作成功", "完成").then(() => {
         location.reload();
       });
     },
@@ -328,7 +325,7 @@ async function DELETE_handleClick(event) {
   // console.log(`URL: ${url}, ID: ${id}`);
   // console.log(`URL:${approvalStatus}`);
 
-  if (approvalStatus == "in_progress" || approvalStatus == "completed") {
+  if (approvalStatus == "in_process" || approvalStatus == "completed") {
     return showSwal(
       "刪除異常",
       "此單正在簽核中或是已完成，請先收回。如果已完成請通知主管處理。",
@@ -347,7 +344,7 @@ async function DELETE_handleClick(event) {
     },
     data: formData,
     success: function (response) {
-      Swal.fire("操作成功", "", false).then(() => {
+      Swal.fire("操作成功", "").then(() => {
         location.reload();
       });
     },
