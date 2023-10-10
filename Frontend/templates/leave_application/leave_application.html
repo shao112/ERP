@@ -102,7 +102,7 @@
                     <th data-field="type_of_leave" data-sortable="true">假別項目</th>
                     <th data-field="date_of_leave" data-sortable="true">請假日期</th>
                     <th data-field="time_of_leave" data-sortable="true">請假時間</th>
-                    <th data-field="leave_hours" data-sortable="true">申請時數</th>
+                    <th data-field="leave_hours" data-sortable="true">系統計算時數</th>
                     <th data-field="substitute" data-sortable="true">工作代理人</th>
                     <th data-field="leave_reason" data-sortable="true">請假事由</th>
                     <th data-field="backlog" data-sortable="true">待辦事項</th>
@@ -169,12 +169,12 @@
                         {{ leave_application.end_date_of_leave|date:"Y-m-d" }}
                     </td>
                     <td>
-                        {{ leave_application.start_hours_of_leave }}:{{ leave_application.start_mins_of_leave }} -
-                        {{ leave_application.end_hours_of_leave }}:{{ leave_application.end_mins_of_leave }}
+                        {{ leave_application.start_hours_of_leave| stringformat:"02d" }}:{{ leave_application.start_mins_of_leave| stringformat:"02d" }} -
+                        {{ leave_application.end_hours_of_leave| stringformat:"02d"  }}:{{ leave_application.end_mins_of_leave| stringformat:"02d" }}
                     </td>
                     <td>
                         {{ leave_application.calculate_leave_duration.0 }}時
-                        {{leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分
+                        {{leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分    
                     </td>
                     <td>
                         {% if leave_application.substitute %}{{ leave_application.substitute }}{% else %}{% endif %}

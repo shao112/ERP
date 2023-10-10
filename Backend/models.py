@@ -1324,7 +1324,6 @@ class Work_Overtime_Application(ModifiedModel):
 
 
     def calculate_overtime_hours(self):
-        #換算成分
         start_time_minutes = self.start_hours_of_overtime * 60 + self.start_mins_of_overtime
         end_time_minutes = self.end_hours_of_overtime * 60 + self.end_mins_of_overtime
 
@@ -1337,11 +1336,6 @@ class Work_Overtime_Application(ModifiedModel):
             if self.end_hours_of_overtime == 12:
                 deduction += self.end_mins_of_overtime
 
-        print(self.get_show_id())
-        print(deduction)
-        print(self.start_hours_of_overtime )
-        print(self.start_hours_of_overtime )
-        print(self.start_hours_of_overtime < 13 and self.start_mins_of_overtime >= 13)
         overtime_minutes = end_time_minutes - start_time_minutes - deduction
 
         

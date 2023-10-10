@@ -73,6 +73,7 @@
                     <th data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
                     <th data-field="type_of_overtime" data-sortable="true">加班類別</th>
                     <th data-field="work_overtime_time" data-sortable="true">加班時間</th>
+                    <th data-field="work_overtime_time" data-sortable="true">系統計算小時</th>
                     <th data-field="carry_over" data-sortable="true">加班結轉方式</th>
                     <th data-field="overtime_reason" data-sortable="true">加班事由</th>
                 </tr>
@@ -145,6 +146,9 @@
                     </td>
                     <td>
                         {{ work_overtime_application.get_carry_over_display }}
+                    </td>
+                    <td>
+                        {{ work_overtime_application.calculate_overtime_hours.0 }}
                     </td>
                     <td>
                         {{ work_overtime_application.overtime_reason }}
