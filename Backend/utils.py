@@ -21,7 +21,7 @@ def salaryFile(get_salary,get_type):
         title = "激勵性獎金"
 
     get_details = get_salary.details.all()
-    file_path = 'static/files/salary_template.xlsx'
+    file_path = r'media/system_files/salary_template.xlsx'
 
     try:
         workbook = load_workbook(filename=file_path)
@@ -122,7 +122,7 @@ def quotationFile(quotation_obj):
     # email = quotation_obj.email
     # quote_validity_period = quotation_obj.quote_validity_period
     # business_tel = quotation_obj.business_tel
-    file_path = 'static/files/quotation_template.xlsx'
+    file_path = r'media/system_files/quotation_template.xlsx'
     print("client ", client)
     try:
         workbook = load_workbook(filename=file_path)
