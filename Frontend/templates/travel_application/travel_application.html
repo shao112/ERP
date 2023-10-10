@@ -159,7 +159,7 @@
         console.log("load")
         const approvalStatus = event.currentTarget.getAttribute('data-approval');
 
-        if(approvalStatus=="in_progress" || approvalStatus=="completed" ){
+        if(approvalStatus=="in_process" || approvalStatus=="completed" ){
             lock_input();
         }else{
             unlock_input();

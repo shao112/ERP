@@ -308,7 +308,7 @@ class Approval_View_Process(View):
         user = request.user.employee
         approval_obj = get_obj.Approval
 
-        if approval_obj.current_status == 'in_progress':
+        if approval_obj.current_status == 'in_process':
             approval_obj.send_message_to_related_users(f"{get_obj.get_show_id()} 單被{user.full_name}收回簽核")
             approval_obj.delete()
 

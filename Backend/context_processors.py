@@ -12,7 +12,7 @@ def approval_count(request):
 
     related_records = []
 
-    for Approval in ApprovalModel.objects.filter(current_status="in_progress"):            
+    for Approval in ApprovalModel.objects.filter(current_status="in_process"):            
         get_employee = Approval.get_approval_employee()
         if get_employee !="x":
             if  get_employee ==current_employee :

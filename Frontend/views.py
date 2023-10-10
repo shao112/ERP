@@ -530,8 +530,10 @@ class Approval_Process(ListView):
     
         related_records = []        
         error_related_records = []        
-        get_objs = ApprovalModel.objects.filter(current_status="in_progress").order_by("-id")
+        get_objs = ApprovalModel.objects.filter(current_status="in_process").order_by("-id")
         for Approval in get_objs:            
+            print(Approval.id)
+            print(Approval.get_foreignkey())
             try:
                 get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
                 if get_employee !="x":
@@ -550,7 +552,8 @@ class Approval_Process(ListView):
                     if is_supervisor:            
                         related_records.append(Approval)
             except:
-                error_related_records.append(Approval.get_showid())
+                print("approval process error")
+                error_related_records.append(Approval.id)
                 continue
         context["related_records"] = related_records
         context["error_related_records"] = error_related_records
