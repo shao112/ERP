@@ -208,10 +208,66 @@ class Index(View):
         
 
     def get(self,request):
+        def calculate_annual_leave():
+            from Backend.models import AnnualLeave
+            from datetime import timedelta
+            from datetime import datetime
+            import math
+
+
+            employee = request.user.employee
+            
+            years = employee.seniority()
+
+            #計算入職的前一天的明年時間
+            end_date = employee.start_work_date - timedelta(days=1)
+            end_date = end_date.replace(year=end_date.year + 1)
+            print(end_date)
+            print(type(end_date))
+            print(years)
+
+
+
+            if years == "人資單位未填寫入值日" or years <0.6:
+                return 0 
+            # years=1.5
+            
+            if years < 1:
+                has_three_days_leave = employee.annualleaves.filter(days=3).exists()
+                print(has_three_days_leave)
+                if not has_three_days_leave:
+                    pass
+                    # annual_leave = AnnualLeave.objects.create(days=3, end_date=end_date, remark="")
+                    # employee.annualleaves.add(annual_leave)
+                return 
+            
+            today = datetime.today().date()
+            #今天=入職 才執行給假
+            if  not (today.month == employee.start_work_date.month and today.day == employee.start_work_date.day):
+                print("1")
+                pass
+            
+            give_day = 0
+            if years >= 1 and years < 2:
+                give_day= 7
+            elif years >= 2 and years < 3:
+                give_day= 10
+            elif years >= 3 and years < 5:
+                give_day= 14
+            elif years >= 5 and years < 10:
+                give_day= 15
+            elif years == 10:
+                give_day= 16
+            else:
+                give_day= min(30, math.floor(years))
+            print("give_day")
+            print(give_day)
+
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
-            
+            calculate_annual_leave()
+
             news = News.objects.all()
             employeeid = request.user.employee
             clock_inout = get_weekly_clock_data(employeeid)

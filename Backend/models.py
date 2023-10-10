@@ -121,8 +121,8 @@ class ReferenceTable(models.Model):
 #特休紀錄
 class AnnualLeave(ModifiedModel):
     days = models.IntegerField(default=0, verbose_name="天數")
-    end_date = models.CharField(max_length=20, null=True, blank=True,verbose_name='截止日期')
-    remark = models.DateField(null=True, blank=True, verbose_name='備註')
+    end_date = models.DateField( null=True, blank=True,verbose_name='截止日期')
+    remark = models.TextField( null=True, blank=True, verbose_name='備註')
 
 
 # 員工（以內建 User 擴增）
@@ -218,8 +218,6 @@ class Employee(ModifiedModel):
             total_hour-=1
             total_minutes=30
         
-        # if results!=[]:
-        #     print(results)
 
         return total_hour,total_minutes ,results
     
@@ -1538,8 +1536,6 @@ class Clock_Correction_Application(ModifiedModel):
             self.clock = clock
             self.save()
         else:
-            print("Clock 更新")
-            print(self.clock)
             self.clock.clock_date=date_of_clock
             self.clock. clock_in_or_out=true_or_false
             self.clock.clock_time=time
