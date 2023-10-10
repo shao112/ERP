@@ -6,7 +6,9 @@ from django.conf import settings
 from django.http import HttpResponse
 import openpyxl
 from openpyxl import load_workbook
+from openpyxl.styles import NamedStyle
 from urllib.parse import quote
+from cn2an import an2cn
 from django.db.models import Sum
 
 
@@ -129,8 +131,10 @@ def quotationFile(quotation_obj):
 
 
     sheet = workbook.active
+    chinese_format = NamedStyle(name='chinese_format', number_format="[$NT$-2]#,##0;[RED]-[$NT$-2]#,##0")
+    workbook.add_named_style(chinese_format)
 
-
+    sum = 0
     try:
         for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
             
@@ -171,17 +175,21 @@ def quotationFile(quotation_obj):
                         sheet.cell(row=i, column=index+5, value="")
                     else:
                         for next_index, item in enumerate(item_list):
-                            print("item.item_id: ",item.item_id)
-                            print("item.item_name: ",item.item_name)
-                            print("item.unit: ",item.unit)
-                            print("item.count: ",item.count)
-                            print("item.unit_price: ",item.unit_price)
-                            sheet.cell(row=i+next_index, column=index, value= item.item_id)
+                            sheet.cell(row=i+next_index, column=index, value= next_index+1)
                             sheet.cell(row=i+next_index, column=index+1, value=item.item_name)
-                            sheet.cell(row=i+next_index, column=index+2, value=item.unit)
-                            sheet.cell(row=i+next_index, column=index+3, value=item.count)
-                            sheet.cell(row=i+next_index, column=index+4, value=item.unit_price)
-                            sheet.cell(row=i+next_index, column=index+5, value=(item.count)*(item.unit_price))
+                            sheet.cell(row=i+next_index, column=index+5, value=item.unit)
+                            sheet.cell(row=i+next_index, column=index+6, value=item.count)
+                            sheet.cell(row=i+next_index, column=index+7, value=item.unit_price)
+                            sheet.cell(row=i+next_index, column=index+8, value=(item.count)*(item.unit_price))
+                            sum+=(item.count)*(item.unit_price)
+                elif cell_value == "SUM":
+                    sheet.cell(row=i, column=index, value=sum).style = 'chinese_format'
+                elif cell_value == "SUM_CHINESS":
+                    chinese_amount = an2cn(sum, "low")
+                    # chinese_amount = 0
+                    print("chinese_amoun t ", chinese_amount)
+                    sheet.cell(row=i, column=index, value="總 計:新台幣 " + chinese_amount + "元整")
+                    
     except ValueError as e:
         return True,"遇到欄位合併的錯誤"
     except Exception as e: 
