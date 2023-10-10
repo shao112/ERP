@@ -49,6 +49,7 @@ function cleanform() {
         .val(null)
         .trigger("change");
     }
+    // $("form .modal table tbody").html()
   });
 
   var inputElements = document.querySelectorAll('form input[type="file"]');

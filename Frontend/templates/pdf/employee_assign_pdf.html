@@ -150,30 +150,37 @@
             </table>
             <table class="test_table">
                 <thead>
-                    <th>檢查項目</th>
+                    <th>檢驗日期</th>
+                    <th>試驗地點</th>
+                    <th>檢測項目</th>
+                    <th>廠牌規格/額定電壓</th>
+                    <th>加壓等級</th>
+                    <th>數量</th>
                 </thead>
                 <tbody>
-                    <tr><td>
-                        {% for item in project_employee_assign.test_items_split %}
-                        {{ item }}{% if not forloop.last %}、{% endif %}{% endfor %}
-                    </td></tr>
+                    {% for item in project_employee_assign.test_items_ary %}
+                    <tr>
+                        <td>
+                            {{ item.test_date }}
+                        </td>
+                        <td>
+                            {{ item.test_location }}
+                        </td>
+                        <td>
+                            {{ item.test_items }}
+                        </td>
+                        <td>
+                            {{ item.format_and_voltage }}
+                        </td>
+                        <td>
+                            {{ item.level }}
+                        </td>
+                        <td>
+                            {{ item.number }}
+                        </td>
+                    </tr>
+                    {% endfor %}
                     
-                </tbody>
-            </table>
-            <table class="test_table">
-                <thead>
-                    <th>檢查項目敘述</th>
-                </thead>
-                <tbody>
-                    <tr><td>{{ project_employee_assign.test_description }}</td></tr>
-                </tbody>
-            </table>
-            <table class="test_table">
-                <thead>
-                    <th>接交/備註</th>
-                </thead>
-                <tbody>
-                    <tr><td>{{ project_employee_assign.remark }}</td></tr>
                 </tbody>
             </table>
 
