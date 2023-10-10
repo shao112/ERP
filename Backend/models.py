@@ -118,8 +118,13 @@ class ReferenceTable(models.Model):
     def __str__(self):
         return f"{self.name}參照表 居住地 {self.location_city_residence} / 出差地 {self.location_city_business_trip}  金額 {self.amount}"
 
+#特休紀錄
+class AnnualLeave(ModifiedModel):
+    days = models.IntegerField(default=0, verbose_name="天數")
+    end_date = models.CharField(max_length=20, null=True, blank=True,verbose_name='截止日期')
+    remark = models.DateField(null=True, blank=True, verbose_name='備註')
 
-        
+
 # 員工（以內建 User 擴增）
 class Employee(ModifiedModel):
     GENDER_CHOICES = [
@@ -146,6 +151,7 @@ class Employee(ModifiedModel):
     profile_image = models.ImageField(upload_to='employee_profile/', blank=True, null=True, default='employee_profile/default_profile.png', verbose_name='員工照片')
     location_city = models.CharField(max_length=4, choices=LOCATION_CHOICES, null=True, blank=True, verbose_name='居住城市(用於計算)')
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="userfile")
+    annualleaves = models.ManyToManyField(AnnualLeave,blank=True,  related_name="AnnualLeave_user")
     full_name = models.CharField(max_length=30, null=True, blank=True, verbose_name='員工名稱')
     employee_id	 = models.CharField(max_length=30, blank=True,verbose_name='員工編號')
     departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
@@ -178,6 +184,7 @@ class Employee(ModifiedModel):
     health_insurance = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="健保級距")
     labor_pension_moeny = models.PositiveIntegerField(default=6, null=True, blank=True, verbose_name="勞退級距")
     labor_pension = models.PositiveIntegerField(default=6, null=True, blank=True, verbose_name="勞退比例(%)")
+    
 
     class Meta:
         verbose_name = "員工"   # 單數
@@ -568,10 +575,12 @@ class Clock(models.Model):
         new_clock_records_id = []
         for record in day_clocks:
             if record.type_of_clock =="2":
-                get_approval = record.clock_correction.all()[0].Approval
-                if get_approval :
-                    if get_approval.current_status =="completed":
-                        new_clock_records_id.append(record.id)
+                clock_corrections = record.clock_correction.all()
+                if len(clock_corrections):
+                    get_approval = clock_corrections[0].Approval
+                    if get_approval :
+                        if get_approval.current_status =="completed":
+                            new_clock_records_id.append(record.id)
             else:
                 new_clock_records_id.append(record.id)
                 
@@ -1290,6 +1299,8 @@ class Leave_Param(ModifiedModel):
             })
 
         return leave_param_details
+
+
 
 # 加班申請
 class Work_Overtime_Application(ModifiedModel):

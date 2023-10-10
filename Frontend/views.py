@@ -184,13 +184,11 @@ class Index(View):
 
     def post(self,request):
         if request.method == "POST":
-            belong_to_company = request.POST.get('belong_to_company', '')
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
             auto_login = request.POST.get('auto-login') == 'on'
             user = authenticate(username=username, password=password)
             if user is not None and user.is_active:
-                # belong_to_company == user.employee.departments.belong_to_company 加在上面的 if 條件
                 login(request, user)
                 if auto_login:
                     # Create a long-term session for auto-login
@@ -532,8 +530,6 @@ class Approval_Process(ListView):
         error_related_records = []        
         get_objs = ApprovalModel.objects.filter(current_status="in_process").order_by("-id")
         for Approval in get_objs:            
-            print(Approval.id)
-            print(Approval.get_foreignkey())
             try:
                 get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
                 if get_employee !="x":
