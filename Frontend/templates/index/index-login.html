@@ -124,7 +124,7 @@
             <div class="col-2">
                 <img src="{% static 'img/logo/logo_removebg.png' %}" width="120" class="img-fluid" alt="艾力克電機">
             </div>
-            <div class="clock-inout-record border-right col-10">
+            <div class="clock-inout-record border-right col-6">
                 
                 <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
                 <div class="clock-inout-record-content my-3">
@@ -136,6 +136,18 @@
                     {% endif %}
                 </div>
             </div>
+            {% if user|in_group_T_or_F:"工程" or pass_test_func %}
+            <div class="clock-inout-record border-right col-4">
+                
+                <div class="clock-inout-record-title font-weight-bold">派任計畫異常</div>
+                <div class="clock-inout-record-content my-3">
+                    {% for item in employee_assign_ids %}
+                    {{ item }}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
     <div class="container shadow-sm mt-4">

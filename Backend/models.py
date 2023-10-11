@@ -729,6 +729,7 @@ class Quotation(ModifiedModel):
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
     address = models.CharField(max_length=100,verbose_name="地址",blank=True, null=True)
     tel = models.CharField(max_length=20, verbose_name="電話",blank=True, null=True)
+    quote_date = models.DateField(null=True, blank=True, verbose_name="報價日期")
     mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
     fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
     email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
@@ -738,7 +739,8 @@ class Quotation(ModifiedModel):
     work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
-    invoice_attachment = models.FileField(upload_to="Invoice", null=True, blank=True, verbose_name="請款單")
+    # invoice_attachment = models.FileField(upload_to="Invoice", null=True, blank=True, verbose_name="請款單")
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
 
     def get_show_id(self):
         return self.quotation_id
@@ -809,6 +811,20 @@ class Project_Job_Assign(ModifiedModel):
     def get_show_id(self):
         return f"派任-{str(self.id).zfill(5)}"
 
+
+    @classmethod
+    def get_assignments(cls):
+        today = timezone.now().date()
+        print(today)
+        assignments = cls.objects.filter(attendance_date__lt=today)
+        
+        employee_assign_ids = []
+        for assignment in assignments:
+            project_employee_assigns = assignment.project_employee_assign.all()
+            if project_employee_assigns:
+                employee_assign_ids.append(assignment.get_show_id())
+                
+        return employee_assign_ids
 
 
     @classmethod

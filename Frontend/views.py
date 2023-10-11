@@ -23,7 +23,7 @@ from django.db.models import Q,Value,CharField
 from django.db.models.functions import Concat
 import json
 from django.shortcuts import get_object_or_404
-
+from django.http import FileResponse
 
 
 class LaborHealthInfo_ListView(UserPassesTestMixin,View):
@@ -274,6 +274,8 @@ class Index(View):
             clock_inout = get_weekly_clock_data(employeeid)
             related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(    work_employee__in=[employeeid]        )
             related_projects = related_projects.distinct()
+            employee_assign_ids = Project_Job_Assign.get_assignments()
+
 
             grouped_projects = {}
             for project in related_projects:
@@ -294,6 +296,7 @@ class Index(View):
                 'news':news,
                 'work_list':work_list,
                 "grouped_projects":sorted_grouped_projects,
+                "employee_assign_ids":employee_assign_ids,
             }
             return render(request, 'index/index-login.html', context)
         else:

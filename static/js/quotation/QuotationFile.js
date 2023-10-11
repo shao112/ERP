@@ -6,7 +6,7 @@ const fileListElement = $("#fileList");
 function LoadFileList() {
   $.ajax({
     type: "GET",
-    url: "/restful/employee",
+    url: "/restful/quotation",
     headers: {
       "X-CSRFToken": csrftoken,
     },
@@ -22,10 +22,12 @@ function LoadFileList() {
           "list-group-item d-flex justify-content-between align-items-center"
         );
 
+        const fileName = file.file.split('/').pop();
+
         const fileLink = $("<a></a>");
         fileLink.attr("href", file.file);
         fileLink.attr("target", "_blank");
-        fileLink.text(file.name || "未命名");
+        fileLink.text(file.name|| fileName || "未命名");
 
         const deleteButton = $("<button></button>");
         deleteButton.addClass("btn btn-danger btn-sm");
@@ -84,7 +86,7 @@ function handleAPI() {
     return;
   }
 
-  var modal = "employee";
+  var modal = "Quotation";
   var formData = new FormData();
   formData.append(inputName, file);
   formData.append("name", inputName);

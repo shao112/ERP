@@ -645,6 +645,14 @@ class Quotation_View(View):
         data = get_object_or_404(Quotation, id=id)
         get_id = data.get_show_id()
 
+        uploaded_files = data.uploaded_files.all() 
+        uploaded_files_dict_list = []
+        for file in uploaded_files:
+            file_dict = model_to_dict(file)
+            file_dict["file"] = file.file.url
+            uploaded_files_dict_list.append(file_dict)
+
+
         work_item_list = []
         for item in data.work_item.all():
             item_dict = model_to_dict(item)
@@ -653,6 +661,7 @@ class Quotation_View(View):
         data = model_to_dict(data)
         print("dict_data")
         print(data)
+        data["uploaded_files"]=uploaded_files_dict_list
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
         data['client_name'] = client_name
