@@ -6,7 +6,9 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/equipment/equipment.css' %}">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"
+    integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% endblock %}
 
@@ -27,20 +29,22 @@
                     <div class="container shadow-sm">
                         <form action="/restful/equipment" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden/>
+                            <input name="id" hidden />
                             <div class="form-row my-2">
                                 <div class="col-12 col-md-6">
                                     <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="equipment_id_control">資產標籤</label>
-                                                <input class="form-control form-control-sm" name="equipment_id" id="equipment_id_control" required>
+                                                <input class="form-control form-control-sm" name="equipment_id"
+                                                    id="equipment_id_control" required>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="order_id_control">序號</label>
-                                                <input class="form-control form-control-sm" name="order_id" id="order_id_control">
+                                                <input class="form-control form-control-sm" name="order_id"
+                                                    id="order_id_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
@@ -63,7 +67,7 @@
                                             <div class="form-group">
                                                 <label for="equipment_name_control">品名</label>
                                                 <input class="form-control form-control-sm" name="equipment_name"
-                                                  required   id="equipment_name_control">
+                                                    required id="equipment_name_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
@@ -85,13 +89,15 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="supplier_control">供應商</label>
-                                                <input class="form-control form-control-sm" name="supplier" id="supplier_control">
+                                                <input class="form-control form-control-sm" name="supplier"
+                                                    id="supplier_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="invoice_control">發票號碼</label>
-                                                <input class="form-control form-control-sm" name="invoice" id="invoice_control">
+                                                <input class="form-control form-control-sm" name="invoice"
+                                                    id="invoice_control">
                                             </div>
                                         </div>
                                     </div>
@@ -113,7 +119,8 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="buyer_control">採購人</label>
-                                                <input class="form-control form-control-sm" name="buyer" id="buyer_control">
+                                                <input class="form-control form-control-sm" name="buyer"
+                                                    id="buyer_control">
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +128,8 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="user_control">使用人</label>
-                                                <input class="form-control form-control-sm" name="user" id="user_control">
+                                                <input class="form-control form-control-sm" name="user"
+                                                    id="user_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
@@ -168,26 +176,27 @@
                                             <div class="form-group">
                                                 <label>點此上傳異常照片</label>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input"  data-modal="Equipment"
+                                                    <input type="file" class="custom-file-input" data-modal="Equipment"
                                                         name="abnormal_img" id="reassignment_attachment_control">
-                                                    <label class="custom-file-label" for="abnormal_img">Choose file</label>
-                                                    <a href="#" id="abnormal_img" >下載附件</a>
+                                                    <label class="custom-file-label" for="abnormal_img">Choose
+                                                        file</label>
+                                                    <a href="#" id="abnormal_img">下載附件</a>
                                                 </div>
                                                 <label>點此上傳買進照片</label>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input"  data-modal="Equipment"
-                                                    name="buy_img" id="reassignment_buy_img_control">
+                                                    <input type="file" class="custom-file-input" data-modal="Equipment"
+                                                        name="buy_img" id="reassignment_buy_img_control">
                                                     <label class="custom-file-label" for="buy_img">Choose file</label>
-                                                    <a href="#" id="buy_img" >下載附件</a>
+                                                    <a href="#" id="buy_img">下載附件</a>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    
-                                    
+
+
                                     <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
@@ -235,7 +244,7 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="warranty_control">保固期</label>
-                                                <input class="form-control form-control-sm"  name="warranty"
+                                                <input class="form-control form-control-sm" name="warranty"
                                                     id="warranty_control">
                                             </div>
                                         </div>
@@ -244,8 +253,8 @@
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
                                                 <label for="warranty_period_control">保固期間(截止)</label>
-                                                <input class="form-control form-control-sm" type="date" name="warranty_period"
-                                                    id="warranty_period_control">
+                                                <input class="form-control form-control-sm" type="date"
+                                                    name="warranty_period" id="warranty_period_control">
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
@@ -321,8 +330,14 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-row">
+                                        <div id="qrcode">
+
+                                        </div>
+                                    </div>
+
                                 </div>
-                                
+
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4"
@@ -339,14 +354,17 @@
     </div>
     <div class="equipment-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-        data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
-        data-search="true" data-show-columns="true" data-filter-strict-search="true"
-        data-show-columns-toggle-all="true">
+            data-toolbar="#toolbar" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true">
             <div id="toolbar">
                 <div class="equipment-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#equipment-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增固定資產
                     </a>
+
+
+
                     <a class="upload-file font-weight-bold" onclick="importfile()">
                         <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i>
                         <span id="importLink">匯入</span>
@@ -355,7 +373,8 @@
                     <a href="" class="font-weight-bold" download="">
                         <i class="fa-solid fa-download fa-sm" style="color: #000000;"></i> 下載公版
                     </a>
-                    <button onclick="exportAllOptionToExcel('固定資產管理.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button onclick="exportAllOptionToExcel('固定資產管理.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button onclick="exportSelectedOptionToExcel('固定資產管理.xlsx')">匯出已選資料</button>
                 </div>
             </div>
@@ -373,14 +392,15 @@
                 {% for e in equipment %}
 
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ e.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ e.id }}"></td>
                     <td>
-                        <a type="button" data-url="equipment" data-id="{{e.id}}"
-                            class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                            data-target="#equipment-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" data-url="equipment" data-id="{{e.id}}" class="btn btn-sm btn-warning"
+                            data-toggle="modal" data-target="#equipment-modal" onclick="LoadData(event)"><i
+                                class="fas fa-edit"></i></a>
                     </td>
                     <td><a data-url="equipment" data-id="{{e.pk}}" type="button"
-                        class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
+                            class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td> {{ e.equipment_id}} </td>
                     <td>{{e.order_id}}</td>
@@ -405,6 +425,33 @@
             document.body.appendChild(script);
         });
     });
+
+    function set_qrocde(equipment_id) {
+        var qr = qrcode(0, "H");
+        qr.size = 600;
+
+        qr.addData(equipment_id);
+
+        qr.make();
+
+        var width = 128;
+        var margin = 2;
+        var moduleCount = qr.getModuleCount();
+        var cell = (width - margin * 2) / moduleCount;
+        const svg = qr.createImgTag(cell,margin);
+        document.getElementById('qrcode').innerHTML = svg;
+
+    }
+
+    async function LoadData(event) {
+        console.log("load")
+        getdata = await GET_handleClick(event);
+        var get_equipment_id = getdata["equipment_id"];
+        console.log(get_equipment_id)
+        set_qrocde(get_equipment_id)
+
+
+    }
 
 
 </script>
