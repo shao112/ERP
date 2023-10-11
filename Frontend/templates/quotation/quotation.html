@@ -14,7 +14,8 @@
 {% block main %}
 
 
-<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,8 +41,8 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn"class="btn border border-dark rounded"
-                    style="color: #fff;background: #1E3050;">上傳</button>
+                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded"
+                        style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
                 <h4>檔案列表</h4>
@@ -75,14 +76,17 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="quotation_id">報價單編號</label>
-                                                <input class="form-control form-control-sm" name="quotation_id" id="quotation_id">
+                                                <input class="form-control form-control-sm" name="quotation_id"
+                                                    id="quotation_id">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="client">客戶名稱</label>
-                                                <select class="form-control form-control-sm" name="client" id="client" readonly>
-                                                    <option value="{{ client.id }}" selected>{{ client.client_name }}</option>
+                                                <select class="form-control form-control-sm" name="client" id="client"
+                                                    readonly>
+                                                    <option value="{{ client.id }}" selected>{{ client.client_name }}
+                                                    </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -97,7 +101,8 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="project_name">專案名稱</label>
-                                                <input required class="form-control form-control-sm" name="project_name" id="project_name">
+                                                <input required class="form-control form-control-sm" name="project_name"
+                                                    id="project_name">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -108,11 +113,11 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
-                                           
+
                                             <div class="form-group">
                                                 <label for="quote_date">報價日期</label>
                                                 <input class="form-control form-control-sm" name="quote_date"
-                                                id="quote_date" type="date">
+                                                    id="quote_date" type="date">
                                             </div>
                                         </div>
                                     </div>
@@ -151,14 +156,14 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
-                                                
+
                                             <div class="form-group">
                                                 <label for="address">地址</label>
                                                 <input class="form-control form-control-sm" name="address" id="address">
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-row">
 
                                         <div class="col-12 col-lg-4">
@@ -183,7 +188,7 @@
                                                 </textarea>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="col-12 col-lg-12">
@@ -227,6 +232,12 @@
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
                         onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
+                    <div class="form-group">
+                        <label for="for">對內</label>
+                        <input type="checkbox" name="" class="" id="for" checked>
+                        <label for="idfive">含稅</label>
+                        <input type="checkbox" name="" class="" id="five" checked>
+                    </div>
                 </div>
             </div>
             <thead class="thead-light" style="font-size: 14px;">
@@ -236,7 +247,8 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="file" data-sortable="true">檔案上傳</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">列印/下載pdf</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
+                        列印/下載pdf</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
                     <th data-field="tax_id" data-sortable="true">客戶名稱</th>
@@ -247,7 +259,8 @@
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for item in quotation %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ item.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ item.id }}"></td>
                     <td>
                         <a data-target="#employee-modal" type="button" data-url="quotation" data-id="{{ item.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
@@ -262,10 +275,11 @@
                         </a>
                     </td>
                     <td>
-                        <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal" data-target="#fileUploadModal">點擊</a>
+                        <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal"
+                            data-target="#fileUploadModal">點擊</a>
                     </td>
 
-                    <td><a target="_blank" href="{% url 'quotation_file' id=item.id %}">點擊</a></td>
+                    <td><a href="#"  onclick="openNewWindow({{item.pk}})">點擊</a></td>
 
                     <td>
                         {{ item.quotation_id}}
@@ -291,6 +305,20 @@
 </div>
 
 <script>
+
+    function openNewWindow(id) {
+        var forCheckbox = document.getElementById('for');
+        var fiveCheckbox = document.getElementById('five');
+
+        var forChecked = forCheckbox.checked ? 1 : 0;
+        var fiveChecked = fiveCheckbox.checked ? 1 : 0;
+
+
+
+        var url = `/restful/quotationfile/${id}/${forChecked}/${fiveChecked}`;
+        window.open(url, '_blank');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
@@ -308,7 +336,7 @@
         });
     });
 
-    async function LoadData(event){
+    async function LoadData(event) {
         console.log("load")
         getdata = await GET_handleClick(event);
 

@@ -1452,8 +1452,10 @@ class Work_Overtime_Application(ModifiedModel):
                 applications = None
 
                 show_date =date
+                date_str=""
                 if day_of_week==5:
                     date_next = date + timedelta(days=1)
+                    date_str = show_date.strftime("%Y-%m-%d")
                     show_date =str(date) + " " + str(date_next) 
                     applications = cls.objects.filter(
                         Q(Q(created_by=user) & Q(date_of_overtime=date)) |
@@ -1461,7 +1463,8 @@ class Work_Overtime_Application(ModifiedModel):
                         # Approval__current_status="completed"
                     )
                 else:
-                     applications = cls.objects.filter(
+                    date_str = show_date.strftime("%Y-%m-%d")
+                    applications = cls.objects.filter(
                         created_by=user,
                         date_of_overtime=date,
                         # Approval__current_status="completed"
@@ -1481,13 +1484,13 @@ class Work_Overtime_Application(ModifiedModel):
                     eigth_money = math.ceil(8 * 1.67*hourly_salary)
                     end_money = math.ceil(overtime_hours * 2*hourly_salary)
                     holiday_overtime_money +=eigth_money+end_money
-                    date_str = show_date.strftime("%Y-%m-%d")
+
                     details.append({"id":id_str,"date":date_str+"(假日結算)","hour":8,"money":eigth_money,"magnification":1.67})
                     details.append({"id":id_str,"date":date_str +"(假日結算)","hour":overtime_hours,"money":end_money,"magnification":2})
                 else:
                     eigth_money = math.ceil(total_time * 1.67 * hourly_salary)
                     holiday_overtime_money +=eigth_money
-                    details.append({"id":id_str,"date":show_date+"(假日結算)","hour":total_time,"money":eigth_money,"magnification":1.67})
+                    details.append({"id":id_str,"date":date_str+"(假日結算)","hour":total_time,"money":eigth_money,"magnification":1.67})
 
         
         total_money = sum(item['money'] for item in details)

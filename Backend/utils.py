@@ -8,6 +8,7 @@ import openpyxl
 from openpyxl import load_workbook
 from openpyxl.styles import NamedStyle
 from urllib.parse import quote
+import os
 from cn2an import an2cn
 from django.db.models import Sum
 import math
@@ -95,7 +96,7 @@ def salaryFile(get_salary,get_type):
     workbook.save(new_file)
     return False,new_file
 
-def quotationFile(quotation_obj):
+def quotationFile(quotation_obj,see,five):
     quotation_id = "" if quotation_obj.quotation_id is None else quotation_obj.quotation_id
     client = "" if quotation_obj.client is None else quotation_obj.client
     project_name = "" if quotation_obj.project_name is None else quotation_obj.project_name
@@ -108,6 +109,7 @@ def quotationFile(quotation_obj):
     fax = "" if quotation_obj.fax is None else quotation_obj.fax
     email = "" if quotation_obj.email is None else quotation_obj.email
     quote_validity_period = "" if quotation_obj.quote_validity_period is None else quotation_obj.quote_validity_period
+    quote_date = "" if quotation_obj.quote_date is None else quotation_obj.quote_date
     business_tel = "" if quotation_obj.business_tel is None else quotation_obj.business_tel
 
     item_list = quotation_obj.work_item.all()
@@ -124,18 +126,17 @@ def quotationFile(quotation_obj):
     workbook.add_named_style(chinese_format)
 
     #放圖
-    import os
 
-    uploaded_files = quotation_obj.uploaded_files.all() 
-    print("xx")
-    print(uploaded_files)
-    for i, file in enumerate(uploaded_files):
-        file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
-        print(file_path)
-        img = Image(file_path)
-        sheet.add_image(img, f'O{4+i}')
-    internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
-    sheet['L2'].value = internal_content
+    if see:
+        uploaded_files = quotation_obj.uploaded_files.all() 
+
+        for i, file in enumerate(uploaded_files):
+            file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
+            print(file_path)
+            img = Image(file_path)
+            sheet.add_image(img, f'O{4+i}')
+        internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
+        sheet['L2'].value = internal_content
 
     
 
@@ -150,6 +151,8 @@ def quotationFile(quotation_obj):
                     sheet.cell(row=i, column=index, value=str(client))
                 elif cell_value == "QUOTATION_ID":
                     sheet.cell(row=i, column=index, value=quotation_id)
+                elif cell_value == "quote_date":
+                    sheet.cell(row=i, column=index, value=quote_date)
                 elif cell_value == "TAX_ID":
                     sheet.cell(row=i, column=index, value=tax_id)
                 elif cell_value == "MOBILE":
@@ -192,7 +195,10 @@ def quotationFile(quotation_obj):
                 elif cell_value == "SUM":
                     sheet.cell(row=i, column=index, value=sum)
                 elif cell_value == "sum_five":
-                    five_sum = math.ceil(sum *0.05)
+                    if five:                           
+                        five_sum = math.ceil(sum *0.05)
+                    else: 
+                        five_sum=0
                     sheet.cell(row=i, column=index, value=five_sum)
                 elif cell_value == "all_sum":
                     all_sum = sum + five_sum

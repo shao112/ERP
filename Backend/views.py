@@ -39,6 +39,8 @@ class QuotationFileView(View):
 
     def get(self, request, *args, **kwargs):
         obj_id = self.kwargs.get('id')
+        see = self.kwargs.get('see')
+        five = self.kwargs.get('five')
         
         if id:
             error_msg=""
@@ -51,7 +53,7 @@ class QuotationFileView(View):
                 print(e)
                 return JsonResponse({"error": str(e)}, status=400)
             
-            return quotationFile(quotaion_obj)
+            return quotationFile(quotaion_obj,see,five)
 
         else:
             print("error 找不到相應的ID obj")

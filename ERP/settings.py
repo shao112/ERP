@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'Backend',
     # 套件
     'django_cleanup',
-    "qr_code",
 ]
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
