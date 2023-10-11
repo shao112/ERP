@@ -138,8 +138,6 @@ def quotationFile(quotation_obj,see,five):
         internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
         sheet['L2'].value = internal_content
 
-    
-
 
     sum = 0
     five_sum = 0
@@ -204,11 +202,6 @@ def quotationFile(quotation_obj,see,five):
                     all_sum = sum + five_sum
                     sheet.cell(row=i, column=index, value=all_sum)
 
-                # elif cell_value == "SUM_CHINESS":
-                #     chinese_amount = an2cn(sum, "low")
-                #     print("chinese_amoun t ", chinese_amount)
-                #     sheet.cell(row=i, column=index, value="總 計:新台幣 " + chinese_amount + "元整")
-                    
     except ValueError as e:
         return True,"遇到欄位合併的錯誤"
     except Exception as e: 

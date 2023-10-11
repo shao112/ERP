@@ -54,7 +54,7 @@ class SysMessage(models.Model):
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
-    file = models.FileField(upload_to='employee_profile/users/')
+    file = models.FileField(upload_to='UploadedFile/')
 
     class Meta:
         verbose_name = '檔案上傳管理'

@@ -860,7 +860,7 @@ class FileUploadView(View):
         uploaded_file = request.FILES.get('fileInput')
 
         if uploaded_file ==None:
-             return JsonResponse({'error': '請上傳檔案'}, status=500)
+             return JsonResponse({'error': '請上傳檔案'}, status=400)
         #檢查type，回傳上傳正確檔案
 
         workbook = load_workbook(uploaded_file)
@@ -943,7 +943,6 @@ class FormUploadFileView(View):
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
             if ManyToManyProcess:
-                print("ManyToManyProcess")
                 related_field = getattr(model, getname)
                 uploaded_file_obj = UploadedFile.objects.create(name=filename, file=uploaded_file)
                 related_field.add(uploaded_file_obj)
@@ -1637,7 +1636,6 @@ class Calendar_View(View):
                 continue
             if project.location is None:
                 project.location = "暫無"
-            print(project.location)
             data.append({
                 'title': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,

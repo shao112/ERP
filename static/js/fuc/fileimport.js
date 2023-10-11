@@ -32,6 +32,7 @@ fileInput.addEventListener('change', async function () {
     console.log(formData); // Handle the success response from Django
     model = fileInput.getAttribute('data-model');
     console.log("model: "+model)
+
     $.ajax({
         type: 'POST',
         url: "/restful/" + model + "/file", // Replace this with your actual Django endpoint URL

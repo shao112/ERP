@@ -66,7 +66,7 @@ function LoadFileList() {
   });
 }
 
-function setQuotationId(id) {
+function setEmployeeId(id) {
   employee_id = id;
   LoadFileList();
 }
@@ -83,6 +83,10 @@ function handleAPI() {
   if (!file) {
     return;
   }
+  var newFileName = "employee_" + file.name;
+
+  file = new File([file], newFileName, { type: file.type });
+
 
   var modal = "employee";
   var formData = new FormData();

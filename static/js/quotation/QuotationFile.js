@@ -85,6 +85,10 @@ function handleAPI() {
   if (!file) {
     return;
   }
+  var newFileName = "Quotation_" + file.name;
+
+  file = new File([file], newFileName, { type: file.type });
+
 
   var modal = "Quotation";
   var formData = new FormData();
