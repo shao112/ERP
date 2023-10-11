@@ -125,6 +125,7 @@ class AnnualLeave(ModifiedModel):
     remark = models.TextField( null=True, blank=True, verbose_name='備註')
 
 
+
 # 員工（以內建 User 擴增）
 class Employee(ModifiedModel):
     GENDER_CHOICES = [
@@ -231,7 +232,7 @@ class Employee(ModifiedModel):
         today = datetime.today().date()
         total_months = (today.year - start_work_date.year) * 12 + (today.month - start_work_date.month)
 
-        seniority_value = total_months / 12
+        seniority_value = round(total_months / 12,2)
 
         return seniority_value
 
@@ -1173,10 +1174,23 @@ class Leave_Param(ModifiedModel):
 
     #統一回傳leave_quantity，主要處理特休計算 才建立這個fuc
     def leave_hours(self,user):
-        if self.id ==1: #特休id是1        
-            start_work_date = user.start_work_date #入職日
+        if self.id ==1: #特休id是1
+            #以目前日期，撈取截止日期最大的        
             today = datetime.today()
-            return 0
+            nearest_annual_leave = user.annualleaves.all()
+            if not nearest_annual_leave :
+                return 0
+            print("today")
+            print(nearest_annual_leave)
+            nearest_annual_leave = nearest_annual_leave.filter(end_date__gt=today).order_by('-end_date')
+            print(nearest_annual_leave)
+
+            if len(nearest_annual_leave):
+                nearest_annual_leave = nearest_annual_leave.first()
+                get_hours = nearest_annual_leave.days * 24
+                return get_hours
+            else:
+                return 0
 
         return self.leave_quantity
     
@@ -1233,6 +1247,10 @@ class Leave_Param(ModifiedModel):
 
     #傳入新申請obj，判斷今年能不能請假
     def exceeds_leave_quantity_by_year(self, leave_application,user):
+
+        if self.leave_name=="公假":
+            return True
+
         year = leave_application.start_date_of_leave.year
         #取得今年請假時數
         total_hours, total_minutes ,_= self.calculate_leave_duration_by_YM_or_Total(user,year=year)        
@@ -1285,6 +1303,11 @@ class Leave_Param(ModifiedModel):
             if total_minutes > 0:
                 remaining_hours -= 1
                 remaining_minutes = 60 - total_minutes
+            
+            remaining_time= f"{remaining_hours}時{remaining_minutes}分"
+
+            if  leave_param.leave_name=="公假":
+                remaining_time="無"
 
             leave_param_details.append({
                 'id': leave_param.get_show_id(),
@@ -1292,7 +1315,7 @@ class Leave_Param(ModifiedModel):
                 'total_hours': total_hours,
                 'total_minutes': total_minutes,
                 'all_hour': can_use_hour,
-                'remaining_time': f"{remaining_hours}時{remaining_minutes}分",
+                'remaining_time': remaining_time,
                 "details":details
             })
 

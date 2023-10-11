@@ -217,35 +217,35 @@ class Index(View):
 
             employee = request.user.employee
             
+            start_work_date = employee.start_work_date
+            if not start_work_date:
+                return
+            
             years = employee.seniority()
+            today = datetime.today().date()
 
             #計算入職的前一天的明年時間
             end_date = employee.start_work_date - timedelta(days=1)
-            end_date = end_date.replace(year=end_date.year + 1)
-            print(end_date)
-            print(type(end_date))
+            end_date = end_date.replace(year=today.year + 1)
             print(years)
-
-
-
+            print("end_date")
+            print(end_date)
             if years == "人資單位未填寫入值日" or years <0.6:
-                return 0 
-            # years=1.5
+                return 0
+
             
             if years < 1:
                 has_three_days_leave = employee.annualleaves.filter(days=3).exists()
+                print("has_three_days_leave")
                 print(has_three_days_leave)
-                if not has_three_days_leave:
-                    pass
-                    # annual_leave = AnnualLeave.objects.create(days=3, end_date=end_date, remark="")
-                    # employee.annualleaves.add(annual_leave)
+                if not has_three_days_leave:                    
+                    annual_leave = AnnualLeave.objects.create(days=3, end_date=end_date, remark="")
+                    employee.annualleaves.add(annual_leave)
                 return 
             
-            today = datetime.today().date()
             #今天=入職 才執行給假
-            if  not (today.month == employee.start_work_date.month and today.day == employee.start_work_date.day):
-                print("1")
-                pass
+            if  not (today.month == start_work_date.month and today.day == start_work_date.day):
+                return
             
             give_day = 0
             if years >= 1 and years < 2:
@@ -260,8 +260,9 @@ class Index(View):
                 give_day= 16
             else:
                 give_day= min(30, math.floor(years))
-            print("give_day")
-            print(give_day)
+
+            annual_leave = AnnualLeave.objects.create(days=give_day, end_date=end_date, remark="")
+            employee.annualleaves.add(annual_leave)
 
 
         if not isinstance(request.user, AnonymousUser):

@@ -1332,6 +1332,7 @@ class Employee_View(View):
             uploaded_files_dict_list.append(file_dict)
 
         data = model_to_dict(data)
+        data["annualleaves"] = ""
         data["uploaded_files"]=uploaded_files_dict_list
         data['profile_image'] = data['profile_image'].url if data['profile_image']  else None
         print(data)
