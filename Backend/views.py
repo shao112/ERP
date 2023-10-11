@@ -39,15 +39,17 @@ class QuotationFileView(View):
 
     def get(self, request, *args, **kwargs):
         obj_id = self.kwargs.get('id')
-        print("id ",obj_id)
         
         if id:
             error_msg=""
             try:
                 quotaion_obj = Quotation.objects.get(id=obj_id)
                 print("quotaion_obj ",quotaion_obj)
+            except Http404:
+                return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
             except Exception as e:
-                error_msg +=f"找不到\n"
+                print(e)
+                return JsonResponse({"error": str(e)}, status=400)
             
             return quotationFile(quotaion_obj)
 
@@ -651,7 +653,7 @@ class Quotation_View(View):
             file_dict = model_to_dict(file)
             file_dict["file"] = file.file.url
             uploaded_files_dict_list.append(file_dict)
-
+            
 
         work_item_list = []
         for item in data.work_item.all():
@@ -665,7 +667,6 @@ class Quotation_View(View):
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
         data['client_name'] = client_name
-        data['invoice_attachment'] = data['invoice_attachment'].url if data['invoice_attachment']  else None
 
 
         return JsonResponse({"data":data}, status=200,safe = False)
@@ -1665,14 +1666,18 @@ class Check(View):
 
 
 class DeleteUploadedFileView(View):
-    def delete(self, request, employee_id, file_id):
-        employee = get_object_or_404(Employee, id=employee_id)
+    def delete(self, request,model, obj_id, file_id):
+        match model:
+            case "employee":
+                model=Employee.objects.get(id=obj_id)
+            case "Quotation":
+                model=Quotation.objects.get(id=obj_id)
+
         uploaded_file = get_object_or_404(UploadedFile, id=file_id)
-        if uploaded_file in employee.uploaded_files.all():
-            employee.uploaded_files.remove(uploaded_file)
-            employee.save()
-            uploaded_file.delete()
-            
+        if uploaded_file in model.uploaded_files.all():
+            model.uploaded_files.remove(uploaded_file)
+            model.save()
+            uploaded_file.delete()            
             return JsonResponse({"message": "檔案已刪除。"}, status=200)
         else:
             return JsonResponse({"message": "檔案不存在或不屬於此員工。"}, status=400)

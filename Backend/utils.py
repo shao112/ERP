@@ -10,6 +10,9 @@ from openpyxl.styles import NamedStyle
 from urllib.parse import quote
 from cn2an import an2cn
 from django.db.models import Sum
+import math
+from openpyxl.drawing.image import Image
+
 
 
 
@@ -108,22 +111,8 @@ def quotationFile(quotation_obj):
     business_tel = "" if quotation_obj.business_tel is None else quotation_obj.business_tel
 
     item_list = quotation_obj.work_item.all()
-    print("item_list: ",item_list)
-    # quotation_id = quotation_obj.quotation_id
-    # client = quotation_obj.client
-    # project_name = quotation_obj.project_name
-    # tax_id = quotation_obj.tax_id
-    # contact_person = quotation_obj.contact_person
-    # business_assistant = quotation_obj.business_assistant
-    # address = quotation_obj.address
-    # tel = quotation_obj.tel
-    # mobile = quotation_obj.mobile
-    # fax = quotation_obj.fax
-    # email = quotation_obj.email
-    # quote_validity_period = quotation_obj.quote_validity_period
-    # business_tel = quotation_obj.business_tel
+
     file_path = r'media/system_files/quotation_template.xlsx'
-    print("client ", client)
     try:
         workbook = load_workbook(filename=file_path)
     except Exception as e:
@@ -134,7 +123,25 @@ def quotationFile(quotation_obj):
     chinese_format = NamedStyle(name='chinese_format', number_format="[$NT$-2]#,##0;[RED]-[$NT$-2]#,##0")
     workbook.add_named_style(chinese_format)
 
+    #放圖
+    import os
+
+    uploaded_files = quotation_obj.uploaded_files.all() 
+    print("xx")
+    print(uploaded_files)
+    for i, file in enumerate(uploaded_files):
+        file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
+        print(file_path)
+        img = Image(file_path)
+        sheet.add_image(img, f'O{4+i}')
+    internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
+    sheet['L2'].value = internal_content
+
+    
+
+
     sum = 0
+    five_sum = 0
     try:
         for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
             
@@ -183,16 +190,23 @@ def quotationFile(quotation_obj):
                             sheet.cell(row=i+next_index, column=index+8, value=(item.count)*(item.unit_price))
                             sum+=(item.count)*(item.unit_price)
                 elif cell_value == "SUM":
-                    sheet.cell(row=i, column=index, value=sum).style = 'chinese_format'
-                elif cell_value == "SUM_CHINESS":
-                    chinese_amount = an2cn(sum, "low")
-                    # chinese_amount = 0
-                    print("chinese_amoun t ", chinese_amount)
-                    sheet.cell(row=i, column=index, value="總 計:新台幣 " + chinese_amount + "元整")
+                    sheet.cell(row=i, column=index, value=sum)
+                elif cell_value == "sum_five":
+                    five_sum = math.ceil(sum *0.05)
+                    sheet.cell(row=i, column=index, value=five_sum)
+                elif cell_value == "all_sum":
+                    all_sum = sum + five_sum
+                    sheet.cell(row=i, column=index, value=all_sum)
+
+                # elif cell_value == "SUM_CHINESS":
+                #     chinese_amount = an2cn(sum, "low")
+                #     print("chinese_amoun t ", chinese_amount)
+                #     sheet.cell(row=i, column=index, value="總 計:新台幣 " + chinese_amount + "元整")
                     
     except ValueError as e:
         return True,"遇到欄位合併的錯誤"
     except Exception as e: 
+        print(e)
         return True,"系統無法分析此樣板，出現意外錯誤"
 
     filename = f"【報價單】 {quotation_id}-{client}-{project_name}.xlsx"

@@ -35,7 +35,7 @@ function LoadFileList() {
         deleteButton.click(function () {
           $.ajax({
             type: "DELETE",
-            url: `/restful/delete_uploaded_file/${employee_id}/${file.id}`,
+            url: `/restful/delete_uploaded_file/${"Quotation"}/${employee_id}/${file.id}`,
             headers: {
               "X-CSRFToken": csrftoken,
             },

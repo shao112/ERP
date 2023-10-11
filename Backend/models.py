@@ -739,7 +739,6 @@ class Quotation(ModifiedModel):
     work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
-    # invoice_attachment = models.FileField(upload_to="Invoice", null=True, blank=True, verbose_name="請款單")
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
 
     def get_show_id(self):
@@ -1482,8 +1481,9 @@ class Work_Overtime_Application(ModifiedModel):
                     eigth_money = math.ceil(8 * 1.67*hourly_salary)
                     end_money = math.ceil(overtime_hours * 2*hourly_salary)
                     holiday_overtime_money +=eigth_money+end_money
-                    details.append({"id":id_str,"date":show_date+"(假日結算)","hour":8,"money":eigth_money,"magnification":1.67})
-                    details.append({"id":id_str,"date":show_date+"(假日結算)","hour":overtime_hours,"money":end_money,"magnification":2})
+                    date_str = show_date.strftime("%Y-%m-%d")
+                    details.append({"id":id_str,"date":date_str+"(假日結算)","hour":8,"money":eigth_money,"magnification":1.67})
+                    details.append({"id":id_str,"date":date_str +"(假日結算)","hour":overtime_hours,"money":end_money,"magnification":2})
                 else:
                     eigth_money = math.ceil(total_time * 1.67 * hourly_salary)
                     holiday_overtime_money +=eigth_money

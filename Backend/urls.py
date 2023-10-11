@@ -7,7 +7,7 @@ urlpatterns = [
 #打卡  
     path('check', views.Check.as_view(), name="check"),
 #處理檔案
-    path('delete_uploaded_file/<int:employee_id>/<int:file_id>', views.DeleteUploadedFileView.as_view(), name='delete_uploaded_file'),
+    path('delete_uploaded_file/<str:model>/<int:obj_id>/<int:file_id>', views.DeleteUploadedFileView.as_view(), name='delete_uploaded_file'),
     path('<str:model>/file', views.FileUploadView.as_view(), name='file_upload'),
     path('saveimg', views.IMGUploadView.as_view(), name='saveimg'),
     path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
