@@ -1,3 +1,5 @@
+let work_tests_del_show = false; //在HTML 設定此變數開關
+
 var tests_btn = document.getElementById("test_items_form_btn");
 if (tests_btn) {
   tests_btn.onclick = AddProcess;
@@ -30,14 +32,17 @@ function renderTestsList() {
       row.appendChild(cell);
     });
     
-    var deleteButton = document.createElement("button");
-    deleteButton.textContent = "刪除";
-    deleteButton.onclick = function() {
-      deleteItem(index);
-    };
-    var deleteCell = document.createElement("td");
-    deleteCell.appendChild(deleteButton);
-    row.appendChild(deleteCell);
+    if(work_tests_del_show){
+
+      var deleteButton = document.createElement("button");
+      deleteButton.textContent = "刪除";
+      deleteButton.onclick = function() {
+        deleteItem(index);
+      };
+      var deleteCell = document.createElement("td");
+      deleteCell.appendChild(deleteButton);
+      row.appendChild(deleteCell);
+    }
 
 
     worklist_tbody.appendChild(row);

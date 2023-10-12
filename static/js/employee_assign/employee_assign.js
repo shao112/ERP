@@ -29,20 +29,38 @@ project_job_assign_IdControl.addEventListener("change", function () {
     data: formData,
     success: function (response) {
       jsonData = response.data;
-      // console.log(jsonData);
-      project_confirmation = jsonData["project_confirmation"];
-      quotation_dict = jsonData["quotation_dict"];
+      console.log(jsonData)
+      var msgDiv = document.getElementById('employee_assign_show_msg');
+
+      // 從jsonData中獲取相關資料
+      var vehicles = jsonData["vehicle"];
+      var leadEmployees = jsonData["lead_employee"];
+      var workEmployees = jsonData["work_employee"];
+      var leadEmployeeNames = leadEmployees.map(function(employee) {
+        return employee.full_name;
+      }).join(", ");
+      
+      var workEmployeeNames = workEmployees.map(function(employee) {
+          return employee.full_name;
+      }).join(", ");
+      var htmlContent = `
+          使用車輛: ${vehicles||"無提供"}
+          <br/>
+          帶班主管: ${leadEmployeeNames}
+          <br/>
+          檢測人員: ${workEmployeeNames}
+      `;
+
+      msgDiv.innerHTML = htmlContent;
+
+
+      var project_confirmation = jsonData["project_confirmation"];
+      var quotation_dict = jsonData["quotation_dict"];
 
       var q_id = set_project_employee_assign_form.querySelectorAll(
         '[id="quotation_id"]'
       )[0];
-      q_id.value = quotation_dict["q_id"];
-      // console.log(
-      //   "quotation_dict[client_name]" + quotation_dict["client_name"]
-      // );
-      // console.log(
-      //   "quotation_dict[project_name]" + quotation_dict["project_name"]
-      // );
+      q_id.value = quotation_dict["q_id"];     
       document.getElementsByName("project_name")[0].value =
         quotation_dict["project_name"];
       document.getElementsByName("client_name")[0].value =

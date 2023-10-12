@@ -483,16 +483,6 @@ class Project_Employee_Assign_View(View):
                 del dict_data["carry_equipments"]
                 get_Project_Employee_Assign.carry_equipments.set(get_carry_equipments)
 
-            if "lead_employee" in dict_data:
-                get_completion_report_employee = dict_data["lead_employee"]
-                del dict_data["lead_employee"]
-                get_Project_Employee_Assign.lead_employee.set(get_completion_report_employee)
-
-            if "inspector" in dict_data:
-                get_completion_report_employee = dict_data["inspector"]
-                del dict_data["inspector"]
-                get_Project_Employee_Assign.inspector.set(get_completion_report_employee)
-
 
             get_Project_Employee_Assign.update_fields_and_save(**dict_data)
 
@@ -532,22 +522,22 @@ class Project_Employee_Assign_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
-        get_id=data.get_show_id()
         location = data.project_job_assign.location
+        
+        get_id=data.get_show_id()
         data = model_to_dict(data)
-        data["inspector"] = convent_employee(data["inspector"])
-        data["lead_employee"] = convent_employee(data["lead_employee"])
         carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
         data["carry_equipments"] = list(carry_equipments_ids)
         data["show_id"] = get_id
         data["location"] = location
-        
+
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
         else:
             data['enterprise_signature'] = None
         print("dict_data")
         print(data)
+
         return JsonResponse({"data":data}, status=200,safe = False)
 
 class New_View(View):
@@ -1530,7 +1520,9 @@ class Job_Assign_View(View):
         data = model_to_dict(data)
         data["requisition_name"]=requisition_name
         data["lead_employee"] = convent_employee(data["lead_employee"])
-        data["work_employee"] = convent_employee(data["work_employee"])
+        data["work_employee"] = convent_employee(data["work_employee"])        
+       
+
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
         data['quotation_dict'] = quotation_dict

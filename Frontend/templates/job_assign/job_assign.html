@@ -64,8 +64,8 @@
                         <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
                         <th data-sortable="true" data-field="project_name">工程名稱</th>
                         <th data-sortable="true" data-field="attendance_date">出勤日期</th>
+                        <th data-sortable="true" data-field="lead_employee">帶班主管</th>
                         <th data-sortable="true" data-field="work_employee">工作人員</th>
-                        <th data-sortable="true" data-field="lead_employee">帶班人員</th>
                         <th data-sortable="true" data-field="vehicle">使用車輛</th>
                         <th data-sortable="true" data-field="location">工作地點</th>
                         <th data-sortable="true" data-field="project_type">工作類型</th>
@@ -92,14 +92,14 @@
                             {{ j.project_confirmation.get_show_id }}
                         </td> 
                         <td>
-                            {{ j.get_show_id }}
+                            {{ j.get_show_id }} 
                         </td>
                         <td>{{ j.project_confirmation.quotation.project_name  }}</td>
                         <td>
                             {{ j.attendance_date |date:"Y/m/d" }}
                         </td>
-                        <td>{% for employees_list in j.work_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                         <td>{% for employees_list in j.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
+                        <td>{% for employees_list in j.work_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                         <td>{{ j.vehicle }}</td>
                         <td>{{ j.location }}</td>
                         <td>{{ j.project_type }}</td>

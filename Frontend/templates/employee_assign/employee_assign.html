@@ -205,7 +205,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-12 col-lg-2">
+                                                <div class="col-12 col-lg-4">
                                                     <div class="form-group">
                                                         <label for="is_completed">是否完工</label>
                                                         <select class="form-control form-control-sm" name="is_completed"
@@ -215,7 +215,18 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-12 col-lg-5">
+                                                 <div class="col-12 col-lg-8">
+                                                    <div id="employee_assign_show_msg" style="width: 100%;"> 
+                                                        使用車輛:
+                                                        <br/>
+                                                        帶班主管:
+                                                        <br/>
+                                                        檢測人員:                                                    
+                                                    </div>
+
+                                                </div>
+                                                    
+                                                <!-- <div class="col-12 col-lg-5">
                                                     <div class="form-group">
                                                         <label for="lead_employee">帶班主管</label>
                                                         <select class="select2" data-placeholder="選擇帶班主管"
@@ -240,7 +251,7 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div>  -->
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-12">
@@ -535,6 +546,7 @@
             script.src = src;
             document.body.appendChild(script);
         });
+        work_tests_del_show= true;
     });
 
     $(document).ready(function () {
@@ -560,6 +572,7 @@
 
         getdata = await GET_handleClick(event, true);
         console.log(getdata)
+
         get_value = Object.values(getdata["carry_equipments"]);
         all_Equipment_checked = get_value;
         syncall_Equipment_checkedRowsWithArray();

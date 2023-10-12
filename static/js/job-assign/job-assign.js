@@ -37,6 +37,7 @@ projectConfirmationIdControl.addEventListener('change', function () {
                 console.log(jsonData["requisition_name"])
                 requisition.value = jsonData["requisition_name"];
                 client.value = jsonData["client_name"];
+
                 
         },
         error: function (xhr, textStatus, errorThrown) {

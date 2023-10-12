@@ -73,17 +73,12 @@
                                     readonly></input>
                             </div>
                         </div>
+
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="lead_employee">帶班主管</label>
-                                <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
-                                    id="lead_employee_select2" multiple>
-                                    {% for employee in employees_list %}
-                                    <option value="{{ employee.id }}">
-                                        {{employee.full_name}}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                <label for="manuscript_return_date">手稿預計回傳日</label>
+                                <input class="form-control" name="manuscript_return_date" type="date"
+                                    id="manuscript_return_date"></input>
                             </div>
                         </div>
                     </div>
@@ -123,32 +118,16 @@
 
                     </div>
                     <div class="form-row">
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="inspector_select2">檢測人員</label>
-                                <select class="select2" data-placeholder="選擇工作人員" name="inspector"
-                                    id="inspector_select2" multiple>
-                                    {% for employee in employees_list %}
-                                    <option value="{{ employee.id }}">
-                                        {{employee.full_name}}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-
+                        <div id="employee_assign_show_msg" style="width: 100%;"> 
+                            使用車輛:
+                            <br/>
+                            帶班主管:
+                            <br/>
+                            檢測人員:                                                    
                         </div>
                     </div>
                     <div class="form-row">
 
-                        <div class="col-12 col-md-6">
-                            <div class="form-group">
-                                <label for="manuscript_return_date">手稿預計回傳日</label>
-                                <input class="form-control" name="manuscript_return_date" type="date"
-                                    id="manuscript_return_date"></input>
-                            </div>
-                        </div>
                     </div>
 
                 </div>

@@ -793,8 +793,8 @@ class Project_Job_Assign(ModifiedModel):
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
     attendance_date =models.DateField(null=True, blank=True, verbose_name="出勤日期")
     work_method = models.BooleanField(null=True, blank=True, verbose_name="工作方式(是:出勤、否:文書)",default=True) 
-    work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='工作人員')
-    lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班人員")
+    work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='檢測人員')
+    lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班主管")
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=4,choices=LOCATION_CHOICES, null=True, blank=True, verbose_name="工作地點")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
@@ -842,7 +842,7 @@ class Project_Job_Assign(ModifiedModel):
         # print(assignments)
         # print(employee_location)
 
-        allowance_dict = defaultdict(lambda: {"id":"","location": "", "day": 0, "money": 0,"food":0,"error":"","food_error":""})
+        allowance_dict = defaultdict(lambda: {"id":"","location": "", "date": "", "money": 0,"food":0,"error":"","food_error":""})
 
 
         for assignment in assignments:
@@ -857,7 +857,7 @@ class Project_Job_Assign(ModifiedModel):
             if assignment.work_method:  # 如果是出勤
                 
                 allowance_dict[get_show_id]["location"] = f"派工地-{location}"
-                allowance_dict[get_show_id]["day"] += 1
+                allowance_dict[get_show_id]["date"] =assignment.attendance_date.strftime('%Y-%m-%d')
                 try:
                     get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
                                             location_city_residence=employee_location,
@@ -874,7 +874,7 @@ class Project_Job_Assign(ModifiedModel):
                     allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
             else:
                 allowance_dict[get_show_id]["location"] = f"非派工地-{location}"
-                allowance_dict[get_show_id]["day"] += 1
+                allowance_dict[get_show_id]["date"] =assignment.attendance_date.strftime('%Y-%m-%d')
                 try:
                     get_Reference_food_obj = ReferenceTable.objects.get(name="非派工-伙食津貼",
                                             location_city_residence=employee_location,
@@ -887,16 +887,16 @@ class Project_Job_Assign(ModifiedModel):
             {
                 "id": data["id"],
                 "location": data["location"],
-                "day": data["day"],
+                "date": data["date"],
                 "money": data.get("money",0),
                 "food": data.get("food", 0),
                 "error": data.get("error", ""),
                 "food_error": data["food_error"],
             }
-            for data in allowance_dict.values() if data["day"] >= 0
+            for data in allowance_dict.values()
         ]
-        total_money =  math.ceil(sum(data["money"] * data["day"] for data in allowance_list))
-        total_food_money = math.ceil(sum(data["food"] * data["day"] for data in allowance_list))
+        total_money =  math.ceil(sum(data["money"]  for data in allowance_list))
+        total_food_money = math.ceil(sum(data["food"]  for data in allowance_list))
 
         #回傳伙食津貼/出差津貼/明細
         return total_money,total_food_money, allowance_list
@@ -912,9 +912,7 @@ class Project_Employee_Assign(ModifiedModel):
     construction_date = models.DateField(null=True, blank=True, verbose_name="施工日期")
     completion_date = models.DateField(null=True, blank=True, verbose_name="完工日期")
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
-    inspector = models.ManyToManyField('Employee', related_name='employee_assign_work_employee', blank=True, verbose_name='檢測人員')
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
-    lead_employee = models.ManyToManyField('Employee', related_name='employee_assign_lead_employee', blank=True, verbose_name='帶班主管')
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')

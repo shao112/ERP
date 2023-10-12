@@ -190,7 +190,7 @@
                         <div class="col-6">
                             {% for project in projects %}
                             <li href=""
-                                onclick="showjobassign('{{ project.project_confirmation.quotation.project_name }}|上班地點:{% if project.get_work_method_display %} 出勤(外地) {% else %} 公司 {% endif %} ')">
+                                onclick="showjobassign('{{ project.project_confirmation.quotation.project_name }}|上班方式:{% if project.get_work_method_display %} 派公 {% else %} 非派工 {% endif %}|備註:{{ project.remark  }} ')">
                                 {{ project.project_confirmation.quotation.project_name }}
                             </li>
                             <br>

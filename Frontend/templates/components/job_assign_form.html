@@ -97,8 +97,8 @@
             <div class="form-row">
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="lead_employee_select2">帶班人員</label>
-                        <select class="select2" data-placeholder="選擇帶班人員" name="lead_employee"
+                        <label for="lead_employee_select2">帶班主管</label>
+                        <select class="select2" data-placeholder="選擇帶班主管" name="lead_employee"
                             id="lead_employee_select2" multiple>
                             {% for employee in employees_list %}
                             <option value="{{ employee.id }}">{{ employee.full_name }}
@@ -107,10 +107,11 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="work_employee_select2">工作人員</label>
-                        <select class="select2" data-placeholder="選擇工作人員" name="work_employee"
+                        <label for="work_employee_select2">檢測人員</label>
+                        <select class="select2" data-placeholder="選擇檢測人員" name="work_employee"
                             id="work_employee_select2" multiple>
                             {% for employee in employees_list %}
                             <option value="{{ employee.id }}">{{ employee.full_name }}

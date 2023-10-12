@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .resources import DepartmentResource, ProjectConfirmationResource, ProjectEmployeeAssignResource, ProjectJobAssignResource
+# from .resources import DepartmentResource, ProjectConfirmationResource, ProjectEmployeeAssignResource, ProjectJobAssignResource
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -39,7 +39,7 @@ class ClockCorrectionApplicationAdmin(admin.ModelAdmin):
 # 部門
 class DepartmentAdmin(ImportExportModelAdmin):
     list_display = ('pk','belong_to_company', 'parent_department', 'department_name', 'department_id', 'created_date', 'update_date')
-    resource_class = DepartmentResource
+    # resource_class = DepartmentResource
     
 # 工程確認單
 class ProjectConfirmationAdmin(ImportExportModelAdmin):
@@ -47,7 +47,7 @@ class ProjectConfirmationAdmin(ImportExportModelAdmin):
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
-    resource_class = ProjectConfirmationResource
+    # resource_class = ProjectConfirmationResource
     
 # 工作派任計畫
 class ProjectJobAssignAdmin(ImportExportModelAdmin):
@@ -56,11 +56,11 @@ class ProjectJobAssignAdmin(ImportExportModelAdmin):
     # ManyToMany不能在list_display顯示
     def display_work_employee(self, obj):
         return ', '.join([str(item) for item in obj.work_employee.all()])
-    display_work_employee.short_description = '多對多_工作人員'
+    display_work_employee.short_description = '多對多_檢測人員'
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
-    display_lead_employee.short_description = '多對多_帶班人員'
-    resource_class = ProjectJobAssignResource
+    display_lead_employee.short_description = '多對多_帶班主管'
+    # resource_class = ProjectJobAssignResource
 
 
 # 打卡
