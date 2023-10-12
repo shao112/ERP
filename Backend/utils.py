@@ -350,31 +350,28 @@ def convent_excel_dict(worksheet,model):
     match  model:
         case "project-confirmation":
             template_dict= {
-                "quotation_id":"",
-                "project_confirmation_id":"",
-                "c_a":"",
-                "project_name":"",
-                "client":"",
-                "requisition":"",
+                "quotation":"",
                 "order_id":"",
+                "c_a":"",
                 "turnover":"",
+                "remark":"",
             }
             convent_model=Project_Confirmation
         case "job-assign":
             template_dict= {
-                "job_assign_id":"",
+                "project_confirmation":"",
                 "attendance_date":"",
                 "location":"",
-                "project_type":"",
                 "remark":"",
             }
             convent_model=Project_Job_Assign
         case "employee-assign":
             template_dict= {
+                "project_job_assign":"",
                 "construction_date":"",
                 "completion_date":"",
-                "is_completed":"",
-                "construction_location":"",
+                "manuscript_return_date":"",
+                "remark":"",
             }
             convent_model=Project_Employee_Assign
         case _:

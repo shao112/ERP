@@ -28,7 +28,6 @@ fileInput.addEventListener('change', async function () {
 
     const formData = new FormData(); // Create a new FormData object
     formData.append('fileInput', fileInput.files[0]); // Add the selected file to the FormData
-    console.log("ee"); // Handle the success response from Django
     console.log(formData); // Handle the success response from Django
     model = fileInput.getAttribute('data-model');
     console.log("model: "+model)
@@ -37,7 +36,7 @@ fileInput.addEventListener('change', async function () {
         type: 'POST',
         url: "/restful/" + model + "/file", // Replace this with your actual Django endpoint URL
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         data: formData,
         processData: false,

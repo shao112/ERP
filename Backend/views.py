@@ -848,7 +848,7 @@ class FileUploadView(View):
    def post(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']
         uploaded_file = request.FILES.get('fileInput')
-
+        print(modelstr)
         if uploaded_file ==None:
              return JsonResponse({'error': '請上傳檔案'}, status=400)
         #檢查type，回傳上傳正確檔案
@@ -857,12 +857,33 @@ class FileUploadView(View):
         worksheet = workbook.active
         get_dicts,get_model = convent_excel_dict(worksheet,modelstr)
         error_str=""
-        print(get_dicts)
+        print("get_dicts: " , get_dicts)
         for i,get_dict in enumerate(get_dicts):
             try:
-                 get_model.objects.create(**get_dict)
+                if get_model == Project_Confirmation: # 工程確認單判斷報價單編號是否有存在
+                    print("get_dict: ",get_dict['quotation'])
+                    id_object = Quotation.objects.get(quotation_id=get_dict['quotation'])
+                    get_model.objects.create(
+                        quotation = id_object,
+                        order_id = get_dict['order_id'],    
+                        c_a = get_dict['c_a'],    
+                        turnover = get_dict['turnover'],    
+                        remark = get_dict['remark']
+                    )
+                    print("id_object: ",id_object)
+
+                # elif  get_model == Project_Job_Assign : # 派任計畫判斷工程確認單編號是否有存在
+                #     id_object = Project_Job_Assign.objects.get(=get_dict) # 工確單的編號是用方法回傳的
+                # elif  get_model == Project_Confirmation: # 派工單判斷派任計畫編號是否有存在
+                #     id_object = Project_Job_Assign.objects.get(=get_dict)
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
                 error_str=f"第{i+1}欄資料錯誤\n"
+            except Quotation.DoesNotExist:
+                print("找不到關聯報價單編號")
+            except Project_Confirmation.DoesNotExist:
+                print("找不到工程確認單編號")
+            except Project_Job_Assign.DoesNotExist:
+                print("找不到關派任計畫編號")
 
         if error_str=="":
             return JsonResponse({'message': '上傳成功'},status=200)
