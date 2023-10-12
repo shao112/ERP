@@ -112,7 +112,7 @@
                     </tr>
                     <tr>
                         <td class="chinese">施工地點</td>
-                        <td>{{ project_employee_assign.construction_location }}</td>
+                        <td>{{ project_employee_assign.project_job_assign.location }}</td>
                         <td class="chinese">支援公司<br>(人數/姓名)</td>
                         <td>{{ project_employee_assign.support_company }}</td>
                         <td class="chinese">手稿預計回傳日</td>
@@ -120,10 +120,10 @@
                     </tr>
                     <tr>
                         <td class="chinese">使用車輛: </td>
-                        <td colspan="3">{{ project_employee_assign.vehicle }}</td>
+                        <td colspan="3">{{ project_employee_assign.project_job_assign.vehicle }}</td>
                         <td class="chinese">檢測人員</td>
                         <td colspan="3">
-                            {% for inspector in project_employee_assign.inspectors.all %}
+                            {% for inspector in project_employee_assign.project_job_assign.work_employee.all %}
                             {{ inspector.full_name }} (員工編號: {{ inspector.employee_id }}){% if not forloop.last %},
                             {%endif %}
                             {% endfor %}

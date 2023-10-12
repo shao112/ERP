@@ -263,7 +263,7 @@ class SalaryDetail(models.Model):
         verbose_name_plural = "薪資明細"
 
     def __str__(self):
-        return f"{self.name} + {self.salary}"
+        return f"{self.name} + {self.salary} +{self.adjustment_amount}(調整金額) "
 
 
 class Salary(ModifiedModel):
@@ -844,45 +844,61 @@ class Project_Job_Assign(ModifiedModel):
 
         allowance_dict = defaultdict(lambda: {"id":"","location": "", "date": "", "money": 0,"food":0,"error":"","food_error":""})
 
+        use_id=[]
 
         for assignment in assignments:
-            location = assignment.location
-            get_show_id = assignment.get_show_id()
-            allowance_dict[get_show_id]["id"] = get_show_id
-
-            if  location=="":
-                allowance_dict[get_show_id]["error"] = "派任單未選擇城市"
+            if assignment.id in use_id:
                 continue
-                
-            if assignment.work_method:  # 如果是出勤
-                
-                allowance_dict[get_show_id]["location"] = f"派工地-{location}"
-                allowance_dict[get_show_id]["date"] =assignment.attendance_date.strftime('%Y-%m-%d')
-                try:
-                    get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
-                                            location_city_residence=employee_location,
-                                            location_city_business_trip=location)
-                    allowance_dict[get_show_id]["money"] = get_Reference_obj.amount
-                except ReferenceTable.DoesNotExist:
-                    allowance_dict[get_show_id]["error"] = f"找不到{employee_location}對{location}的出差參照表 "
-                try:
-                    get_Reference_food_obj = ReferenceTable.objects.get(name="派工-伙食津貼",
-                                            location_city_residence=employee_location,
-                                            location_city_business_trip=location)
-                    allowance_dict[get_show_id]["food"] = get_Reference_food_obj.amount
-                except ReferenceTable.DoesNotExist:
-                    allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
-            else:
-                allowance_dict[get_show_id]["location"] = f"非派工地-{location}"
-                allowance_dict[get_show_id]["date"] =assignment.attendance_date.strftime('%Y-%m-%d')
-                try:
-                    get_Reference_food_obj = ReferenceTable.objects.get(name="非派工-伙食津貼",
-                                            location_city_residence=employee_location,
-                                            location_city_business_trip=location)
-                    allowance_dict[get_show_id]["food"] = get_Reference_food_obj.amount
-                except ReferenceTable.DoesNotExist:
-                    allowance_dict[get_show_id]["food_error"] = f"找不到{employee_location}對{location}的伙食津貼參照表"
 
+            assignment_date = assignment.attendance_date
+            day_assignments =  assignments.filter(attendance_date=assignment_date) 
+            show_date = assignment_date.strftime('%Y-%m-%d')
+            show_id=""
+            allowance_dict[show_date]["date"] = show_date
+
+            cal_food=0
+            cal_money=0
+
+            for day_assignment in day_assignments:
+                use_id.append(day_assignment.id)
+                get_show_id =day_assignment.get_show_id() 
+                show_id += get_show_id+"<br/> "
+                allowance_dict[show_date]["id"] = show_id
+                location = day_assignment.location
+                if  location=="":
+                    allowance_dict[show_date]["error"] += f"{get_show_id }派任單未選擇城市，跳過計算。 "
+                    continue
+                                    
+                if day_assignment.work_method:  # 如果是出勤   
+                    allowance_dict[show_date]["location"] += f"派工地-{location} <br/>"
+                    try:
+                        get_Reference_obj = ReferenceTable.objects.get(name="出差津貼",
+                                                location_city_residence=employee_location,
+                                                location_city_business_trip=location)
+                        cal_money = max(get_Reference_obj.amount,cal_money)
+                    except ReferenceTable.DoesNotExist:
+                        allowance_dict[show_date]["error"] += f"找不到{employee_location}對{location}的出差參照表。 "
+                    try:
+                        get_Reference_food_obj = ReferenceTable.objects.get(name="派工-伙食津貼",
+                                                location_city_residence=employee_location,
+                                                location_city_business_trip=location)
+                        cal_food = max(get_Reference_food_obj.amount,cal_food)
+                    except ReferenceTable.DoesNotExist:
+                        allowance_dict[show_date]["food_error"] += f"找不到{employee_location}對{location}的伙食津貼參照表。 "
+                else:
+                    allowance_dict[show_date]["location"] += f"非派工地-{location} <br/>"
+                    try:
+                        get_Reference_food_obj = ReferenceTable.objects.get(name="非派工-伙食津貼",
+                                                location_city_residence=employee_location,
+                                                location_city_business_trip=location)
+                        cal_food = max(get_Reference_food_obj.amount,cal_food)
+                    except ReferenceTable.DoesNotExist:
+                        allowance_dict[show_date]["food_error"]+= f"找不到{employee_location}對{location}的伙食津貼參照表。"
+            
+            allowance_dict[show_date]["food"]= math.floor(cal_food)
+            allowance_dict[show_date]["money"]= math.floor(cal_money)
+
+            
         allowance_list = [
             {
                 "id": data["id"],
@@ -895,8 +911,9 @@ class Project_Job_Assign(ModifiedModel):
             }
             for data in allowance_dict.values()
         ]
-        total_money =  math.ceil(sum(data["money"]  for data in allowance_list))
-        total_food_money = math.ceil(sum(data["food"]  for data in allowance_list))
+
+        total_money = math.floor(sum(data["money"] for data in allowance_list))
+        total_food_money = math.floor(sum(data["food"] for data in allowance_list))
 
         #回傳伙食津貼/出差津貼/明細
         return total_money,total_food_money, allowance_list

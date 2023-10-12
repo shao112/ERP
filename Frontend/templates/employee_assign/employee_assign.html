@@ -546,7 +546,7 @@
             script.src = src;
             document.body.appendChild(script);
         });
-        work_tests_del_show= true;
+
     });
 
     $(document).ready(function () {
@@ -560,7 +560,7 @@
     });
 
     async function LoadData(event) {
-
+        work_tests_del_show= true;
         const approvalStatus = event.currentTarget.getAttribute('data-approval');
 
         if (approvalStatus == "in_process" || approvalStatus == "completed") {

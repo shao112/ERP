@@ -26,6 +26,14 @@ def salaryFile(get_salary,get_type):
 
     get_details = get_salary.details.all()
     file_path = r'media/system_files/salary_template.xlsx'
+    miss_obj = 0 #取得勞退項目
+
+    try:
+        miss_obj =get_salary.details.filter(name="*勞退公提(6%免扣)").first().adjustment_amount
+        print("x")
+        print(miss_obj)
+    except Exception as e:
+       pass
 
     try:
         workbook = load_workbook(filename=file_path)
@@ -40,13 +48,19 @@ def salaryFile(get_salary,get_type):
 
     sheet = workbook.active
     
-    deduction_items = get_details.filter(deduction=True,five=get_type)
-    addition_items = get_details.filter(deduction=False,five=get_type)
+    deduction_items = get_details.filter(deduction=True,five=get_type) #.exclude(name="*勞退")#扣
+    addition_items = get_details.filter(deduction=False,five=get_type)#加
+
+
     deduction_sum = deduction_items.aggregate(total=Sum('adjustment_amount'))['total'] or 0
     addition_sum = addition_items.aggregate(total=Sum('adjustment_amount'))['total'] or 0
+
+
+    deduction_sum -=miss_obj #扣項把勞退扣回去
+
     difference = addition_sum - deduction_sum
 
-    print(full_name,deduction_sum,addition_sum,difference)
+    print(full_name,"add",addition_sum,"cost",deduction_sum,"toto",difference)
 
     #http://localhost:8000/restful/salaryfile/2023/10/2/1
     try:
@@ -84,8 +98,12 @@ def salaryFile(get_salary,get_type):
                         sheet.cell(row=i, column=index+1, value="")
                     else:
                         for next_index, item in enumerate(deduction_items):
-                            sheet.cell(row=i+next_index, column=index, value= item.name)
-                            sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
+                            if item.name=="*勞退公提(6%免扣)":
+                                sheet.cell(row=i+next_index, column=index, value= "勞退公提(6%免扣)")
+                                sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
+                            else:
+                                sheet.cell(row=i+next_index, column=index, value= item.name)
+                                sheet.cell(row=i+next_index, column=index+1, value=item.adjustment_amount)
 
     except ValueError as e:
         return True,"遇到欄位合併的錯誤"

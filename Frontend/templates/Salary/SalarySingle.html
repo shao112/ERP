@@ -212,25 +212,25 @@
 
                     <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
                         伙食津貼{{job_money}} / 出差津貼{{job_food_money}}
-                        <table>
+                        <table class="table">
                             <thead>
                                 <tr>
+                                    <th>出勤日期</th>
                                     <th>派任計畫單單號</th>
                                     <th>地點與類型</th>
                                     <th>出勤對應價格</th>
                                     <th>伙食補貼價格</th>
-                                    <th>出勤日期</th>
                                     <th>備註</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for detail in Project_Job_Assign_details %}
                                 <tr>
-                                    <td>{{ detail.id }}</td>
-                                    <td>{{ detail.location }}</td>
+                                    <td>{{ detail.date }}</td>
+                                    <td>{{ detail.id|safe  }}</td>
+                                    <td>{{ detail.location |safe }}</td>
                                     <td>{{ detail.money }}</td>
                                     <td>{{ detail.food }}</td>
-                                    <td>{{ detail.date }}</td>
                                     <td>{{ detail.error }} {{ detail.food_error}}</td>
                                 </tr>
                                 {% endfor %}
@@ -243,7 +243,7 @@
                     <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
                         總和:{{Travel_Application_details_total_amount}}時
                         車程津貼:{{Travel_Application_details_total_money}} 
-                        <table>
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>車程單號</th>
@@ -293,6 +293,8 @@
                     {{salary.user.full_name}}的薪水明細
                 </h4>
                 明細名稱可自行新增(在搜尋欄輸入名稱後按下送出)
+                <br>
+                明細名稱有含* 請勿改名。
                 <div class="salary-header container-fluid">
                     <div>
                         <div class="container mt-4">

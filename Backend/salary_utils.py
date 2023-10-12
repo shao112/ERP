@@ -76,9 +76,9 @@ def create_salary(employee,year,month):
     get_employee_labor_pension = employee.labor_pension
     SalaryDetail.objects.create(
             salary=salary,
-            name='勞退',
-            system_amount=math.ceil(employee.labor_pension_moeny*6/100),
-            adjustment_amount= math.ceil(employee.labor_pension_moeny*6/100),
+            name='*勞退公提(6%免扣)',
+            system_amount=math.ceil(labor_pension_moeny*6/100),
+            adjustment_amount= math.ceil(labor_pension_moeny*6/100),
             deduction=True,
         five=True,
     )
@@ -88,8 +88,8 @@ def create_salary(employee,year,month):
         SalaryDetail.objects.create(
             salary=salary,
             name=f'勞退自提({employee_labor_pension_by_self}%)',
-            system_amount=math.ceil(employee.labor_pension_moeny*employee_labor_pension_by_self/100),
-            adjustment_amount= math.ceil(employee.labor_pension_moeny*employee_labor_pension_by_self/100),
+            system_amount=math.ceil(labor_pension_moeny*employee_labor_pension_by_self/100),
+            adjustment_amount= math.ceil(labor_pension_moeny*employee_labor_pension_by_self/100),
             deduction=True,
         five=True,
         )
