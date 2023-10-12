@@ -29,6 +29,16 @@ function renderTestsList() {
       cell.textContent = field;
       row.appendChild(cell);
     });
+    
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "刪除";
+    deleteButton.onclick = function() {
+      deleteItem(index);
+    };
+    var deleteCell = document.createElement("td");
+    deleteCell.appendChild(deleteButton);
+    row.appendChild(deleteCell);
+
 
     worklist_tbody.appendChild(row);
   });
