@@ -29,10 +29,10 @@ projectConfirmationIdControl.addEventListener('change', function () {
                 var form = document.querySelector('form[name="job_assign"]');
                 var projectName = form.querySelectorAll('[name="project_name"]')[0];
                 var requisition = form.querySelectorAll('[name="requisition"]')[0];
-                var c_a = form.querySelectorAll('[name="c_a"]')[0];
+                // var c_a = form.querySelectorAll('[name="c_a"]')[0];
                 var client = form.querySelectorAll('[name="client"]')[0];
                 projectName.value = jsonData["project_name"];
-                c_a.value = jsonData["c_a"];
+                // c_a.value = jsonData["c_a"];
                 console.log(jsonData)
                 console.log(jsonData["requisition_name"])
                 requisition.value = jsonData["requisition_name"];

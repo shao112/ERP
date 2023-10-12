@@ -135,8 +135,10 @@
         console.log("load")
         getdata = await GET_handleClick(event);
         var choose_input = document.getElementById("project_confirmation_select2");
+        var vehicle_select2 = document.getElementById("vehicle_select2");
         const change_event = new Event("change");
         choose_input.dispatchEvent(change_event);     
+        vehicle_select2.dispatchEvent(change_event);     
 
         
 

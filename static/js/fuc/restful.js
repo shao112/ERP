@@ -135,10 +135,9 @@ async function GET_handleClick(event, bringdata = true) {
             if (input.type == "file" ) {
               var element = document.getElementById(key);
 
-              console.log("g111111111et_value");
-              console.log(get_value);
-              console.log(key);
-              console.log(element);
+              // console.log(get_value);
+              // console.log(key);
+              // console.log(element);
               if(get_value != null){
                 element.href = get_value;
                 element.target = "_blank";
