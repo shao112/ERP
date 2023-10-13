@@ -58,6 +58,9 @@ urlpatterns = [
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
     path('accounts/logout/', views.signout, name='logout'),
+    #查看
+    path('leave_application_watch', login_required(views.Leave_Application_Watch_List.as_view()), name="Leave_Application_all"),
+    path('work_overtime_application_watch',login_required( views.Work_Overtime_Application_Watch_List.as_view()), name="Work_Overtime_Application"),
 ]
 
 

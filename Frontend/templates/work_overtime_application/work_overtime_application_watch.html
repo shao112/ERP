@@ -44,6 +44,7 @@
             </div>
         </div>
     </div>
+
     <div class="work-overtime-application-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
@@ -51,10 +52,6 @@
             data-filter-control="true">
             <div id="toolbar">
                 <div class="work-overtime-application-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
-                        data-target="#work-overtime-application-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增加班申請
-                    </a>
                     <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('加班申請.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
@@ -65,15 +62,17 @@
                 <tr class="text-nowrap">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
                         class="d-none d-md-table-cell">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-sortable="true" data-field="APP">簽核</th>
-                    <th data-sortable="true" data-field="id">加班編號</th>
-                    <th data-field="date_of_overtime" data-sortable="true">加班日期</th>
-                    <th data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
-                    <th data-field="type_of_overtime" data-sortable="true">加班類別</th>
-                    <th data-field="work_overtime_time" data-sortable="true">加班時間</th>
-                    <th data-field="work_overtime_time" data-sortable="true">系統計算小時</th>
+                        <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">查看</th>
+                    <th  data-filter-control="input" data-sortable="true" data-field="id">加班編號</th>
+                    <th data-filter-control="input" data-sortable="true" data-field="APP">簽核</th>
+                    <th data-filter-control="input" data-field="1" data-sortable="true">申請人編號</th>
+                    <th data-filter-control="input" data-field="2" data-sortable="true">申請人</th>
+                    <th  data-field="3" data-sortable="true">附件</th>
+                    <th data-filter-control="input" data-field="date_of_overtime" data-sortable="true">加班日期</th>
+                    <th  data-filter-control="input"  data-field="shift_of_overtime" data-sortable="true">班前/班後</th>
+                    <th  data-filter-control="input" data-field="type_of_overtime" data-sortable="true">加班類別</th>
+                    <th data-filter-control="input" data-field="work_overtime_time" data-sortable="true">加班時間</th>
+                    <th data-field="sys_time" data-sortable="true">系統計算小時</th>
                     <th data-field="carry_over" data-sortable="true">加班結轉方式</th>
                     <th data-field="overtime_reason" data-sortable="true">加班事由</th>
                 </tr>
@@ -88,47 +87,25 @@
                          data-approval="{{ work_overtime_application.Approval.current_status}}"
                             data-url="work_overtime_application" data-id="{{ work_overtime_application.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
-                            <i class="fas fa-sm fa-edit"></i>
+                            <i class="fas fa-sm fa-eye"></i>
                         </a>
                     </td>
-                    <td>
-                        <a data-url="work_overtime_application" data-target="#work-overtime-application-modal"
-                            data-id="{{ work_overtime_application.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
-                            <i class="far fa-sm fa-trash-alt"></i>
-                        </a>
-                    </td>
-                    <td>
-                        {% if work_overtime_application.Approval %}
-                        {{work_overtime_application.Approval.get_current_status_display}}
-
-                        {% if work_overtime_application.Approval.current_status == "completed" %}
-                        {% if request.user|get_supervisor %}
-                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
-                            onclick="DelApproval(event)">收回(主管)</button>
-                        {% endif %}
-                        {% endif %}
-
-
-                        {% if work_overtime_application.Approval.current_status == "in_process" %}
-                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
-                            onclick="DelApproval(event)">收回</button>
-                        {% endif %}
-
-                        {% if work_overtime_application.Approval.current_status == "rejected" %}
-                        / <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
-                            onclick="submitApproval(event)">發送新簽核</button>
-                        {% endif %}
-
-                        {% else %}
-                        <button data-id="{{work_overtime_application.id}}" data-model="Work_Overtime_Application"
-                            onclick="submitApproval(event)">開始簽核</button>
-                        {% endif %}
-                    </td>
-
+                    
                     <td>
                         {{ work_overtime_application.get_show_id }}
                     </td>
+                    <td>
+
+                        {% if work_overtime_application.Approval.get_current_status_display %}
+                        {{work_overtime_application.Approval.get_current_status_display}}
+                        {% else %}
+                        未開始簽核
+                        {% endif %}
+
+                    </td>
+                    <th >{{ work_overtime_application.created_by.employee_id }}</th>
+                    <th >{{ work_overtime_application.created_by.full_name }}</th>
+                    <th >{{ work_overtime_application.reassignment_attachment_link }}</th>
                     <td>
                         {{ work_overtime_application.date_of_overtime|date:"Y-m-d" }}
                     </td>
@@ -180,15 +157,8 @@
     });
 
     async function LoadData(event) {
-        console.log("load")
-        
-        const approvalStatus = event.currentTarget.getAttribute('data-approval');
-
-        if(approvalStatus=="in_process" || approvalStatus=="completed" ){
-            lock_input();
-        }else{
-            unlock_input();
-        }
+        console.log("load")        
+        lock_input();
         getdata = await GET_handleClick(event);
 
     }

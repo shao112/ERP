@@ -90,12 +90,6 @@
                     </li>
                     {% endif %}
 
-                    {% if user|in_group_T_or_F:"工程派任"  or user|in_group_T_or_F:"工程確認"  or pass_test_func %}
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Calendar_list' %}">工程部行程表</a>
-                    </li>
-                    {% endif %}
 
 
                     {% if user|in_group_T_or_F:"派工單" or pass_test_func %}
@@ -104,6 +98,14 @@
                         <a class="nav-link" href="{% url 'employee_assign' %}">派工單</a>
                     </li>
                     {% endif %}
+
+                    {% if user|in_group_T_or_F:"工程派任"  or user|in_group_T_or_F:"工程確認"  or pass_test_func %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Calendar_list' %}">行程表</a>
+                    </li>
+                    {% endif %}
+
                 </ul>
             </div>
         </li>
@@ -126,8 +128,11 @@
                         <a class="nav-link" href="{% url 'department' %}">部門管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Apply_List' %}">申請單查詢</a>
+                        <a class="nav-link" href="{% url 'Leave_Application_all' %}">假單查詢</a>
                     </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Apply_List' %}">申請單查詢</a>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_list' %}">員工管理</a>
                     </li>

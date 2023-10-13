@@ -25,29 +25,6 @@
 {% block main %}
 
 
-<div class="modal fade" id="leaveDetailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">假别詳情</h5>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    {% for detail in leave_details %}
-                    <li>
-                        假別: {{ detail.name }} 可請：{{detail.all_hour}} 已使用: {{ detail.total_hours }} 時 {{ detail.total_minutes }} 分  剩餘：{{detail.remaining_time}} 
-                        <br>
-
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <div class="main px-3">
@@ -78,34 +55,32 @@
             data-filter-control="true">
             <div id="toolbar">
                 <div class="leave_application-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"
-                        data-target="#leave-application-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增請假申請
-                    </a>
+
                     <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
                         onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
-                    <button data-toggle="modal" data-target="#leaveDetailsModal">
-                        查看假別
-                    </button>
+
                 </div>
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
                         class="d-none d-md-table-cell">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-field="app" data-sortable="true">簽核</th>
-                    <th data-field="id" data-sortable="true">代號</th>
-                    <th data-field="type_of_leave" data-sortable="true">假別項目</th>
-                    <th data-field="date_of_leave" data-sortable="true">請假日期</th>
-                    <th data-field="time_of_leave" data-sortable="true">請假時間</th>
-                    <th data-field="leave_hours" data-sortable="true">申請時數</th>
-                    <th data-field="substitute" data-sortable="true">工作代理人</th>
-                    <th data-field="leave_reason" data-sortable="true">請假事由</th>
-                    <th data-field="backlog" data-sortable="true">待辦事項</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">查看</th>
+
+                    <th data-filter-control="input" data-field="app" data-sortable="true">簽核</th>
+                    <th data-filter-control="input" data-field="id" data-sortable="true">單號</th>
+                    <th data-filter-control="input" data-field="1" data-sortable="true">申請人編號</th>
+                    <th data-filter-control="input" data-field="2" data-sortable="true">申請人</th>
+                    <th  data-field="3" data-sortable="true">附件</th>
+                    <th data-filter-control="input" data-field="type_of_leave" data-sortable="true">假別項目</th>
+                    <th data-filter-control="input" data-field="date_of_leave" data-sortable="true">請假日期</th>
+                    <th data-filter-control="input" data-field="time_of_leave" data-sortable="true">請假時間</th>
+                    <th data-filter-control="input" data-field="leave_hours" data-sortable="true">系統計算時數</th>
+                    <th data-filter-control="input" data-field="substitute" data-sortable="true">工作代理人</th>
+                    <th data-filter-control="input" data-field="leave_reason" data-sortable="true">請假事由</th>
+                    <th data-filter-control="input" data-field="backlog" data-sortable="true">待辦事項</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -118,49 +93,26 @@
                             data-id="{{ leave_application.id }}" class="sys_get btn btn-sm btn-warning"
                             data-approval="{{ leave_application.Approval.current_status}}" data-toggle="modal"
                             onclick="LoadData(event)">
-                            <i class="fas fa-sm fa-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a data-url="leave_application" data-target="#leave_application-modal"
-                            data-id="{{ leave_application.id }}" type="button" class="sys_del btn btn-sm btn-danger"
-                            onclick="DELETE_handleClick(event)">
-                            <i class="far fa-sm fa-trash-alt"></i>
+                            <i class="fas fa-sm fa-eye"></i>
                         </a>
                     </td>
 
                     <td>
 
-                        {% if leave_application.Approval %}
+                        {% if leave_application.Approval.get_current_status_display %}
                         {{leave_application.Approval.get_current_status_display}}
-
-                        {% if leave_application.Approval.current_status == "completed" %}
-                        {% if request.user|get_supervisor %}
-                        / <button data-id="{{leave_application.id}}" data-model="Leave_Application"
-                            onclick="DelApproval(event)">收回(主管)</button>
-                        {% endif %}
-                        {% endif %}
-
-
-                        {% if leave_application.Approval.current_status == "in_progress" %}
-                        / <button data-id="{{leave_application.id}}" data-model="Leave_Application"
-                            onclick="DelApproval(event)">收回</button>
-                        {% endif %}
-
-                        {% if leave_application.Approval.current_status == "rejected" %}
-                        / <button data-id="{{leave_application.id}}" data-model="Leave_Application"
-                            onclick="submitApproval(event)">發送新簽核</button>
-                        {% endif %}
-
                         {% else %}
-                        <button data-id="{{leave_application.id}}" data-model="Leave_Application"
-                            onclick="submitApproval(event)">開始簽核</button>
+                        未開始簽核
                         {% endif %}
+
 
                     </td>
                     <td>
                         {% if leave_application.get_show_id %}{{ leave_application.get_show_id }}{% else %}{% endif %}
                     </td>
+                    <th >{{ leave_application.created_by.employee_id }}</th>
+                    <th >{{ leave_application.created_by.full_name }}</th>
+                    <th >{{ leave_application.reassignment_attachment_link }}</th>
                     <td>
                         {% if leave_application.type_of_leave %}{{ leave_application.type_of_leave }}{% else %}{% endif %}
                     </td>
@@ -169,12 +121,12 @@
                         {{ leave_application.end_date_of_leave|date:"Y-m-d" }}
                     </td>
                     <td>
-                        {{ leave_application.start_hours_of_leave }}:{{ leave_application.start_mins_of_leave }} -
-                        {{ leave_application.end_hours_of_leave }}:{{ leave_application.end_mins_of_leave }}
+                        {{ leave_application.start_hours_of_leave| stringformat:"02d" }}:{{ leave_application.start_mins_of_leave| stringformat:"02d" }} -
+                        {{ leave_application.end_hours_of_leave| stringformat:"02d"  }}:{{ leave_application.end_mins_of_leave| stringformat:"02d" }}
                     </td>
                     <td>
                         {{ leave_application.calculate_leave_duration.0 }}時
-                        {{leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分
+                        {{leave_application.calculate_leave_duration.1 | stringformat:"02d" }}分    
                     </td>
                     <td>
                         {% if leave_application.substitute %}{{ leave_application.substitute }}{% else %}{% endif %}
@@ -215,11 +167,7 @@
     async function LoadData(event) {
         const approvalStatus = event.currentTarget.getAttribute('data-approval');
 
-        if (approvalStatus == "in_progress" || approvalStatus == "completed") {
-            lock_input();
-        } else {
-            unlock_input();
-        }
+        lock_input();
 
         console.log("load")
         getdata = await GET_handleClick(event);

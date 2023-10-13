@@ -34,10 +34,12 @@ function unlock_input() {
 
 function lock_input() {
   const get_input = get_all_input();
-
+  
   get_input.forEach((input) => {
-    input.setAttribute("readonly", "readonly");
-    input.disabled = true;
+    if (!input.className.includes("bootstrap-table-filter-control-")) {
+      input.setAttribute("readonly", "readonly");
+      input.disabled = true;
+    }
   });
 }
 

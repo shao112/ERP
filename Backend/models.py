@@ -784,7 +784,7 @@ class Project_Confirmation(ModifiedModel):
             download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
             return mark_safe(download_link)
         else:
-            return ""
+            return "未提供"
 
 
 # 工作派任計畫
@@ -956,7 +956,7 @@ class Project_Employee_Assign(ModifiedModel):
             download_link = "<a href='{}' download>下載</a>".format(self.enterprise_signature.url)
             return mark_safe(download_link)
         else:
-            return ""        
+            return "未提供"        
 
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
@@ -1002,6 +1002,14 @@ class Travel_Application(ModifiedModel):
     attachment = models.FileField(upload_to="Travel_Application_Attachment", null=True, blank=True, verbose_name="車程津貼附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
     created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
+
+    def reassignment_attachment_link(self):
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+
 
     class Meta:
         verbose_name = "車程申請"   # 單數
@@ -1074,6 +1082,13 @@ class Leave_Application(ModifiedModel):
     attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
     created_by = models.ForeignKey("Employee",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
+
+    def reassignment_attachment_link(self):
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
 
 
     class Meta:
@@ -1391,6 +1406,14 @@ class Work_Overtime_Application(ModifiedModel):
     class Meta:
         verbose_name = "加班申請"
         verbose_name_plural = verbose_name
+        
+    def reassignment_attachment_link(self):
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+
 
 
     def calculate_overtime_hours(self):
@@ -1591,6 +1614,13 @@ class Clock_Correction_Application(ModifiedModel):
     clock = models.ForeignKey("Clock",related_name="clock_correction", on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
+    def reassignment_attachment_link(self):
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+
 
     class Meta:
         verbose_name = "補卡申請"

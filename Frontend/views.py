@@ -579,8 +579,8 @@ class Apply_List(View):
                 return render(request, self.template_name, context)
 
         q_filter = Q()
-        obj_id=int(obj_id)
         if obj_id:
+            obj_id=int(obj_id)
             q_filter &= Q(id=obj_id)
 
         if created_by:
@@ -757,6 +757,21 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
 
 # 請假申請
 
+class Leave_Application_Watch_List(ListView):
+    model = Leave_Application
+    template_name = 'leave_application/leave_application_watch.html'
+    context_object_name = 'leave_application'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["leave_application_form"] = LeaveApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
+        context["leave_application_list"] =Leave_Application.objects.all()
+        return context
+
+
+
 class Leave_Application_List(ListView):
     model = Leave_Application
     template_name = 'leave_application/leave_application.html'
@@ -767,13 +782,10 @@ class Leave_Application_List(ListView):
         context["leave_application_form"] = LeaveApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
-
         user = self.request.user.employee
         current_year = datetime.now().year
-
         context["leave_details"] =Leave_Param.get_leave_param_all_details(user,year=current_year)
         context["leave_application_list"] =Leave_Application.objects.filter(created_by=user)
-
         return context
 
 
@@ -781,19 +793,29 @@ class Leave_Application_List(ListView):
 class Work_Overtime_Application_List(ListView):
     model = Work_Overtime_Application
     template_name = 'work_overtime_application/work_overtime_application.html'
-    context_object_name = 'work_overtime_applicationS'
+    context_object_name = 'work_overtime_application'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user.employee
-
-        x = Work_Overtime_Application.get_money_by_user_month(user,2023,10)
-        print(x)
-
         context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
         context["24range"] = range(24)
         context["60range"] = range(60)
         context["work_overtime_application_list"] =Work_Overtime_Application.objects.filter(created_by=user)
+        return context
+    
+class Work_Overtime_Application_Watch_List(ListView):
+    model = Work_Overtime_Application
+    template_name = 'work_overtime_application/work_overtime_application_watch.html'
+    context_object_name = 'work_overtime_application'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user.employee
+        context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
+        context["work_overtime_application_list"] =Work_Overtime_Application.objects.all()
         return context
     
 # 補卡申請

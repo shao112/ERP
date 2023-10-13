@@ -1067,6 +1067,10 @@ class Leave_Application_View(View):
         form = LeaveApplicationForm(dict_data)
         if form.is_valid():
             getObject = Leave_Application.objects.get(id=dict_data['id'])
+            #本人才能修改
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能修改"},status=400)
+
             if "type_of_leave" in dict_data:
                 type_of_leave = dict_data["type_of_leave"]
                 del dict_data["type_of_leave"]
@@ -1112,10 +1116,14 @@ class Leave_Application_View(View):
         data = model_to_dict(data)
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
+
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Leave_Application.objects.get(id=int(dict_data['id'])).delete()
+            getObject =Leave_Application.objects.get(id=int(dict_data['id']))
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1182,7 +1190,11 @@ class Work_Overtime_Application_View(View):
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Work_Overtime_Application.objects.get(id=dict_data['id']).delete()
+            getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            getObject.delete()
+
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1196,6 +1208,9 @@ class Work_Overtime_Application_View(View):
         form = WorkOvertimeApplicationForm(dict_data)
         if form.is_valid():
             getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
         else:
