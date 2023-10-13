@@ -525,6 +525,100 @@ class Calendar(ListView):
     template_name = 'calendar/calendar.html'
     context_object_name = 'employee'
 
+#申請單查詢
+class Apply_List(View):
+    template_name = 'apply_list/apply_list.html'
+
+    @staticmethod
+    def get_data():
+        context = {
+                "employees_list": Employee.objects.values('id', 'full_name'),
+                "all_project_job_assign": Project_Job_Assign.objects.all(),
+                "all_Equipment": Equipment.objects.all(),
+                "project_confirmation_list": Project_Confirmation.objects.all(),
+                "vehicle": Vehicle.objects.all(),
+                "Travel_ApplicationForm": Travel_ApplicationForm(),
+                "work_overtime_application_form": WorkOvertimeApplicationForm(),
+                "leave_application_form": LeaveApplicationForm(),
+                "clock_correction_application_form": ClockCorrectionApplicationForm(),
+                "Project_location_list": Project_Job_Assign.objects.all(),
+                "range_24": range(24),
+                "range_60": range(60),
+        }
+        return context
+
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_data()
+        return render(request, self.template_name, context)
+
+
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_data()
+        model_name = request.POST.get('model_name')
+        obj_id = request.POST.get('obj_id',"")
+        created_by = request.POST.get('created_by',"")
+        if created_by:
+            try:
+                created_by = Employee.objects.get(full_name=created_by)
+            except:
+                context["error"]  = "找不到員工"
+                return render(request, self.template_name, context)
+
+        q_filter = Q()
+        obj_id=int(obj_id)
+        if obj_id:
+            q_filter &= Q(id=obj_id)
+
+        if created_by:
+            q_filter &= Q(created_by=created_by)
+
+        print(model_name, obj_id,created_by,q_filter)
+
+        # 根據傳入的 model_name 選擇對應的模型 
+        if model_name == 'work_overtime_application':
+            model = Work_Overtime_Application
+        elif model_name == 'leave_application':
+            model = Leave_Application
+        elif model_name == 'Travel_Application':
+            model = Travel_Application
+        elif model_name == 'clock_correction_application':
+            model = Clock_Correction_Application
+        elif model_name == 'all':
+            pass
+        else:
+            context["error"]  = "錯誤類型"
+            return render(request, self.template_name, context)
+        
+        models = []
+        if model_name == 'all':
+            work_overtime_objects = Work_Overtime_Application.objects.filter(q_filter).annotate(
+                    model_url=Value("work_overtime_application")
+                )
+            leave_objects = Leave_Application.objects.filter(q_filter).annotate(
+                model_url=Value("leave_application")
+            )
+            travel_objects = Travel_Application.objects.filter(q_filter).annotate(
+                model_url=Value("Travel_Application")
+            )
+            clock_correction_objects = Clock_Correction_Application.objects.filter(q_filter).annotate(
+                model_url=Value("clock_correction_application")
+            )
+
+            models += list(work_overtime_objects)
+            models += list(leave_objects)
+            models += list(travel_objects)
+            models += list(clock_correction_objects)
+        else:
+            objects = model.objects.filter(q_filter).annotate(
+                    model_url=Value(model_name)
+            )
+            models += list(objects)
+
+
+        context["objects"] = models
+        return render(request, self.template_name, context)
 
 
 class Approval_List(ListView):

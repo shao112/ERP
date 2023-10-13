@@ -182,10 +182,14 @@ async function GET_handleClick(event, bringdata = true) {
 }
 
 $("form").on("submit", function (event) {
+  var form = $(this);
+  if (form.attr("id") === "nouse") {
+    return
+  }
+
   console.log("新增 or 修改");
   event.preventDefault();
 
-  var form = $(this);
   var url = form.attr("action");
   var formData = form.serialize();
   var method =  api_method;//form.data("method");

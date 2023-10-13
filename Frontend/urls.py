@@ -30,6 +30,7 @@ urlpatterns = [
     path('salary/<int:year>/<int:month>/<int:user>', login_required(views.SalaryDetailView.as_view()), name='salary_detail'),
     path('salary/<int:year>/<int:month>', login_required(views.SalaryListView.as_view()), name='salary_list'),
 
+    path('apply_list', login_required(views.Apply_List.as_view()), name="Apply_List"),
     path('approval_list', login_required(views.Approval_List.as_view()), name="Approval_List"),
     path('ExtraWorkDay',login_required( views.ExtraWorkDay_ListView.as_view()), name="ExtraWorkDay"),
     path('Salary_Employees', login_required(views.Salary_Employees_ListView.as_view()), name="Salary_Employees"),
