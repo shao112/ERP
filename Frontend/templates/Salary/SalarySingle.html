@@ -211,12 +211,14 @@
                     </div>
 
                     <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
-                        伙食津貼{{job_money}} / 出差津貼{{job_food_money}}
+                        伙食津貼{{job_food_money}} / 出差津貼{{job_money}}
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>出勤日期</th>
                                     <th>派任計畫單單號</th>
+                                    <th>報價單號</th>
+                                    <th>工程名稱</th>
                                     <th>地點與類型</th>
                                     <th>出勤對應價格</th>
                                     <th>伙食補貼價格</th>
@@ -227,7 +229,9 @@
                                 {% for detail in Project_Job_Assign_details %}
                                 <tr>
                                     <td>{{ detail.date }}</td>
-                                    <td>{{ detail.id|safe  }}</td>
+                                    <td>{{ detail.show_id |safe }}</td>
+                                    <td>{{ detail.q_id |safe }}</td>
+                                    <td>{{ detail.project_name|safe  }}</td>
                                     <td>{{ detail.location |safe }}</td>
                                     <td>{{ detail.money }}</td>
                                     <td>{{ detail.food }}</td>

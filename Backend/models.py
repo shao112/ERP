@@ -842,7 +842,7 @@ class Project_Job_Assign(ModifiedModel):
         # print(assignments)
         # print(employee_location)
 
-        allowance_dict = defaultdict(lambda: {"id":"","location": "", "date": "", "money": 0,"food":0,"error":"","food_error":""})
+        allowance_dict = defaultdict(lambda: {"id":"","location": "","project_name":"","q_id":"", "date": "", "money": 0,"food":0,"error":"","food_error":""})
 
         use_id=[]
 
@@ -854,6 +854,8 @@ class Project_Job_Assign(ModifiedModel):
             day_assignments =  assignments.filter(attendance_date=assignment_date) 
             show_date = assignment_date.strftime('%Y-%m-%d')
             show_id=""
+            project_name=""
+            q_id=""
             allowance_dict[show_date]["date"] = show_date
 
             cal_food=0
@@ -863,7 +865,11 @@ class Project_Job_Assign(ModifiedModel):
                 use_id.append(day_assignment.id)
                 get_show_id =day_assignment.get_show_id() 
                 show_id += get_show_id+"<br/> "
-                allowance_dict[show_date]["id"] = show_id
+                project_name += day_assignment.project_confirmation.quotation.project_name +"<br/> "
+                q_id += day_assignment.project_confirmation.quotation.quotation_id+"<br/> "
+                allowance_dict[show_date]["show_id"] = show_id
+                allowance_dict[show_date]["q_id"] = q_id
+                allowance_dict[show_date]["project_name"] = project_name
                 location = day_assignment.location
                 if  location=="":
                     allowance_dict[show_date]["error"] += f"{get_show_id }派任單未選擇城市，跳過計算。 "
@@ -901,8 +907,10 @@ class Project_Job_Assign(ModifiedModel):
             
         allowance_list = [
             {
-                "id": data["id"],
+                "show_id": data["show_id"],
                 "location": data["location"],
+                "q_id": data["q_id"],
+                "project_name": data["project_name"],
                 "date": data["date"],
                 "money": data.get("money",0),
                 "food": data.get("food", 0),
