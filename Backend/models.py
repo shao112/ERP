@@ -757,15 +757,15 @@ class Project_Confirmation(ModifiedModel):
     quotation =  models.ForeignKey("Quotation", null=True, blank=True,verbose_name="報價單號", on_delete=models.CASCADE )
     order_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='訂單編號')
     c_a = models.CharField(max_length=100, null=True, blank=True, verbose_name='母案編號')
-    requisition = models.ForeignKey('Requisition', on_delete=models.DO_NOTHING, null=True, blank=True, verbose_name='請購單位')
+    requisition = models.ForeignKey('Requisition', on_delete=models.CASCADE, null=True, blank=True, verbose_name='請購單位')
     turnover = models.CharField(max_length=10, null=True, blank=True, verbose_name='成交金額')
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     completion_report_employee = models.ManyToManyField(Employee, related_name='projects_confirmation_report_employee', blank=True, verbose_name='完工回報人')
     completion_report_date = models.DateField(null=True, blank=True, verbose_name="完工回報日期")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='project_confirmation_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
+    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
 
     def get_show_id(self):
         return f"工確-{str(self.id).zfill(5)}"
@@ -798,8 +798,8 @@ class Project_Job_Assign(ModifiedModel):
     vehicle = models.CharField(max_length=100,null=True, blank=True, verbose_name='使用車輛')
     location = models.CharField(max_length=4,choices=LOCATION_CHOICES, null=True, blank=True, verbose_name="工作地點")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Job_Assign_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Job_Assign_Approval')
+    created_by = models.ForeignKey("Employee",related_name="Project_Job_Assign_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
 
 
     class Meta:
@@ -940,10 +940,10 @@ class Project_Employee_Assign(ModifiedModel):
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
     carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Project_Employee_Assign_Approval')
     test_items_str = models.TextField( verbose_name="檢查項目字串", blank=True)
     remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
-    created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
+    created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
 
     def test_items_ary(self):
         try:
@@ -1000,8 +1000,8 @@ class Travel_Application(ModifiedModel):
     location_city_go = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="出發地")
     location_city_end = models.CharField(max_length=4,blank=True, null=True,default="", choices=LOCATION_CHOICES, verbose_name="到達")
     attachment = models.FileField(upload_to="Travel_Application_Attachment", null=True, blank=True, verbose_name="車程津貼附件")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Travel_Application_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請者')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Travel_Application_Approval')
+    created_by = models.ForeignKey("Employee",related_name="Travel_Application_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='申請者')
 
     def reassignment_attachment_link(self):
         if self.attachment:
@@ -1080,8 +1080,8 @@ class Leave_Application(ModifiedModel):
     leave_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="請假事由")
     backlog = models.CharField(max_length=100, blank=True, null=True, verbose_name="待辦事項")
     attachment = models.FileField(upload_to="Leave_Application_attachment", null=True, blank=True, verbose_name="請假附件")
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Leave_Application_Approval')
-    created_by = models.ForeignKey("Employee",related_name="leave_list", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='申請人')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Leave_Application_Approval')
+    created_by = models.ForeignKey("Employee",related_name="leave_list", on_delete=models.CASCADE, null=True, blank=True, verbose_name='申請人')
 
     def reassignment_attachment_link(self):
         if self.attachment:
@@ -1401,7 +1401,7 @@ class Work_Overtime_Application(ModifiedModel):
     overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
     attachment = models.FileField(upload_to="Work_Overtime_Application_Attachment", null=True, blank=True, verbose_name="加班附件")
     created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Work_Overtime_Application_Approval')
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Work_Overtime_Application_Approval')
 
     class Meta:
         verbose_name = "加班申請"
@@ -1611,9 +1611,9 @@ class Clock_Correction_Application(ModifiedModel):
     end_mins_of_clock = models.IntegerField(default=0,blank=True, null=True, verbose_name="補卡分鐘")
     clock_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="補卡事由")
     attachment = models.FileField(upload_to="Clock_Correction_Application_Attachment", null=True, blank=True, verbose_name="補卡附件")
-    clock = models.ForeignKey("Clock",related_name="clock_correction", on_delete=models.SET_NULL, null=True, blank=True)
-    created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.SET_NULL, null=True, blank=True)
-    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Clock_Correction_Application_Approval')
+    clock = models.ForeignKey("Clock",related_name="clock_correction", on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",related_name="clock_correction_application_author", on_delete=models.CASCADE, null=True, blank=True)
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Clock_Correction_Application_Approval')
     def reassignment_attachment_link(self):
         if self.attachment:
             download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)

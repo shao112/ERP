@@ -99,6 +99,25 @@
                     <td>
                         {{ object.get_foreignkey.get_show_id }}
                     </td>                  
+
+                    <td>
+                        {% for log in object.get_approval_log_list %}
+                        {{ log.show_name }} -
+                        {% if log.status == 'pass' %}
+                        【{{log.content}}】
+
+                        {% else %}
+                        (wait)
+                        {% endif %}
+                        {% if not forloop.last %} >{% endif %}
+                        {% empty %}
+                        未執行簽核
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ object.get_foreignkey.created_by.full_name }}
+                    </td>
+                    
                     <td>
                         <a href="" data-Approval_id="{{ object.id }}"  data-created_by="{{ object.get_foreignkey.created_by }}"
                         data-id="{{object.get_foreignkey.id}}"

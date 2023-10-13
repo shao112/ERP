@@ -1138,9 +1138,14 @@ class Clock_Correction_Application_View(View):
         form = ClockCorrectionApplicationForm(dict_data)
         if form.is_valid():
             getObject = Clock_Correction_Application.objects.get(id=dict_data['id'])
-            if(getObject.Approval ):
+            
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能更改"},status=400)
+
+            if getObject.Approval :
                 if(getObject.Approval.current_status=="completed" or getObject.Approval.current_status=="in_process" ):            
                     return JsonResponse({"error":"簽核進行或完成禁止修改"},status=400)
+
 
             employee = Employee.objects.get(id=request.user.employee.id)
             getObject.update_fields_and_save(**dict_data)
@@ -1177,7 +1182,11 @@ class Clock_Correction_Application_View(View):
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Clock_Correction_Application.objects.get(id=dict_data['id']).delete()
+            getObject=Clock_Correction_Application.objects.get(id=dict_data['id'])
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            getObject.delete()
+
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1209,7 +1218,7 @@ class Work_Overtime_Application_View(View):
         if form.is_valid():
             getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
-                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+                return JsonResponse({"error":"此單本人才能更改"},status=400)
 
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
@@ -1573,6 +1582,9 @@ class Travel_Application_View(View):
         form = Travel_ApplicationForm(dict_data)
         if form.is_valid():
             getObject = Travel_Application.objects.get(id=int(dict_data['id']))
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能更改"},status=400)
+
             getObject.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "完成修改"},status=200)
@@ -1583,7 +1595,11 @@ class Travel_Application_View(View):
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Travel_Application.objects.get(id=dict_data['id']).delete()
+            getObject=Travel_Application.objects.get(id=dict_data['id'])
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            getObject.delete()
+
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)

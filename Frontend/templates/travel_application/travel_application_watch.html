@@ -1,0 +1,151 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+
+<style>
+    .clock-correction-application-header a{
+        text-decoration: none;
+        color: black;
+    }
+    .clock-correction-application-table td{
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}
+
+{% load custom_tags %}
+
+{% block main %}
+
+<div class="main px-3">
+    <div id="error-message"></div>
+    <div class="clock-correction-application modal fade" id="clock-correction-application-modal" tabindex="-1" aria-labelledby="clock-correction-application" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clock-correction-application-label">車程申請</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container shadow-sm">
+                        {% include 'components\travel_application_form.html' with showbtn=True %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clock-correction-application-table container-fluid shadow-sm table-responsive-lg">
+        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-filter-control="true">
+            <div id="toolbar">
+                <div class="clock-correction-application-header container-fluid">
+
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('補卡申請.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button class="d-none d-md-inline-block"
+                        onclick="exportSelectedOptionToExcel('補卡申請.xlsx')">匯出已選資料</button>
+                </div>
+            </div>
+            <thead class="thead-light" style="font-size: 14px;">
+                <tr class="text-nowrap">
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                        class="d-none d-md-table-cell">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">查看</th>
+                    <th data-filter-control="input" data-field="go_id" data-sortable="true">編號</th>
+                    <th data-filter-control="input" data-sortable="true" data-field="APP">簽核</th>
+                    <th data-filter-control="input" data-field="1" data-sortable="true">申請人編號</th>
+                    <th data-filter-control="input" data-field="2" data-sortable="true">申請人</th>
+                    <th data-field="3" data-sortable="true">附件</th>
+                    <th data-filter-control="input" data-field="job" data-sortable="true">申請時間</th>
+                    <th data-filter-control="input" data-field="time_of_clock" data-sortable="true">出發城市</th>
+                    <th data-filter-control="input" data-field="clock_reason" data-sortable="true">目的地城市</th>
+                    <th data-field="time" data-sortable="true">時數</th>
+                </tr>
+            </thead>
+            <tbody class="text-nowrap" style="font-size: 14px;">
+                {% for obj in Travel_Application_list %}
+                <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ obj.id }}"></td>
+                    <td>
+                        <a data-target="#clock-correction-application-modal" type="button" data-url="Travel_Application" data-id="{{ obj.id }}"
+                        data-approval="{{ obj.Approval.current_status}}"    class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
+                            <i class="fas fa-sm fa-eye"></i>
+                        </a>
+                    </td>
+
+                    
+                    <td>
+                        {{ obj.get_show_id }}
+                    </td>
+                    <td>
+
+                        {% if obj.Approval.get_current_status_display %}
+                        {{obj.Approval.get_current_status_display}}
+                        {% else %}
+                        未開始簽核
+                        {% endif %}
+
+                    </td>
+                    <td >{{ obj.created_by.employee_id }}</td>
+                    <td >{{ obj.created_by.full_name }}</td>
+                    <td >{{ obj.reassignment_attachment_link }}</td>
+
+                    <td>
+                        {{ obj.date |date:"Y/m/d" }}
+                    </td>
+                    <td>
+                        {{ obj.location_city_go }}
+                    </td>
+                    <td>
+                        {{ obj.location_city_end }}
+                    </td>
+                    <td>
+                        {{ obj.location_city_go|Travel_show:obj.location_city_end }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var scripts = [
+            "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/fuc/approval.js' %}",
+            "{% static 'js/bootstrap-table/checked_row.js' %}",
+            "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
+            "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
+        ];
+
+        scripts.forEach(function (src) {
+            var script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
+    });
+
+    async function LoadData(event){
+        console.log("load")
+        const approvalStatus = event.currentTarget.getAttribute('data-approval');
+
+        lock_input();
+
+        getdata = await GET_handleClick(event);
+
+    }
+
+
+
+</script>
+{% endblock %}

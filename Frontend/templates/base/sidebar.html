@@ -127,9 +127,29 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'department' %}">部門管理</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'Leave_Application_all' %}">假單查詢</a>
-                    </li>
+
+                    <a class="nav-link collapsed" href="#" data-target="#applys" data-toggle="collapse"
+                            aria-expanded="false" aria-controls="salesCollapse">
+                            申請單查詢
+                        </a>
+                    <div class="collapse" id="applys">
+                        <ul class="nav flex-column ml-4">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'Leave_Application_all' %}">假單查詢</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'Work_Overtime_Application_watch' %}">加班查詢</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'Work_Overtime_Application_watch' %}">補卡查詢</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'TravelApplicationView_watch' %}">車程查詢</a>
+                            </li>
+                        </ul>
+                    </div>
+
+
                     <!-- <li class="nav-item">
                         <a class="nav-link" href="{% url 'Apply_List' %}">申請單查詢</a>
                     </li> -->

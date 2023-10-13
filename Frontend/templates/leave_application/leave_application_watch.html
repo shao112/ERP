@@ -110,9 +110,9 @@
                     <td>
                         {% if leave_application.get_show_id %}{{ leave_application.get_show_id }}{% else %}{% endif %}
                     </td>
-                    <th >{{ leave_application.created_by.employee_id }}</th>
-                    <th >{{ leave_application.created_by.full_name }}</th>
-                    <th >{{ leave_application.reassignment_attachment_link }}</th>
+                    <td >{{ leave_application.created_by.employee_id }}</td>
+                    <td >{{ leave_application.created_by.full_name }}</td>
+                    <td >{{ leave_application.reassignment_attachment_link }}</td>
                     <td>
                         {% if leave_application.type_of_leave %}{{ leave_application.type_of_leave }}{% else %}{% endif %}
                     </td>

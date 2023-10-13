@@ -68,15 +68,25 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
     
 
 
+class TravelApplicationView_Watch(ListView):
+    model = Travel_Application
+    template_name = 'Travel_Application/Travel_Application_watch.html'
+    context_object_name = 'Travel_Applications'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Travel_Application_list"] = Travel_Application.objects.all()
+        context['Travel_ApplicationForm'] = Travel_ApplicationForm()
+
+        return context
+
+
 class TravelApplicationView(ListView):
     model = Travel_Application
     template_name = 'Travel_Application/Travel_Application.html'
     context_object_name = 'Travel_Applications'
     def get_context_data(self, **kwargs):
-        employee = self.request.user.employee
         context = super().get_context_data(**kwargs)
         context["Travel_Application_list"] = Travel_Application.objects.filter(created_by=self.request.user.employee)
-        context["Project_location_list"] = Project_Job_Assign.objects.filter(lead_employee__in=[employee])|Project_Job_Assign.objects.filter(    work_employee__in=[employee]        )
         context['Travel_ApplicationForm'] = Travel_ApplicationForm()
 
         return context
@@ -632,6 +642,37 @@ class Apply_List(View):
         context["objects"] = models
         return render(request, self.template_name, context)
 
+class Approval_List_Watch(ListView):
+    model = ApprovalModel
+    template_name = 'approval_list/approval_list.html'
+    context_object_name = 'approval_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["employees_list"] = Employee.objects.values('id','full_name')
+        context["all_project_job_assign"] = Project_Job_Assign.objects.all()
+        context["all_Equipment"] = Equipment.objects.all()
+        context['project_confirmation_list'] = Project_Confirmation.objects.all()
+        context['vehicle'] = Vehicle.objects.all()
+        context['Travel_ApplicationForm'] = Travel_ApplicationForm()
+        context["work_overtime_application_form"] = WorkOvertimeApplicationForm()
+        context["leave_application_form"] = LeaveApplicationForm()
+        context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
+        context["Project_location_list"] = Project_Job_Assign.objects.all()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
+        return context
+
+    def get_queryset(self):
+
+        all_approval_models = ApprovalModel.objects.all().order_by("-id")
+
+        related_approval_models = [
+            approval_model for approval_model in all_approval_models
+        ]
+
+        queryset = related_approval_models
+        return queryset
 
 class Approval_List(ListView):
     model = ApprovalModel
@@ -819,6 +860,25 @@ class Work_Overtime_Application_Watch_List(ListView):
         return context
     
 # 補卡申請
+
+class Clock_Correction_Application_Watch_List(ListView):
+    model = Clock_Correction_Application
+    template_name = 'clock_correction_application/clock_correction_application_watch.html'
+    context_object_name = 'clock_correction_applications'
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user.employee
+        context = super().get_context_data(**kwargs)
+        context["clock_correction_application_list"] =Clock_Correction_Application.objects.filter()
+        context["clock_correction_application_form"] = ClockCorrectionApplicationForm()
+        context["24range"] = range(24)
+        context["60range"] = range(60)
+        return context
+    
+
+
+
+
 class Clock_Correction_Application_List(ListView):
     model = Clock_Correction_Application
     template_name = 'clock_correction_application/clock_correction_application.html'

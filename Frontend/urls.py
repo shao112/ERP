@@ -59,8 +59,11 @@ urlpatterns = [
     path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
     path('accounts/logout/', views.signout, name='logout'),
     #查看
+    path('clock_correction_application_watch', login_required(views.Clock_Correction_Application_Watch_List.as_view()), name="clock_correction_application_watch"),
     path('leave_application_watch', login_required(views.Leave_Application_Watch_List.as_view()), name="Leave_Application_all"),
-    path('work_overtime_application_watch',login_required( views.Work_Overtime_Application_Watch_List.as_view()), name="Work_Overtime_Application"),
+    path('work_overtime_application_watch',login_required( views.Work_Overtime_Application_Watch_List.as_view()), name="Work_Overtime_Application_watch"),
+    path('TravelApplicationView_watch/', login_required(views.TravelApplicationView_Watch.as_view()), name='TravelApplicationView_watch'),
+    path('approval_list_watch', login_required(views.Approval_List_Watch.as_view()), name="approval_list_Watch"),
 ]
 
 

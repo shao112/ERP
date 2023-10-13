@@ -40,6 +40,7 @@
             </div>
         </div>
     </div>
+
     <div class="clock-correction-application-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
@@ -47,9 +48,7 @@
             data-filter-control="true">
             <div id="toolbar">
                 <div class="clock-correction-application-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#clock-correction-application-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增補卡申請
-                    </a>
+                  
                     <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('補卡申請.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
@@ -60,15 +59,17 @@
                 <tr class="text-nowrap">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
                         class="d-none d-md-table-cell">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-sortable="true" data-field="id">單號</th>
-                    <th data-sortable="true" data-field="APP">簽核</th>
-                    <th data-field="date_of_clock" data-sortable="true">補卡日期</th>
-                    <th data-field="shift_of_clock" data-sortable="true">補卡班別</th>
-                    <th data-field="category_of_clock" data-sortable="true">補卡類別</th>
-                    <th data-field="type_of_clock" data-sortable="true">補卡方式</th>
-                    <th data-field="time_of_clock" data-sortable="true">補卡時間</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">查看</th>
+                    <th data-filter-control="input" data-sortable="true" data-field="id">單號</th>
+                    <th data-filter-control="input" data-sortable="true" data-field="APP">簽核</th>
+                    <th data-filter-control="input" data-field="1" data-sortable="true">申請人編號</th>
+                    <th data-filter-control="input" data-field="2" data-sortable="true">申請人</th>
+                    <th data-field="3" data-sortable="true">附件</th>                    
+                    <th data-filter-control="input" data-field="date_of_clock" data-sortable="true">補卡日期</th>
+                    <th data-filter-control="input" data-field="shift_of_clock" data-sortable="true">補卡班別</th>
+                    <th data-filter-control="input" data-field="category_of_clock" data-sortable="true">補卡類別</th>
+                    <th data-filter-control="input" data-field="type_of_clock" data-sortable="true">補卡方式</th>
+                    <th data-filter-control="input" data-field="time_of_clock" data-sortable="true">補卡時間</th>
                     <th data-field="clock_reason" data-sortable="true">補卡事由</th>
                 </tr>
             </thead>
@@ -79,43 +80,22 @@
                     <td>
                         <a data-target="#clock-correction-application-modal" type="button" data-url="clock_correction_application" data-id="{{ clock_correction_application.id }}"
                         data-approval="{{ clock_correction_application.Approval.current_status}}"          class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
-                            <i class="fas fa-sm fa-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a data-url="clock_correction_application" data-target="#clock-correction-application-modal" data-id="{{ clock_correction_application.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
-                            <i class="far fa-sm fa-trash-alt"></i>
+                            <i class="fas fa-sm fa-eye"></i>
                         </a>
                     </td>
                     <td >{{ clock_correction_application.get_show_id }}</td>
                     <td>
-                        {% if clock_correction_application.Approval %}
+
+                        {% if clock_correction_application.Approval.get_current_status_display %}
                         {{clock_correction_application.Approval.get_current_status_display}}
-
-                        {% if clock_correction_application.Approval.current_status == "completed" %}
-                        {% if request.user|get_supervisor %}
-                        / <button data-id="{{ clock_correction_application.id }}" data-model="Clock_Correction_Application"
-                            onclick="DelApproval(event)">收回(主管)</button>
-                        {% endif %}
-                        {% endif %}
-
-
-                        {% if clock_correction_application.Approval.current_status == "in_process" %}
-                        / <button data-id="{{ clock_correction_application.id }}" data-model="Clock_Correction_Application"
-                            onclick="DelApproval(event)">收回</button>
-                        {% endif %}
-
-                        {% if clock_correction_application.Approval.current_status == "rejected" %}
-                        / <button data-id="{{ clock_correction_application.id }}" data-model="Clock_Correction_Application"
-                            onclick="submitApproval(event)">發送新簽核</button>
-                        {% endif %}
-
                         {% else %}
-                        <button data-id="{{ clock_correction_application.id }}" data-model="Clock_Correction_Application"
-                            onclick="submitApproval(event)">開始簽核</button>
+                        未開始簽核
                         {% endif %}
+
                     </td>
+                    <td >{{ clock_correction_application.created_by.employee_id }}</td>
+                    <td >{{ clock_correction_application.created_by.full_name }}</td>
+                    <td >{{ clock_correction_application.reassignment_attachment_link }}</td>
 
                     <td>
                         {{ clock_correction_application.date_of_clock|date:"Y-m-d" }}

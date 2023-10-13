@@ -36,9 +36,7 @@ def Travel_show(location_city_go, location_city_end):
         )
         return reference_entry.amount
     except ReferenceTable.DoesNotExist:
-        return f"找不到{location_city_end}對{location_city_go}的車程津貼參照表 "
-
-
+        return f"找不到{location_city_go}對{location_city_end}的車程津貼參照表 "
 
 @register.filter
 def in_group_T_or_F(user, group):
