@@ -12,6 +12,7 @@
 
 
 {% block main %}
+
 <div class="main">
     <div class="container">
         <div class="row">
@@ -19,10 +20,12 @@
                 <div id='calendar'></div>
             </div>
             <div class="col-12 col-md-4 border p-4 p-md-2">
-                <h5 class="font-weight-bold">點擊行程 顯示詳細內容</h5>
+                <h5 class="font-weight-bold">點擊行程  顯示詳細內容</h5>
                 <div id="calendar-title"></div>
                 <div id="calendar-date"></div>
                 <div id="calendar-location"></div>
+                <div id="work_emp"></div>
+                <div id="tests_emp"></div>
           </div>
         </div>
     </div>
@@ -40,6 +43,9 @@
                     url: '/restful/calendar',
                     type: 'GET',
                     dataType: 'json',
+                    data:{
+                        "all":"{{all}}"
+                    },
                     success: function(response) {
                         var events = response;
                         console.log(events)
@@ -55,10 +61,13 @@
                 var title = info.event.title
                 var date = moment(info.event.start).format('YYYY-MM-DD')
                 var location = info.event.extendedProps.location
-                console.log(location)
+                var lead_employee = info.event.extendedProps.lead_employee
+                var work_employee = info.event.extendedProps.work_employee
                 document.getElementById('calendar-title').innerHTML = "專案名稱: " +title;
                 document.getElementById('calendar-date').innerHTML = "日期: " + date;
                 document.getElementById('calendar-location').innerHTML = "地點: " + location;
+                document.getElementById('work_emp').innerHTML = "帶班主管: " + lead_employee;
+                document.getElementById('tests_emp').innerHTML = "檢測人員: " + work_employee;
             },
         });
         calendar.render();

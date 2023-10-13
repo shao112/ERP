@@ -525,6 +525,18 @@ class Calendar(ListView):
     template_name = 'calendar/calendar.html'
     context_object_name = 'employee'
 
+#行事曆全
+class Calendar_list(ListView):
+    model = Employee
+    template_name = 'calendar/calendar.html'
+    context_object_name = 'employee'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all'] = 1
+        return context
+
+
+
 #申請單查詢
 class Apply_List(View):
     template_name = 'apply_list/apply_list.html'

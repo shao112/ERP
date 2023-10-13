@@ -40,6 +40,7 @@ urlpatterns = [
     path('clock_correction_application', login_required(views.Clock_Correction_Application_List.as_view()), name="Clock_Correction_Application"),
     path('leave_param', login_required(views.Leave_Param_List.as_view()), name="Leave_Param"),
     path('calendar',login_required( views.Calendar.as_view()), name="calendar"),
+    path('Calendar_list',login_required( views.Calendar_list.as_view()), name="Calendar_list"),
     path('director_Index', login_required(views.Director_Index.as_view()), name="director_Index"),
     path('LaborHealthInfo', login_required(views.LaborHealthInfo_ListView.as_view()), name="LaborHealthInfo"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),

@@ -1641,18 +1641,30 @@ class ExcelExportView(View):
 
 class Calendar_View(View):
    def get(self,request):
-        employeeid = request.user.employee
-        related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
+        all = request.GET.get('all',"")
+        if all=="1":
+            related_projects = Project_Job_Assign.objects.all()
+        else:
+            employeeid = request.user.employee
+            related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(work_employee__in=[employeeid])
         data = []
         for project in related_projects:
             if project.attendance_date is None:
                 continue
             if project.location is None:
                 project.location = "暫無"
+            
+            lead_employee_names = project.lead_employee.all().values_list('full_name', flat=True)
+            merged_names = ', '.join(lead_employee_names)
+            work_employee_names = project.work_employee.all().values_list('full_name', flat=True)
+            work_employee_merged_names = ', '.join(work_employee_names)
+
             data.append({
                 'title': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,
-                'location': project.location
+                'location': project.location,
+                'lead_employee': merged_names,
+                'work_employee': work_employee_merged_names
                 # 'start': project.attendance_date.strftime('%Y-%m-%d'),
             })
         return JsonResponse(data, status=200,safe = False)

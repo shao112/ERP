@@ -83,10 +83,17 @@
                     {% endif %}
 
 
-                    {% if user|in_group_T_or_F:"工程派任" or pass_test_func %}
+                    {% if user|in_group_T_or_F:"工程派任"  or pass_test_func %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project' %}">工作派任計畫</a>
+                    </li>
+                    {% endif %}
+
+                    {% if user|in_group_T_or_F:"工程派任"  or user|in_group_T_or_F:"工程確認"  or pass_test_func %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'Calendar_list' %}">工程部行程表</a>
                     </li>
                     {% endif %}
 
