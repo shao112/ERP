@@ -836,7 +836,7 @@ class FileUploadView(View):
         print("get_dicts: " , get_dicts)
         for i,get_dict in enumerate(get_dicts):
             try:
-                if get_model == Project_Confirmation: # 工程確認單判斷報價單編號是否有存在
+                if get_model == Project_Confirmation:
                     print("get_dict: ",get_dict['quotation'])
                     id_object = Quotation.objects.get(quotation_id=get_dict['quotation'])
                     get_model.objects.create(
@@ -847,11 +847,33 @@ class FileUploadView(View):
                         remark = get_dict['remark']
                     )
                     print("id_object: ",id_object)
-
-                # elif  get_model == Project_Job_Assign : # 派任計畫判斷工程確認單編號是否有存在
-                #     id_object = Project_Job_Assign.objects.get(=get_dict) # 工確單的編號是用方法回傳的
-                # elif  get_model == Project_Confirmation: # 派工單判斷派任計畫編號是否有存在
-                #     id_object = Project_Job_Assign.objects.get(=get_dict)
+                elif get_model == Project_Job_Assign :
+                    print("get_dict: ",get_dict['project_confirmation'])
+                    id_str = get_dict['project_confirmation']
+                    id_num = int(id_str[id_str.rindex("-")+1:])
+                    print("id_num: ", id_num)
+                    id_object = Project_Confirmation.objects.get(id=id_num)
+                    get_model.objects.create(
+                        project_confirmation = id_object,
+                        attendance_date = get_dict['attendance_date'],    
+                        location = get_dict['location'],    
+                        remark = get_dict['remark']
+                    )
+                    print("工確單: ",id_object)
+                elif get_model == Project_Employee_Assign:
+                    print("get_dict: ",get_dict['project_job_assign'])
+                    id_str = get_dict['project_job_assign']
+                    id_num = int(id_str[id_str.rindex("-")+1:])
+                    print("id_num: ", id_num)
+                    id_object = Project_Job_Assign.objects.get(id=id_num)
+                    get_model.objects.create(
+                        project_job_assign = id_object,
+                        construction_date = get_dict['construction_date'],    
+                        completion_date = get_dict['completion_date'],    
+                        manuscript_return_date = get_dict['manuscript_return_date'],
+                        remark = get_dict['remark'],
+                    )
+                    print("派任計畫: ",id_object)
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
                 error_str=f"第{i+1}欄資料錯誤\n"
             except Quotation.DoesNotExist:

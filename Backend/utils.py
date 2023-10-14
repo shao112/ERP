@@ -138,8 +138,10 @@ def quotationFile(quotation_obj,see,five):
         quote_validity_period=str(quote_validity_period) + "天"
 
     item_list = quotation_obj.work_item.all()
-
-    file_path = r'media/system_files/quotation_template.xlsx'
+    if five:
+        file_path = r'media/system_files/quotation_template.xlsx' # 艾力克電機
+    else:
+        file_path = r'media/system_files/quotation_template.xlsx' # 維景 還沒放
     try:
         workbook = load_workbook(filename=file_path)
     except Exception as e:
@@ -147,8 +149,8 @@ def quotationFile(quotation_obj,see,five):
 
 
     sheet = workbook.active
-    chinese_format = NamedStyle(name='chinese_format', number_format="[$NT$-2]#,##0;[RED]-[$NT$-2]#,##0")
-    workbook.add_named_style(chinese_format)
+    # chinese_format = NamedStyle(name='chinese_format', number_format="[$NT$-2]#,##0;[RED]-[$NT$-2]#,##0")
+    # workbook.add_named_style(chinese_format)
 
     #放圖
     grey_fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
@@ -159,6 +161,13 @@ def quotationFile(quotation_obj,see,five):
 
         for i, file in enumerate(uploaded_files):
             file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
+            try:
+                with open(file_path, 'r') as f:
+                    print(f.read())
+            except FileNotFoundError:
+                print(f"找不到檔案: {file_path}")
+            except Exception as e:
+                print(f"發生未知的錯誤: {e}")
             print(file_path)
             img = Image(file_path)
             sheet.add_image(img, f'O{4+i}')
@@ -204,19 +213,19 @@ def quotationFile(quotation_obj,see,five):
                     if  len(item_list)==0:
                         sheet.cell(row=i, column=index, value="")
                         sheet.cell(row=i, column=index+1, value="")
-                        sheet.cell(row=i, column=index+2, value="")
-                        sheet.cell(row=i, column=index+3, value="")
-                        sheet.cell(row=i, column=index+4, value="")
                         sheet.cell(row=i, column=index+5, value="")
+                        sheet.cell(row=i, column=index+6, value="")
+                        sheet.cell(row=i, column=index+7, value="")
+                        sheet.cell(row=i, column=index+8, value="")
                     else:
                         for next_index, item in enumerate(item_list):
                             sheet.cell(row=i+next_index, column=index, value= next_index+1)
                             sheet.cell(row=i+next_index, column=index+1, value=item.item_name)
+                            sheet.cell(row=i+next_index, column=index+6, value="")
                             sheet.cell(row=i+next_index, column=index+5, value=item.unit)
-                            sheet.cell(row=i+next_index, column=index+6, value=item.count)
-                            sheet.cell(row=i+next_index, column=index+7, value=item.unit_price)
-                            sheet.cell(row=i+next_index, column=index+8, value=(item.count)*(item.unit_price))
-                            sum+=(item.count)*(item.unit_price)
+                            # sheet.cell(row=i+next_index, column=index+7, value=item.money)
+                            sheet.cell(row=i+next_index, column=index+8, value=item.year_money)
+                            # sum+=(item.count)*(item.unit_price)
                 elif cell_value == "SUM":
                     sheet.cell(row=i, column=index, value=sum)
                 elif cell_value == "hide_key":

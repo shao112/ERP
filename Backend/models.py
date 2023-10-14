@@ -702,6 +702,11 @@ class Department(ModifiedModel):
     def __str__(self):
         return f"{self.department_name}({self.belong_to_company})"
 
+# 工項數量
+class Work_Item_Number(ModifiedModel):
+    work_item = models.ForeignKey("Work_Item",related_name="Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工項名稱')
+    number = models.IntegerField(blank=True, null=True, verbose_name="數量")
+
 # 工項管理
 class Work_Item(ModifiedModel):
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項編號")
