@@ -71,7 +71,7 @@
                             {% csrf_token %}
                             <input name="id" hidden>
                             <div class="form-row my-2">
-                                <div class="col-12">
+                                <div class="col-12" id="quotation_input">
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
@@ -122,7 +122,6 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
-
                                             <div class="form-group">
                                                 <label for="quote_date">報價日期</label>
                                                 <input class="form-control form-control-sm" name="quote_date"
@@ -130,10 +129,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
-
                                     <div class="form-row">
-
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="business_assistant">業務助理</label>                                            
@@ -144,8 +140,6 @@
                                                     </option>
                                                     {% endfor %}
                                                 </select>
-
-
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -163,18 +157,29 @@
                                                 </textarea>
                                             </div>
                                         </div>
-
                                     </div>
-
-                                    <div class="col-12 col-lg-12">
-                                        <div class="form-group">
-                                            <label for="business_assistant">工項選擇</label>
-                                            <select class="select2" name="work_item" id="work_item_select2" multiple>
-                                                {% for workitem in workitems %}
-                                                <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
-                                                </option>
-                                                {% endfor %}
-                                            </select>
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <input type="button" value="增加工項" id="insert_work_item_row">
+                                        </div>
+                                    </div>
+                                    <div class="form-row" id="work_item_form_row">
+                                        <div class="col-12 col-lg-10">
+                                            <div class="form-group">
+                                                <label>工項選擇</label>
+                                                <select class="form-control form-control-sm" name="work_item">
+                                                    {% for workitem in workitems %}
+                                                    <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                <label>數量</label>
+                                                <input type="number" class="form-control form-control-sm" name="number">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -330,8 +335,16 @@
 
 
     }
-
-
+    $(document).ready(function(){
+        var clonedRow = $("#work_item_form_row").clone();
+        clonedRow.attr("id","");
+        $("#insert_work_item_row").click(function(){
+            console.log("click");
+            new_cloneRow = clonedRow.clone();
+            $("#quotation_input").append(new_cloneRow);
+        })
+    });
+    
 
 </script>
 {% endblock %}

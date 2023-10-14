@@ -6,7 +6,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
@@ -629,9 +629,16 @@ class Quotation_View(View):
 
     def post(self,request):
         form = QuotationForm(request.POST)
-
         if form.is_valid():
             newobj = form.save()
+            # dict_data = convent_dict(request.body)
+            # if "number" in dict_data:
+            #     print("dict_data[number]: ", dict_data["number"])
+            #     Work_Item_Number.objects.create(
+            #         work_item = newobj.work_item,
+            #         number = dict_data["number"]
+            #     )
+            #     print("建立Work_Item_Number")
             return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
