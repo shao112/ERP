@@ -15,13 +15,15 @@
 {% block main %}
 
 <style>
-    .client-header a{
+    .client-header a {
         text-decoration: none;
         color: black;
     }
-    .client-table td{
+
+    .client-table td {
         vertical-align: middle;
     }
+
     .select2-container {
         font-size: 14px;
     }
@@ -32,7 +34,7 @@
 <div class="main px-3">
     <div id="error-message"></div>
     <div class="client modal fade" id="client-modal" tabindex="-1" aria-labelledby="client" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="client-label">客戶管理</h5>
@@ -45,13 +47,63 @@
                         <form action="/restful/client" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
                             <input name="id" hidden />
-                            <div class="form-row my-2">
-                                <div class="col-12 col-lg-6">
+
+                            <div class="form-row">
+                                <div class="col-12 col-lg-4">
                                     <div class="form-group">
                                         <label for="client_name">客戶簡稱</label>
-                                        <input class="form-control form-control-sm" name="client_name"id="client_name" required></input>
+                                        <input class="form-control form-control-sm" name="client_name" id="client_name"
+                                            required></input>
                                     </div>
                                 </div>
+                                <div class="col-12 col-lg-4">
+                                    <label for="tax_id">統一編號</label>
+                                    <input class="form-control form-control-sm" name="tax_id" id="tax_id">
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="contact_person" >聯絡人</label>
+                                        <input class="form-control form-control-sm" name="contact_person"
+                                            id="contact_person" >
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="tel">電話</label>
+                                        <input class="form-control form-control-sm" name="tel" id="tel">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="mobile">手機</label>
+                                        <input class="form-control form-control-sm" name="mobile" id="mobile">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">電子郵件</label>
+                                        <input class="form-control form-control-sm" name="email" id="email">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="fax">傳真</label>
+                                        <input class="form-control form-control-sm" name="fax" id="fax">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+
+                                    <div class="form-group">
+                                        <label for="address">地址</label>
+                                        <input class="form-control form-control-sm" name="address" id="address">
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn border border-dark rounded w-50 mx-4"
@@ -90,12 +142,16 @@
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="client_name" data-sortable="true">客戶簡稱</th>
+                    <th data-field="client_user" data-sortable="true">聯絡人</th>
+                    <th data-field="tel" data-sortable="true">電話</th>
+                    <th data-field="mbile" data-sortable="true">傳真</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for client in client_list %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ client.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ client.id }}"></td>
                     <td>
                         <a data-target="#client-modal" type="button" data-url="client" data-id="{{ client.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal" onclick="LoadData(event)">
@@ -111,6 +167,15 @@
 
                     <td>
                         {{ client.client_name }}
+                    </td>
+                    <td>
+                        {{ client.contact_person }}
+                    </td>
+                    <td>
+                        {{ client.tel }}
+                    </td>
+                    <td>
+                        {{ client.mobile }}
                     </td>
                 </tr>
                 {% endfor %}
@@ -136,7 +201,7 @@
         });
     });
 
-    async function LoadData(event){
+    async function LoadData(event) {
         console.log("load")
         getdata = await GET_handleClick(event);
 

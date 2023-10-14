@@ -83,19 +83,28 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="client">客戶名稱</label>
-                                                <select class="form-control form-control-sm" name="client" id="client"
-                                                    readonly>
-                                                    <option value="{{ client.id }}" selected>{{ client.client_name }}
+                                                <select class="form-control form-control-sm" name="client" id="client"  required>
+                                                    <option value="-1">選擇客戶名稱</option>
+                                                    {% for client in clients %}
+                                                    <option value="{{ client.id }}" >{{ client.client_name }}
                                                     </option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="tax_id">統一編號</label>
-                                                <input class="form-control form-control-sm" name="tax_id" id="tax_id">
+                                                <label for="client">業主名稱</label>
+                                                <select class="form-control form-control-sm" name="requisition" id="requisition" required >
+                                                    <option value="-1">選擇業主名稱</option>
+                                                    {% for client in clients %}
+                                                    <option value="{{ client.id }}" >{{ client.client_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
+
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
@@ -109,7 +118,7 @@
                                             <div class="form-group">
                                                 <label for="quote_validity_period">報價單有效期</label>
                                                 <input type="number" class="form-control form-control-sm"
-                                                    name="quote_validity_period" id="quote_validity_period">
+                                                    name="quote_validity_period"  value="14" id="quote_validity_period">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -121,56 +130,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="contact_person">聯絡人</label>
-                                                <input class="form-control form-control-sm" name="contact_person"
-                                                    id="contact_person">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="tel">電話</label>
-                                                <input class="form-control form-control-sm" name="tel" id="tel">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="mobile">手機</label>
-                                                <input class="form-control form-control-sm" name="mobile" id="mobile">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="email">電子郵件</label>
-                                                <input class="form-control form-control-sm" name="email" id="email">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="fax">傳真</label>
-                                                <input class="form-control form-control-sm" name="fax" id="fax">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-
-                                            <div class="form-group">
-                                                <label for="address">地址</label>
-                                                <input class="form-control form-control-sm" name="address" id="address">
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
 
                                     <div class="form-row">
 
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="business_assistant">業務助理</label>
-                                                <input class="form-control form-control-sm" name="business_assistant"
-                                                    id="business_assistant">
+                                                <label for="business_assistant">業務助理</label>                                            
+                                                <select name="business_assistant" id="business_assistant" class="select2">
+                                                    <option value="-1">選擇助理</option>
+                                                    {% for employee in employees_sorted %}
+                                                    <option value="{{ employee.full_name }}">{{ employee.full_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+
+
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -253,7 +228,9 @@
                         列印/下載pdf</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
-                    <th data-field="tax_id" data-sortable="true">客戶名稱</th>
+                    <th data-field="client" data-sortable="true">客戶名稱</th>
+                    <th data-field="requisition" data-sortable="true">業主名稱</th>
+                    <th data-field="business_assistant" data-sortable="true">助理</th>
                     <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
@@ -291,6 +268,12 @@
                     </td>
                     <td>
                         {{ item.client.client_name}}
+                    </td>
+                    <td>
+                        {{ item.requisition.client_name}}
+                    </td>
+                    <td>
+                        {{ item.business_assistant}}
                     </td>
                     <td>
                         {{ item.quote_validity_period}}
@@ -341,6 +324,10 @@
     async function LoadData(event) {
         console.log("load")
         getdata = await GET_handleClick(event);
+        var choose_input = document.getElementById("business_assistant");
+        const change_event = new Event("change");
+        choose_input.dispatchEvent(change_event);     
+
 
     }
 

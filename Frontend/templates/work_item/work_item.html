@@ -25,160 +25,228 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="employee-label">工項資料庫</h5>
+                    <h5 class="modal-title" id="employee-label">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" data-target="#none_equipment_tab">工項管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-target="#year_tab">年度單價管理</a>
+                            </li>
+                        </ul>
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="container shadow-sm">
+
+
                         <form action="/restful/work_item" id="form" method="POST" class="pb-4" data-method="post">
-                            {% csrf_token %}
-                            <input name="id" hidden />
-                            <div class="form-row my-2">
-                                <div class="col-12">
-                                    <div class="form-row">
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="work_item_id">工項編號(自動產生)</label>
-                                                <input class="readonly form-control form-control-sm" name="work_item_id"
-                                                    id="work_item_id" readonly></input>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="none_equipment_tab">
+                                    {% csrf_token %}
+                                    <input name="id" hidden />
+                                    <input name="year_money" id="year_money_str" hidden />
+                                    <div class="form-row my-2">
+                                        <div class="col-12">
+                                            <div class="form-row">
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="item_id">工項編號</label>
+                                                        <input class="form-control form-control-sm" name="item_id"
+                                                            required id="item_id"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="item_name">工項名稱(試驗項目)</label>
+                                                        <input class="form-control form-control-sm" name="item_name"
+                                                            required id="item_name"></input>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="item_id">合約編號</label>
+                                                        <input class="form-control form-control-sm" name="contract_id"
+                                                            id="contract_id"></input>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="item_name">品名規格</label>
-                                                <input class="form-control form-control-sm" name="item_name" required
-                                                    id="item_name"></input>
+                                            <div class="form-row">
+
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="client">業主名稱</label>
+                                                        <select class="form-control form-control-sm" name="requisition"
+                                                            id="requisition" >
+                                                            <option value="-1">選擇業主名稱</option>
+                                                            {% for client in clients %}
+                                                            <option value="{{ client.id }}">{{ client.client_name }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="unit">單位</label>
+                                                        <input class="form-control form-control-sm" name="unit" required
+                                                            id="unit"></input>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="item_id">編號</label>
-                                                <input class="form-control form-control-sm" name="item_id" required
-                                                    id="item_id"></input>
-                                            </div>
+
+
                                         </div>
                                     </div>
-                                    <div class="form-row">
 
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="unit_price">數量</label>
-                                                <input type="number" class="form-control form-control-sm" required
-                                                    name="count" id="count"></input>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="unit_price">單價</label>
-                                                <input type="number" class="form-control form-control-sm" required
-                                                    name="unit_price" id="unit_price"></input>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="unit">單位</label>
-                                                <input class="form-control form-control-sm" name="unit" required
-                                                    id="unit"></input>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
-                                    style="color: #fff;background: #1E3050;">送出</button>
-                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
-                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
-                            </div>
+
+                                <div class="tab-pane fade " id="year_tab">
+                                    <p>會以最晚的年份為單價去 做系統計算</p>
+                                    <div class="col-12">
+                                        <div class="form-row">
+                                            <div class="col-12 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="year">年份：</label>
+                                                    <input class=" form-control form-control-sm" type="number" id="year"
+                                                        ><br>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="price">價格：</label>
+                                                    <input class=" form-control form-control-sm" value="0" type="number"
+                                                        id="price" ><br>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-2">
+                                                <button type="button" id="test_items_form_btn"
+                                                    class="btn border border-dark rounded"
+                                                    style="color: #fff;background: #1E3050;"
+                                                    onclick="addYearMoney()">新增</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="show_work_item_msg">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th> 年</th>
+                                                    <th> 單價</th>
+                                                    <th> 刪除</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="yearTable">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                        style="color: #fff;background: #1E3050;">送出</button>
+                                    <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                        style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                                </div>
                         </form>
-
-
                     </div>
+
+
+
                 </div>
             </div>
         </div>
     </div>
-    <div class="employee-table container-fluid shadow-sm table-responsive-lg">
-        <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-            data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
-            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
-            data-filter-control="true">
-            <div id="toolbar">
-                <div class="employee-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
-                        <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工項資料庫
-                    </a>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
-                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button class="d-none d-md-inline-block"
-                        onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
-                </div>
+</div>
+<div class="employee-table container-fluid shadow-sm table-responsive-lg">
+    <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
+        data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+        data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+        data-filter-control="true">
+        <div id="toolbar">
+            <div class="employee-header container-fluid">
+                <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
+                    <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增工項資料庫
+                </a>
+                <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
+                    data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                <button class="d-none d-md-inline-block"
+                    onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
             </div>
-            <thead class="thead-light" style="font-size: 14px;">
-                <tr class="text-nowrap">
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
-                        class="d-none d-md-table-cell">匯出</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-field="work_item_id" data-sortable="true">工項編號</th>
-                    <th data-field="item_name" data-sortable="true">品名規格</th>
-                    <th data-field="item_id" data-sortable="true">編號</th>
-                    <th data-field="count" data-sortable="true">數量</th>
-                    <th data-field="unit_price" data-sortable="true">單價</th>
-                    <th data-field="unit" data-sortable="true">單位</th>
-                </tr>
-            </thead>
-            <tbody class="text-nowrap" style="font-size: 14px;">
-                {% for item in work_item %}
-                <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
-                            value="{{ item.id }}"></td>
-                    <td>
-                        <a data-target="#employee-modal" type="button" data-url="work_item" data-id="{{ item.id }}"
-                            class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                            data-target="#project-confirmation-modal" onclick="LoadData(event)">
-                            <i class="fas fa-sm fa-edit"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a data-url="work_item" data-target="#employee-modal" data-id="{{ item.id }}" type="button"
-                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
-                            <i class="far fa-sm fa-trash-alt"></i>
-                        </a>
-                    </td>
-                    <td>
-                        {{ item.get_show_id }}
-                    </td>
-                    <td>
-                        {{ item.item_name }}
-                    </td>
-                    <td>
-                        {{ item.item_id }}
-                    </td>
-                    <td>
-                        {{ item.count }}
-                    </td>
-                    <td>
-                        {{ item.unit_price }}
-                    </td>
-                    <td>
-                        {{ item.unit }}
-                    </td>
+        </div>
+        <thead class="thead-light" style="font-size: 14px;">
+            <tr class="text-nowrap">
+                <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                    class="d-none d-md-table-cell">匯出</th>
+                <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
+                <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                <th data-field="work_item_id" data-sortable="true">工項編號</th>
+                <th data-field="item_name" data-sortable="true">品名規格</th>
+                <th data-field="item_id" data-sortable="true">編號</th>
+                <th data-field="name_req" data-sortable="true">業主名稱</th>
+                <th data-field="unit_price" data-sortable="true">系統採用單價</th>
+                <th data-field="unit" data-sortable="true">單位</th>
+            </tr>
+        </thead>
+        <tbody class="text-nowrap" style="font-size: 14px;">
+            {% for item in work_item %}
+            <tr>
+                <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)" value="{{ item.id }}">
+                </td>
+                <td>
+                    <a data-target="#employee-modal" type="button" data-url="work_item" data-id="{{ item.id }}"
+                        class="btn btn-sm btn-warning" data-toggle="modal" data-target="#project-confirmation-modal"
+                        onclick="LoadData(event)">
+                        <i class="fas fa-sm fa-edit"></i>
+                    </a>
+                </td>
+                <td>
+                    <a data-url="work_item" data-target="#employee-modal" data-id="{{ item.id }}" type="button"
+                        class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                        <i class="far fa-sm fa-trash-alt"></i>
+                    </a>
+                </td>
+                <td>
+                    {{ item.get_show_id }}
+                </td>
+                <td>
+                    {{ item.item_name }}
+                </td>
+                <td>
+                    {{ item.item_id }}
+                </td>
+                <td>
+                    {{ item.requisition.client_name}}
+                </td>
 
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                <td>
+                    {{ item.money }}
+                </td>
+                <td>
+                    {{ item.unit }}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/work_item/work_item.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
@@ -189,7 +257,27 @@
             script.src = src;
             document.body.appendChild(script);
         });
+        var yearInput = document.getElementById('year');
+        var currentYear = new Date().getFullYear();
+        yearInput.value = currentYear;
     });
+
+    async function LoadData(event) {
+        console.log("load")
+        getdata = await GET_handleClick(event);
+
+        var year_money_str = getdata["year_money"];
+        var jsonArray = []
+        if (year_money_str) {
+            jsonArray = JSON.parse(year_money_str);
+
+        }
+
+        year_moneys = jsonArray;
+        renderTable();
+
+    }
+
 
 
 </script>

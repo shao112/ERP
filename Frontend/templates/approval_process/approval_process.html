@@ -90,6 +90,7 @@
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
                     <th data-sortable="true" data-field="type">類型</th>
+                    <th data-sortable="true"  data-field="id">編號</th>
                     <th data-sortable="true" data-field="content">內容</th>
                     <th data-sortable="true" data-field="progress">簽核進度</th>
                     <th data-sortable="true" data-field="author">申請人</th>
@@ -101,6 +102,7 @@
                 <tr>
                     <!-- 應該可以顯示對display捨的 顯示中文 -->
                     <td>{{ object.target_approval.get_name_display }}</td>
+                    <td>{{ object.get_show_id }}</td>
                     <td>
                         {{ object.get_foreignkey.get_show_id }}
                     </td>

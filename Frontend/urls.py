@@ -25,8 +25,7 @@ urlpatterns = [
     path('project_employee_assign_View/<int:id>/',login_required(views.Project_employee_assign_View.as_view()), name='project_employee_assign_View'),
 
     path('approval_process', login_required(views.Approval_Process.as_view()), name="Approval_Process"),
-    # path('quotation', views.Quotation_ListView.as_view(), name="quotation"),
-    path('quotation/<int:client_id>/', login_required(views.Quotation_ListView.as_view()), name='quotation_detail'),
+    path('quotation', login_required(views.Quotation_ListView.as_view()), name="quotation"),
     path('salary/<int:year>/<int:month>/<int:user>', login_required(views.SalaryDetailView.as_view()), name='salary_detail'),
     path('salary/<int:year>/<int:month>', login_required(views.SalaryListView.as_view()), name='salary_list'),
 
@@ -54,7 +53,7 @@ urlpatterns = [
     path('employee_assign/', login_required(views.Employee_Assign_ListView.as_view()), name='employee_assign'),
     path('work_item/', login_required(views.Work_Item_ListView.as_view()), name='work_item_list'),
     path('client/', login_required(views.Client_ListView.as_view()), name='client_list'),
-    path('requisition/', login_required(views.Requisition_ListView.as_view()), name='requisition_list'),
+
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
     path('accounts/logout/', views.signout, name='logout'),

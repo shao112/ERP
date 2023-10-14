@@ -69,7 +69,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#engineerCollapse" data-toggle="collapse"
                 aria-expanded="false" aria-controls="engineerCollapse">
-                <i class="fa-solid fa-wrench" style="color: #ffffff;"></i> 工程部 
+                <i class="fa-solid fa-wrench" style="color: #ffffff;"></i> 工程部
             </a>
             <div class="collapse" id="engineerCollapse">
                 <ul class="nav flex-column ml-4">
@@ -83,7 +83,7 @@
                     {% endif %}
 
 
-                    {% if user|in_group_T_or_F:"工程派任"  or pass_test_func %}
+                    {% if user|in_group_T_or_F:"工程派任" or pass_test_func %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project' %}">工作派任計畫</a>
@@ -99,7 +99,7 @@
                     </li>
                     {% endif %}
 
-                    {% if user|in_group_T_or_F:"工程派任"  or user|in_group_T_or_F:"工程確認"  or pass_test_func %}
+                    {% if user|in_group_T_or_F:"工程派任" or user|in_group_T_or_F:"工程確認" or pass_test_func %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Calendar_list' %}">行程表</a>
@@ -113,25 +113,25 @@
 
 
 
-        {% if user|in_group_T_or_F:"簽核流程管理"  or user|in_group_T_or_F:"管理部" or pass_test_func %}
+        {% if user|in_group_T_or_F:"簽核流程管理" or user|in_group_T_or_F:"管理部" or pass_test_func %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
                 aria-expanded="false" aria-controls="personnelCollapse">
-                <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> 管理部 
+                <i class="fa-solid fa-user-plus" style="color: #ffffff;"></i> 管理部
             </a>
             <div class="collapse" id="personnelCollapse">
                 <ul class="nav flex-column ml-4">
-                    
+
                     {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'department' %}">部門管理</a>
                     </li>
 
                     <a class="nav-link collapsed" href="#" data-target="#applys" data-toggle="collapse"
-                            aria-expanded="false" aria-controls="salesCollapse">
-                            申請單查詢
-                        </a>
+                        aria-expanded="false" aria-controls="salesCollapse">
+                        單號查詢
+                    </a>
                     <div class="collapse" id="applys">
                         <ul class="nav flex-column ml-4">
                             <li class="nav-item">
@@ -145,6 +145,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'TravelApplicationView_watch' %}">車程查詢</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'approval_list_Watch' %}">簽核查詢</a>
                             </li>
                         </ul>
                     </div>
@@ -171,8 +174,8 @@
                         <a class="nav-link" href="{% url 'employee_permission_list'%}">權限管理</a>
                     </li>
                     {% endif %}
-                    
-                  
+
+
                 </ul>
             </div>
         </li>
@@ -189,32 +192,15 @@
             <div class="collapse" id="salesCollapse">
                 <ul class="nav flex-column ml-4">
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-target="#clients" data-toggle="collapse"
-                            aria-expanded="false" aria-controls="salesCollapse">
-                            <!-- <i class="fa-solid fa-book-open" style="color: #ffffff;"></i>  -->
-                            報價單
-                        </a>
-                        <div class="collapse" id="clients">
-                            <ul class="nav flex-column ml-4">
-                                {% for client in clients %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'quotation_detail' client.id %}">
-                                        {{ client.client_name }}</a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-
+                        <a class="nav-link" href="{% url 'quotation'  %}">報價單</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'work_item_list' %}">工項管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'client_list' %}">客戶管理</a>
+                        <a class="nav-link" href="{% url 'client_list' %}">公司管理</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'requisition_list' %}">請購單位管理</a>
-                    </li>
+
                 </ul>
             </div>
         </li>
@@ -229,7 +215,7 @@
             </a>
             <div class="collapse" id="financialCollapse">
                 <ul class="nav flex-column ml-4">
-                 
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'salary_list' current_year current_month %}">員工薪水</a>
                     </li>
@@ -283,11 +269,10 @@
         </li>
         {% endif %}
 
-        {% if  pass_test_func %}
+        {% if pass_test_func %}
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#OP" data-toggle="collapse" aria-expanded="false"
-                aria-controls="OP">
+            <a class="nav-link collapsed" href="#OP" data-toggle="collapse" aria-expanded="false" aria-controls="OP">
                 <i class="fa-solid fa-quote-left" style="color: #ffffff;"></i> 參數調整
             </a>
             <div class="collapse" id="OP">
@@ -297,23 +282,23 @@
                         <a class="nav-link" href="{% url 'Approval_Group' %}">簽核順序</a>
                     </li>
                     {% endif %}
-                    
+
                     {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
                     </li>
-                    
+
                     {% endif %}
-                    
+
                     {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'LaborHealthInfo' %}">勞健保級距對照表</a>
                     </li>
-                    
+
                     {% endif %}
-                    
+
                     {% if user|in_group_T_or_F:"財務部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>

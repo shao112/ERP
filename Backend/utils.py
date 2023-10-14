@@ -13,6 +13,8 @@ from cn2an import an2cn
 from django.db.models import Sum
 import math
 from openpyxl.drawing.image import Image
+from openpyxl.styles import PatternFill
+
 
 
 
@@ -115,20 +117,25 @@ def salaryFile(get_salary,get_type):
     return False,new_file
 
 def quotationFile(quotation_obj,see,five):
+
     quotation_id = "" if quotation_obj.quotation_id is None else quotation_obj.quotation_id
-    client = "" if quotation_obj.client is None else quotation_obj.client
+    hide_client = "" if quotation_obj.client.client_name is None else quotation_obj.client.client_name
+    requisition = "" if quotation_obj.requisition.client_name is None else quotation_obj.requisition.client_name
     project_name = "" if quotation_obj.project_name is None else quotation_obj.project_name
-    tax_id = "" if quotation_obj.tax_id is None else quotation_obj.tax_id
-    contact_person = "" if quotation_obj.contact_person is None else quotation_obj.contact_person
-    business_assistant = "" if quotation_obj.business_assistant is None else quotation_obj.business_assistant
-    address = "" if quotation_obj.address is None else quotation_obj.address
-    tel = "" if quotation_obj.tel is None else quotation_obj.tel
-    mobile = "" if quotation_obj.mobile is None else quotation_obj.mobile
-    fax = "" if quotation_obj.fax is None else quotation_obj.fax
-    email = "" if quotation_obj.email is None else quotation_obj.email
-    quote_validity_period = "" if quotation_obj.quote_validity_period is None else quotation_obj.quote_validity_period
-    quote_date = "" if quotation_obj.quote_date is None else quotation_obj.quote_date
-    business_tel = "" if quotation_obj.business_tel is None else quotation_obj.business_tel
+    tax_id =  quotation_obj.requisition.tax_id  or ""
+    contact_person = quotation_obj.requisition.contact_person or ""
+    business_assistant = quotation_obj.business_assistant or ""
+    address = quotation_obj.requisition.address or ""
+    tel = quotation_obj.requisition.tel or ""
+    mobile = quotation_obj.requisition.mobile or ""
+    fax = quotation_obj.requisition.fax or ""
+    email = quotation_obj.requisition.email or ""
+    quote_validity_period = quotation_obj.quote_validity_period or ""
+    quote_date = quotation_obj.quote_date or ""
+    business_tel = quotation_obj.business_tel or ""
+
+    if quote_validity_period:
+        quote_validity_period=str(quote_validity_period) + "天"
 
     item_list = quotation_obj.work_item.all()
 
@@ -144,6 +151,8 @@ def quotationFile(quotation_obj,see,five):
     workbook.add_named_style(chinese_format)
 
     #放圖
+    grey_fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+
 
     if see:
         uploaded_files = quotation_obj.uploaded_files.all() 
@@ -164,7 +173,7 @@ def quotationFile(quotation_obj,see,five):
             
             for index, cell_value in enumerate(row, start=1):
                 if cell_value == "CLIENT":
-                    sheet.cell(row=i, column=index, value=str(client))
+                    sheet.cell(row=i, column=index, value=str(requisition))
                 elif cell_value == "QUOTATION_ID":
                     sheet.cell(row=i, column=index, value=quotation_id)
                 elif cell_value == "quote_date":
@@ -210,6 +219,17 @@ def quotationFile(quotation_obj,see,five):
                             sum+=(item.count)*(item.unit_price)
                 elif cell_value == "SUM":
                     sheet.cell(row=i, column=index, value=sum)
+                elif cell_value == "hide_key":
+                    if see:
+                        sheet.cell(row=i, column=index, value="客戶名稱").fill = grey_fill
+                    else:
+                        sheet.cell(row=i, column=index, value="")
+                elif cell_value == "hide_name":
+                    if see:
+                        sheet.cell(row=i, column=index, value=hide_client).fill = grey_fill
+                    else:
+
+                        sheet.cell(row=i, column=index, value="")
                 elif cell_value == "sum_five":
                     if five:                           
                         five_sum = math.ceil(sum *0.05)
@@ -226,7 +246,7 @@ def quotationFile(quotation_obj,see,five):
         print(e)
         return True,"系統無法分析此樣板，出現意外錯誤"
 
-    filename = f"【報價單】 {quotation_id}-{client}-{project_name}.xlsx"
+    filename = f"【報價單】 {quotation_id}-{requisition}-{project_name}.xlsx"
     quoted_filename = quote(filename)
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] =  f'attachment; filename="{quoted_filename}"'

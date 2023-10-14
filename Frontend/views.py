@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 from Backend.forms import  SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client, Requisition
+from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -473,13 +473,18 @@ class Quotation_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["workitems"]= Work_Item.objects.all()
-        client_id = self.kwargs.get('client_id', None)
-        context['client'] = Client.objects.get(id=client_id)
+        context['client'] = Client.objects.all()
+        context['quotation'] = Quotation.objects.all()
+        from django.db.models import Case, When, Value, CharField
+        employees_sorted = Employee.objects.annotate(#以業務組優先排序
+            custom_order=Case(
+                When(departments__department_name='業務組', then=Value(0)),
+                default=Value(1)
+            )
+        ).order_by('custom_order')
 
-        if client_id:
-            context['quotation'] = Quotation.objects.filter(client=client_id)
-        else:
-            context['quotation'] = Quotation.objects.all()
+        context['employees_sorted'] = employees_sorted
+        print(employees_sorted  )
 
         return context
     
@@ -510,14 +515,7 @@ class ExtraWorkDay_ListView(ListView):
         context = super().get_context_data(**kwargs)
         return context
 
-# 請購單位管理
-class Requisition_ListView(ListView):
-    model = Requisition
-    template_name = 'requisition/requisition.html'
-    context_object_name = 'requisition_list'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+
 
 # 最新消息
 class News_ListView(ListView):

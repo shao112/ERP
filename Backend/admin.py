@@ -4,7 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import AnnualLeave, LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client,Requisition
+from .models import AnnualLeave, LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -20,7 +20,8 @@ class MyUserAdmin(UserAdmin):
 
 # 工項管理
 class WorkItemAdmin(admin.ModelAdmin):
-    list_display = ('item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
+    pass
+    # list_display = ('item_name', 'item_id', 'unit', 'unit_price', 'created_date', 'update_date')
     # resource_class = DepartmentResource
 # 請假申請
 class LeaveApplicationAdmin(admin.ModelAdmin):
@@ -43,7 +44,7 @@ class DepartmentAdmin(ImportExportModelAdmin):
     
 # 工程確認單
 class ProjectConfirmationAdmin(ImportExportModelAdmin):
-    list_display = ('quotation_id', 'Approval','order_id', 'c_a',  'requisition', 'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
+    list_display = ('quotation_id', 'Approval','order_id', 'c_a',   'turnover', 'is_completed', 'display_completion_report_employee', 'completion_report_date', 'remark', 'attachment', 'created_date', 'update_date')
     def display_completion_report_employee(self, obj):
         return ', '.join([str(item) for item in obj.completion_report_employee.all()])
     display_completion_report_employee.short_description = '多對多_完工回報人'
@@ -77,9 +78,6 @@ class VehicleAdmin(admin.ModelAdmin):
 # 客戶
 class ClientAdmin(admin.ModelAdmin):
     list_display = ('client_name', 'created_date', 'update_date')
-# 請購單位
-class RequisitionAdmin(admin.ModelAdmin):
-    list_display = ('requisition_name', 'created_date', 'update_date')
 #派工單
 class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
     list_display = ("id",'project_job_assign', 'modified_by')
@@ -127,7 +125,6 @@ admin.site.register(Project_Confirmation, ProjectConfirmationAdmin)
 admin.site.register(Project_Job_Assign, ProjectJobAssignAdmin)
 admin.site.register(Clock, ClockAdmin)
 admin.site.register(Client, ClientAdmin)
-admin.site.register(Requisition, RequisitionAdmin)
 admin.site.register(Work_Item, WorkItemAdmin)
 admin.site.register(Leave_Application, LeaveApplicationAdmin)
 admin.site.register(Leave_Param, LeaveParamAdmin)

@@ -81,18 +81,20 @@
             <div id="toolbar"></div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-sortable="true" data-field="type">類型</th>
-                    <th data-sortable="true" data-field="status">狀態</th>
-                    <th data-sortable="true" data-field="content">編號</th>
+                    <th data-sortable="true" data-filter-control="input"  data-field="type">類型</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="id">簽核單</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="status">狀態</th>
+                    <th data-sortable="true"  data-filter-control="input" data-field="content">編號</th>
                     <th data-sortable="true" data-field="progress">簽核進度</th>
-                    <th data-sortable="true" data-field="author">申請人</th>
-                    <th data-sortable="true" data-field="watch">查看</th>
+                    <th data-sortable="true" data-filter-control="input" data-field="author">申請人</th>
+                    <th data-sortable="true"  data-field="watch">查看</th>
                 </tr>
             </thead>
             <tbody class="" style="font-size: 14px;">
                 {% for object in object_list %}
                 <tr>
                     <td>{{ object.target_approval.get_name_display }}</td>
+                    <td>{{ object.get_show_id }}</td>
                     <td>
                         {{ object.get_current_status_display }}
                     </td>
