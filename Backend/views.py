@@ -623,7 +623,14 @@ class Quotation_View(View):
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Quotation.objects.get(id=dict_data['id']).delete()
+            quotation_obj = Quotation.objects.get(id=dict_data['id']) 
+            if quotation_obj.work_item is not None:
+                print("存在")
+                print("quotation_obj.work_item: ", quotation_obj.work_item.all())
+                for i in quotation_obj.work_item.all():
+                    for n in i:
+                        Work_Item_Number.objects.get(id=n.Work_Item_Number.id).delete()
+            quotation_obj.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -636,20 +643,17 @@ class Quotation_View(View):
         
         work_item_id = request.POST.getlist('work_item_id')
         work_item_number = request.POST.getlist('work_item_number')
-        print(work_item_id)
-        print(work_item_number)
+        # print(work_item_id)
+        # print(work_item_number)
         if form.is_valid():
             newobj = form.save()
-
-
-            # dict_data = convent_dict(request.body)
-            # if "number" in dict_data:
-            #     print("dict_data[number]: ", dict_data["number"])
-            #     Work_Item_Number.objects.create(
-            #         work_item = newobj.work_item,
-            #         number = dict_data["number"]
-            #     )
-            #     print("建立Work_Item_Number")
+            for i, n in zip(work_item_id, work_item_number):
+                work_item = Work_Item.objects.get(id=i)
+                Work_Item_Number.objects.create(
+                    quotation = work_item.quotations,
+                    work_item = work_item,
+                    number = n
+                )
             return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()

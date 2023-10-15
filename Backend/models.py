@@ -704,9 +704,11 @@ class Department(ModifiedModel):
 
 # 工項數量
 class Work_Item_Number(ModifiedModel):
+    quotation = models.ForeignKey("Quotation",related_name="Quotation_Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='報價單')
     work_item = models.ForeignKey("Work_Item",related_name="Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工項名稱')
     number = models.IntegerField(blank=True, null=True, verbose_name="數量")
-
+    def __str__(self):
+            return f"{self.work_item} 數量: {self.number}"
 # 工項管理
 class Work_Item(ModifiedModel):
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項編號")
