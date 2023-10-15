@@ -708,7 +708,8 @@ class Work_Item_Number(ModifiedModel):
     work_item = models.ForeignKey("Work_Item",related_name="Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工項名稱')
     number = models.IntegerField(blank=True, null=True, verbose_name="數量")
     def __str__(self):
-            return f"{self.work_item} 數量: {self.number}"
+            return f"{self.work_item} 數量: {self.number} |id{self.id}"
+
 # 工項管理
 class Work_Item(ModifiedModel):
     item_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項編號")
@@ -733,7 +734,7 @@ class Work_Item(ModifiedModel):
 
     def get_display_text(self):
         pn_id =self.get_show_id()
-        return f"{pn_id} | {self.item_name} | {self.unit} | { self.money() } (計算價格)"
+        return f"{pn_id} | {self.item_name} | { self.money() } (計算價格) | {self.unit} "
 
     def get_show_id(self):
         return self.item_id
@@ -754,7 +755,6 @@ class Quotation(ModifiedModel):
     quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
     business_tel = models.CharField(max_length=20, verbose_name="業務電話",blank=True, null=True)
     business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)
-    work_item = models.ManyToManyField(Work_Item,blank=True, related_name="quotations",verbose_name="工項")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
@@ -764,7 +764,7 @@ class Quotation(ModifiedModel):
 
 
     # def __str__(self):
-    #     return self.project_name
+    #     return self.quotation_id
 
     class Meta:
         verbose_name = "報價單"

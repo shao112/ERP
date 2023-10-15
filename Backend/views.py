@@ -617,15 +617,40 @@ class Quotation_View(View):
 
         if form.is_valid():
             getQuotation = Quotation.objects.get(id=dict_data['id'])
-            print("xx工向關聯")
-            print(getQuotation.Quotation_Work_Item_Number.all())
-            # print(dict_data['work_item_id'])
-            # print(dict_data['work_item_number'])
-            if "work_item" in dict_data:
-                get_work_item = [int(item) for item in  dict_data["work_item"]]
-                del dict_data["work_item"]
-                getQuotation.work_item.set(get_work_item)
-            
+
+            work_item_objs = getQuotation.Quotation_Work_Item_Number.all()
+
+            Work_Item_Number_ids = dict_data.get('Work_Item_Number_id', [])
+
+
+            for obj in work_item_objs:
+                if obj.id not in Work_Item_Number_ids:
+                    obj.delete()
+
+            if "work_item_id" in dict_data:
+                # print(work_item_ids,work_item_numbers,Work_Item_Number_ids)
+                work_item_ids = dict_data['work_item_id'] 
+                work_item_numbers = dict_data['work_item_number'] 
+                for i in range(len(Work_Item_Number_ids)):
+                    work_item_id = work_item_ids[i]
+                    work_item_number = work_item_numbers[i]
+                    Work_Item_Number_id = Work_Item_Number_ids[i]
+                    matching_obj = Work_Item_Number.objects.filter(id=Work_Item_Number_id).first()
+                    try:
+                        work_obj = get_object_or_404(Work_Item, id=work_item_id)                    
+                    except Http404:
+                        return JsonResponse({"error":"找不到工項，請先重新整理看看。"},status=400)
+                    if matching_obj:
+                        matching_obj.number = work_item_number
+                        matching_obj.work_item = work_obj
+                        matching_obj.save()
+                    else:
+                        Work_Item_Number.objects.create(
+                            quotation=getQuotation,
+                            work_item=work_obj,
+                            number=work_item_number
+                        )                
+
             if "client" in dict_data:
                 get_obj = Client.objects.get(pk=int(dict_data["client"]))
                 print(get_obj)
@@ -668,8 +693,6 @@ class Quotation_View(View):
         
         work_item_id = request.POST.getlist('work_item_id')
         work_item_number = request.POST.getlist('work_item_number')
-        print(work_item_id)
-        print(work_item_number)
         if form.is_valid():
             newobj = form.save()
             for i, n in zip(work_item_id, work_item_number):
@@ -700,12 +723,8 @@ class Quotation_View(View):
             
 
         work_item_list = []
-        for item in data.work_item.all():
-            item_dict = model_to_dict(item)
-            work_item_list.append(item_dict)
-        number_list = []
         for item in data.Quotation_Work_Item_Number.all():
-            number_list.append(item.number)
+            work_item_list.append({"id":item.id,"number":item.number,"work_item_id":item.work_item.id})
             
         client_name=data.client.client_name if data.client else None
         requisition_name=data.requisition.client_name if data.requisition else None
@@ -716,9 +735,7 @@ class Quotation_View(View):
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
         data['client_name'] = client_name
-        data['number'] = number_list
         data['requisition_name'] = requisition_name
-
 
         return JsonResponse({"data":data}, status=200,safe = False)
 

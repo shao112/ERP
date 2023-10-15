@@ -54,6 +54,7 @@
 
 <!-- template -->
 <div class="form-row" id="work_item_form_row" hidden> 
+    <input  id="" name="Work_Item_Number_id" value="-1" hidden/>
         <div class="col-12 col-lg-8">
         <div class="form-group">
             <label>工項選擇</label>
@@ -229,7 +230,7 @@
                     </div>
                     <div class="form-check form-check-inline">
                         <label for="idfive" class="form-check-label">使用維景樣板</label>
-                        <input type="checkbox" name="" class="form-check-input" id="five" checked>
+                        <input type="checkbox" name="" class="form-check-input" id="five" >
                     </div>
                 </div>
             </div>
@@ -346,18 +347,21 @@
             $(this).remove();
         });
 
-        var work_item_list = getdata["work_item"]
-        var number = getdata["number"]
-        console.log("number: "+number)
+        var work_item_list = getdata["work_item"];
+        console.log("work_item: "+work_item_list)
+        console.log("XX")
         for(let i = 0; i < work_item_list.length; i++){
+            console.log(work_item_list[i])
             let clonedRow = $("#work_item_form_row").clone();
             clonedRow.removeAttr("hidden");
             clonedRow.attr("id", "");
             clonedRow.addClass("new_row");
             new_cloneRow = clonedRow.clone();
 
-            new_cloneRow.find("select").val(work_item_list[i].id);
-            new_cloneRow.find("input").val(number[i]);
+            new_cloneRow.find("select").val(work_item_list[i].work_item_id);
+            new_cloneRow.find("input[name='Work_Item_Number_id']").val(work_item_list[i].id);
+            new_cloneRow.find("input[name='work_item_number']").val(work_item_list[i].number);
+
             $("#quotation_input").append(new_cloneRow);
         }
     }

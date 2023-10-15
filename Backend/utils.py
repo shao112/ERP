@@ -137,7 +137,8 @@ def quotationFile(quotation_obj,see,five):
     if quote_validity_period:
         quote_validity_period=str(quote_validity_period) + "天"
 
-    item_list = quotation_obj.work_item.all()
+    item_list = quotation_obj.Quotation_Work_Item_Number.all()
+    print(item_list)
 
     if five:
         file_path = r'media/system_files/quotation_template_other.xlsx' # 維景 還沒放
@@ -163,21 +164,17 @@ def quotationFile(quotation_obj,see,five):
 
         for i, file in enumerate(uploaded_files):
             file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
-            # print(file_path)
-            try:
+            if os.path.exists(file_path):
                 with open(file_path, 'r') as f:
-                    print(f.read())
                     img = Image(file_path)
                     sheet.add_image(img, f'O{4+i}')
-            except FileNotFoundError:
+            else:
                 sheet[f'O{4+i}'].value=f"伺服器找不到{file.name}、路徑{file.file}檔案"
                 print(f"找不到檔案: {file_path}")
-            except Exception as e:
-                sheet[f'O{4+i}'].value=f"伺服器找不到{file.name}、路徑{file.file}檔案"
-                print(f"發生未知的錯誤: {e}")
+
         #顯示對內對話紀錄
         internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
-        sheet['L2'].value = internal_content
+        sheet['M2'].value = internal_content
 
 
     sum = 0
@@ -223,14 +220,20 @@ def quotationFile(quotation_obj,see,five):
                         sheet.cell(row=i, column=index+7, value="")
                         sheet.cell(row=i, column=index+8, value="")
                     else:
-                        for next_index, item in enumerate(item_list):
+                        for next_index, item in enumerate(item_list): #艾利克
                             sheet.cell(row=i+next_index, column=index, value= next_index+1)
-                            sheet.cell(row=i+next_index, column=index+1, value=item.item_name)
-                            sheet.cell(row=i+next_index, column=index+6, value="")
-                            sheet.cell(row=i+next_index, column=index+5, value=item.unit)
-                            # sheet.cell(row=i+next_index, column=index+7, value=item.money)
-                            sheet.cell(row=i+next_index, column=index+8, value=item.year_money)
-                            # sum+=(item.count)*(item.unit_price)
+                            sheet.cell(row=i+next_index, column=index+1, value=item.work_item.item_name)
+                            sheet.cell(row=i+next_index, column=index+5, value=item.work_item.contract_id)
+                            sheet.cell(row=i+next_index, column=index+6, value=item.work_item.unit)
+                            num =item.number
+                            money=item.work_item.money()
+                            item_total_moeny=0
+                            if str(money).isnumeric():
+                                item_total_moeny = num*money
+                            sheet.cell(row=i+next_index, column=index+7, value=num)
+                            sheet.cell(row=i+next_index, column=index+8, value=money )
+                            sheet.cell(row=i+next_index, column=index+9, value=item_total_moeny )
+                            sum+=item_total_moeny
                 elif cell_value == "SUM":
                     sheet.cell(row=i, column=index, value=sum)
                 elif cell_value == "hide_key":
@@ -363,7 +366,7 @@ def convent_dict(data):
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
-        process_key =("vehicle","work_item_number","work_item_id","inspector","support_employee","work_item","carry_equipments","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
+        process_key =("vehicle","Work_Item_Number_id","work_item_number","work_item_id","inspector","support_employee","work_item","carry_equipments","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
         if key in process_key: #處理員工多對多陣列        
             new_dict_data[key] =  [int(num) for num in  value]
         elif  key == "test_items":           
