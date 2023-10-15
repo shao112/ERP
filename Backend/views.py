@@ -595,6 +595,7 @@ class Quotation_View(View):
 
         if form.is_valid():
             getQuotation = Quotation.objects.get(id=dict_data['id'])
+            print("getQuotation: ",getQuotation.Quotation_Work_Item_Number.all())
             print(dict_data['work_item_id'])
             print(dict_data['work_item_number'])
             if "work_item" in dict_data:
@@ -630,6 +631,7 @@ class Quotation_View(View):
                 for i in quotation_obj.work_item.all():
                     for n in i:
                         Work_Item_Number.objects.get(id=n.Work_Item_Number.id).delete()
+
             quotation_obj.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -643,14 +645,14 @@ class Quotation_View(View):
         
         work_item_id = request.POST.getlist('work_item_id')
         work_item_number = request.POST.getlist('work_item_number')
-        # print(work_item_id)
-        # print(work_item_number)
+        print(work_item_id)
+        print(work_item_number)
         if form.is_valid():
             newobj = form.save()
             for i, n in zip(work_item_id, work_item_number):
                 work_item = Work_Item.objects.get(id=i)
                 Work_Item_Number.objects.create(
-                    quotation = work_item.quotations,
+                    quotation = newobj,
                     work_item = work_item,
                     number = n
                 )
@@ -678,6 +680,10 @@ class Quotation_View(View):
         for item in data.work_item.all():
             item_dict = model_to_dict(item)
             work_item_list.append(item_dict)
+        number_list = []
+        for item in data.Quotation_Work_Item_Number.all():
+            number_list.append(item.number)
+            
         client_name=data.client.client_name if data.client else None
         data = model_to_dict(data)
         print("dict_data")
@@ -686,6 +692,7 @@ class Quotation_View(View):
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
         data['client_name'] = client_name
+        data['number'] = number_list
 
 
         return JsonResponse({"data":data}, status=200,safe = False)

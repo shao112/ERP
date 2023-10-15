@@ -342,19 +342,38 @@
         const change_event = new Event("change");
         choose_input.dispatchEvent(change_event);
 
+        $(".new_row").each(function() {
+            $(this).remove();
+        });
 
+        var work_item_list = getdata["work_item"]
+        var number = getdata["number"]
+        console.log("number: "+number)
+        for(let i = 0; i < work_item_list.length; i++){
+            let clonedRow = $("#work_item_form_row").clone();
+            clonedRow.removeAttr("hidden");
+            clonedRow.attr("id", "");
+            clonedRow.addClass("new_row");
+            new_cloneRow = clonedRow.clone();
+
+            new_cloneRow.find("select").val(work_item_list[i].id);
+            new_cloneRow.find("input").val(number[i]);
+            $("#quotation_input").append(new_cloneRow);
+        }
     }
     $(document).ready(function () {
         var clonedRow = $("#work_item_form_row").clone();
         clonedRow.removeAttr("hidden");
-        clonedRow.attr("id", "");        
-        $("#insert_work_item_row").click(function () {
+        clonedRow.attr("id", "");   
+        clonedRow.addClass("new_row");
+        $("#insert_work_item_row").click(function(){
             console.log("click");
             new_cloneRow = clonedRow.clone();
             $("#quotation_input").append(new_cloneRow);
         })
     });
-
+    
+    
     function deleteWorkItemRow(button) {
         var rowToDelete = button.closest('.form-row');
         rowToDelete.remove();
