@@ -23,7 +23,7 @@ function get_all_input() {
 
 function unlock_input() {
   const get_input = get_all_input();
-  console.log(get_input);
+  // console.log(get_input);
   get_input.forEach((input) => {
     if (!input.classList.contains("readonly")) {
       input.removeAttribute("readonly");
@@ -138,7 +138,8 @@ async function GET_handleClick(event, bringdata = true) {
               var element = document.getElementById(key);
 
               // console.log(get_value);
-              // console.log(key);
+              console.log(key);
+              console.log(typeof jsonData[key]);
               // console.log(element);
               if(get_value != null){
                 element.href = get_value;
@@ -155,6 +156,7 @@ async function GET_handleClick(event, bringdata = true) {
 
             if (typeof jsonData[key] == "object" && get_value != null) {
               //判斷是不是陣列
+              console.log(key);
               SetSelect2(input, key, get_value);
               continue;
             }

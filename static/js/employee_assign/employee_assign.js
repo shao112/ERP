@@ -34,6 +34,7 @@ project_job_assign_IdControl.addEventListener("change", function () {
 
       // 從jsonData中獲取相關資料
       var vehicles = jsonData["vehicle"];
+      console.log("vehicles: "+vehicles)
       var leadEmployees = jsonData["lead_employee"];
       var workEmployees = jsonData["work_employee"];
       var leadEmployeeNames = leadEmployees.map(function(employee) {
@@ -68,6 +69,13 @@ project_job_assign_IdControl.addEventListener("change", function () {
       document.getElementsByName("requisition")[0].value =
         jsonData["requisition_name"];
       document.getElementsByName("location")[0].value = jsonData["location"];
+      document.getElementsByName("vehicle")[0].value = jsonData["vehicle"];
+
+
+      var vehicle_select2_DOM = document.getElementById("vehicle_select2");
+      SetSelect2(vehicle_select2_DOM,"vehicle",vehicles);
+      
+
     },
     error: function (xhr, textStatus, errorThrown) {
       alert("job_assign js error");

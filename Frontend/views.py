@@ -369,6 +369,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
         context["employees_list"] =  Employee.objects.values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
+        context['vehicle'] = Vehicle.objects.all()
         return context
 
     def test_func(self):

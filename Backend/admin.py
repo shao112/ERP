@@ -53,7 +53,7 @@ class ProjectConfirmationAdmin(ImportExportModelAdmin):
 # 工作派任計畫
 class ProjectJobAssignAdmin(ImportExportModelAdmin):
     # list_display = ('project_confirmation', 'projecet_id', 'project_name', 'c_a', 'attendance_date', 'display_work_employee', 'display_lead_employee','vehicle', 'location', 'project_type', 'remark', 'support', 'attachment', 'created_date', 'update_date')
-    list_display = ('project_confirmation',   'display_work_employee', 'display_lead_employee','attendance_date','vehicle', 'location',  'remark', 'created_date', 'update_date')
+    list_display = ('project_confirmation',   'display_work_employee', 'display_lead_employee','attendance_date', 'location',  'remark', 'created_date', 'update_date')
     # ManyToMany不能在list_display顯示
     def display_work_employee(self, obj):
         return ', '.join([str(item) for item in obj.work_employee.all()])
@@ -61,6 +61,9 @@ class ProjectJobAssignAdmin(ImportExportModelAdmin):
     def display_lead_employee(self, obj):
         return ', '.join([str(item) for item in obj.lead_employee.all()])
     display_lead_employee.short_description = '多對多_帶班主管'
+    def display_vehicle(self, obj):
+        return ', '.join([str(item) for item in obj.vehicle.all()])
+    display_vehicle.short_description = '多對多_車輛'
     # resource_class = ProjectJobAssignResource
 
 

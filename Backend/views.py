@@ -465,6 +465,16 @@ class Project_Employee_Assign_View(View):
         form = Project_Employee_AssignForm(dict_data)
         if form.is_valid():
             get_Project_Employee_Assign =Project_Employee_Assign.objects.get(id=dict_data['id'])
+            # print(dict_data)
+            if "vehicle" in dict_data:
+                related_project_job_assign = get_Project_Employee_Assign.project_job_assign
+                vehicle_id = dict_data["vehicle"]
+                vehicle_id_list = [int(item) for item in vehicle_id]
+                related_project_job_assign.vehicle.set(vehicle_id_list)
+                related_project_job_assign.save()
+                del dict_data["vehicle"]
+
+            
 
             if "project_job_assign" in dict_data:
                 project_job_assign_instance = Project_Job_Assign.objects.get(pk=int(dict_data["project_job_assign"]))
@@ -511,6 +521,14 @@ class Project_Employee_Assign_View(View):
         if form.is_valid():
             newobj =form.save()
             newobj.test_items = ','.join(map(str, get_test_items))
+            related_project_job_assign = newobj.project_job_assign
+            vehicle = request.POST.getlist("vehicle")
+       
+            vehicle_id_list = [int(item) for item in vehicle]
+            related_project_job_assign.vehicle.set(vehicle_id_list)
+            related_project_job_assign.save()
+
+
             newobj.save()
             return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
         else:
@@ -523,13 +541,17 @@ class Project_Employee_Assign_View(View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
         location = data.project_job_assign.location
-        
+        vehicle_id_list = []
+        for item in data.project_job_assign.vehicle.all():
+            vehicle_id_list.append(item.id)
+        print("vehicle_id_list: ",vehicle_id_list)
         get_id=data.get_show_id()
         data = model_to_dict(data)
         carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
         data["carry_equipments"] = list(carry_equipments_ids)
         data["show_id"] = get_id
         data["location"] = location
+        data["vehicle"] = vehicle_id_list
 
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
@@ -1518,7 +1540,7 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
-
+# 派工單
 class Job_Assign_View(View):
 
     def put(self,request):
@@ -1588,8 +1610,13 @@ class Job_Assign_View(View):
         quotation_dict["q_id"] = q_id
         quotation_dict["client_name"] = client_name
 
+        car_id =[]
+        for car in data.vehicle.all():
+            car_id.append(str(car.id))
+
         data = model_to_dict(data)
         data["requisition_name"]=requisition_name
+        data["vehicle"]=car_id
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])        
        
