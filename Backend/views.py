@@ -595,6 +595,8 @@ class Quotation_View(View):
 
         if form.is_valid():
             getQuotation = Quotation.objects.get(id=dict_data['id'])
+            print("xx工向關聯")
+            print(getQuotation.Quotation_Work_Item_Number.all())
             # print(dict_data['work_item_id'])
             # print(dict_data['work_item_number'])
             if "work_item" in dict_data:
@@ -650,7 +652,7 @@ class Quotation_View(View):
             for i, n in zip(work_item_id, work_item_number):
                 work_item = Work_Item.objects.get(id=i)
                 Work_Item_Number.objects.create(
-                    quotation = work_item.quotations,
+                    quotation = newobj,
                     work_item = work_item,
                     number = n
                 )
