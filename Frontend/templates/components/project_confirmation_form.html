@@ -14,7 +14,7 @@
                         <option value="-1">選擇報價單號</option>
                         {% for quotation in quotation_list %}
                         <option value="{{ quotation.id }}">
-                            {{ quotation.get_show_id }}-{{ quotation.project_name }}-{{ quotation.client }}
+                            {{ quotation.get_show_id }}-{{ quotation.project_name }}- 業主【 {{ quotation.requisition }}】
                         </option>
                         {% endfor %}
                     </select>
@@ -45,8 +45,8 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="order_id_control">訂單編號</label>
-                        <input class="form-control form-control-sm" name="order_id" id="order_id_control"></input>
+                        <label for="requisition">業主名稱</label>
+                        <input readonly type="text" class="readonly form-control form-control-sm" id="requisition_id" />
                     </div>
                 </div>
 
@@ -60,10 +60,12 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="requisition">請購單位</label>
-                        {{ project_confirmation_form.requisition }}
+                        <label for="order_id_control">訂單編號</label>
+                        <input class="form-control form-control-sm" name="order_id" id="order_id_control"></input>
                     </div>
                 </div>
+
+
             </div>
             <div class="form-row">
                 <div class="col-12">

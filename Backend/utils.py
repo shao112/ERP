@@ -125,7 +125,7 @@ def quotationFile(quotation_obj,see,five):
     tax_id =  quotation_obj.requisition.tax_id  or ""
     contact_person = quotation_obj.requisition.contact_person or ""
     business_assistant = quotation_obj.business_assistant or ""
-    address = quotation_obj.requisition.address or ""
+    address = quotation_obj.requisition.address or ""  
     tel = quotation_obj.requisition.tel or ""
     mobile = quotation_obj.requisition.mobile or ""
     fax = quotation_obj.requisition.fax or ""
@@ -138,10 +138,12 @@ def quotationFile(quotation_obj,see,five):
         quote_validity_period=str(quote_validity_period) + "天"
 
     item_list = quotation_obj.work_item.all()
+
     if five:
-        file_path = r'media/system_files/quotation_template.xlsx' # 艾力克電機
+        file_path = r'media/system_files/quotation_template_other.xlsx' # 維景 還沒放
     else:
-        file_path = r'media/system_files/quotation_template.xlsx' # 維景 還沒放
+        file_path = r'media/system_files/quotation_template.xlsx' # 艾力克電機
+
     try:
         workbook = load_workbook(filename=file_path)
     except Exception as e:
@@ -168,10 +170,10 @@ def quotationFile(quotation_obj,see,five):
                     img = Image(file_path)
                     sheet.add_image(img, f'O{4+i}')
             except FileNotFoundError:
-                sheet[f'O{4+i}'].value=f"伺服器找不到{uploaded_files.name}、路徑{uploaded_files.file.file}檔案"
+                sheet[f'O{4+i}'].value=f"伺服器找不到{file.name}、路徑{file.file}檔案"
                 print(f"找不到檔案: {file_path}")
             except Exception as e:
-                sheet[f'O{4+i}'].value=f"伺服器找不到{uploaded_files.name}、路徑{uploaded_files.file.file}檔案"
+                sheet[f'O{4+i}'].value=f"伺服器找不到{file.name}、路徑{file.file}檔案"
                 print(f"發生未知的錯誤: {e}")
         #顯示對內對話紀錄
         internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
@@ -237,11 +239,14 @@ def quotationFile(quotation_obj,see,five):
                     else:
                         sheet.cell(row=i, column=index, value="")
                 elif cell_value == "hide_name":
-                    if see:
-                        sheet.cell(row=i, column=index, value=hide_client).fill = grey_fill
+                    if five:
+                        sheet.cell(row=i, column=index, value=hide_client)
                     else:
 
-                        sheet.cell(row=i, column=index, value="")
+                        if see:
+                            sheet.cell(row=i, column=index, value=hide_client).fill = grey_fill
+                        else:
+                            sheet.cell(row=i, column=index, value="")
                 elif cell_value == "sum_five":
                     if five:                           
                         five_sum = math.ceil(sum *0.05)

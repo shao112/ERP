@@ -595,9 +595,10 @@ class Quotation_View(View):
 
         if form.is_valid():
             getQuotation = Quotation.objects.get(id=dict_data['id'])
-            print("getQuotation: ",getQuotation.Quotation_Work_Item_Number.all())
-            print(dict_data['work_item_id'])
-            print(dict_data['work_item_number'])
+            print("xx工向關聯")
+            print(getQuotation.Quotation_Work_Item_Number.all())
+            # print(dict_data['work_item_id'])
+            # print(dict_data['work_item_number'])
             if "work_item" in dict_data:
                 get_work_item = [int(item) for item in  dict_data["work_item"]]
                 del dict_data["work_item"]
@@ -685,6 +686,7 @@ class Quotation_View(View):
             number_list.append(item.number)
             
         client_name=data.client.client_name if data.client else None
+        requisition_name=data.requisition.client_name if data.requisition else None
         data = model_to_dict(data)
         print("dict_data")
         print(data)
@@ -693,6 +695,7 @@ class Quotation_View(View):
         data['quotation_id'] = get_id
         data['client_name'] = client_name
         data['number'] = number_list
+        data['requisition_name'] = requisition_name
 
 
         return JsonResponse({"data":data}, status=200,safe = False)
@@ -1504,11 +1507,13 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
         get_id=data.get_show_id()
         project_name=data.quotation.project_name if data.quotation else None
         client_name=data.quotation.client.client_name if data.quotation.client else None
+        requisition_name=data.quotation.requisition.client_name if data.quotation.requisition else None
 
         data = model_to_dict(data)
         data['project_confirmation_id'] = get_id
         data['project_name'] = project_name
         data['client_name'] = client_name
+        data['requisition_name'] = requisition_name
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         print(data)

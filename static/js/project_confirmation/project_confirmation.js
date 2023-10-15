@@ -28,6 +28,7 @@ quotation_select.addEventListener("change", function () {
       document.getElementsByName("project_name")[0].value =
         jsonData["project_name"];
       document.getElementById("client_id").value = jsonData["client_name"];
+      document.getElementById("requisition_id").value = jsonData["requisition_name"];
     },
     error: function (xhr, textStatus, errorThrown) {
       alert("quotation  error");
