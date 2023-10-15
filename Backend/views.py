@@ -592,15 +592,19 @@ class Quotation_View(View):
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = QuotationForm(dict_data)
+
         if form.is_valid():
+            getQuotation = Quotation.objects.get(id=dict_data['id'])
+            print(dict_data['work_item_id'])
+            print(dict_data['work_item_number'])
             if "work_item" in dict_data:
-                getQuotation = Quotation.objects.get(id=dict_data['id'])
                 get_work_item = [int(item) for item in  dict_data["work_item"]]
                 del dict_data["work_item"]
                 getQuotation.work_item.set(get_work_item)
             
             if "client" in dict_data:
                 get_obj = Client.objects.get(pk=int(dict_data["client"]))
+                print(get_obj)
                 getQuotation.client = get_obj
                 del dict_data["client"]
 
@@ -629,8 +633,15 @@ class Quotation_View(View):
 
     def post(self,request):
         form = QuotationForm(request.POST)
+        
+        work_item_id = request.POST.getlist('work_item_id')
+        work_item_number = request.POST.getlist('work_item_number')
+        print(work_item_id)
+        print(work_item_number)
         if form.is_valid():
             newobj = form.save()
+
+
             # dict_data = convent_dict(request.body)
             # if "number" in dict_data:
             #     print("dict_data[number]: ", dict_data["number"])
@@ -1441,11 +1452,7 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
                 del dict_data["completion_report_employee"]
                 getObject.completion_report_employee.set(get_completion_report_employee)
 
-            if "requisition" in dict_data:
-                get_requisition_id = dict_data["requisition"]
-                del dict_data["requisition"]
-                getObject.requisition = Client.objects.get(id=get_requisition_id)
-            
+
             get_Quotation_Object = Quotation.objects.get(id=dict_data['quotation'])
             getObject.quotation = get_Quotation_Object
             del dict_data["quotation"]

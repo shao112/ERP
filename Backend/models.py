@@ -731,7 +731,7 @@ class Work_Item(ModifiedModel):
 
     def get_display_text(self):
         pn_id =self.get_show_id()
-        return f"{pn_id} | {self.item_name} || {self.unit} | (價格)"
+        return f"{pn_id} | {self.item_name} | {self.unit} | { self.money() } (計算價格)"
 
     def get_show_id(self):
         return self.item_id

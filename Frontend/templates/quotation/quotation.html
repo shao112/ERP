@@ -52,6 +52,32 @@
     </div>
 </div>
 
+<!-- template -->
+<div class="form-row" id="work_item_form_row" hidden> 
+        <div class="col-12 col-lg-8">
+        <div class="form-group">
+            <label>工項選擇</label>
+            <select class="form-control form-control-sm" name="work_item_id">
+                {% for workitem in workitems %}
+                <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label>數量</label>
+            <input type="number" class="form-control form-control-sm"
+                name="work_item_number" value="1">
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <button type="button" onclick="deleteWorkItemRow(this)">刪除</button>
+        </div>
+    </div>
+</div>
 
 
 <div class="main px-3">
@@ -83,10 +109,11 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="client">客戶名稱</label>
-                                                <select class="form-control form-control-sm" name="client" id="client"  required>
+                                                <select class="form-control form-control-sm" name="client" id="client"
+                                                    required>
                                                     <option value="-1">選擇客戶名稱</option>
                                                     {% for client in clients %}
-                                                    <option value="{{ client.id }}" >{{ client.client_name }}
+                                                    <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
@@ -95,10 +122,11 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="client">業主名稱</label>
-                                                <select class="form-control form-control-sm" name="requisition" id="requisition" required >
+                                                <select class="form-control form-control-sm" name="requisition"
+                                                    id="requisition" required>
                                                     <option value="-1">選擇業主名稱</option>
                                                     {% for client in clients %}
-                                                    <option value="{{ client.id }}" >{{ client.client_name }}
+                                                    <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
@@ -118,7 +146,7 @@
                                             <div class="form-group">
                                                 <label for="quote_validity_period">報價單有效期</label>
                                                 <input type="number" class="form-control form-control-sm"
-                                                    name="quote_validity_period"  value="14" id="quote_validity_period">
+                                                    name="quote_validity_period" value="14" id="quote_validity_period">
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
@@ -132,8 +160,9 @@
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="business_assistant">業務助理</label>                                            
-                                                <select name="business_assistant" id="business_assistant" class="select2">
+                                                <label for="business_assistant">業務助理</label>
+                                                <select name="business_assistant" id="business_assistant"
+                                                    class="select2">
                                                     <option value="-1">選擇助理</option>
                                                     {% for employee in employees_sorted %}
                                                     <option value="{{ employee.full_name }}">{{ employee.full_name }}
@@ -163,25 +192,7 @@
                                             <input type="button" value="增加工項" id="insert_work_item_row">
                                         </div>
                                     </div>
-                                    <div class="form-row" id="work_item_form_row">
-                                        <div class="col-12 col-lg-10">
-                                            <div class="form-group">
-                                                <label>工項選擇</label>
-                                                <select class="form-control form-control-sm" name="work_item">
-                                                    {% for workitem in workitems %}
-                                                    <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <div class="form-group">
-                                                <label>數量</label>
-                                                <input type="number" class="form-control form-control-sm" name="number">
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -263,7 +274,7 @@
                             data-target="#fileUploadModal">點擊</a>
                     </td>
 
-                    <td><a href="#"  onclick="openNewWindow({{item.pk}})">點擊</a></td>
+                    <td><a href="#" onclick="openNewWindow({{item.pk}})">點擊</a></td>
 
                     <td>
                         {{ item.quotation_id}}
@@ -303,8 +314,6 @@
         var forChecked = forCheckbox.checked ? 1 : 0;
         var fiveChecked = fiveCheckbox.checked ? 1 : 0;
 
-
-
         var url = `/restful/quotationfile/${id}/${forChecked}/${fiveChecked}`;
         window.open(url, '_blank');
     }
@@ -331,20 +340,25 @@
         getdata = await GET_handleClick(event);
         var choose_input = document.getElementById("business_assistant");
         const change_event = new Event("change");
-        choose_input.dispatchEvent(change_event);     
+        choose_input.dispatchEvent(change_event);
 
 
     }
-    $(document).ready(function(){
+    $(document).ready(function () {
         var clonedRow = $("#work_item_form_row").clone();
-        clonedRow.attr("id","");
-        $("#insert_work_item_row").click(function(){
+        clonedRow.removeAttr("hidden");
+        clonedRow.attr("id", "");        
+        $("#insert_work_item_row").click(function () {
             console.log("click");
             new_cloneRow = clonedRow.clone();
             $("#quotation_input").append(new_cloneRow);
         })
     });
-    
+
+    function deleteWorkItemRow(button) {
+        var rowToDelete = button.closest('.form-row');
+        rowToDelete.remove();
+    }
 
 </script>
 {% endblock %}

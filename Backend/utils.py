@@ -161,16 +161,19 @@ def quotationFile(quotation_obj,see,five):
 
         for i, file in enumerate(uploaded_files):
             file_path = os.path.join(settings.MEDIA_ROOT, str(file.file))
+            # print(file_path)
             try:
                 with open(file_path, 'r') as f:
                     print(f.read())
+                    img = Image(file_path)
+                    sheet.add_image(img, f'O{4+i}')
             except FileNotFoundError:
+                sheet[f'O{4+i}'].value=f"伺服器找不到{uploaded_files.name}、路徑{uploaded_files.file.file}檔案"
                 print(f"找不到檔案: {file_path}")
             except Exception as e:
+                sheet[f'O{4+i}'].value=f"伺服器找不到{uploaded_files.name}、路徑{uploaded_files.file.file}檔案"
                 print(f"發生未知的錯誤: {e}")
-            print(file_path)
-            img = Image(file_path)
-            sheet.add_image(img, f'O{4+i}')
+        #顯示對內對話紀錄
         internal_content ="" if quotation_obj.internal_content is None else quotation_obj.internal_content
         sheet['L2'].value = internal_content
 
@@ -355,7 +358,7 @@ def convent_dict(data):
     new_dict_data = {}
     for key, value in dict_data.items():
         new_dict_data[key] = value[0]
-        process_key =("inspector","support_employee","work_item","carry_equipments","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
+        process_key =("work_item_number","work_item_id","inspector","support_employee","work_item","carry_equipments","user_set","completion_report_employee","work_employee","lead_employee","completion_report_employeeS")
         if key in process_key: #處理員工多對多陣列        
             new_dict_data[key] =  [int(num) for num in  value]
         elif  key == "test_items":           
