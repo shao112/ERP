@@ -256,14 +256,14 @@ class EmployeeForm(BaseModelForm):
                 raise forms.ValidationError(errors)
 
             return cleaned_data
-# 員工
+# 車輛
 class VehicleForm(BaseModelForm):
 
     class Meta:
         model = Vehicle
         fields = '__all__'
         widgets = {
-            'vehicle_type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'vehicle_type': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'vehicle_type', "name":'vehicle_type'}),
         }
 # 簽核狀態
 class ApprovalModelForm(BaseModelForm):

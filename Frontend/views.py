@@ -8,7 +8,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import  SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import  VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -505,6 +505,16 @@ class Client_ListView(ListView):
     context_object_name = 'client_list'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        return context
+    
+# 車輛管理
+class Vehicle_ListView(ListView):
+    model = Vehicle
+    template_name = 'vehicle/vehicle.html'
+    context_object_name = 'vehicle_list'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["VehicleForm"] = VehicleForm
         return context
     
 # 上班日調整

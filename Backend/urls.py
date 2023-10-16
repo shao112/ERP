@@ -31,6 +31,7 @@ urlpatterns = [
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('news', views.New_View.as_view(), name="news_view_api"),
     path('calendar', views.Calendar_View.as_view(), name="calendar_api"),
+    path('vehicle', views.Vehicle_View.as_view(), name="vehicle_api"),
     #處理approval 的簽核進度
     path('approval_process_log', views.Approval_Process_Log.as_view(), name="approval_process_Log_api"),
     #處理工確、派工單等的頁面處理
