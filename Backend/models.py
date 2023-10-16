@@ -735,7 +735,7 @@ class Work_Item(ModifiedModel):
 
     def get_display_text(self):
         pn_id =self.get_show_id()
-        return f"{pn_id} | {self.item_name} | { self.money() } (計算價格) | {self.unit} "
+        return f"{pn_id} | {self.item_name}  | {self.contract_id }| { self.money() } (計算價格) | {self.unit} "
 
     def get_show_id(self):
         return self.item_id
@@ -1407,8 +1407,7 @@ class Work_Overtime_Application(ModifiedModel):
         ('1', '加班費'),
     )
     date_of_overtime = models.DateField(blank=True, null=True, verbose_name="加班日期")
-    shift_of_overtime = models.CharField(max_length=1, choices=SHIFT_TYPE, default="1", blank=False, null=False, verbose_name="班前/班後")
-    type_of_overtime = models.CharField(max_length=1, choices=OVERTIME_TYPE, default="1", blank=False, null=False, verbose_name="加班類別")
+
     start_hours_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班起始小時")
     start_mins_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班起始分鐘")
     end_hours_of_overtime = models.IntegerField(default=0,blank=True, null=True, verbose_name="加班結束小時")

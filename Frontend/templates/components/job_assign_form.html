@@ -9,13 +9,13 @@
             <div class="form-row">
                 <div class="col-12">
                     <div class="form-group">
-                        <label for="project_confirmation">工程確認單編號</label>
-                        <select class="form-control form-control-sm" name="project_confirmation"
+                        <label for="project_confirmation">工程確認單編號</label><a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
+                        <select class=" form-control form-control-sm" name="project_confirmation"
                             id="project_confirmation_select2">
                             <option value="-1">請選擇工確單編號</option>
                             {% for project_confirmation in project_confirmation_list %}
                             <option value="{{ project_confirmation.pk }}">
-                                {{ project_confirmation.get_show_id }}-{{ project_confirmation.quotation.project_name }}-{{ project_confirmation.quotation.client }}
+                                {{ project_confirmation.quotation.get_show_id }}-{{ project_confirmation.get_show_id }}-{{ project_confirmation.quotation.project_name }}-{{ project_confirmation.quotation.requisition }}
                             </option>
                             {% endfor %}
                         </select>
@@ -44,7 +44,7 @@
                         <!-- <label for="c_a_control">母案編號</label>
                         <input class="readonly form-control form-control-sm" name="c_a" readonly
                             id="c_a_control"></input> -->
-                            <label for="requisition_control">請購單位</label>
+                            <label for="requisition_control">業主單位</label>
                             <input class="form-control readonly form-control-sm" name="requisition" readonly
                                 id="requisitioncontrol"></input>
                         </div>

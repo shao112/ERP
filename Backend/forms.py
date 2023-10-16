@@ -324,8 +324,6 @@ class WorkOvertimeApplicationForm(BaseModelForm):
         model = Work_Overtime_Application
         fields = '__all__'
         widgets = {
-            'shift_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'shift_of_overtime', 'name':'shift_of_overtime'}),
-            'type_of_overtime': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'type_of_overtime', "name":'type_of_overtime'}),
             'carry_over': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'carry_over', "name":'carry_over'}),
         }
     def clean(self):

@@ -70,6 +70,51 @@
 </style>
 
 
+<div class="modal fade" id="listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">選擇工作派任單</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-hover text-center" id="list_id" data-toggle="table"
+                    data-sortable="true" data-search="true" data-filter-strict-search="true" data-filter-control="true">
+                    <thead>
+                        <tr>
+                            <th data-filter-control="input" data-field="go_date">出勤日期</th>
+                            <th data-filter-control="input" data-field="list_context">報價單號</th>
+                            <th data-filter-control="input" data-field="list_context1">工程名稱</th>
+                            <th data-filter-control="input" data-field="list_id1">派任單編號</th>
+                            <th data-filter-control="input" data-field="list_id">工確單編號</th>
+                            <th data-filter-control="input" data-field="list_ow">業主</th>
+                            <th>選擇</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in all_project_job_assign %}
+                        <tr>
+                            <td> {{ obj.attendance_date|date:"Y/m/d" }}</td>
+                            <td> {{ obj.project_confirmation.quotation.get_show_id }}</td>
+                            <td> {{ obj.project_confirmation.quotation.project_name }}</td>
+                            <td> {{ obj.get_show_id }}</td>
+                            <td> {{ obj.project_confirmation.get_show_id }}</td>
+                            <td> {{ obj.project_confirmation.quotation.requisition }}</td>
+                            <td><button class="select-btn"
+                                    onclick="set_select_id('{{obj.id}}','project_job_assign_id')">選擇</button></td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="main px-3">
     <div id="error-message"></div>
 
@@ -117,13 +162,13 @@
                                             <div class="form-row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="project_confirmation_control">工程派任計畫</label>
+                                                        <label for="project_confirmation_control">工程派任計畫</label> <a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
                                                         <select class="form-control form-control-sm"
                                                             name="project_job_assign" id="project_job_assign_id">
                                                             <option value="-1">請選擇工作派任計畫</option>
                                                             {% for job_assign in all_project_job_assign %}
                                                             <option value="{{ job_assign.id }}">
-                                                                {{job_assign.get_show_id }}-{{job_assign.project_confirmation.quotation.project_name }}-{{job_assign.project_confirmation.quotation.client }}
+                                                                {{job_assign.attendance_date|date:"Y/m/d"}}-{{ job_assign.project_confirmation.quotation.get_show_id }}-{{ job_assign.project_confirmation.quotation.project_name }}-{{ job_assign.get_show_id }}-{{ job_assign.project_confirmation.get_show_id }}-{{ job_assign.project_confirmation.quotation.requisition }}
                                                             </option>
                                                             {% endfor %}
                                                         </select>

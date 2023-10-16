@@ -106,7 +106,7 @@
                         headers: {
                             'X-CSRFToken': csrftoken
                         },
-                        data: {id:messageId},
+                        data: { id: messageId },
                         success: function (response) {
                         },
                         error: function (error) {
@@ -185,7 +185,7 @@
     $(document).ready(function () {
         $('.select2').select2({
             width: '100%',
-            allowClear: true,
+            // allowClear: true,    
         });
 
         $('#table').bootstrapTable({
@@ -198,7 +198,25 @@
 
     });
 
+    // 打開選單 設定對應的dom value 
+    function set_select_id(id, selectID) {
+        console.log("set_select_id")
+        // console.log(id, selectname);
+        var choose_input = document.getElementById(selectID);
+        if(!choose_input){
+            alert("selectname設定錯誤");
+        }
+        choose_input.value = id;
+        $('#listid').modal('hide');
+        const change_event = new Event("change");
+        choose_input.dispatchEvent(change_event);
+    }
 
 </script>
+<style>
+    #listid.modal {
+    z-index: 2000;
+}
+</style>
 
 </html>

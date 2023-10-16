@@ -33,6 +33,45 @@
         </div>
     </div>
 
+    <div class="modal fade" id="listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">選擇報價單號</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-hover text-center" id="list_id" data-toggle="table"
+                        data-sortable="true" data-search="true"
+                        data-filter-strict-search="true" data-filter-control="true">
+                        <thead>
+                            <tr>
+                                <th data-filter-control="input" data-field="list_id">報價單編號</th>
+                                <th data-filter-control="input" data-field="list_context">專案名稱</th>
+                                <th data-filter-control="input" data-field="list_ow">業主</th>
+                                <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for quotation in quotation_list %}
+                            <tr>
+                                <td> {{ quotation.get_show_id }}</td>
+                                <td> {{ quotation.project_name }}</td>
+                                <td> {{ quotation.requisition }}</td>
+                                <td><button class="select-btn" onclick="set_select_id('{{quotation.id}}','quotation_id')" >選擇</button></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="project-confirmation-table container-fluid shadow-sm table-responsive">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
@@ -89,19 +128,19 @@
                     <td>
                         <a type="button" data-url="project_confirmation" data-id="{{ p.id }}"
                             class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                            data-approval="{{p.Approval.current_status}}"
-                            data-target="#project-confirmation-modal" onclick="LoadData(event)">
+                            data-approval="{{p.Approval.current_status}}" data-target="#project-confirmation-modal"
+                            onclick="LoadData(event)">
                             <i class="fas fa-sm fa-edit"></i>
                         </a>
                     </td>
                     <td>
                         <a data-url="project_confirmation" data-id="{{ p.id }}" type="button"
-                        data-approval="{{p.Approval.current_status}}"
-                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                            data-approval="{{p.Approval.current_status}}" class="sys_del btn btn-sm btn-danger"
+                            onclick="DELETE_handleClick(event)">
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
-                    
+
                     <td>{{ p.quotation.get_show_id }}</td>
                     <td>{% if p.id %}{{ p.get_show_id }}{% else %}{% endif %}</td>
                     <td>{% if p.c_a %}{{ p.c_a }}{% else %}{% endif %}</td>
@@ -152,7 +191,7 @@
         const change_event = new Event("change");
         choose_input.dispatchEvent(change_event);
 
-        
+
     }
 
 

@@ -32,7 +32,7 @@ class LeaveParamAdmin(admin.ModelAdmin):
     list_display = ('leave_name', 'leave_type', 'leave_quantity', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
 # 加班申請
 class WorkOvertimeApplicationAdmin(admin.ModelAdmin):
-    list_display = ('date_of_overtime', 'shift_of_overtime', 'type_of_overtime', 'start_hours_of_overtime', 'start_mins_of_overtime', 'end_hours_of_overtime','end_mins_of_overtime','overtime_hours', 'overtime_mins','carry_over', 'overtime_reason', 'created_date', 'update_date')
+    list_display = ('date_of_overtime',  'start_hours_of_overtime', 'start_mins_of_overtime', 'end_hours_of_overtime','end_mins_of_overtime','overtime_hours', 'overtime_mins','carry_over', 'overtime_reason', 'created_date', 'update_date')
 # 補卡申請
 class ClockCorrectionApplicationAdmin(admin.ModelAdmin):
     list_display = ('date_of_clock', 'shift_of_clock', 'category_of_clock', 'type_of_clock', 'end_hours_of_clock', 'end_mins_of_clock','clock_reason', 'created_date', 'update_date')

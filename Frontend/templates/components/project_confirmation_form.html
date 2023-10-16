@@ -4,17 +4,19 @@
     <input name="id" hidden />
     <div class="form-row my-2" id="modal-download_pdf">
         <div class="col-12 col-md-6">
-            <!-- <h5 style="font-size: 1.2rem;">
-                <kbd>確認單描述</kbd>
-            </h5> -->
+
             <div class="form-row">
                 <div class="col-12">
                     <label for="quotation">報價單號</label>
+                    {% if showbtn %}
+                    <a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
+                    {% endif %}
+
                     <select class="form-control form-control-sm" name="quotation" id="quotation_id">
                         <option value="-1">選擇報價單號</option>
                         {% for quotation in quotation_list %}
                         <option value="{{ quotation.id }}">
-                            {{ quotation.get_show_id }}-{{ quotation.project_name }}- 業主【 {{ quotation.requisition }}】
+                            {{ quotation.get_show_id }}-{{ quotation.project_name }}-{{ quotation.requisition }}
                         </option>
                         {% endfor %}
                     </select>
@@ -127,7 +129,7 @@
                             id="reassignment_attachment_control">
                         <label class="custom-file-label" for="reassignment_attachment_control">Choose file</label>
                     </div>
-                    <a href="#" id="attachment" >下載附件</a>
+                    <a href="#" id="attachment">下載附件</a>
                 </div>
             </div>
         </div>

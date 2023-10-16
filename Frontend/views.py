@@ -475,7 +475,7 @@ class Quotation_ListView(ListView):
         context = super().get_context_data(**kwargs)
         context["workitems"]= Work_Item.objects.all()
         context['client'] = Client.objects.all()
-        context['quotation'] = Quotation.objects.all()
+        context['quotation'] = Quotation.objects.all().order_by("-id")
         from django.db.models import Case, When, Value, CharField
         employees_sorted = Employee.objects.annotate(#以業務組優先排序
             custom_order=Case(

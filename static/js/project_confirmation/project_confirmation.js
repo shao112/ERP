@@ -36,3 +36,15 @@ quotation_select.addEventListener("change", function () {
     },
   });
 });
+
+
+function set_select_id(id,selectname) {
+  console.log("set_select_id")
+  // console.log(id, selectname);
+  var choose_input = document.getElementById(selectname);
+  choose_input.value = id;
+  $('#listid').modal('hide'); 
+  const change_event = new Event("change");
+  choose_input.dispatchEvent(change_event);
+}
+// );
