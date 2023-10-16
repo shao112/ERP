@@ -10,7 +10,9 @@
     .bootstrap-table .fixed-table-container .table thead th {
         padding: 0 10px 6px 10px;
     }
-    .filter-control input, .filter-control select{
+
+    .filter-control input,
+    .filter-control select {
         font-size: 12px;
         height: 1.5rem;
         padding: 0.25rem 0.5rem;
@@ -19,7 +21,6 @@
         background: #f5f5f5;
         border-radius: 0.2rem;
     }
-
 </style>
 
 {% endblock %}
@@ -27,7 +28,7 @@
 
 {% block main %}
 
-
+<!-- 檔案上傳 -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -66,13 +67,59 @@
     </div>
 </div>
 
+<!-- 工項選擇 -->
+<div class="modal fade"  style="z-index: 2000;" id="work_listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">選擇工項</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-sm table-hover text-center" id="list_id" data-toggle="table"
+                data-sortable="true" data-search="true" data-filter-strict-search="true"
+                data-filter-control="true">
+                <thead>
+                    <tr>
+                        <th data-filter-control="input" data-field="list_id">工項編號</th>
+                        <th data-filter-control="input" data-field="list_contract_id">合約編號</th>
+                        <th data-filter-control="input" data-field="list_item_name">工項名稱(試驗項目)</th>
+                        <th data-filter-control="input" data-field="list_unit">單位</th>
+                        <th data-filter-control="input" data-field="list_year_money">年度單價</th>
+                        <th>選擇</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for workitem in workitems %}
+                    <tr>
+                        <td> {{ workitem.item_id }}</td>
+                        <td> {{ workitem.contract_id }}</td>
+                        <td> {{ workitem.item_name }}</td>
+                        <td> {{ workitem.unit }}</td>
+                        <td> {{ workitem.money }}</td>
+                        <td><button class="select-btn"
+                                onclick="set_work_select_id('{{workitem.id}}')">選擇</button></td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
 <!-- template -->
 <div class="form-row" id="work_item_form_row" hidden>
     <input id="" name="Work_Item_Number_id" value="-1" hidden />
     <div class="col-8">
         <div class="form-group">
-            <label>工項選擇</label>
-            <select class="form-control form-control-sm" name="work_item_id">
+            <label>工項選擇</label> <a data-toggle="modal" href="#" class="work_list_set_id"
+                data-target="#work_listid">打開選單</a>
+            <select class="form-control form-control-sm" name="work_item_id" id="">
                 {% for workitem in workitems %}
                 <option value="{{ workitem.id }}"> {{ workitem.get_display_text }}
                 </option>
@@ -203,8 +250,9 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12">
-                                            <input type="button" value="增加工項" onclick="work_click()" id="insert_work_item_row">
-                                            <a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
+                                            <input type="button" value="增加工項" onclick="work_click()"
+                                                id="insert_work_item_row">
+
                                         </div>
                                     </div>
 
@@ -225,48 +273,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">選擇工項</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-sm table-hover text-center" id="list_id" data-toggle="table"
-                        data-sortable="true" data-search="true"
-                        data-filter-strict-search="true" data-filter-control="true">
-                        <thead>
-                            <tr>
-                                <th data-filter-control="input" data-field="list_id">工項編號</th>
-                                <th data-filter-control="input" data-field="list_contract_id">合約編號</th>
-                                <th data-filter-control="input" data-field="list_item_name">工項名稱(試驗項目)</th>
-                                <th data-filter-control="input" data-field="list_unit">單位</th>
-                                <th data-filter-control="input" data-field="list_year_money">年度單價</th>
-                                <th>選擇</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for workitem in workitems %}
-                            <tr>
-                                <td> {{ workitem.item_id }}</td>
-                                <td> {{ workitem.contract_id }}</td>
-                                <td> {{ workitem.item_name }}</td>
-                                <td> {{ workitem.unit }}</td>
-                                <td> {{ workitem.money }}</td>
-                                <td><button class="select-btn" onclick="set_select_id('{{workitem.id}}','quotation_id')" >選擇</button></td>
-                            </tr>
-                            {% endfor %}
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="employee-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
@@ -364,7 +371,32 @@
     </div>
 </div>
 
+
+
 <script>
+    let work_id_select_id=0
+    $(document).on('click', '.work_list_set_id', function () {
+        console.log("work_id clicked");
+        var work_id = $(this).attr('id');
+        var parts = work_id.split('_');
+        var lastPart = parts[parts.length - 1];
+        var number = parseInt(lastPart);
+        work_id_select_id=number;
+        console.log(work_id_select_id);
+    });
+
+    function set_work_select_id(id) {
+        let selectID="work_select_"+work_id_select_id;
+        var choose_input = document.getElementById(selectID);
+        if(!choose_input){
+            alert("selectname設定錯誤");
+        }
+        choose_input.value = id;
+        const change_event = new Event("change");
+        choose_input.dispatchEvent(change_event);
+        $('#work_listid').modal('hide');
+    }
+
 
     function openNewWindow(id) {
         var forCheckbox = document.getElementById('for');
@@ -396,13 +428,15 @@
     });
 
 
-    var clonedRow = $("#work_item_form_row").clone();
+    let clonedRow = $("#work_item_form_row").clone();
+    let clonedIndex = 0;
     clonedRow.removeAttr("hidden");
     clonedRow.attr("id", "");
     clonedRow.addClass("new_row");
 
     async function LoadData(event) {
         console.log("load")
+        clonedIndex = 0;
         getdata = await GET_handleClick(event);
         var choose_input = document.getElementById("business_assistant");
         const change_event = new Event("change");
@@ -413,16 +447,15 @@
         });
 
         var work_item_list = getdata["work_item"];
-        console.log("work_item: " + work_item_list)
-        console.log("XX")
+
         for (let i = 0; i < work_item_list.length; i++) {
-            // console.log(work_item_list[i])
+            clonedIndex += 1;
             new_cloneRow = clonedRow.clone();
-            // new_cloneRow = $.extend(true, {}, clonedRow);
+            new_cloneRow.find('a').attr('id', 'work_class_' + clonedIndex);
+            new_cloneRow.find('select').attr('id', 'work_select_' + clonedIndex);
             new_cloneRow.find("select").val(work_item_list[i].work_item_id);
             new_cloneRow.find("input[name='Work_Item_Number_id']").val(work_item_list[i].id);
             new_cloneRow.find("input[name='work_item_number']").val(work_item_list[i].number);
-            //啟動
             new_cloneRow.find("select").select2({
                 width: '100%',
             });
@@ -432,8 +465,9 @@
 
     function work_click() {
         console.log("click");
+        clonedIndex += 1;
         new_cloneRow = clonedRow.clone();
-        console.log(new_cloneRow);
+        new_cloneRow.find('a').attr('id', 'work' + clonedIndex);
         new_cloneRow.find("select").select2({
             width: '100%',
         });
