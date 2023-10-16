@@ -14,7 +14,7 @@
 
 
 {% block main %}
-<div class="main px-3 px-md-5">
+<div class="main">
     <div id="error-message"></div>
     <div class="equipment modal fade" id="equipment-modal" tabindex="-1" aria-labelledby="equipment" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -381,9 +381,13 @@
                     <th data-force-hide="true" data-switchable="false" data-field="epm_checkbox">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-field="epm_edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-field="epm_delete">刪除</th>
-                    <th data-field="epm_equipment_id" data-sortable="true">資產標籤</th>
-                    <th data-field="epm_order_id" data-sortable="true">序號</th>
-                    <th data-field="epm_equipment_name" data-sortable="true">品名</th>
+                    <th data-field="equipment_id" data-sortable="true">資產標籤</th>
+                    <th data-field="order_id" data-sortable="true">序號</th>
+                    <th data-field="equipment_category" data-sortable="true">資產種類別</th>
+                    <th data-field="equipment_type" data-sortable="true">中類</th>
+                    <th data-field="equipment_name" data-sortable="true">品名</th>
+                    <th data-field="product_model" data-sortable="true">廠牌/型號</th>
+                    <th data-field="manufacturing_numbe" data-sortable="true">製造序號</th>
                 </tr>
             </thead>
             <tbody>
@@ -402,7 +406,11 @@
                     </td>
                     <td> {{ e.equipment_id}} </td>
                     <td>{{e.order_id}}</td>
+                    <td>{{ e.equipment_category}}</td>
+                    <td>{{ e.equipment_type}}</td>
                     <td>{{ e.equipment_name}}</td>
+                    <td>{{ e.product_model}}</td>
+                    <td>{{ e.manufacturing_numbe}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
