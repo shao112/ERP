@@ -1580,6 +1580,15 @@ class Job_Assign_View(View):
                 if key in dict_data:
                     del dict_data[key]
 
+            if "vehicle" in dict_data:
+                related_project_job_assign = getObject
+                vehicle_id = dict_data["vehicle"]
+                vehicle_id_list = [int(item) for item in vehicle_id]
+                related_project_job_assign.vehicle.set(vehicle_id_list)
+                related_project_job_assign.save()
+                del dict_data["vehicle"]
+
+
             getObject.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "完成修改"},status=200)

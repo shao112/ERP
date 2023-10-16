@@ -118,12 +118,24 @@
 
                     </div>
                     <div class="form-row">
-                        <div id="employee_assign_show_msg" style="width: 100%;"> 
-                            使用車輛:
-                            <br/>
-                            帶班主管:
-                            <br/>
-                            檢測人員:                                                    
+                        <div class="col-6 col-md-6">
+                            <div class="form-group">
+                                <label for="vehicle_control">使用車輛</label>
+                                <select class="select2" name="vehicle" id="vehicle_select2" multiple>
+                                    {% for v in vehicle %}
+                                    <option value="{{ v.id }}">{{ v.vehicle_id }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6">
+                            <div id="employee_assign_show_msg" style="width: 100%;"> 
+                                使用車輛:
+                                <br/>
+                                帶班主管:
+                                <br/>
+                                檢測人員:                                                    
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">

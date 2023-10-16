@@ -120,7 +120,9 @@
                     </tr>
                     <tr>
                         <td class="chinese">使用車輛: </td>
-                        <td colspan="3">{{ project_employee_assign.project_job_assign.vehicle }}</td>
+                        <td colspan="3">{% for  car in project_employee_assign.project_job_assign.vehicle.all %}
+                            {{ car.vehicle_id }}  {% endfor %}
+                        </td>
                         <td class="chinese">檢測人員</td>
                         <td colspan="3">
                             {% for inspector in project_employee_assign.project_job_assign.work_employee.all %}

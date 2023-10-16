@@ -1,19 +1,21 @@
 function SetSelect2(input, key, get_value) {
     const options = input.options;
-    selectname = `#${key}_select2`
-    console.log("GET_" + key + "=> " + selectname);
+    console.log("GET_" + key + "=> " );
+    console.log(input);
     console.log(get_value)
-//CLEAN CHECK
-    var select2Instance = $(input).data('select2');
-
-    // 取得目前所有選中的選項
-    var selectedOptions = select2Instance.data();
-    // 取消所有選中的選項
-    selectedOptions.forEach(function(option) {
-        select2Instance.trigger('unselect', {
-            data: option
+    //CLEAN CHECK
+    if (key=="vehicle"){ //多對多的選項清除
+        var select2Instance = $(input).data('select2');
+        
+        // 取得目前所有選中的選項
+        var selectedOptions = select2Instance.data();
+        // 取消所有選中的選項
+        selectedOptions.forEach(function(option) {
+            select2Instance.trigger('unselect', {
+                data: option
+            });
         });
-    });
+    }
    
     get_value = Object.values(get_value);
     if (get_value.length != 0) {

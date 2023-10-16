@@ -704,8 +704,8 @@ class Department(ModifiedModel):
 
 # 工項數量
 class Work_Item_Number(ModifiedModel):
-    quotation = models.ForeignKey("Quotation",related_name="Quotation_Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='報價單')
-    work_item = models.ForeignKey("Work_Item",related_name="Work_Item_Number", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='工項名稱')
+    quotation = models.ForeignKey("Quotation",related_name="Quotation_Work_Item_Number", on_delete=models.CASCADE, null=True, blank=True, verbose_name='報價單')
+    work_item = models.ForeignKey("Work_Item",related_name="Work_Item_Number", on_delete=models.CASCADE, null=True, blank=True, verbose_name='工項名稱')
     number = models.IntegerField(blank=True, null=True, verbose_name="數量")
     def __str__(self):
             return f"{self.work_item} 數量: {self.number} |id{self.id}"
@@ -724,9 +724,10 @@ class Work_Item(ModifiedModel):
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def money(self):
+        print(self.id)
         year_money = self.year_money
         
-        if year_money=="[]" or year_money ==None:
+        if year_money=="[]" or year_money ==None or year_money=="":
             return "未有任何一筆單價"
         year_money_list = json.loads(year_money)
         max_price = max(year_money_list, key=lambda x: x.get('price', 0))

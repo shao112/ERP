@@ -44,9 +44,7 @@ project_job_assign_IdControl.addEventListener("change", function () {
       var workEmployeeNames = workEmployees.map(function(employee) {
           return employee.full_name;
       }).join(", ");
-      var htmlContent = `
-          使用車輛: ${vehicles||"無提供"}
-          <br/>
+      var htmlContent = `         
           帶班主管: ${leadEmployeeNames}
           <br/>
           檢測人員: ${workEmployeeNames}

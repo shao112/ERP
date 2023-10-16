@@ -100,7 +100,7 @@
                         </td>
                         <td>{% for employees_list in j.lead_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
                         <td>{% for employees_list in j.work_employee.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
-                        <td>{{ j.vehicle }}</td>
+                        <td>{% for car in j.vehicle.all %}{{ car.vehicle_id }}<br>{% endfor %} </td>
                         <td>{{ j.location }}</td>
                         <td>{{ j.project_type }}</td>
                         <td>{{ j.remark }}</td>
