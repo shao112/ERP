@@ -6,7 +6,21 @@
 
 {% load static%}
 <link rel="stylesheet" href="{% static 'css/employee/employee.css' %}">
+<style>
+    .bootstrap-table .fixed-table-container .table thead th {
+        padding: 0 10px 6px 10px;
+    }
+    .filter-control input, .filter-control select{
+        font-size: 12px;
+        height: 1.5rem;
+        padding: 0.25rem 0.5rem;
+        font-size: .875rem;
+        /* line-height: 1.5; */
+        background: #f5f5f5;
+        border-radius: 0.2rem;
+    }
 
+</style>
 
 {% endblock %}
 
@@ -55,7 +69,7 @@
 <!-- template -->
 <div class="form-row" id="work_item_form_row" hidden>
     <input id="" name="Work_Item_Number_id" value="-1" hidden />
-    <div class="col-12 col-lg-8">
+    <div class="col-8">
         <div class="form-group">
             <label>工項選擇</label>
             <select class="form-control form-control-sm" name="work_item_id">
@@ -74,7 +88,7 @@
     </div>
     <div class="col-2">
         <div class="form-group">
-            <button type="button" onclick="deleteWorkItemRow(this)">刪除</button>
+            <input type="button" class="btn btn-danger mt-4" value="刪除" onclick="deleteWorkItemRow(this)" />
         </div>
     </div>
 </div>
@@ -189,8 +203,8 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12">
-                                            <input type="button" value="增加工項" onclick="work_click()"
-                                                id="insert_work_item_row">
+                                            <input type="button" value="增加工項" onclick="work_click()" id="insert_work_item_row">
+                                            <a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
                                         </div>
                                     </div>
 
@@ -210,6 +224,50 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">選擇工項</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-hover text-center" id="list_id" data-toggle="table"
+                        data-sortable="true" data-search="true"
+                        data-filter-strict-search="true" data-filter-control="true">
+                        <thead>
+                            <tr>
+                                <th data-filter-control="input" data-field="list_id">工項編號</th>
+                                <th data-filter-control="input" data-field="list_contract_id">合約編號</th>
+                                <th data-filter-control="input" data-field="list_item_name">工項名稱(試驗項目)</th>
+                                <th data-filter-control="input" data-field="list_unit">單位</th>
+                                <th data-filter-control="input" data-field="list_year_money">年度單價</th>
+                                <th>選擇</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for workitem in workitems %}
+                            <tr>
+                                <td> {{ workitem.item_id }}</td>
+                                <td> {{ workitem.contract_id }}</td>
+                                <td> {{ workitem.item_name }}</td>
+                                <td> {{ workitem.unit }}</td>
+                                <td> {{ workitem.money }}</td>
+                                <td><button class="select-btn" onclick="set_select_id('{{workitem.id}}','quotation_id')" >選擇</button></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="employee-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
