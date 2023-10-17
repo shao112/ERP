@@ -805,6 +805,8 @@ class Work_Item_View(View):
                 "quotation_id": wn.quotation.quotation_id,
                 "requisition": wn.quotation.requisition.client_name,
                 "project_name": wn.quotation.project_name,
+                "quote_date": wn.quotation.quote_date,
+                "business_assistant": wn.quotation.business_assistant,
                 "number": wn.number,
             }
             quotations_info.append(quotation_info)

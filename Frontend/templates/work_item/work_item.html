@@ -162,6 +162,8 @@
                                                     <th>業主</th>
                                                     <th>專案名稱</th>
                                                     <th>數量</th>
+                                                    <th>報價日期</th>
+                                                    <th>助理</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="history_tbody">
@@ -317,11 +319,17 @@
             projectCell.textContent = quotation.project_name;
             var numberCell = document.createElement("td");
             numberCell.textContent = quotation.number;
+            var business_assistantCell = document.createElement("td");
+            business_assistantCell.textContent = quotation.business_assistant;
+            var quote_dateCell = document.createElement("td");
+            quote_dateCell.textContent = quotation.quote_date;
 
             row.appendChild(quotationCell);
             row.appendChild(requisitionCell);
             row.appendChild(projectCell);
             row.appendChild(numberCell);
+            row.appendChild(quote_dateCell);
+            row.appendChild(business_assistantCell);
 
             tbody.appendChild(row);
         });
