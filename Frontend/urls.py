@@ -42,6 +42,7 @@ urlpatterns = [
     path('Calendar_list',login_required( views.Calendar_list.as_view()), name="Calendar_list"),
     path('director_Index', login_required(views.Director_Index.as_view()), name="director_Index"),
     path('LaborHealthInfo', login_required(views.LaborHealthInfo_ListView.as_view()), name="LaborHealthInfo"),
+    path('ReferenceTable', login_required(views.ReferenceTable_ListView.as_view()), name="ReferenceTable"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('department/', login_required(views.Department_list.as_view()), name='department'),

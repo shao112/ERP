@@ -378,6 +378,7 @@ aria-hidden="true">
     $(document).on('click', '.work_list_set_id', function () {
         console.log("work_id clicked");
         var work_id = $(this).attr('id');
+        console.log(work_id);
         var parts = work_id.split('_');
         var lastPart = parts[parts.length - 1];
         var number = parseInt(lastPart);

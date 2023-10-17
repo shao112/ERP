@@ -1,0 +1,96 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %}艾力克電機{% endblock %}
+
+{% block import %}
+
+{% load static%}
+<style>
+    .reference-table-table td {
+        vertical-align: middle;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block main %}
+<div class="main px-3">
+    <div class="reference-table-table container-fluid shadow-sm table-responsive">
+        <form action="/restful/reference_table/" id="allowance_form">
+            <select class="form-control form-control-sm" name="reference" id="reference_type">
+                <option value="">選擇參照表</option>
+                <option value="project_allowance">派工-伙食津貼</option>
+                <option value="none_project_allowance">非派工-伙食津貼</option>
+                <option value="travel_allowance">車程津貼</option>
+                <option value="business_trip_allowance">出差津貼</option>
+            </select>
+            <button type="submit">送出</button>
+        </form>
+        
+        <form action="/restful/reference_table" id="project_allowance_form">
+            <table class="table table-sm table-hover">
+                <div class="project-allowance-header container-fluid">
+                    派工-伙食津貼
+                </div>
+                </tbody>
+
+            </table>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    $("#allowance_form").on("submit", function (event) {
+        event.preventDefault();
+        type = $("#reference_type").val();
+        $.ajax({
+            url: "/restful/reference_table/" + type,
+            type: 'get',
+            dataType: 'json',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function(response) {
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                if (xhr.status === 400) {
+                    var errorMessage = xhr.responseJSON.error;
+                    console.log(errorMessage);
+
+                    var errorMessageHTML = "<ul>";
+
+                    if (typeof errorMessage == "string") {
+                    errorMessageHTML += "<li>" + errorMessage + "</li>";
+                    } else {
+                    Object.entries(errorMessage).map(([key, errors]) => {
+                        errors.forEach((error) => {
+                        errorMessageHTML += "<li>" + error + "</li>";
+                        });
+                    });
+                    }
+
+                    errorMessageHTML += "</ul>";
+                    console.log(errorMessageHTML);
+
+                    showSwal("操作失敗", errorMessageHTML, "error", false);
+                } else if (xhr.status === 403) {
+                    alert("無權獲得該頁詳細，請聯絡管理員");
+                } else {
+                    alert("系統發生錯誤");
+                    console.log(errorThrown);
+                }
+                },
+            });
+    })
+
+    
+
+</script>
+
+
+
+{% endblock %}

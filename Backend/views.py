@@ -196,6 +196,17 @@ class SalaryDetailView(View):
 
         
 
+class ReferenceTableListView(View):
+    def get(self, request, *args, **kwargs):
+        type = kwargs.get('type')
+        print(type)
+        data = {
+            "type": type
+        }
+           
+
+        return JsonResponse({"data":data},status=200)
+    
 class SalaryListView(View):
     def post(self, request, *args, **kwargs):
         year = kwargs.get('year')

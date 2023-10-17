@@ -25,7 +25,15 @@ import json
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 
+class ReferenceTable_ListView(UserPassesTestMixin,View):
+    
+    def get(self,request):
+        context ={}
+        return render(request, 'reference_table/reference_table.html', context)
 
+    def test_func(self):
+        return Check_Permissions(self.request.user,"級距表管理")
+    
 class LaborHealthInfo_ListView(UserPassesTestMixin,View):
 
     def post(self,request):

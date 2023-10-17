@@ -42,6 +42,9 @@ urlpatterns = [
     path('client', views.Client_View.as_view(), name="client_api"),
     path('ExtraWorkDay', views.ExtraWorkDay_View.as_view(), name="ExtraWorkDay_api"),
 
+    # 級距表
+    # path('reference_table', views.ReferenceTableListView.as_view(), name="reference_table_api"),
+    path('reference_table/<str:type>', views.ReferenceTableListView.as_view(), name="reference_table_api"),
     #計算當月所有薪資明細
     path('salary/<int:year>/<int:month>', views.SalaryListView.as_view(), name="salary_api"),
     #處理個人明細重製
