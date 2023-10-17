@@ -50,8 +50,18 @@ INSTALLED_APPS = [
     'Backend',
     # 套件
     'django_cleanup',
+    'django_crontab',
+
 ]
+
+#定期執行任務
+CRONJOBS = [
+    ('*/1 * * * *', 'Backend.cron.calculate_annual_leave_for_all_employees >> /logfile.log 2>&1')
+
+]
+
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -118,11 +118,16 @@ class ReferenceTable(models.Model):
     def __str__(self):
         return f"{self.name}參照表 居住地 {self.location_city_residence} / 出差地 {self.location_city_business_trip}  金額 {self.amount}"
 
-#特休紀錄
+
+#特休紀錄 員工綁AnnualLeave，如果有需要紀錄 可以再擴增記錄某假別欄位
 class AnnualLeave(ModifiedModel):
     days = models.IntegerField(default=0, verbose_name="天數")
     end_date = models.DateField( null=True, blank=True,verbose_name='截止日期')
     remark = models.TextField( null=True, blank=True, verbose_name='備註')
+
+    class Meta:
+        verbose_name = "特休紀錄表"
+        verbose_name_plural = "特休紀錄表"
 
 
 
