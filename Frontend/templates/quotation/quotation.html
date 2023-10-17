@@ -172,7 +172,7 @@ aria-hidden="true">
                                                 <label for="client">客戶名稱</label>
                                                 <select class="form-control form-control-sm" name="client" id="client"
                                                     required>
-                                                    <option value="-1">選擇客戶名稱</option>
+                                                    <option value="">選擇客戶名稱</option>
                                                     {% for client in clients %}
                                                     <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>
@@ -185,7 +185,7 @@ aria-hidden="true">
                                                 <label for="client">業主名稱</label>
                                                 <select class="form-control form-control-sm" name="requisition"
                                                     id="requisition" required>
-                                                    <option value="-1">選擇業主名稱</option>
+                                                    <option value="">選擇業主名稱</option>
                                                     {% for client in clients %}
                                                     <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>

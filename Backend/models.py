@@ -105,6 +105,7 @@ class ModifiedModel(models.Model):
             setattr(self, key, value)
         self.save()
 
+
 class ReferenceTable(models.Model):
     location_city_residence = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="居住地")
     location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
@@ -1199,8 +1200,9 @@ class Leave_Application(ModifiedModel):
             if sleep_day > 0:
                 total_hours +=sleep_day *8
 
+        total_decimal_hours = (total_hours + (total_minutes / 60))
 
-        return total_hours, total_minutes
+        return total_hours, total_minutes,total_decimal_hours
 
     
 
@@ -1220,7 +1222,6 @@ class Leave_Param(ModifiedModel):
         ('一般假', '一般假'),
         ('特別假', '特別假'),
     )
-    # leave_code = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別代碼")
     leave_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別名稱")
     leave_type = models.CharField(max_length=5, choices=LEAVE_TYPE,blank=True, null=True, verbose_name="項目類別")
     leave_quantity = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
@@ -1246,16 +1247,14 @@ class Leave_Param(ModifiedModel):
 
     #統一回傳leave_quantity，主要處理特休計算 才建立這個fuc
     def leave_hours(self,user):
+
         if self.id ==1: #特休id是1
             #以目前日期，撈取截止日期最大的        
             today = datetime.today()
             nearest_annual_leave = user.annualleaves.all()
             if not nearest_annual_leave :
                 return 0
-            print("today")
-            print(nearest_annual_leave)
             nearest_annual_leave = nearest_annual_leave.filter(end_date__gt=today).order_by('-end_date')
-            print(nearest_annual_leave)
 
             if len(nearest_annual_leave):
                 nearest_annual_leave = nearest_annual_leave.first()
@@ -1290,10 +1289,10 @@ class Leave_Param(ModifiedModel):
         user_leave_applications = self.get_user_leave_applications_by_YM_or_Total(user=user,Approval_status=Approval_status,year=year,month=month)
 
         for leave_application in user_leave_applications:
-            leave_hours, leave_minutes = leave_application.calculate_leave_duration()
+            leave_hours, leave_minutes,total_decimal_hours = leave_application.calculate_leave_duration()
             details.append({
                 "id":leave_application.get_show_id(),
-                "time":f"{leave_hours} : {leave_minutes}",
+                "time":f"{leave_hours} : {leave_minutes} ({total_decimal_hours})",
             })
 
             total_hours += leave_hours
@@ -1319,8 +1318,8 @@ class Leave_Param(ModifiedModel):
 
     #傳入新申請obj，判斷今年能不能請假
     def exceeds_leave_quantity_by_year(self, leave_application,user):
-
-        if self.leave_name=="公假":
+        pass_str=["公假","補修"]
+        if self.leave_name in pass_str:
             return True
 
         year = leave_application.start_date_of_leave.year
@@ -1328,9 +1327,9 @@ class Leave_Param(ModifiedModel):
         total_hours, total_minutes ,_= self.calculate_leave_duration_by_YM_or_Total(user,year=year)        
         total_hours += total_minutes / 60
         #取得傳入的請假obj 使用多少小時
-        leave_application_hours, leave_application_minutes = leave_application.calculate_leave_duration()
+        _, _,total_decimal_hours = leave_application.calculate_leave_duration()
         #將已經請過的假 + 將要請的時數加在一起
-        total_hours += leave_application_hours + leave_application_minutes / 60
+        total_hours += total_decimal_hours
         #判斷最低單位正常
         # pass_hours ,pass_minutes = self.minimum_leave_number*24 ,self.minimum_leave_unit*60
 
@@ -1340,7 +1339,7 @@ class Leave_Param(ModifiedModel):
 
 
     @classmethod #撈全部請假參數，範圍YM，每個參數請了多久小時，回傳已經使用多久小時的參數list
-    def get_year_total_cost_list(cls, user,year,month):
+    def get_year_total_cost_list(cls, user,year,month): #主要算錢
         leave_param_details = []
         leave_params = cls.objects.all()
 
@@ -1361,7 +1360,7 @@ class Leave_Param(ModifiedModel):
         return leave_param_details
 
     @classmethod #取得已經使用多久的假別的list
-    def get_leave_param_all_details(cls, user,year=None,month=None):
+    def get_leave_param_all_details(cls, user,year=None,month=None): #主要顯示
         leave_param_details = []
 
         leave_params = cls.objects.all()#取得請假參數
@@ -1378,7 +1377,8 @@ class Leave_Param(ModifiedModel):
             
             remaining_time= f"{remaining_hours}時{remaining_minutes}分"
 
-            if  leave_param.leave_name=="公假":
+            pass_str=["公假","補修"]
+            if  leave_param.leave_name in pass_str:
                 remaining_time="無"
 
             leave_param_details.append({
@@ -1538,7 +1538,11 @@ class Work_Overtime_Application(ModifiedModel):
 
                 only_six = False #只有星期日加班
                 week_time=0 #計算六日累計時數
-                applications = cls.objects.filter(Q(Q(created_by=user) & Q(date_of_overtime=date)) )
+                applications = cls.objects.filter(
+                    Q(Q(created_by=user) & Q(date_of_overtime=date)) 
+                    # &  Q(Approval__current_status="completed")
+                )
+
                 date_next= date
                 while True:
                     date_next = date_next + timedelta(days=1)
@@ -1580,11 +1584,13 @@ class Work_Overtime_Application(ModifiedModel):
                                 holiday_overtime_hours += additional_hours
                                 holiday_overtime_money += eigth_money
 
+
                                 can_two = overtime_hours - additional_hours#使用*2時數
-                                eigth_money = math.ceil(can_two * 2 * hourly_salary)
-                                details.append({"id":id_str,"date":obj_show_date+"(假日連續)","hour":can_two,"money":eigth_money,"magnification":2})
-                                holiday_overtime_two_hour +=can_two
-                                holiday_overtime_two_money +=eigth_money
+                                if can_two>0:
+                                    eigth_money = math.ceil(can_two * 2 * hourly_salary)
+                                    details.append({"id":id_str,"date":obj_show_date+"(假日連續)","hour":can_two,"money":eigth_money,"magnification":2})
+                                    holiday_overtime_two_hour +=can_two
+                                    holiday_overtime_two_money +=eigth_money
                             else:
                                 eigth_money = math.ceil(overtime_hours * 2 * hourly_salary)
                                 details.append({"id":id_str,"date":obj_show_date+"(假日連續)","hour":overtime_hours,"money":eigth_money,"magnification":2})
