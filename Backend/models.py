@@ -1455,8 +1455,15 @@ class Work_Overtime_Application(ModifiedModel):
 
         if is_weekday:
             pm_19 = 1140 #19*60
+            print(end_time_minutes)
+            #假如加班申請時間沒到19點，就改用下班時間
+            if end_time_minutes < pm_19:
+                pm_19 =  end_time_minutes
 
-            start_to_7pm = pm_19 - start_time_minutes
+            start_to_7pm = pm_19 - start_time_minutes 
+            if self.start_hours_of_overtime < 13: #假如平日從中午就申請 -60
+                start_to_7pm-=60
+
             if  start_to_7pm< 0:
                 start_to_7pm = 0
 
@@ -1498,21 +1505,25 @@ class Work_Overtime_Application(ModifiedModel):
         details=[]
         hourly_salary =user.get_hour_salary()
 
-
         for application in overtime_applications:
             overtime_hours,start_to_7pm,after_7pm_to_end = application.calculate_overtime_hours()
             day_of_week = application.date_of_overtime.weekday()
 
             #判斷倍率
-            if  day_of_week < 5: #平日
+            is_day_off = ExtraWorkDay.objects.filter(date=application.date_of_overtime, date_type='day_off').exists()
+
+            if  day_of_week < 5 and not is_day_off : #平日且 不是國定放假
                 start_money = math.ceil(start_to_7pm*1.34 *hourly_salary)
                 end_money = math.ceil(after_7pm_to_end * 1.67*hourly_salary)
                 weekdays_overtime_money =start_money+end_money
                 weekdays_overtime_hours += overtime_hours
-                if(start_to_7pm>0):
-                    details.append({"id":application.get_show_id(),"date":application.date_of_overtime.strftime("%Y-%m-%d"),"hour":start_to_7pm,"money":start_money,"magnification":1.34})
-                if(after_7pm_to_end>0):
-                    details.append({"id":application.get_show_id(),"date":application.date_of_overtime.strftime("%Y-%m-%d"),"hour":after_7pm_to_end,"money":end_money,"magnification":1.67})
+                obj_show_date = application.date_of_overtime.strftime("%Y-%m-%d") +f"-{week_dict.get(day_of_week, '未知')}" 
+
+                if start_to_7pm > 0:
+                    details.append({"id":application.get_show_id(),"date":obj_show_date +"(七點前)","hour":start_to_7pm,"money":start_money,"magnification":1.34})
+
+                if after_7pm_to_end > 0:
+                    details.append({"id":application.get_show_id(),"date":obj_show_date+"(七點後)","hour":after_7pm_to_end,"money":end_money,"magnification":1.67})
 
 
             else: #處理假日
@@ -1521,28 +1532,21 @@ class Work_Overtime_Application(ModifiedModel):
                     continue
                 
                 date = application.date_of_overtime
-                date_next = None
                 applications = None
 
 
                 only_six = False #只有星期日加班
                 week_time=0 #計算六日累計時數
+                applications = cls.objects.filter(Q(Q(created_by=user) & Q(date_of_overtime=date)) )
+                date_next= date
+                while True:
+                    date_next = date_next + timedelta(days=1)
+                    if date_next.weekday() == 6 or  ExtraWorkDay.objects.filter(date=date_next, date_type='day_off').exists() :
+                        applications =applications.union(cls.objects.filter(Q(Q(created_by=user) & Q(date_of_overtime=date_next)) ))
+                    else:
+                        break
+                
 
-                if day_of_week==5:#如果是禮拜六 就抓禮拜六
-                    date_next = date + timedelta(days=1)
-                    show_date =str(date) + " " + str(date_next) 
-                    applications = cls.objects.filter(
-                        Q(Q(created_by=user) & Q(date_of_overtime=date)) |
-                        Q(Q(created_by=user) & Q(date_of_overtime=date_next)),
-                        # Approval__current_status="completed"
-                    )
-                else:
-                    applications = cls.objects.filter(
-                        created_by=user,
-                        date_of_overtime=date,
-                        # Approval__current_status="completed"
-                    )
-                    
                 total_time= 0
                 id_str= ""
 
@@ -1559,32 +1563,33 @@ class Work_Overtime_Application(ModifiedModel):
                     
                     if only_six:#沒經過周六，只有假日 固定1.67
                         eigth_money = math.ceil(overtime_hours * 1.67*hourly_salary)
-                        details.append({"id":id_str,"date":obj_show_date+"(假日結算)","hour":overtime_hours,"money":eigth_money,"magnification":1.67})
+                        details.append({"id":id_str,"date":obj_show_date+"(假日)","hour":overtime_hours,"money":eigth_money,"magnification":1.67})
                     else:
                         if obj_day_of_week ==5 :# 還在禮拜六 都已1.67
                             week_time += overtime_hours
                             eigth_money = math.ceil(overtime_hours * 1.67* hourly_salary)
-                            details.append({"id":id_str,"date":obj_show_date+"(假日結算)","hour":overtime_hours,"money":eigth_money,"magnification":1.67})
+                            details.append({"id":id_str,"date":obj_show_date+"(假日)","hour":overtime_hours,"money":eigth_money,"magnification":1.67})
                             holiday_overtime_hours += overtime_hours
                             holiday_overtime_money += eigth_money
                         else:#禮拜日
                             additional_hours = 8 - week_time
                             if additional_hours > 0: #不足八小時
                                 eigth_money = math.ceil(additional_hours * 1.67 * hourly_salary)#滿八小時計算
-                                details.append({"id":id_str,"date":obj_show_date+"(假日結算)","hour":additional_hours,"money":eigth_money,"magnification":1.67})
+                                details.append({"id":id_str,"date":obj_show_date+"(假日)","hour":additional_hours,"money":eigth_money,"magnification":1.67})
                                 holiday_overtime_hours += additional_hours
                                 holiday_overtime_money += eigth_money
 
                                 can_two = overtime_hours - additional_hours#使用*2時數
                                 eigth_money = math.ceil(can_two * 2 * hourly_salary)
-                                details.append({"id":id_str,"date":obj_show_date+"(假日結算)","hour":can_two,"money":eigth_money,"magnification":2})
+                                details.append({"id":id_str,"date":obj_show_date+"(假日連續)","hour":can_two,"money":eigth_money,"magnification":2})
                                 holiday_overtime_two_hour +=can_two
                                 holiday_overtime_two_money +=eigth_money
                             else:
                                 eigth_money = math.ceil(overtime_hours * 2 * hourly_salary)
-                                details.append({"id":id_str,"date":obj_show_date+"(假日結算)","hour":overtime_hours,"money":eigth_money,"magnification":2})
+                                details.append({"id":id_str,"date":obj_show_date+"(假日連續)","hour":overtime_hours,"money":eigth_money,"magnification":2})
                                 holiday_overtime_two_hour +=overtime_hours
                                 holiday_overtime_two_money +=eigth_money
+                            week_time += overtime_hours
 
 
 

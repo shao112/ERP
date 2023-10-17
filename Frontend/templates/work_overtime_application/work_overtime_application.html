@@ -70,7 +70,7 @@
                     <th data-sortable="true" data-field="APP">簽核</th>
                     <th data-sortable="true" data-field="id">加班編號</th>
                     <th data-field="date_of_overtime" data-sortable="true">加班日期</th>
-                    <th data-field="work_overtime_time" data-sortable="true">加班時間</th>
+                    <th data-field="work_overtime_time1" data-sortable="true">加班時間</th>
                     <th data-field="work_overtime_time" data-sortable="true">系統計算小時</th>
                     <th data-field="carry_over" data-sortable="true">加班結轉方式</th>
                     <th data-field="overtime_reason" data-sortable="true">加班事由</th>
@@ -138,7 +138,7 @@
                         {{ work_overtime_application.end_mins_of_overtime | stringformat:"02d" }}
                     </td>
                     <td>
-                        {{ work_overtime_application.calculate_overtime_hours.0 }}
+                        {{ work_overtime_application.calculate_overtime_hours }}
                     </td>
                     <td>
                         {{ work_overtime_application.get_carry_over_display }}
