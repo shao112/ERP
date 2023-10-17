@@ -784,13 +784,27 @@ class Work_Item_View(View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Work_Item, id=id)
+
+        #找尋使用過的報價單
+        work_item_number = Work_Item_Number.objects.filter(work_item=data)
+
+        quotations_info=[]
+        for wn in work_item_number:
+            quotation_info = {
+                "quotation_id": wn.quotation.quotation_id,
+                "requisition": wn.quotation.requisition.client_name,
+                "project_name": wn.quotation.project_name,
+                "number": wn.number,
+            }
+            quotations_info.append(quotation_info)
+
+
+
         data = model_to_dict(data)
 
-
+        data['quotations_info'] = quotations_info
         print("dict_data")
         print(data)
-        data['work_item_id'] = "WT-" +str(data["id"]).zfill(5)
-
 
         return JsonResponse({"data":data}, status=200,safe = False)
 

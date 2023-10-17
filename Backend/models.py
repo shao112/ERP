@@ -722,14 +722,10 @@ class Work_Item(ModifiedModel):
     item_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="工項名稱(試驗項目)")
     unit = models.CharField(max_length=100, blank=True, null=True, verbose_name="單位")
     year_money = models.TextField(blank=True, null=True, verbose_name='年度單價')
-    # unit_price = models.IntegerField(blank=True, null=True, verbose_name="單價")
-    # count = models.IntegerField(blank=True, null=True, verbose_name="數量")
-    
     requisition = models.ForeignKey("Client",related_name="work_item_requisition", on_delete=models.CASCADE, null=True, blank=True, verbose_name='業主單位')
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
     def money(self):
-        print(self.id)
         year_money = self.year_money
         
         if year_money=="[]" or year_money ==None or year_money=="":
