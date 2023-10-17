@@ -810,7 +810,7 @@ class Project_Job_Assign(ModifiedModel):
     # 外鍵工程確認單，連帶帶出來的資料可重複（報價單號、工程名稱、客戶名稱）
     project_confirmation= models.ForeignKey(Project_Confirmation,on_delete=models.CASCADE,related_name='project',null=True, blank=True, verbose_name="工程確認單")
     attendance_date =models.DateField(null=True, blank=True, verbose_name="出勤日期")
-    work_method = models.BooleanField(null=True, blank=True, verbose_name="工作方式(是:出勤、否:文書)",default=True) 
+    work_method = models.BooleanField(null=True, blank=True, verbose_name="工作方式(是:派工、否:非派工)",default=True) 
     work_employee = models.ManyToManyField('Employee', related_name='projects_work_employee', blank=True, verbose_name='檢測人員')
     lead_employee = models.ManyToManyField('Employee', related_name='projects_lead_employee', blank=True, verbose_name="帶班主管")
     vehicle = models.ManyToManyField('Vehicle', related_name='project_job_assign_vehicle', blank=True, verbose_name='使用車輛')

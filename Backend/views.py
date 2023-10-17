@@ -1769,9 +1769,15 @@ class Calendar_View(View):
             work_employee_names = project.work_employee.all().values_list('full_name', flat=True)
             work_employee_merged_names = ', '.join(work_employee_names)
 
+            work_method_str = "非派工"
+            if project.work_method:
+               work_method_str = "派工"
+
+
             data.append({
                 'title': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,
+                'work_method': work_method_str,
                 'location': project.location,
                 'lead_employee': merged_names,
                 'work_employee': work_employee_merged_names
