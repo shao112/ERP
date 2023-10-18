@@ -1151,6 +1151,33 @@ class Approval_Groups_View(UserPassesTestMixin,View):
     def test_func(self):
         return Check_Permissions(self.request.user,"簽核流程管理")
 
+    @staticmethod
+    def del_approval(approval_target):
+        name_display = approval_target.get_name_display()
+        print(name_display)
+
+        approvals_to_delete = approval_target.approvals.filter(current_status='in_process')
+
+        senders=[] #員工
+
+        for approval_obj in approvals_to_delete:
+            employee_id = approval_obj.get_created_by.id 
+            try:
+                employee = Employee.objects.get(id=employee_id)
+                if employee not in senders:
+                    senders.append(employee)
+            except Employee.DoesNotExist:
+                continue
+
+        for sender in senders:
+            SysMessage.objects.create(
+                Target_user=sender,
+                content=f"系統調整:{name_display} 調整簽核順序，進行中的簽核已經刪除，請重新簽核"
+            )
+
+        approvals_to_delete.delete()
+
+
     def post(self,request):
         # post 處理兩個事件，【是否勾選直屬主管】以及【送出新關卡(員工)】
         dict_data = convent_dict(request.body)
@@ -1166,7 +1193,6 @@ class Approval_Groups_View(UserPassesTestMixin,View):
                 approval_order.insert(0,"x")
                 approval_target.approval_order = approval_order
                 approval_target.save()
-                return JsonResponse({'data': "修改成功"},status=200)
             else:
             # 【取消勾選直屬主管】:
                 print("取消勾選")
@@ -1174,8 +1200,13 @@ class Approval_Groups_View(UserPassesTestMixin,View):
                     approval_order.remove("x")
                 approval_target.approval_order = approval_order
                 approval_target.save()
-                return JsonResponse({'data': "修改成功"},status=200)
-        
+
+            #刪除非完成的簽核
+            self.del_approval(approval_target)
+            return JsonResponse({'data': "修改成功"},status=200)
+
+
+
         # 【送出新關卡(員工)】:
         employee_id = int(dict_data["new_stage_id"])
         approval_order.append(employee_id)
@@ -1183,6 +1214,9 @@ class Approval_Groups_View(UserPassesTestMixin,View):
         approval_target.save()
         print("approval_target.approval_order ",approval_target.approval_order)
         
+        #刪除非完成的簽核
+        self.del_approval(approval_target)
+
         return JsonResponse({'data': "修改成功"},status=200)
 
     def get(self, request):

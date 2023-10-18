@@ -14,6 +14,7 @@
 {% block main %}
 <div class="main px-3">
     <div id="error-message"></div>
+    <strong>只要更改資料如：勾選、取消直屬簽核、刪除、新增員工都會讓該簽核進行中、駁回的項目取消，但不會影響到已完成的簽核項目</strong>
     <div class="approval_group modal fade" id="approval_group-modal" tabindex="-1" aria-labelledby="approval_group"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -79,7 +80,7 @@
                         <td>
                             <a onclick="sendApprovalGroup('{{a.id}}')" type="button" data-url="approval_group" data-id="{{ a.id }}"
                                 class="btn btn-sm btn-warning " data-toggle="modal"
-                                data-target="#approval_group-modal"><i class="fas fa-edit"></i></a>
+                             ><i class="fas fa-edit"></i></a>
 
                         </td>
                         <td data-toggle="collapse" data-target="#sub-row-{{ a.id }}">

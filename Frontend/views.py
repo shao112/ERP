@@ -194,11 +194,11 @@ class SalaryListView(UserPassesTestMixin,ListView):
 
     
 
-# 首頁
+# 主管管理
 class Director_Index(View):
     def get(self,request):
             current_employee = request.user.employee
-            other_employees = current_employee.departments.employees.exclude(id=current_employee.id)
+            other_employees = current_employee.departments.employees.filter(user__is_active=True).exclude(id=current_employee.id)
             other_employees = convent_employee(other_employees)
             for employee in other_employees:
                 employee['clock_data'] = get_weekly_clock_data(employee['id'])

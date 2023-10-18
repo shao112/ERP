@@ -417,7 +417,7 @@ class ApprovalModel(models.Model):
     @property
     def get_created_by(self):
         get_foreignkey = self.get_foreignkey()   
-        if get_foreignkey:   
+        if get_foreignkey:
             return get_foreignkey.created_by
         return None    
 
