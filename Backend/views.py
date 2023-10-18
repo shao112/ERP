@@ -1472,20 +1472,19 @@ class Profile_View(View):
 class Employee_Pasword_View(UserPassesTestMixin,View):
     def test_func(self):
         return Check_Permissions(self.request.user,"管理部管理")
+
     def post(self,request):
         form = EmployeeForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data['id']
-            password = form.cleaned_data['password']
-            print(username,password)
-            if User.objects.filter(username=username).exists():
-                return JsonResponse({"error":"員工編號已存在或是曾被刪除過。"},status=400)
-            
-            user = User.objects.create_user(username=username, password=password)
-            employee = form.save(commit=False)
-            employee.user = user
-            employee.save()
+            id = request.POST.get('id')
+            password = request.POST.get('password')
+            if len(password)<4:
+                return JsonResponse({"error":"長度至少5碼"},status=400)
+            employee = Employee.objects.get(id=id)
+            print(employee)
+            employee.user.set_password(password)
+            employee.user.save()
             return JsonResponse({'data': "完成新增","id":employee.id},status=200)
         else:
             error_messages = form.get_error_messages()

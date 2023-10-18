@@ -348,26 +348,37 @@
     function resetpassword(id) {
         Swal.fire({
             title: '輸入密碼',
-            input: 'new_password',
+            input: 'text',
             inputAttributes: {
                 autocomplete: 'off'
             },
             showCancelButton: true,
-            confirmButtonText: '確認',    
+            confirmButtonText: '確認',
             showLoaderOnConfirm: true,
             preConfirm: (password) => {
                 $.ajax({
-                    url: '{% url employee_password %}',
+                    url: '{% url "employee_password" %}',
                     method: 'POST',
+                    headers: {
+                        "X-CSRFToken": csrftoken, // 在請求標頭中包含 CSRF token
+                    },
                     data: {
-                        id:id,
+                        id: id,
                         password: password
                     },
                     success: function (response) {
-                        Swal.fire('成功', '密碼登入', 'success');
+                        Swal.fire('成功', '成功修改', 'success');
                     },
-                    error: function (error) {
-                        Swal.fire('错误', '发生错误', 'error');
+                    error: function (xhr, textStatus, errorThrown) {
+                        if (xhr.status === 400) {
+                            var errorMessage = xhr.responseJSON.error;
+                            showSwal("操作失敗", errorMessage, "error", false);
+                        } else if (xhr.status === 403) {
+                            alert("無權操作，請聯絡管理員");
+                        } else {
+                            alert("系統發生錯誤" + xhr.responseJSON.error);
+                            console.log(errorThrown);
+                        }
                     }
                 });
             },
