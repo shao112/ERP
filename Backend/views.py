@@ -6,8 +6,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 
-from Backend.models import  Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
-from Backend.forms import VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.models import  ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.forms import ReferenceTableForm,VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
@@ -196,17 +196,6 @@ class SalaryDetailView(View):
 
         
 
-class ReferenceTableListView(View):
-    def get(self, request, *args, **kwargs):
-        type = kwargs.get('type')
-        print(type)
-        data = {
-            "type": type
-        }
-           
-
-        return JsonResponse({"data":data},status=200)
-    
 class SalaryListView(View):
     def post(self, request, *args, **kwargs):
         year = kwargs.get('year')
@@ -467,6 +456,60 @@ class Equipment_View(View):
         data['buy_img'] = data['buy_img'].url if data['buy_img']  else ''
         print("dict_data")
         print(data)
+        return JsonResponse({"data":data}, status=200,safe = False)
+
+class ReferenceTable_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+
+        form = ReferenceTableForm(dict_data)
+        if form.is_valid():
+            ReferenceTable.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
+            return JsonResponse({'data': "修改成功"},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            ReferenceTable.objects.get(id=dict_data['id']).delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            return JsonResponse({"error":str(e)},status=500)
+
+
+    def post(self,request):
+        form = ReferenceTableForm(request.POST)
+        if form.is_valid():
+            location_city_residence = form.cleaned_data['location_city_residence']
+            location_city_business_trip = form.cleaned_data['location_city_business_trip']
+            name = form.cleaned_data['name']
+            if ReferenceTable.objects.filter(
+                        location_city_residence=location_city_residence,
+                        location_city_business_trip=location_city_business_trip,
+                        name=name
+                    ).exists():
+                return JsonResponse({"error": f"{name}參照表-居住地:{location_city_residence} 目的地:{location_city_business_trip} 已經有該筆紀錄"}, status=400)
+
+
+            newobj =form.save()
+            return JsonResponse({"data":"新增成功","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print(error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(ReferenceTable, id=id)
+        data = model_to_dict(data)        
+        if data["amount"]=="":
+            data["amount"] =0
         return JsonResponse({"data":data}, status=200,safe = False)
 
 

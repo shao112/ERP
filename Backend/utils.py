@@ -306,12 +306,12 @@ def get_weekly_clock_data(userid):
 
                 if len(clock_corrections) :
                     get_approval = clock_corrections[0].Approval
-                    if get_approval.current_status =="completed":
-                    
-                        if record.clock_in_or_out:
-                            clock_in_records.append(record)   
-                        else:         
-                            clock_out_records.append(record)   
+                    if get_approval:
+                        if get_approval.current_status =="completed":                    
+                            if record.clock_in_or_out:
+                                clock_in_records.append(record)   
+                            else:         
+                                clock_out_records.append(record)   
             else:
                 if record.clock_in_or_out:
                     clock_in_records.append(record)   

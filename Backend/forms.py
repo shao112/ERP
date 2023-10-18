@@ -1,5 +1,5 @@
 from django import forms
-from .models import ExtraWorkDay,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
+from .models import ReferenceTable,ExtraWorkDay,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -59,6 +59,16 @@ class NewsForm(BaseModelForm):
             'category': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'type': forms.Select(attrs={'class': 'form-control form-control-sm'}),
             'level': forms.Select(attrs={'class': 'form-control form-control-sm'})
+        }
+
+class ReferenceTableForm(BaseModelForm):
+
+    class Meta:
+        model = ReferenceTable
+        fields = '__all__'
+        widgets = {
+            'location_city_residence': forms.Select(attrs={'class': 'form-control form-control-sm'}),
+            'location_city_business_trip': forms.Select(attrs={'class': 'form-control form-control-sm'}),
         }
 
 

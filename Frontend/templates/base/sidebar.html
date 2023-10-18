@@ -194,9 +194,11 @@
             </a>
             <div class="collapse" id="salesCollapse">
                 <ul class="nav flex-column ml-4">
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'quotation'  %}">報價單</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'work_item_list' %}">工項管理</a>
                     </li>
@@ -304,9 +306,27 @@
 
                     {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'ReferenceTable' %}">級距對照表</a>
-                    </li>
+                    <a class="nav-link collapsed" href="#" data-target="#reference" data-toggle="collapse"
+                        aria-expanded="false" aria-controls="salesCollapse">
+                        對照表
+                    </a>
+                    <div class="collapse" id="reference">
+                        <ul class="nav flex-column ml-4">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ReferenceTable' name='出差津貼'  %}">出差津貼</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ReferenceTable' name='派工-伙食津貼'  %}">派工-伙食津貼</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ReferenceTable' name='非派工-伙食津貼'  %}">非派工-伙食津貼</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'ReferenceTable' name='車程津貼'  %}">車程津貼</a>
+                            </li>
+                        </ul>
+                    </div>
+
 
                     {% endif %}
 

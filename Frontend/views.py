@@ -8,7 +8,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import  VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.forms import  ReferenceTableForm, VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
 from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
@@ -25,15 +25,25 @@ import json
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse
 
-class ReferenceTable_ListView(UserPassesTestMixin,View):
+class ReferenceTable_ListView(UserPassesTestMixin,ListView):
     
-    def get(self,request):
-        context ={}
-        return render(request, 'reference_table/reference_table.html', context)
+    model = ReferenceTable
+    template_name = 'reference_table/reference_table.html'
+    context_object_name = 'reference_table'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        name = self.kwargs.get('name')
+        objs = ReferenceTable.objects.filter(name=name).order_by('location_city_residence')
+        context['objs'] = objs
+        context["name"] = name
+        context['ReferenceTableForm'] = ReferenceTableForm
+        return context
 
     def test_func(self):
         return Check_Permissions(self.request.user,"級距表管理")
-    
+
+
 class LaborHealthInfo_ListView(UserPassesTestMixin,View):
 
     def post(self,request):
@@ -44,9 +54,6 @@ class LaborHealthInfo_ListView(UserPassesTestMixin,View):
         except Exception as e:
             return JsonResponse({"error": "找不到相應的勞健保級距 obj"}, status=400)
         get_obj.update_fields_and_save(**dict_data)
-
-        print(dict_data)
-        print(type(dict_data))
        
         return JsonResponse({"ok":"ok"},status=200)
     

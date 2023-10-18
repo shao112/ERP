@@ -106,10 +106,10 @@ class ModifiedModel(models.Model):
         self.save()
 
 
-class ReferenceTable(models.Model):
+class ReferenceTable(ModifiedModel):
     location_city_residence = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="居住地")
     location_city_business_trip = models.CharField(max_length=4, choices=LOCATION_CHOICES, verbose_name="出差地")
-    amount = models.DecimalField(verbose_name="錢/單位",max_digits=10, decimal_places=2)
+    amount = models.DecimalField(verbose_name="錢/單位",max_digits=10, decimal_places=2,default=0)
     name=models.CharField(max_length=10)
 
     class Meta:

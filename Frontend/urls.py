@@ -42,7 +42,6 @@ urlpatterns = [
     path('Calendar_list',login_required( views.Calendar_list.as_view()), name="Calendar_list"),
     path('director_Index', login_required(views.Director_Index.as_view()), name="director_Index"),
     path('LaborHealthInfo', login_required(views.LaborHealthInfo_ListView.as_view()), name="LaborHealthInfo"),
-    path('ReferenceTable', login_required(views.ReferenceTable_ListView.as_view()), name="ReferenceTable"),
     path('profile/', login_required(views.Profile.as_view()), name='profile'),
     path('project-confirmation/', views.Project_Confirmation_ListView.as_view(), name='project-confirmation'),
     path('department/', login_required(views.Department_list.as_view()), name='department'),
@@ -55,11 +54,12 @@ urlpatterns = [
     path('work_item/', login_required(views.Work_Item_ListView.as_view()), name='work_item_list'),
     path('client/', login_required(views.Client_ListView.as_view()), name='client_list'),
     path('vehicle/', login_required(views.Vehicle_ListView.as_view()), name='vehicle_list'),
-
+    
+    path('ReferenceTable/<str:name>', login_required(views.ReferenceTable_ListView.as_view()), name="ReferenceTable"),
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
     path('accounts/logout/', views.signout, name='logout'),
-    #查看
+    #查看單號
     path('clock_correction_application_watch', login_required(views.Clock_Correction_Application_Watch_List.as_view()), name="clock_correction_application_watch"),
     path('leave_application_watch', login_required(views.Leave_Application_Watch_List.as_view()), name="Leave_Application_all"),
     path('work_overtime_application_watch',login_required( views.Work_Overtime_Application_Watch_List.as_view()), name="Work_Overtime_Application_watch"),
