@@ -157,8 +157,16 @@
                     },
 
                     error: function (xhr, textStatus, errorThrown) {
-                        alert("計算失敗");
-                        console.log("get error");
+                        if (xhr.status == 400 || xhr.status == 404) {
+                            var errorMessage = xhr.responseJSON.error;
+                            console.log(errorMessage);
+                            showSwal("操作失敗", errorMessage, "error", false);
+                        } else if (xhr.status === 403) {
+                            alert("無權獲得該頁詳細或操作，請聯絡管理員要求對應權限");
+                        } else {
+                            alert("系統發生錯誤");
+                            console.log(errorThrown);
+                        }
                     },
                 });
             }

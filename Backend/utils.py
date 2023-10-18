@@ -276,11 +276,16 @@ def quotationFile(quotation_obj,see,five):
 
 
 #
-def Check_Permissions(user,name):
+def Check_Permissions(user,name,check_get=False,get_name=""):
+
     if settings.PASS_TEST_FUNC or user.groups.filter(name__icontains='最高權限').exists() :
         return True
-    return user.groups.filter(name__icontains='薪水管理').exists()  
-    
+    if check_get=="GET": #請求的模式如果是get，就判斷另一個get_name
+        return user.groups.filter(name__icontains=get_name).exists()  or user.groups.filter(name__icontains=name).exists()  
+
+    return user.groups.filter(name__icontains=name).exists()  
+
+
 #取得當周日期
 def get_weekdays(to_week):
     weekdays = []

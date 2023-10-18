@@ -41,7 +41,7 @@ class ReferenceTable_ListView(UserPassesTestMixin,ListView):
         return context
 
     def test_func(self):
-        return Check_Permissions(self.request.user,"級距表管理")
+        return Check_Permissions(self.request.user,"管理部管理")
 
 
 class LaborHealthInfo_ListView(UserPassesTestMixin,View):
@@ -64,7 +64,7 @@ class LaborHealthInfo_ListView(UserPassesTestMixin,View):
         return render(request, 'LaborHealth/LaborHealth.html', context)
 
     def test_func(self):
-        return Check_Permissions(self.request.user,"薪水管理")
+        return Check_Permissions(self.request.user,"管理部管理")
     
 
 
@@ -83,7 +83,7 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
     
 
 
-class TravelApplicationView_Watch(ListView):
+class TravelApplicationView_Watch(UserPassesTestMixin,ListView):
     model = Travel_Application
     template_name = 'Travel_Application/Travel_Application_watch.html'
     context_object_name = 'Travel_Applications'
@@ -91,8 +91,11 @@ class TravelApplicationView_Watch(ListView):
         context = super().get_context_data(**kwargs)
         context["Travel_Application_list"] = Travel_Application.objects.all()
         context['Travel_ApplicationForm'] = Travel_ApplicationForm()
-
         return context
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
+
+    
 
 
 class TravelApplicationView(ListView):
@@ -479,13 +482,16 @@ class Vehicle_ListView(ListView):
         return context
     
 # 上班日調整
-class ExtraWorkDay_ListView(ListView):
+class ExtraWorkDay_ListView(UserPassesTestMixin,ListView):
     model = ExtraWorkDay
     template_name = 'extraworkday/extraworkday.html'
     context_object_name = 'extraworkday_list'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
 
 
 
@@ -612,7 +618,7 @@ class Apply_List(View):
         context["objects"] = models
         return render(request, self.template_name, context)
 
-class Approval_List_Watch(ListView):
+class Approval_List_Watch(UserPassesTestMixin,ListView):
     model = ApprovalModel
     template_name = 'approval_list/approval_list.html'
     context_object_name = 'approval_list'
@@ -640,9 +646,12 @@ class Approval_List_Watch(ListView):
         related_approval_models = [
             approval_model for approval_model in all_approval_models
         ]
-
         queryset = related_approval_models
         return queryset
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
+
+    
 
 class Approval_List(ListView):
     model = ApprovalModel
@@ -764,11 +773,11 @@ class Leave_Param_List(UserPassesTestMixin,ListView):
         return context
     
     def test_func(self):
-        return Check_Permissions(self.request.user,"財務")
+        return Check_Permissions(self.request.user,"管理部管理")
 
 # 請假申請
 
-class Leave_Application_Watch_List(ListView):
+class Leave_Application_Watch_List(UserPassesTestMixin,ListView):
     model = Leave_Application
     template_name = 'leave_application/leave_application_watch.html'
     context_object_name = 'leave_application'
@@ -780,6 +789,8 @@ class Leave_Application_Watch_List(ListView):
         context["60range"] = range(60)
         context["leave_application_list"] =Leave_Application.objects.all()
         return context
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
 
 
 
@@ -815,7 +826,7 @@ class Work_Overtime_Application_List(ListView):
         context["work_overtime_application_list"] =Work_Overtime_Application.objects.filter(created_by=user)
         return context
     
-class Work_Overtime_Application_Watch_List(ListView):
+class Work_Overtime_Application_Watch_List(UserPassesTestMixin,ListView):
     model = Work_Overtime_Application
     template_name = 'work_overtime_application/work_overtime_application_watch.html'
     context_object_name = 'work_overtime_application'
@@ -828,10 +839,15 @@ class Work_Overtime_Application_Watch_List(ListView):
         context["60range"] = range(60)
         context["work_overtime_application_list"] =Work_Overtime_Application.objects.all()
         return context
+
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
+
     
+
 # 補卡申請
 
-class Clock_Correction_Application_Watch_List(ListView):
+class Clock_Correction_Application_Watch_List(UserPassesTestMixin,ListView):
     model = Clock_Correction_Application
     template_name = 'clock_correction_application/clock_correction_application_watch.html'
     context_object_name = 'clock_correction_applications'
@@ -845,6 +861,8 @@ class Clock_Correction_Application_Watch_List(ListView):
         context["60range"] = range(60)
         return context
     
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
 
 
 

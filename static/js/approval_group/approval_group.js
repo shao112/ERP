@@ -40,9 +40,17 @@ function createApprovalStageElement(jsonData){
                     alert("刪除成功!");
                     sendApprovalGroup(set_id);
                 },
-                error: function (error) {
+                error: function (xhr, textStatus, errorThrown) {
                     alert("刪除失敗!");
-                    console.log("Error:", error);
+                    if (xhr.status === 400) {
+                        var errorMessage = xhr.responseJSON.error;
+                        showSwal("操作失敗", errorMessage, "error", false);
+                      } else if (xhr.status === 403) {
+                        alert("無權操作，請聯絡管理員");
+                      } else {
+                        alert("系統發生錯誤" + xhr.responseJSON.error);
+                        console.log(errorThrown);
+                      }
                 },
             });
         })
@@ -87,8 +95,17 @@ function sendApprovalGroup(id) {
 
             }
         },
-        error: function (error) {
-            console.error("錯誤", error);
+        error: function (xhr, textStatus, errorThrown) {
+
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                showSwal("操作失敗", errorMessage, "error", false);
+              } else if (xhr.status === 403) {
+                alert("無權操作，請聯絡管理員");
+              } else {
+                alert("系統發生錯誤" + xhr.responseJSON.error);
+                console.log(errorThrown);
+              }
         }
     });
 }
@@ -110,9 +127,19 @@ function submitEmployee(){
             console.log(response);
             sendApprovalGroup(set_id)
         },
-        error: function(error) {
-            console.log(error);
+        error: function(xhr, textStatus, errorThrown) {
+
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                showSwal("操作失敗", errorMessage, "error", false);
+              } else if (xhr.status === 403) {
+                alert("無權操作，請聯絡管理員");
+              } else {
+                alert("系統發生錯誤" + xhr.responseJSON.error);
+                console.log(errorThrown);
+              }
             // 員工已被選過錯誤處理
+
         }
     })
 }
@@ -134,8 +161,17 @@ is_director_checkbox.addEventListener("change",function(){
         success: function (response) {
             
         },
-        error: function (error) {
-            alert("錯誤", error);
+        error: function (xhr, textStatus, errorThrown) {
+
+            if (xhr.status === 400) {
+                var errorMessage = xhr.responseJSON.error;
+                showSwal("操作失敗", errorMessage, "error", false);
+              } else if (xhr.status === 403) {
+                alert("無權操作，請聯絡管理員");
+              } else {
+                alert("系統發生錯誤" + xhr.responseJSON.error);
+                console.log(errorThrown);
+              }
         }
     });
 })

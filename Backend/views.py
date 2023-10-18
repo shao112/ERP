@@ -15,7 +15,7 @@ from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import quotationFile,convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import Check_Permissions,quotationFile,convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
 from .salary_utils import create_salary
 import openpyxl
 from openpyxl import load_workbook
@@ -24,7 +24,7 @@ from openpyxl.utils import get_column_letter
 from django.db.utils import IntegrityError
 import random,os,re
 from  django.conf import settings
-from django.contrib.auth.mixins import PermissionRequiredMixin
+
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from datetime import time
@@ -132,7 +132,10 @@ class SalaryFileView(View):
 
 
 
-class SalaryDetailView(View):
+class SalaryDetailView(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"薪水管理")
+
     def delete(self, request, *args, **kwargs):
         dict_data = convent_dict(request.body)
 
@@ -196,12 +199,15 @@ class SalaryDetailView(View):
 
         
 
-class SalaryListView(View):
+class SalaryListView(UserPassesTestMixin,View):
+    def test_func(self):        
+        return Check_Permissions(self.request.user,"薪水管理")
+
     def post(self, request, *args, **kwargs):
         year = kwargs.get('year')
         month = kwargs.get('month')
         user_id = kwargs.get('user_id')
-        print(year, month,user_id)
+
         if user_id:
             employee = Employee.objects.get(id=user_id)
             create_salary(employee, year, month)
@@ -210,18 +216,19 @@ class SalaryListView(View):
             for employee in employees:
                 create_salary(employee, year, month)
            
-
         return JsonResponse({"ok":"ok"},status=200)
-        # return JsonResponse({"error":"找不到model"},status=400)
-
 
 class SysMessage_API(View):
     def post(self, request, *args, **kwargs):
         data = request.POST
         id = data.get('id')  
         getobj = SysMessage.objects.get(id=id)
-        getobj.delete() 
+        if request.user.employee != getobj.Target_user:
+            return HttpResponse("User does not have permission to delete this message", status=403)
+         
+        getobj.delete()
         return HttpResponse(200)
+
 
 class Approval_View_Process(View):
     def post(self,request):
@@ -249,7 +256,6 @@ class Approval_View_Process(View):
                 'Clock_Correction_Application': 'Clock_Correction_Application',
                 'Travel_Application': 'Travel_Application',
             }
-            print("modeltext: ", modeltext)
 
             try:
                 get_Approval_Target = get_object_or_404(Approval_Target, name=model_name.get(modeltext))
@@ -265,8 +271,6 @@ class Approval_View_Process(View):
                     get_order.insert(0, get_user_id ) #先給代理人簽核
                 else:
                     return JsonResponse({"error": "請選擇代理人"}, status=400)
-
-
 
             new_Approval= ApprovalModel.objects.create(target_approval=get_Approval_Target,order=get_order)
             if get_obj.Approval !=None:
@@ -359,7 +363,9 @@ class Approval_Process_Log(View):
         if status:
             return JsonResponse({"data":"ok"},status=200)
 
-class Department_View(View):
+class Department_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理",self.request.method,"管理部查看") 
 
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -458,7 +464,10 @@ class Equipment_View(View):
         print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
-class ReferenceTable_View(View):
+class ReferenceTable_View(UserPassesTestMixin,View):
+
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
 
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -512,8 +521,10 @@ class ReferenceTable_View(View):
             data["amount"] =0
         return JsonResponse({"data":data}, status=200,safe = False)
 
-
-class Project_Employee_Assign_View(View):
+#派工單
+class Project_Employee_Assign_View(UserPassesTestMixin,View):
+    def test_func(self):        
+        return Check_Permissions(self.request.user,"工程派工單管理",self.request.method,"工程派工單查看")     
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = Project_Employee_AssignForm(dict_data)
@@ -527,7 +538,6 @@ class Project_Employee_Assign_View(View):
                 related_project_job_assign.vehicle.set(vehicle_id_list)
                 related_project_job_assign.save()
                 del dict_data["vehicle"]
-
             
 
             if "project_job_assign" in dict_data:
@@ -664,7 +674,9 @@ class New_View(View):
 
 
 
-class Quotation_View(View):
+class Quotation_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"業務部管理",self.request.method,"業務部查看") 
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = QuotationForm(dict_data)
@@ -794,7 +806,10 @@ class Quotation_View(View):
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
-class Work_Item_View(View):
+class Work_Item_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"業務部管理",self.request.method,"業務部查看") 
+
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = Work_ItemForm(dict_data)
@@ -864,7 +879,10 @@ class Work_Item_View(View):
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
-class Client_View(View):
+class Client_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"業務部管理",self.request.method,"業務部查看") 
+    
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = ClientForm(dict_data)
@@ -901,7 +919,11 @@ class Client_View(View):
         data = model_to_dict(data)
         return JsonResponse({"data":data}, status=200,safe = False)
     
-class ExtraWorkDay_View(View):
+class ExtraWorkDay_View(UserPassesTestMixin,View):
+
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
+
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = ExtraWorkDayForm(dict_data)
@@ -1104,7 +1126,10 @@ class FormUploadFileView(View):
             return JsonResponse({"data":"error"}, status=400,safe=False)
 
 
-class Groups_View(View):
+class Groups_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部權限管理")
+
     def put(self,request):
         dict_data = convent_dict(request.body)
         group = Group.objects.get(id=dict_data['id'])
@@ -1122,7 +1147,10 @@ class Groups_View(View):
 
         return JsonResponse({"data": data}, status=200)
 
-class Approval_Groups_View(View):
+class Approval_Groups_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"簽核流程管理")
+
     def post(self,request):
         # post 處理兩個事件，【是否勾選直屬主管】以及【送出新關卡(員工)】
         dict_data = convent_dict(request.body)
@@ -1206,7 +1234,7 @@ class Leave_Application_View(View):
         form = LeaveApplicationForm(dict_data)
         if form.is_valid():
             getObject = Leave_Application.objects.get(id=dict_data['id'])
-            #本人才能修改
+            #本人能修改
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能修改"},status=400)
 
@@ -1385,7 +1413,10 @@ class Work_Overtime_Application_View(View):
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
-class Leave_Param_View(View):
+class Leave_Param_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
+
     def post(self,request):
         id = request.POST.get("id")
         form = LeaveParamModelForm(request.POST)
@@ -1451,7 +1482,9 @@ class Profile_View(View):
 
 
 
-class Employee_View(View):
+class Employee_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
 
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -1557,13 +1590,8 @@ class Employee_Attendance_View(View):
 
 
 class Project_Confirmation_View(UserPassesTestMixin,View):
-    def test_func(self):
-        op = self.request.user.groups.filter(name__icontains='工程確認單管理').exists() #最高權限
-        if op  or settings.PASS_TEST_FUNC:
-            return True
-        if self.request.method == 'GET':
-            return self.request.user.groups.filter(name__icontains='工程確認單查看').exists()
-
+    def test_func(self):        
+        return Check_Permissions(self.request.user,"工程確認單管理",self.request.method,"工程確認單查看") 
 
     def put(self,request):
         dict_data = convent_dict(request.body)
@@ -1627,9 +1655,13 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
-# 派工單
-class Job_Assign_View(View):
 
+# 派任單
+class Job_Assign_View(UserPassesTestMixin,View):
+    def test_func(self):        
+        print("xx")
+        return Check_Permissions(self.request.user,"工程派工單管理",self.request.method,"工程派工單查看") 
+    
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = ProjectJobAssignForm(dict_data)

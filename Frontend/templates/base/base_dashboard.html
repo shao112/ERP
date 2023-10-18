@@ -111,6 +111,17 @@
                         },
                         error: function (error) {
                             console.error('Error:', error);
+                            if (xhr.status == 400 || xhr.status == 404) {
+                                var errorMessage = xhr.responseJSON.error;
+                                console.log(errorMessage);
+                                showSwal("操作失敗", errorMessage, "error", false);
+                                alert("操作失敗"+errorMessage);
+                            } else if (xhr.status === 403) {
+                                alert("只能刪除自身的訊息");
+                            } else {
+                                alert("系統發生錯誤");
+                                console.log(errorThrown);
+                            }
                         }
                     });
 
@@ -193,8 +204,6 @@
             toolbar: "#toolbar",
 
         });
-
-
 
     });
 

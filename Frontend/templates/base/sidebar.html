@@ -274,7 +274,7 @@
         </li>
         {% endif %}
 
-        {% if pass_test_func %}
+        {% if pass_test_func or  user|in_group_T_or_F:"參數管理"  %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#OP" data-toggle="collapse" aria-expanded="false" aria-controls="OP">
@@ -288,23 +288,15 @@
                     </li>
                     {% endif %}
 
-                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
+                    {% if user|in_group_T_or_F:"管理部管理" or pass_test_func %}
 
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ExtraWorkDay' %}">補班/國定假日調整</a>
                     </li>
-
-                    {% endif %}
-
-                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
-
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'LaborHealthInfo' %}">勞健保級距對照表</a>
                     </li>
-
-                    {% endif %}
-
-                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
 
                     <a class="nav-link collapsed" href="#" data-target="#reference" data-toggle="collapse"
                         aria-expanded="false" aria-controls="salesCollapse">
@@ -328,9 +320,6 @@
                     </div>
 
 
-                    {% endif %}
-
-                    {% if user|in_group_T_or_F:"財務部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'Leave_Param' %}">假別參數</a>
                     </li>

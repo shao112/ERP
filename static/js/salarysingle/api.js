@@ -24,8 +24,16 @@ function reset_salary() {
           location.reload();
         },
         error: function (xhr, textStatus, errorThrown) {
-          var errorMessage = xhr.responseJSON.error;
-          alert("系統發生錯誤" + errorMessage);
+          if (xhr.status == 400 || xhr.status == 404) {
+            var errorMessage = xhr.responseJSON.error;
+            console.log(errorMessage);
+            showSwal("操作失敗", errorMessage, "error", false);
+          } else if (xhr.status === 403) {
+              alert("無權獲得該頁詳細或操作，請聯絡管理員要求對應權限");
+          } else {
+              alert("系統發生錯誤");
+              console.log(errorThrown);
+          }
         },
       });
     }
@@ -79,8 +87,17 @@ function add() {
       location.reload();
     },
     error: function (xhr, textStatus, errorThrown) {
-      var errorMessage = xhr.responseJSON.error;
-      alert("系統發生錯誤" + errorMessage);
+
+      if (xhr.status == 400 || xhr.status == 404) {
+        var errorMessage = xhr.responseJSON.error;
+        console.log(errorMessage);
+        showSwal("操作失敗", errorMessage, "error", false);
+    } else if (xhr.status === 403) {
+        alert("無權獲得該頁詳細，請聯絡管理員");
+    } else {
+        alert("系統發生錯誤");
+        console.log(errorThrown);
+    }
     },
   });
 }
@@ -151,8 +168,16 @@ function save(itemid) {
       location.reload();
     },
     error: function (xhr, textStatus, errorThrown) {
-      var errorMessage = xhr.responseJSON.error;
-      alert("系統發生錯誤" + errorMessage);
+      if (xhr.status == 400 || xhr.status == 404) {
+        var errorMessage = xhr.responseJSON.error;
+        console.log(errorMessage);
+        showSwal("操作失敗", errorMessage, "error", false);
+      } else if (xhr.status === 403) {
+          alert("無權獲得該頁詳細或操作，請聯絡管理員要求對應權限");
+      } else {
+          alert("系統發生錯誤");
+          console.log(errorThrown);
+      }
     },
   });
 }

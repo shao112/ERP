@@ -176,7 +176,7 @@ async function GET_handleClick(event, bringdata = true) {
           console.log(errorMessage);
           showSwal("操作失敗", errorMessage, "error", false);
         } else if (xhr.status === 403) {
-          alert("無權獲得該頁詳細，請聯絡管理員");
+          alert("無權獲得該頁詳細或操作，請聯絡管理員");
         } else {
           alert("系統發生錯誤");
           console.log(errorThrown);
@@ -256,7 +256,7 @@ $("form").on("submit", function (event) {
         });
 
       } else if (xhr.status === 403) {
-        alert("無權獲得該頁詳細，請聯絡管理員");
+        alert("無權獲得該頁詳細或操作，請聯絡管理員");
       } else {
         alert("系統發生錯誤");
         console.log(errorThrown);

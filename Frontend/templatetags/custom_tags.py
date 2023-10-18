@@ -40,10 +40,13 @@ def Travel_show(location_city_go, location_city_end):
 
 @register.filter
 def in_group_T_or_F(user, group):
+    op_is_in_group = any("最高權限" in user_group.name for user_group in user.groups.all())
+    if op_is_in_group:
+        return True
     is_supervisor = False
     is_in_group = any(group in user_group.name for user_group in user.groups.all())
 
-    return is_in_group
+    return is_in_group or op_is_in_group
 
 @register.filter
 def get_supervisor(user):
