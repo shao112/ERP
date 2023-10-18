@@ -7,6 +7,9 @@ from django.conf import settings
 def approval_count(request):
     if  isinstance(request.user, AnonymousUser):
         return {'approval_count': 0}
+    
+    if hasattr( request.user,"employee")==False:
+        return {'approval_count': "異常"}
 
     current_employee = request.user.employee
 
@@ -44,6 +47,8 @@ def pass_test_func(request):
 
 def sys_messages(request):
     if  isinstance(request.user, AnonymousUser):
+        return {'sys_messages': {}}
+    if hasattr( request.user,"employee")==False:
         return {'sys_messages': {}}
 
     get_sys_messages = SysMessage.objects.filter(Target_user=request.user.employee,watch=False)

@@ -86,7 +86,11 @@ class ModifiedModel(models.Model):
         user = get_current_authenticated_user()
         
         if user !=None:
-            self.modified_by = user.employee            
+            if hasattr( user,"employee")==False:
+                super().save(*args, **kwargs)
+
+            self.modified_by = user.employee
+
             if hasattr(self, 'created_by'):
                 if self.created_by ==None:
                     self.created_by =user.employee
@@ -276,7 +280,7 @@ class Salary(ModifiedModel):
     user = models.ForeignKey(Employee,related_name="salary_user" ,on_delete=models.DO_NOTHING, verbose_name="員工")
     year = models.PositiveIntegerField(verbose_name="年")
     month = models.PositiveIntegerField(verbose_name="月")
-    created_by = models.ForeignKey("Employee",related_name="Salary_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",related_name="Salary_author", on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def system_total_money(self):
@@ -785,7 +789,7 @@ class Project_Confirmation(ModifiedModel):
     remark = models.TextField(null=True, blank=True, verbose_name="備註")
     attachment = models.FileField(upload_to="project_confirmation_reassignment_attachment", null=True, blank=True, verbose_name="完工重派附件")
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='project_confirmation_Approval')
-    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
+    created_by = models.ForeignKey("Employee",related_name="Project_Confirmation_author", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='建立人')
 
     def get_show_id(self):
         return f"工確-{str(self.id).zfill(5)}"
@@ -1418,7 +1422,7 @@ class Work_Overtime_Application(ModifiedModel):
     carry_over = models.CharField(max_length=100, choices=CARRY_OVER_TYPE, default="1", blank=False, null=False, verbose_name="加班結轉方式")
     overtime_reason = models.TextField(max_length=300, blank=True, null=True, verbose_name="加班事由")
     attachment = models.FileField(upload_to="Work_Overtime_Application_Attachment", null=True, blank=True, verbose_name="加班附件")
-    created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="work_overtime_application_author", on_delete=models.SET_NULL, null=True, blank=True)
+    created_by = models.ForeignKey("Employee",verbose_name="申請人",related_name="work_overtime_application_author", on_delete=models.CASCADE, null=True, blank=True)
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.CASCADE , related_name='Work_Overtime_Application_Approval')
 
     class Meta:

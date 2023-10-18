@@ -394,7 +394,7 @@ class Employee_Permission_list(UserPassesTestMixin,ListView):
        
         Groups = Group.objects.all().order_by('name')
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =  Employee.objects.values('user__id','full_name')
+        context["employees_list"] =  Employee.objects.values('user__id','full_name') #用user_id 是要設計user的群組
         context['groups'] = sorted_groups
         return context
     def test_func(self):
