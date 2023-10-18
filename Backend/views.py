@@ -965,6 +965,7 @@ class FileUploadView(View):
    def post(self, request, *args, **kwargs):
         modelstr = self.kwargs['model']
         uploaded_file = request.FILES.get('fileInput')
+
         print(modelstr)
         if uploaded_file ==None:
              return JsonResponse({'error': '請上傳檔案'}, status=400)
@@ -1016,18 +1017,17 @@ class FileUploadView(View):
                     )
                     print("派任計畫: ",id_object)
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
-                error_str=f"第{i+1}欄資料錯誤\n"
+                error_str+=f"第{i+1}欄資料錯誤\n"
             except Quotation.DoesNotExist:
-                print("找不到關聯報價單編號")
+                error_str+=f"第{i+1}欄資料 找不到對應的找不到關聯報價單編號<br>"
             except Project_Confirmation.DoesNotExist:
-                print("找不到工程確認單編號")
+                error_str+=f"第{i+1}欄資料 找不到對應的找不到工程確認單編號<br>"
             except Project_Job_Assign.DoesNotExist:
-                print("找不到關派任計畫編號")
-
+                error_str+=f"第{i+1}欄資料 找不到對應的找不到關聯報價單編號找不到關派任計畫編號<br>"
         if error_str=="":
             return JsonResponse({'message': '上傳成功'},status=200)
         else:
-            return JsonResponse({'error': '上傳失敗欄為:'}, status=500)
+            return JsonResponse({'error': "<h4>異常欄位:</h4>\n"+error_str+"<br>其餘上傳成功，再次上傳請小心已經上傳過的資料。"}, status=400)
 
 
 

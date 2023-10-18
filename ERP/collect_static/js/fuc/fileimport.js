@@ -42,10 +42,23 @@ fileInput.addEventListener('change', async function () {
         contentType: false,
         success: function (response) {
             console.log(response); // Handle the success response from Django
-            location.reload();
+            Swal.fire("操作成功", "完成").then(() => {
+                location.reload();
+              });
         },
-        error: function (error) {
-            console.error(error); // Handle the error response, if any
+        error: function (xhr, textStatus, errorThrown) {
+            console.log("file error");
+            if (xhr.status == 400 || xhr.status == 404) {
+              var errorMessage = xhr.responseJSON.error;
+              console.log(errorMessage);
+              showSwal("操作失敗", errorMessage, "error", false);
+            } else if (xhr.status === 403) {
+              alert("無權獲得該頁詳細，請聯絡管理員");
+            } else {
+              alert("系統發生錯誤");
+              console.log(errorThrown);
+            }
+
         }
     });
 
