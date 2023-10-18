@@ -1,6 +1,14 @@
 var quotation_select = document.getElementById("quotation_id");
 
-quotation_select.addEventListener("change", function () {
+$('#quotation_id').on('select2:select', function (e) {
+  console.log("selectd")
+  LoadQuotationData();
+
+});
+
+quotation_select.addEventListener("change",LoadQuotationData );
+
+function LoadQuotationData () {
   var selectedOptionIndex = quotation_select.selectedIndex;
   var selectedOption = quotation_select.options[selectedOptionIndex];
   if (selectedOption == undefined) {
@@ -35,7 +43,7 @@ quotation_select.addEventListener("change", function () {
       console.log("get error");
     },
   });
-});
+}
 
 
 function set_select_id(id,selectname) {

@@ -5,8 +5,15 @@ var set_project_employee_assign_form = document.querySelector(
 var project_job_assign_IdControl = document.getElementById(
   "project_job_assign_id"
 );
+$('#project_job_assign_id').on('select2:select', function (e) {
+  console.log("selectd")
+  Load_Job_Assign();
 
-project_job_assign_IdControl.addEventListener("change", function () {
+});
+
+project_job_assign_IdControl.addEventListener("change", Load_Job_Assign);
+
+function Load_Job_Assign() {
   var selectedOptionIndex = project_job_assign_IdControl.selectedIndex;
   var selectedOption =
     project_job_assign_IdControl.options[selectedOptionIndex];
@@ -80,4 +87,4 @@ project_job_assign_IdControl.addEventListener("change", function () {
       console.log("get error");
     },
   });
-});
+}

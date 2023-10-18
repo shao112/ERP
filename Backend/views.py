@@ -1500,7 +1500,6 @@ class Profile_View(View):
             print("成功")
             return JsonResponse({'status': 'success'},status=200)
         else:
-            print("xx")
             print(request.POST)
             form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
@@ -1711,8 +1710,8 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
 # 派任單
 class Job_Assign_View(UserPassesTestMixin,View):
     def test_func(self):        
-        print("xx")
-        return Check_Permissions(self.request.user,"工程派工單管理",self.request.method,"工程派工單查看") 
+        return Check_Permissions(self.request.user,"工程派任計畫管理",self.request.method,"工程派任計畫查看")  or  Check_Permissions(self.request.user,"工程確認單管理",self.request.method,"工程確認單查看") 
+
     
     def put(self,request):
         dict_data = convent_dict(request.body)

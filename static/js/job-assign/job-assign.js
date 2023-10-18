@@ -1,7 +1,15 @@
 
 var projectConfirmationIdControl = document.getElementById('project_confirmation_select2');
 
-projectConfirmationIdControl.addEventListener('change', function () {
+$('#project_confirmation_select2').on('select2:select', function (e) {
+    console.log("selectd")
+    LoadProjectConfirmation();
+  });
+  
+
+projectConfirmationIdControl.addEventListener('change',LoadProjectConfirmation);
+
+function LoadProjectConfirmation () {
 
     var selectedOptionIndex = projectConfirmationIdControl.selectedIndex;
     var selectedOption = projectConfirmationIdControl.options[selectedOptionIndex];
@@ -48,4 +56,4 @@ projectConfirmationIdControl.addEventListener('change', function () {
 
 
 
-});
+}
