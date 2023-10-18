@@ -18,7 +18,10 @@ urlpatterns = [
     path('equipment',  views.Equipment_View.as_view(), name="equipment_api"),
     path('department',  views.Department_View.as_view(), name="department_api"),
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
+
     path('employee', views.Employee_View.as_view(), name="project_employee_api"),
+    path('employee_password', views.Employee_Pasword_View.as_view(), name="employee_password"),
+
     path('employee_attendance', views.Employee_Attendance_View.as_view(), name="employee_attendance_api"),
     path('group', views.Groups_View.as_view(), name="groups_view_api"),
     path('approval_group', views.Approval_Groups_View.as_view(), name="approval_group_view_api"),

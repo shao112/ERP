@@ -73,7 +73,7 @@ class SalaryFileView(View):
             title = "激勵性獎金"
         
         if user==0:#全員
-            getEm = Employee.objects.all()
+            getEm = Employee.objects.filter(user__is_active=True)
             error_msg=""
             file_paths=[]
             for employee in getEm:
@@ -212,7 +212,7 @@ class SalaryListView(UserPassesTestMixin,View):
             employee = Employee.objects.get(id=user_id)
             create_salary(employee, year, month)
         else:
-            employees = Employee.objects.all()
+            employees = Employee.objects.filter(user__is_active=True)
             for employee in employees:
                 create_salary(employee, year, month)
            
@@ -1469,17 +1469,27 @@ class Profile_View(View):
             else:
                 return JsonResponse({"data":form.errors}, status=400,safe=False)
 
-    # def put(self,request):
-    #     print("views.py put")
-    #     uploaded_image = request.FILES.get('profile_image')
-    #     print(uploaded_image)
-    #     if uploaded_image == None:
-    #          return JsonResponse({'error': '請上傳檔案'}, status=400)
-    #     else:
-            # employee = Employee.objects.filter(pk=request.user.id).update(profile_image=uploaded_image)
-            # employee.save()
-            # return JsonResponse(status=200)
+class Employee_Pasword_View(UserPassesTestMixin,View):
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部管理")
+    def post(self,request):
+        form = EmployeeForm(request.POST)
 
+        if form.is_valid():
+            username = form.cleaned_data['id']
+            password = form.cleaned_data['password']
+            print(username,password)
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({"error":"員工編號已存在或是曾被刪除過。"},status=400)
+            
+            user = User.objects.create_user(username=username, password=password)
+            employee = form.save(commit=False)
+            employee.user = user
+            employee.save()
+            return JsonResponse({'data': "完成新增","id":employee.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            return JsonResponse({"error":error_messages},status=400)
 
 
 class Employee_View(UserPassesTestMixin,View):
@@ -1494,7 +1504,6 @@ class Employee_View(UserPassesTestMixin,View):
             if "labor_pension" in dict_data:
                 if int(dict_data['labor_pension']) <6:
                     return JsonResponse({"error":"勞退比例至少要為6%"},status=400)
-
 
             if "departments" in dict_data:
                 Department_instance = Department.objects.get(pk=int(dict_data["departments"]))
@@ -1529,6 +1538,9 @@ class Employee_View(UserPassesTestMixin,View):
         if form.is_valid():
             username = form.cleaned_data['employee_id']
             password = form.cleaned_data['id_number']
+            if  User.objects.filter(username=username).exists():
+                return JsonResponse({"error":"員工編號已存在或是曾被刪除過。"},status=400)
+
             user = User.objects.create_user(username=username, password=password)
             employee = form.save(commit=False)
             employee.user = user

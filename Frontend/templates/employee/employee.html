@@ -13,7 +13,8 @@
 
 {% block main %}
 
-<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,8 +40,8 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn"class="btn border border-dark rounded"
-                    style="color: #fff;background: #1E3050;">上傳</button>
+                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded"
+                        style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
                 <h4>檔案列表</h4>
@@ -68,7 +69,7 @@
                     <div class="container shadow-sm">
                         <form action="/restful/employee" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden/>
+                            <input name="id" hidden />
                             <div class="form-row my-2">
                                 <div class="col-12 col-md-6">
                                     <div class="form-row">
@@ -82,14 +83,15 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="position">職稱</label>
-                                                <input class="form-control form-control-sm" name="position" id="position" required></input>
+                                                <input class="form-control form-control-sm" name="position"
+                                                    id="position" required></input>
                                             </div>
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="departments">部門</label>
                                                 {{ employee_form.departments }}
-                                            </select>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -110,7 +112,7 @@
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
                                                 <label for="start_date_control">到職日期</label>
-                                                <input type="date" class="form-control form-control-sm"
+                                                <input type="date" class="form-control form-control-sm" required
                                                     name="start_work_date" id="start_date_control"></input>
                                             </div>
                                         </div>
@@ -250,7 +252,7 @@
                                                     id="emergency_contact_phone_control"></input>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -268,50 +270,60 @@
             </div>
         </div>
     </div>
+
+    <p>新員工預設員工ID為登入帳號，密碼為身分證</p>
+
     <div class="employee-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
-        data-toolbar="#toolbar" data-search="true" data-show-columns="true"data-filter-strict-search="true"
-        data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]" 
-        data-filter-control="true">
+            data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
+            data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
+            data-filter-control="true">
             <div id="toolbar">
                 <div class="employee-header container-fluid">
-                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal"data-target="#employee-modal">
+                    <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增員工
                     </a>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
-                    <button class="d-none d-md-inline-block" onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
+
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
+                        data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
+                    <button class="d-none d-md-inline-block"
+                        onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
                 </div>
-            </div>      
+            </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox" class="d-none d-md-table-cell">匯出</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                        class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="employee_file_upload" >員工檔案上傳</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true"
+                        data-field="employee_file_upload">員工檔案上傳</th>
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
                     <th data-field="position" data-sortable="true">職稱</th>
                     <th data-field="phone_number" data-sortable="true">手機號碼</th>
                     <th data-field="contact_number" data-sortable="true">聯絡電話</th>
+                    <th data-field="reset" data-sortable="true">重設密碼</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
                 {% for p in employee %}
                 {% if p.user.is_active %}
                 <tr>
-                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"value="{{ p.id }}"></td>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                            value="{{ p.id }}"></td>
                     <td>
-                        <a type="button" data-url="employee" data-id="{{p.pk}}"
-                        class="sys_get btn btn-sm btn-warning" data-toggle="modal"
-                        data-target="#employee-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" data-url="employee" data-id="{{p.pk}}" class="sys_get btn btn-sm btn-warning"
+                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        <a data-url="employee" data-id="{{p.pk}}" type="button"
-                        class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
+                        <a data-url="employee" data-id="{{p.pk}}" type="button" class="sys_del btn btn-sm btn-danger"><i
+                                class="far fa-trash-alt"></i></a>
                     </td>
                     <td>
-                        <a href="" onclick="setEmployeeId({{p.pk}})" data-toggle="modal" data-target="#fileUploadModal">點擊</a>
+                        <a href="" onclick="setEmployeeId({{p.pk}})" data-toggle="modal"
+                            data-target="#fileUploadModal">點擊</a>
                     </td>
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
@@ -319,6 +331,10 @@
                     <td>{{ p.position }}</td>
                     <td>{% if p.phone_number %}{{ p.phone_number }}{% else %}{% endif %}</td>
                     <td>{% if p.contact_number %}{{ p.contact_number }}{% else %}{% endif %}</td>
+                    <td>
+                        <button id="showPasswordInput" onclick="resetpassword({{p.pk}})">重設密碼</button>
+                    </td>
+
                 </tr>
                 {% endif %}
                 {% endfor %}
@@ -328,6 +344,38 @@
 </div>
 
 <script>
+
+    function resetpassword(id) {
+        Swal.fire({
+            title: '輸入密碼',
+            input: 'new_password',
+            inputAttributes: {
+                autocomplete: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: '確認',    
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    url: '{% url employee_password %}',
+                    method: 'POST',
+                    data: {
+                        id:id,
+                        password: password
+                    },
+                    success: function (response) {
+                        Swal.fire('成功', '密碼登入', 'success');
+                    },
+                    error: function (error) {
+                        Swal.fire('错误', '发生错误', 'error');
+                    }
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+    }
+
+
     document.addEventListener('DOMContentLoaded', function () {
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
