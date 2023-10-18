@@ -569,7 +569,10 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
     def delete(self,request):
         try:
             dict_data = convent_dict(request.body)
-            Project_Employee_Assign.objects.get(id=dict_data['id']).delete()
+            obj = Project_Employee_Assign.objects.get(id=dict_data['id'])
+            if obj.Approval:
+                obj.Approval.delete()
+            obj.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1324,6 +1327,8 @@ class Leave_Application_View(View):
             getObject =Leave_Application.objects.get(id=int(dict_data['id']))
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            if getObject.Approval:
+                getObject.Approval.delete()
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -1386,8 +1391,9 @@ class Clock_Correction_Application_View(View):
             getObject=Clock_Correction_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            if getObject.Approval:
+                getObject.Approval.delete()
             getObject.delete()
-
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1403,8 +1409,9 @@ class Work_Overtime_Application_View(View):
             getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            if getObject.Approval:
+                getObject.Approval.delete()
             getObject.delete()
-
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
@@ -1824,8 +1831,9 @@ class Travel_Application_View(View):
             getObject=Travel_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            if getObject.Approval:
+                getObject.Approval.delete()
             getObject.delete()
-
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
             return JsonResponse({"error":"資料不存在"},status=400)
