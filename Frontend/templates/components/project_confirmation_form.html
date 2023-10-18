@@ -12,7 +12,7 @@
                     <a data-toggle="modal" href="#" data-target="#listid">打開選單</a>
                     {% endif %}
 
-                    <select class="form-control form-control-sm" name="quotation" id="quotation_id">
+                    <select class="form-control form-control-sm select2 " name="quotation" id="quotation_id">
                         <option value="-1">選擇報價單號</option>
                         {% for quotation in quotation_list %}
                         <option value="{{ quotation.id }}">
