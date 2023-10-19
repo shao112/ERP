@@ -4,7 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import Work_Item_Number,AnnualLeave, LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client
+from .models import Work_Item_Number,AnnualLeave,Salary, LaborHealthInfo,ReferenceTable,ExtraWorkDay,Travel_Application,SalaryDetail,Clock_Correction_Application,Work_Overtime_Application,SysMessage, Leave_Param, Leave_Application,Quotation,Work_Item, Employee,Equipment,UploadedFile, Approval_Target,ApprovalModel,ApprovalLog,Department, Project_Job_Assign, Project_Confirmation, Clock,News, Project_Employee_Assign,Vehicle,Client
 
 admin.site.site_header = "艾力克電機後台管理"
 admin.site.site_title = "艾力克電機後台"
@@ -17,7 +17,8 @@ class EmployeeInline(admin.StackedInline):
 
 class MyUserAdmin(UserAdmin):
     inlines = (EmployeeInline, )
-
+    list_display = ('username','email', 'is_active','is_superuser')  # 添加这行
+#
 # 工項管理
 class WorkItemAdmin(admin.ModelAdmin):
     pass
@@ -108,6 +109,7 @@ admin.site.unregister(User)
 admin.site.register(User, MyUserAdmin)
 admin.site.register(AnnualLeave)
 admin.site.register(SysMessage)
+admin.site.register(Salary)
 admin.site.register(LaborHealthInfo)
 admin.site.register(Travel_Application)
 admin.site.register(ReferenceTable,ReferenceTableAdmin)

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from .models import Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Employee,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 from django.conf import settings
@@ -393,6 +393,19 @@ def convent_excel_dict(worksheet,model):
     convent_model= None
     print("model: ",model)
     match  model:
+        case "Employee":
+            template_dict= {
+                "full_name":"",
+                "employee_id":"",
+                "id_number":"",
+                "gender":"",
+                "blood_type":"",
+                "departments":"",
+                "position":"",
+                "start_work_date":"",
+                "location_city":"",
+            }
+            convent_model=Employee
         case "project-confirmation":
             template_dict= {
                 "quotation":"",
@@ -423,7 +436,7 @@ def convent_excel_dict(worksheet,model):
             return "error"
 
     convent_ary=[]
-    pass_one =True
+    pass_one =True#跳過第一航
     for row in worksheet.iter_rows():
         if pass_one:
             pass_one =False

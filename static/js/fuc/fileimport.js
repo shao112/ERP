@@ -11,7 +11,7 @@ function showSwal(title, text, icon) {
 
 
 //匯入處理
-var fileInput = document.getElementById('fileInput');
+var fileInput = document.getElementById('fileInput_file');
 function importfile() {
 
     fileInput.click();
@@ -29,6 +29,9 @@ fileInput.addEventListener('change', async function () {
     formData.append('fileInput', fileInput.files[0]); // Add the selected file to the FormData
     console.log(formData); // Handle the success response from Django
     model = fileInput.getAttribute('data-model');
+
+    console.log("fileInput: ")
+    console.log(fileInput)
     console.log("model: "+model)
 
     $.ajax({
@@ -42,14 +45,18 @@ fileInput.addEventListener('change', async function () {
         contentType: false,
         success: function (response) {
             console.log(response); // Handle the success response from Django
-            location.reload();
+            Swal.fire("操作成功", "全部匯入正常").then(() => {
+                location.reload();
+              });
         },
         error: function (xhr, textStatus, errorThrown) {
             console.log("file error");
             if (xhr.status == 400 || xhr.status == 404) {
               var errorMessage = xhr.responseJSON.error;
               console.log(errorMessage);
-              showSwal("操作失敗", errorMessage, "error", false);
+              showSwal("操作失敗", errorMessage, "error", false).then(() => {
+                location.reload();
+              });
             } else if (xhr.status === 403) {
               alert("無權獲得該頁詳細，請聯絡管理員");
             } else {

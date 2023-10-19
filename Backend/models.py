@@ -170,7 +170,6 @@ class Employee(ModifiedModel):
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
     contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
     start_work_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
-    seniority = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True, verbose_name='目前年資')
     id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
     birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True, verbose_name='性別')
@@ -277,7 +276,7 @@ class SalaryDetail(models.Model):
 
 
 class Salary(ModifiedModel):
-    user = models.ForeignKey(Employee,related_name="salary_user" ,on_delete=models.DO_NOTHING, verbose_name="員工")
+    user = models.ForeignKey(Employee,related_name="salary_user" ,on_delete=models.CASCADE, verbose_name="員工")
     year = models.PositiveIntegerField(verbose_name="年")
     month = models.PositiveIntegerField(verbose_name="月")
     created_by = models.ForeignKey("Employee",related_name="Salary_author", on_delete=models.CASCADE, null=True, blank=True)

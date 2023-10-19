@@ -5,7 +5,7 @@ from django.contrib.auth import update_session_auth_hash
 import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
-
+from Backend.models import LOCATION_CHOICES
 from Backend.models import  ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import ReferenceTableForm,VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
@@ -212,10 +212,15 @@ class SalaryListView(UserPassesTestMixin,View):
             employee = Employee.objects.get(id=user_id)
             create_salary(employee, year, month)
         else:
-            employees = Employee.objects.filter(user__is_active=True)
+            employees = Employee.objects.filter(user__is_active=True).exclude(user__username='admin')
             for employee in employees:
                 create_salary(employee, year, month)
-           
+
+            #刪除淘汰的員工
+            del_employees = Employee.objects.filter(user__is_active=False)
+            salaries_to_delete = Salary.objects.filter(user__in=del_employees)
+            salaries_to_delete.delete()
+
         return JsonResponse({"ok":"ok"},status=200)
 
 class SysMessage_API(View):
@@ -985,6 +990,7 @@ class IMGUploadView(View):
 
 
 
+
 #匯入檔案
 class FileUploadView(View):
    def post(self, request, *args, **kwargs):
@@ -1041,8 +1047,51 @@ class FileUploadView(View):
                         remark = get_dict['remark'],
                     )
                     print("派任計畫: ",id_object)
+                elif get_model == Employee:
+                    print("員工處理")
+                    print(get_dicts)
+                    data = get_dict
+                    username=data['employee_id']
+                    id_number=data['id_number']
+                    try:
+                        user = User.objects.create_user(username=username, password=id_number)
+                    except IntegrityError:
+                        error_str += f"第{i+1}欄資料:ID {username}已存在過資料庫或是曾使用該帳號過。<br>"
+                        continue
+
+                    department_ary = data['departments'].split("/")
+                    department=None 
+                    if len(department_ary)==2:
+                        try:
+                            department = Department.objects.filter(belong_to_company=department_ary[0], department_name=department_ary[1]).first()
+                        except Department.DoesNotExist:
+                            error_str += f"第{i+1}欄資料:ID {username}成功建立，但部門無法搜尋，請在網頁操作。<br>"
+                            pass
+                    else:
+                        error_str += f"第{i+1}欄資料:ID {username}成功建立，但部門格式錯誤，請在網頁操作。<br>"
+
+                    location_city = data['location_city']
+                    if  not location_city in dict(LOCATION_CHOICES):
+                        error_str += f"第{i+1}欄資料:ID {username}成功建立，但找不到對應的居住城市(系統計算)，請在網頁操作。<br>"
+                        location_city   =""
+
+                    employee = Employee(
+                        full_name=data['full_name'],
+                        employee_id=data['employee_id'],
+                        id_number=data['id_number'],
+                        gender=data['gender'],
+                        blood_type=data['blood_type'],
+                        departments=department,
+                        position=data['position'],
+                        start_work_date=data['start_work_date'],
+                        location_city=location_city,
+                        user=user  
+                    )
+                    employee.save()
+
+            
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
-                error_str+=f"第{i+1}欄資料錯誤\n"
+                error_str+=f"第{i+1}欄資料錯誤<br>"
             except Quotation.DoesNotExist:
                 error_str+=f"第{i+1}欄資料 找不到對應的找不到關聯報價單編號<br>"
             except Project_Confirmation.DoesNotExist:
