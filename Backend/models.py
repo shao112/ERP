@@ -855,8 +855,7 @@ class Project_Job_Assign(ModifiedModel):
 
         employee_location = employee.location_city
         if employee_location =="":
-            return {"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
-
+            return 0,0,{"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
         conditions = Q(work_employee=employee) | Q(lead_employee=employee)
         assignments = cls.objects.filter(conditions, 
                                          attendance_date__year=year, 

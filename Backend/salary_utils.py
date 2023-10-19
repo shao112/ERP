@@ -9,6 +9,8 @@ import math
 
 
 def create_salary(employee,year,month):
+    print(employee)
+    print(employee.full_name)
     salary, created = Salary.objects.get_or_create(user=employee, year=year, month=month)
     if not created:#清除所有明細
         SalaryDetail.objects.filter(salary=salary).delete()

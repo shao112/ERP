@@ -15,7 +15,9 @@ from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import Check_Permissions,quotationFile,convent_dict,convent_employee,salaryFile,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import Check_Permissions,convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from Backend.makeExcel.salary import salaryFile
+from Backend.makeExcel.quotation import quotationFile
 from .salary_utils import create_salary
 import openpyxl
 from openpyxl import load_workbook
@@ -1528,6 +1530,7 @@ class Leave_Param_View(UserPassesTestMixin,View):
                 'leave_quantity': request.POST['leave_quantity'],
                 'minimum_leave_number': request.POST['minimum_leave_number'],
                 'minimum_leave_unit': request.POST['minimum_leave_unit'],
+                'leave_rules': request.POST['leave_rules'],
                 'is_audit': is_audit,
                 'is_attachment': is_attachment,
                 'deduct_percentage': request.POST['deduct_percentage']

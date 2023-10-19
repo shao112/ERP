@@ -101,8 +101,9 @@
                             {{ l.gender }}
                         </td>
                         <td>
-                            <a href="#" data-toggle="modal" data-target="#leaveRulesModal">規定</a>
-                            <input name="id" hidden value="{{ l.id }}" />
+                            <textarea name="leave_rules">{{ l.leave_rules|safe|linebreaksbr }}</textarea>
+                            <!-- <a href="#" data-toggle="modal" data-target="#leaveRulesModal">規定</a>
+                            <input name="id" hidden value="{{ l.id }}" /> -->
                         </td>
                     </tr>
                     {% endfor %}
@@ -141,6 +142,7 @@
         var is_audit = $row.find('[name="is_audit"]').prop('checked'); // 獲取 checkbox 的狀態
         var is_attachment = $row.find('[name="is_attachment"]').prop('checked'); // 獲取 checkbox 的狀態
         var deduct_percentage = $row.find('[name="deduct_percentage"]').val(); // 獲取 input 中的值
+        var leave_rules = $row.find('[name="leave_rules"]').val(); // 獲取 input 中的值
 
         var jsonData = {
             id: id,
@@ -150,6 +152,7 @@
             minimum_leave_unit: minimum_leave_unit,
             is_audit: is_audit,
             is_attachment: is_attachment,
+            leave_rules: leave_rules,
             deduct_percentage: deduct_percentage
         };
         console.log(jsonData);
