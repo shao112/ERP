@@ -127,8 +127,8 @@ def quotationFile(quotation_obj,see,five):
                             sheet.cell(row=i+next_index, column=index+1, value=item.work_item.item_name)
                             sheet.cell(row=i+next_index, column=index+5, value=item.work_item.contract_id)
                             sheet.cell(row=i+next_index, column=index+6, value=item.work_item.unit)
-                            num =item.number
-                            money=item.work_item.money()
+                            num =item.number                            
+                            money=item.work_item.last_money_year()[0]
                             item_total_moeny=0
                             if str(money).isnumeric():
                                 item_total_moeny = num*money

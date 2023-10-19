@@ -57,5 +57,6 @@ urlpatterns = [
     path('salaryfile/<int:year>/<int:month>/<int:user>/<int:use_type>', views.SalaryFileView.as_view(), name='salary_file'),
     # 報價單匯出excel api
     path('quotationfile/<int:id>/<int:see>/<int:five>', views.QuotationFileView.as_view(), name='quotation_file'),
+    path('work_itemfileImport', views.Work_ItemFileView.as_view(), name='work_itemfileImport'),
 
 ]

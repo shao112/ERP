@@ -729,14 +729,22 @@ class Work_Item(ModifiedModel):
     requisition = models.ForeignKey("Client",related_name="work_item_requisition", on_delete=models.CASCADE, null=True, blank=True, verbose_name='業主單位')
     created_by = models.ForeignKey("Employee",related_name="work_item_author", on_delete=models.SET_NULL, null=True, blank=True)
 
-    def money(self):
+    def year_money_json(self):
         year_money = self.year_money
-        
         if year_money=="[]" or year_money ==None or year_money=="":
-            return "未有任何一筆單價"
-        year_money_list = json.loads(year_money)
-        max_price = max(year_money_list, key=lambda x: x.get('price', 0))
-        return max_price.get('price', "未有任何一筆單價")
+            return False, "未有任何一筆單價"
+        return  True ,json.loads(year_money)
+
+
+    def last_money_year(self):
+        Result,year_money_list = self.year_money_json()
+        if Result ==False:
+            return year_money_list,"無"
+        max_price = max(year_money_list, key=lambda x: x.get('year'))
+        latest_price = max_price.get('price', 0)
+        latest_year = max_price.get('year', None)
+
+        return latest_price,latest_year
 
     def get_display_text(self):
         pn_id =self.get_show_id()

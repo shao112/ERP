@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from Backend.models import Employee,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from Backend.models import Work_Item,Employee,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 from django.conf import settings
@@ -174,6 +174,17 @@ def convent_excel_dict(worksheet,model):
                 "remark":"",
             }
             convent_model=Project_Employee_Assign
+        case "Work_Item":
+            template_dict= {
+                "item_id":"",
+                "item_name":"",
+                "contract_id":"",
+                "requisition":"",
+                "unit":"",
+                "date":"",#額外欄位
+                "money":"",#額外欄位
+            }
+            convent_model=Work_Item
         case _:
             return "error"
 
@@ -215,15 +226,3 @@ def get_model_by_name(model_name):
              return Travel_Application
         case _:
             return None
-
-def match_excel_content(model):
-    match  model:
-        case "project-confirmation":
-            print("project-confirmation")
-        case "job-assign":
-            print("job-assign")
-        case "employee-assign":
-            print("employee-assign")
-        case _:
-            return "error"
-    
