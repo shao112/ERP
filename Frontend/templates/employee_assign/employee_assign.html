@@ -299,10 +299,49 @@
                                 <div class="tab-pane fade" id="equipment_tab">
                                     <div class="project-confirmation-table container-fluid shadow-sm table-responsive"
                                         style="min-height: 400px;">
-                                        
+                                                                        
+                                        <div class="form-row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="equipment_select">選擇攜帶資產</label>
+                                                    <select data-placeholder="選擇攜帶資產" id="equipment_select"
+                                                    class="select2" name="equipment_select">
+                                                    {% for e in all_Equipment %}
+                                                    <option value="{{ e.id }}">{{ e.equipment_id }} {{ e.equipment_name }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="">狀態</label>
+                                                    <select name="eq_status" id="eq_status">
+                                                        <option value="帶入">帶入</option>
+                                                        <option value="歸還">歸還</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
 
-                                        
+                                        <button type="button" id="Equipment_btn"class="btn border border-dark rounded"
+                                            style="color: #fff;background: #1E3050;">新增紀錄儀器項目</button>
+                                        <hr>
+                                        <table class="table">
+                                            <thead class="thead-light" style="font-size: 14px;">
+                                                <tr class="text-nowrap">
+                                                    <th data-filter-control="input" data-field="es_equipment_id"
+                                                        data-sortable="true">資產標籤</th>
+                                                    <th data-filter-control="input" data-field="es_equipment_name"
+                                                        data-sortable="true">品名</th>
+                                                        <th data-filter-control="input" data-field="eq_state"
+                                                        data-sortable="true">狀態</th>
+                                                        <th>刪除</th>
+                                                </tr>
+                                            </thead style="font-size: 14px;">
+                                            <tbody id="eq_table">
 
+                                            </tbody>
+                                                                                        
+                                        </table>
 
                                         <table id="Equipment_table" class="table table-sm table-hover text-center"
                                             id="table" data-toggle="table" data-sortable="true" data-toolbar="#toolbar"
@@ -568,6 +607,7 @@
             "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/fuc/fileimport.js' %}",
             "{% static 'js/employee_assign/employee_assign.js' %}",
+            "{% static 'js/employee_assign/Equipment.js' %}",
             "{% static 'js/employee_assign/work_tests.js' %}",
             "{% static 'js/employee_assign/choose_Equipment.js' %}",
             "{% static 'js/employee_assign/signature_name.js' %}",

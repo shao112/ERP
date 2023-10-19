@@ -33,7 +33,7 @@ fileInput.addEventListener('change', async function () {
     console.log("fileInput: ")
     console.log(fileInput)
     console.log("model: "+model)
-
+    Swal.fire("發送中", "請勿重整網頁")
     $.ajax({
         type: 'POST',
         url: "/restful/" + model + "/file", // Replace this with your actual Django endpoint URL

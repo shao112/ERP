@@ -366,8 +366,8 @@
                     <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
                             value="{{ p.id }}"></td>
                     <td>
-                        <a type="button" data-url="employee" data-id="{{p.pk}}" class="sys_get btn btn-sm btn-warning"
-                            data-toggle="modal" data-target="#employee-modal"><i class="fas fa-edit"></i></a>
+                        <a type="button" data-url="employee" data-id="{{p.pk}}" class="btn btn-sm btn-warning"
+                            data-toggle="modal" onclick="LoadData(event)"  data-target="#employee-modal"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
                         <a data-url="employee" data-id="{{p.pk}}" type="button" class="sys_del btn btn-sm btn-danger"><i
@@ -436,6 +436,10 @@
             },
             allowOutsideClick: () => !Swal.isLoading()
         });
+    }
+
+    async function LoadData(event) {
+       getdata = await GET_handleClick(event, true); 
     }
 
 

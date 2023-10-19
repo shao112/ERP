@@ -994,6 +994,7 @@ class IMGUploadView(View):
 #匯入檔案
 class FileUploadView(View):
    def post(self, request, *args, **kwargs):
+        from datetime import datetime
         modelstr = self.kwargs['model']
         uploaded_file = request.FILES.get('fileInput')
 
@@ -1049,7 +1050,7 @@ class FileUploadView(View):
                     print("派任計畫: ",id_object)
                 elif get_model == Employee:
                     print("員工處理")
-                    print(get_dicts)
+                    # print(get_dicts)
                     data = get_dict
                     username=data['employee_id']
                     id_number=data['id_number']
@@ -1065,30 +1066,42 @@ class FileUploadView(View):
                         try:
                             department = Department.objects.filter(belong_to_company=department_ary[0], department_name=department_ary[1]).first()
                         except Department.DoesNotExist:
-                            error_str += f"第{i+1}欄資料:ID {username}成功建立，但部門無法搜尋，請在網頁操作。<br>"
+                            error_str += f"第{i+1}欄資料:ID {username}建立，但部門無法搜尋，請在網頁操作。<br>"
                             pass
                     else:
-                        error_str += f"第{i+1}欄資料:ID {username}成功建立，但部門格式錯誤，請在網頁操作。<br>"
+                        error_str += f"第{i+1}欄資料:ID {username}建立，但部門格式錯誤，請在網頁操作。<br>"
 
                     location_city = data['location_city']
                     if  not location_city in dict(LOCATION_CHOICES):
-                        error_str += f"第{i+1}欄資料:ID {username}成功建立，但找不到對應的居住城市(系統計算)，請在網頁操作。<br>"
+                        error_str += f"第{i+1}欄資料:ID {username}建立，但找不到對應的居住城市(系統計算)，請在網頁操作。<br>"
                         location_city   =""
 
-                    employee = Employee(
-                        full_name=data['full_name'],
-                        employee_id=data['employee_id'],
-                        id_number=data['id_number'],
-                        gender=data['gender'],
-                        blood_type=data['blood_type'],
-                        departments=department,
-                        position=data['position'],
-                        start_work_date=data['start_work_date'],
-                        location_city=location_city,
-                        user=user  
-                    )
-                    employee.save()
+                    start_work_date = data['start_work_date']
 
+                    if isinstance(start_work_date, str):
+                        try:
+                            start_work_date = datetime.strptime(start_work_date, '%Y/%m/%d').date()
+                        except ValueError:
+                            error_str += f"第{i+1}欄資料:ID {username}建立，無法解析到職日，請在網頁操作。<br>"
+                            start_work_date = None
+
+                    try:
+                        employee = Employee(
+                            full_name=data['full_name'],
+                            employee_id=data['employee_id'],
+                            id_number=data['id_number'],
+                            gender=data['gender'],
+                            blood_type=data['blood_type'],
+                            departments=department,
+                            position=data['position'],
+                            start_work_date=start_work_date,
+                            location_city=location_city,
+                            user=user  
+                        )
+                        employee.save()
+                    except Exception as e:
+                        user.delete()
+                        error_str += f"第{i+1}欄資料:ID {username}建立<b>失敗</b>0，原因:{e}。<br>"
             
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
                 error_str+=f"第{i+1}欄資料錯誤<br>"
