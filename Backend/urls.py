@@ -59,5 +59,6 @@ urlpatterns = [
     path('quotationfile/<int:id>/<int:see>/<int:five>', views.QuotationFileView.as_view(), name='quotation_file'),
     # 派工單匯出excel api
     path('projectemployeeassignfile/<int:id>', views.EmployeeAssignileView.as_view(), name='project_employee_assign_file'),
+    path('work_itemfileImport', views.Work_ItemFileView.as_view(), name='work_itemfileImport'),
 
 ]

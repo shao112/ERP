@@ -6,12 +6,26 @@ function addYearMoney() {
   var yearInput = document.getElementById("year");
   var priceInput = document.getElementById("price");
 
+
   if (!yearInput.checkValidity() || !priceInput.checkValidity()) {
     alert("請輸入有效的數字！");
     return;
   }
 
-  var year = parseInt(yearInput.value);
+  var year = yearInput.value;
+  if (year==""){
+    alert("請輸入調整日期")
+    return
+  }
+  var date = new Date(year);
+  var yearFormatted = date.getFullYear();
+  var month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始，需要 +1
+  var day = String(date.getDate()).padStart(2, "0");
+
+  // 拼接成 YYYY-MM-DD 格式
+  year = `${yearFormatted}/${month}/${day}`;
+  console.log("year", year);
+
   var price = parseFloat(priceInput.value);
 
   var data = { year: year, price: price };
@@ -29,10 +43,9 @@ function deleteYearMoney(index) {
 }
 
 function renderTable() {
-  year_moneys.sort(function(a, b) {
-      return b.year - a.year;
+  year_moneys.sort(function (a, b) {
+    return new Date(b.year).getTime() - new Date(a.year).getTime();
   });
-
 
   var yearMoneyJson = JSON.stringify(year_moneys);
   yearMoneyStrInput.value = yearMoneyJson;

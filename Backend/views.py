@@ -15,7 +15,7 @@ from urllib.parse import quote
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 from django.views import View
-from .utils import Check_Permissions,convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
+from .utils import Check_Permissions,convent_dict,convent_employee,convent_excel_dict,get_model_by_name
 from Backend.makeExcel.salary import salaryFile
 from Backend.makeExcel.quotation import quotationFile
 from Backend.makeExcel.employee_assign import employeeAssignFile
@@ -33,8 +33,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from datetime import time
 
 from django.utils.text import get_valid_filename # 確保file檔名是合法的，不接受的符號會轉成可接受符號
-
-
 import zipfile
 
 
@@ -60,6 +58,31 @@ class EmployeeAssignileView(View):
         else:
             print("error 找不到相應的ID obj")
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+class Work_ItemFileView(View):
+
+    def get(self, request, *args, **kwargs):
+        file_path = r'media/file_form_template/工項管理樣板.xlsx' 
+        get_obj = Work_Item.objects.all()
+        workbook = load_workbook(file_path)
+        sheet = workbook.active
+        last_row = sheet.max_row
+        for i, item in enumerate(get_obj, start=last_row+1):
+            price, year = item.last_money_year()
+            sheet.cell(row=i, column=1, value=item.item_id)
+            sheet.cell(row=i, column=2, value=item.item_name)
+            sheet.cell(row=i, column=3, value=item.contract_id)
+            sheet.cell(row=i, column=4, value=item.requisition.name)
+            sheet.cell(row=i, column=5, value=item.unit)
+            sheet.cell(row=i, column=6, value=year)
+            sheet.cell(row=i, column=7, value=price)        
+
+        new_path =r"media/file_form_template/工項管理匯出.xlsx"
+        workbook.save(new_path)
+        with open(new_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={os.path.basename(new_path)}'
+            return response
+
 
 class QuotationFileView(View):
 
@@ -68,22 +91,18 @@ class QuotationFileView(View):
         see = self.kwargs.get('see')
         five = self.kwargs.get('five')
         
-        if id:
-            error_msg=""
-            try:
-                quotaion_obj = Quotation.objects.get(id=obj_id)
-                print("quotaion_obj ",quotaion_obj)
-            except Http404:
-                return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
-            except Exception as e:
-                print(e)
-                return JsonResponse({"error": str(e)}, status=400)
-            
-            return quotationFile(quotaion_obj,see,five)
-
-        else:
-            print("error 找不到相應的ID obj")
+        error_msg=""
+        try:
+            quotaion_obj = Quotation.objects.get(id=obj_id)
+            print("quotaion_obj ",quotaion_obj)
+        except Http404:
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+        except Exception as e:
+            print(e)
+            return JsonResponse({"error": str(e)}, status=400)
+        
+        return quotationFile(quotaion_obj,see,five)
+
        
         
 class SalaryFileView(View):
@@ -1147,9 +1166,66 @@ class FileUploadView(View):
                             user=user  
                         )
                         employee.save()
+                        
                     except Exception as e:
                         user.delete()
-                        error_str += f"第{i+1}欄資料:ID {username}建立<b>失敗</b>0，原因:{e}。<br>"
+                        error_str += f"第{i+1}欄資料:ID {username}建立<b>失敗</b>原因:{e}。<br>"
+                elif get_model == Work_Item:
+                    data = get_dict
+                    # print(data)
+                    existing_item = Work_Item.objects.filter(item_id=data['item_id']).first()
+                    str_date = data['date'] or ""
+                    
+                    money = data['money'] or -1
+
+
+                    requisition_obj = None
+                    try:
+                        requisition_obj = Client.objects.get(client_name=data['requisition'])
+                    except Client.DoesNotExist:
+                        error_str += f"第{i+1}欄資料:編號:{data['item_id']}建立，找不到客戶-{data['requisition']}後續請在網頁操作。<br>"
+
+                    if str_date!="":
+                        if  not isinstance(str_date, str):
+                            str_date = str_date.strftime('%Y/%m/%d')
+                        new_year_money = {'year':str_date, 'price': money} 
+                    item_name = str(data['item_name'])
+
+                    if existing_item:
+                        existing_item.item_name =item_name
+                        existing_item.requisition = requisition_obj
+                        existing_item.contract_id =data['contract_id']
+                        existing_item.unit = data['unit']
+                        year_money_list = json.loads(existing_item.year_money)
+                        add_data = True
+                        if str_date=="":
+                            existing_item.save()
+                            continue                        
+                        for entry in year_money_list:
+                            # print(entry["year"],str_date,entry["price"],money)
+                            if entry['year'] == str_date and entry['price'] == money:
+                                add_data = False
+                                break
+                        if add_data:
+                            year_money_list.append(new_year_money)
+                            existing_item.year_money = json.dumps(year_money_list)
+                        existing_item.save()
+                    else:
+                        if str_date!="":
+                            new_year_moeny_str = json.dumps([new_year_money])
+                        else:
+                            new_year_moeny_str="[]"
+                        new_item = Work_Item(
+                            item_id=data['item_id'],
+                            contract_id=data['contract_id'],
+                            item_name=item_name,
+                            requisition=requisition_obj,
+                            unit=data['unit'],
+                            year_money= new_year_moeny_str# 更新 year_money
+                        )
+                        new_item.save()
+
+
             
             except IntegrityError as e: #錯誤發生紀錄，傳給前端
                 error_str+=f"第{i+1}欄資料錯誤<br>"
