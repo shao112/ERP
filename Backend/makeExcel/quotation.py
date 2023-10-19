@@ -9,7 +9,6 @@ from openpyxl import load_workbook
 from openpyxl.styles import NamedStyle
 from urllib.parse import quote
 import os
-from cn2an import an2cn
 from django.db.models import Sum
 import math
 from openpyxl.drawing.image import Image

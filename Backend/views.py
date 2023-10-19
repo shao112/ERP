@@ -18,6 +18,7 @@ from django.views import View
 from .utils import Check_Permissions,convent_dict,convent_employee,convent_excel_dict,match_excel_content,get_model_by_name
 from Backend.makeExcel.salary import salaryFile
 from Backend.makeExcel.quotation import quotationFile
+from Backend.makeExcel.employee_assign import employeeAssignFile
 from .salary_utils import create_salary
 import openpyxl
 from openpyxl import load_workbook
@@ -36,6 +37,29 @@ from django.utils.text import get_valid_filename # 確保file檔名是合法的�
 
 import zipfile
 
+
+class EmployeeAssignileView(View):
+
+    def get(self, request, *args, **kwargs):
+        print("進到get")
+        obj_id = self.kwargs.get('id')
+        
+        if id:
+            error_msg=""
+            try:
+                employee_assign_obj = Project_Employee_Assign.objects.get(id=obj_id)
+                print("employee_assign_obj ",employee_assign_obj)
+            except Http404:
+                return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+            except Exception as e:
+                print(e)
+                return JsonResponse({"error": str(e)}, status=400)
+            
+            return employeeAssignFile(employee_assign_obj)
+
+        else:
+            print("error 找不到相應的ID obj")
+            return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
 
 class QuotationFileView(View):
 
