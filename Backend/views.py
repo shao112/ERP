@@ -529,7 +529,8 @@ class ReferenceTable_View(UserPassesTestMixin,View):
 #派工單
 class Project_Employee_Assign_View(UserPassesTestMixin,View):
     def test_func(self):        
-        return Check_Permissions(self.request.user,"工程派工單管理",self.request.method,"工程派工單查看")     
+        return Check_Permissions(self.request.user,"工程派工單管理",self.request.method,"工程派工單查看")  
+
     def put(self,request):
         dict_data = convent_dict(request.body)
         form = Project_Employee_AssignForm(dict_data)
@@ -543,7 +544,6 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
                 related_project_job_assign.vehicle.set(vehicle_id_list)
                 related_project_job_assign.save()
                 del dict_data["vehicle"]
-            
 
             if "project_job_assign" in dict_data:
                 project_job_assign_instance = Project_Job_Assign.objects.get(pk=int(dict_data["project_job_assign"]))
@@ -556,11 +556,6 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
             else:
                 get_Project_Employee_Assign.test_items = ""
 
-            if "carry_equipments" in dict_data:
-                get_carry_equipments = dict_data["carry_equipments"]
-                get_carry_equipments = [int(item) for item in get_carry_equipments]
-                del dict_data["carry_equipments"]
-                get_Project_Employee_Assign.carry_equipments.set(get_carry_equipments)
 
 
             get_Project_Employee_Assign.update_fields_and_save(**dict_data)
@@ -613,15 +608,23 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
         id = request.GET.get('id')
         data = get_object_or_404(Project_Employee_Assign, id=id)
         location = data.project_job_assign.location
+        carry_equipments_str=data.carry_equipments_ary()
         vehicle_id_list = []
         for item in data.project_job_assign.vehicle.all():
             vehicle_id_list.append(item.id)
-        print("vehicle_id_list: ",vehicle_id_list)
+
+        uploaded_files = data.uploaded_files.all() 
+        uploaded_files_dict_list = []
+        for file in uploaded_files:
+            file_dict = model_to_dict(file)
+            file_dict["file"] = file.file.url
+            uploaded_files_dict_list.append(file_dict)
+
         get_id=data.get_show_id()
         data = model_to_dict(data)
-        carry_equipments_ids = [str(equipment.id) for equipment in data["carry_equipments"]]
-        data["carry_equipments"] = list(carry_equipments_ids)
+        data["carry_equipments_str"] =carry_equipments_str
         data["show_id"] = get_id
+        data["uploaded_files"] = uploaded_files_dict_list
         data["location"] = location
         data["vehicle"] = vehicle_id_list
 
@@ -629,8 +632,8 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
             data['enterprise_signature'] = data['enterprise_signature'].url
         else:
             data['enterprise_signature'] = None
-        print("dict_data")
-        print(data)
+        # print("dict_data")
+        # print(data)
 
         return JsonResponse({"data":data}, status=200,safe = False)
 
@@ -1118,33 +1121,24 @@ class FileUploadView(View):
 
 
 
-class Employee_assign_update_signature(View):
-   def post(self, request):
-        getid = request.POST.get("id")
-        uploaded_file = request.POST.get("enterprise_signature")
-        print("getid:", getid)
-        if(uploaded_file):
-            model=Project_Employee_Assign.objects.get(id=getid)
-
-            format, imgstr = uploaded_file.split(';base64,') 
-            ext = format.split('/')[-1] 
-            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-            filename = f"signature_{getid}.{ext}"
-            model.enterprise_signature.save(filename,data, save=True)
-            return JsonResponse({'status': 'success'},status=200)
-        else:
-            return JsonResponse({"data":"error"}, status=400,safe=False)
-
 
 class FormUploadFileView(View):
    def post(self, request):
         getname = request.POST.get("name")
         getmodal = request.POST.get("modal")
         getid = request.POST.get("id")
-        uploaded_file = request.FILES.get(getname)
-        #如果是多對多，就用另一種
         ManyToManyProcess = request.POST.get("ManyToManyProcess",False)
         filename = request.POST.get("file_name","")
+        uploaded_file = request.FILES.get(getname)
+
+        if getmodal =="Project_Employee_Assign":
+            uploaded_file = request.POST.get("uploaded_files")
+            base64_data = uploaded_file.split(',')[1]
+            binary_data = base64.b64decode(base64_data)
+            uploaded_file=ContentFile(binary_data, name=f'signature_{getid}_{filename}.png')
+
+
+        #如果是多對多，就用另一種
         print("getmodel:", getmodal)
         print("getname:", getname)
         print("getid:", getid)
@@ -1159,6 +1153,8 @@ class FormUploadFileView(View):
                 case "job_assign":
                     model=Project_Job_Assign.objects.get(id=getid)
                 case "employee_assign":
+                    model=Project_Employee_Assign.objects.get(id=getid)
+                case "Project_Employee_Assign": #雖然有一樣的了，但仍獨立處理
                     model=Project_Employee_Assign.objects.get(id=getid)
                 case "news":
                     model=News.objects.get(id=getid)
@@ -2066,6 +2062,8 @@ class DeleteUploadedFileView(View):
                 model=Employee.objects.get(id=obj_id)
             case "Quotation":
                 model=Quotation.objects.get(id=obj_id)
+            case "project_employee_assign":
+                model=Project_Employee_Assign.objects.get(id=obj_id)
 
         uploaded_file = get_object_or_404(UploadedFile, id=file_id)
         if uploaded_file in model.uploaded_files.all():

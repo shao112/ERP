@@ -962,10 +962,12 @@ class Project_Employee_Assign(ModifiedModel):
     is_completed = models.BooleanField(verbose_name='完工狀態',blank=True,default=False)
     manuscript_return_date = models.DateField(null=True, blank=True, verbose_name="手稿預計回傳日")
     enterprise_signature = models.ImageField(upload_to="Employee_Assign_Signature",null=True, blank=True, verbose_name='業主簽名')
-    carry_equipments = models.ManyToManyField('Equipment', related_name='carry_project', blank=True, verbose_name='攜帶資產')
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
     test_items_str = models.TextField( verbose_name="檢查項目字串", blank=True)
+    carry_equipments_str = models.TextField( verbose_name="紀錄資產字串",null="",blank=True)
     remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
+    remark_two = models.TextField( verbose_name="異常報告及聯絡事項",null="",blank=True)
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="employy_assign_files")
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
 
     def test_items_ary(self):
@@ -973,6 +975,30 @@ class Project_Employee_Assign(ModifiedModel):
             return json.loads(self.test_items_str)
         except json.JSONDecodeError:
             return []
+
+    def carry_equipments_ary(self):
+        try:
+            eq_data = json.loads(self.carry_equipments_str)
+            print(eq_data)
+            new_eq_data=[] #更新資料
+            for eq_info in eq_data:
+                equipment_id = eq_info['id']
+                try: #更新資料
+                    equipment = Equipment.objects.get(id=equipment_id)
+                    new_eq_data.append({
+                        'id': equipment.id,
+                        'status': eq_info["status"],
+                        'equipment_id': equipment.equipment_id,
+                        'equipment_name': equipment.equipment_name
+
+                    })
+                except Equipment.DoesNotExist:
+                    pass
+            print(new_eq_data)
+            return new_eq_data
+        except json.JSONDecodeError:
+            return []
+
 
     def enterprise_signature_link(self):
         if self.enterprise_signature:

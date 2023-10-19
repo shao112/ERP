@@ -27,9 +27,24 @@
                 </button>
             </div>
             <div class="modal-body">
-
+                <label>簽名</label>
+                <select id="name_select_id">
+                    <option value="總經理">總經理</option>
+                    <option value="經理">經理</option>
+                    <option value="帶班主管">帶班主管</option>
+                    <option value="填表人">填表人</option>
+                    <option value="業主">業主</option>
+                    <option value="清點人">清點人</option>
+                    <option value="會點人">會點人</option>
+                    <option value="交接人">交接人</option>
+                    <option value="被交接人1">被交接人1</option>
+                    <option value="被交接人2">被交接人2</option>                
+                </select>
                 <canvas id="mycanvas" width="750" height="400"></canvas>
                 <div id="image"></div>
+
+                <h4>檔案列表</h4>
+                <ul id="fileList" class="list-group"></ul>
 
             </div>
             <div class="modal-footer">
@@ -150,6 +165,7 @@
                                 <div class="tab-pane fade show active" id="none_equipment_tab">
                                     <input name="id" hidden />
                                     <input name="test_items_str" id="test_items_str"  hidden />
+                                    <input name="carry_equipments_str" id="carry_equipments_str"  hidden />
                                     <select multiple id="carry_equipments_select2" style="display: none;"
                                         name="carry_equipments">
                                         {% for e in all_Equipment %}
@@ -343,33 +359,6 @@
                                                                                         
                                         </table>
 
-                                        <table id="Equipment_table" class="table table-sm table-hover text-center"
-                                            id="table" data-toggle="table" data-sortable="true" data-toolbar="#toolbar"
-                                            data-filter-strict-search="true" data-filter-control="true">
-
-                                            <thead class="thead-light" style="font-size: 14px;">
-                                                <tr class="text-nowrap">
-                                                    <th>攜帶</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_id"
-                                                        data-sortable="true">資產標籤</th>
-                                                    <th data-filter-control="input" data-field="es_equipment_name"
-                                                        data-sortable="true">品名</th>
-                                                </tr>
-                                            </thead style="font-size: 14px;">
-                                            <tbody>
-                                                {% for e in all_Equipment %}
-
-                                                <tr>
-                                                    <td> <input type="checkbox" name="importcheckd"
-                                                            onclick="update_all_Equipment_checkedArray(this)"
-                                                            value="{{ e.id }}" /> </td>
-                                                    <td>{{ e.equipment_id }} </td>
-                                                    <td>{{ e.equipment_name }}</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-
-                                        </table>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="test_items_tab">
@@ -513,7 +502,7 @@
                     <th data-field="inspector" data-sortable="true">檢測人員</th>
                     <th data-field="vehicle" data-sortable="true">使用車輛</th>
                     <th data-field="manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
-                    <th data-field="enterprise_signature" data-sortable="true">業主簽名</th>
+                    <th data-field="enterprise_signature" data-sortable="true">電子簽名</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -563,7 +552,7 @@
                     </td>
                     <td>
                         <a href="" onclick="setSettingId('{{ p.id }}')" data-toggle="modal"
-                            data-target="#signatureModal">業主簽名</a>
+                            data-target="#signatureModal">電子簽名</a>
                     </td>
                     <td><a target="_blank" href="{% url 'project_employee_assign_View' id=p.id %}">點擊</a></td>
 
@@ -609,7 +598,7 @@
             "{% static 'js/employee_assign/employee_assign.js' %}",
             "{% static 'js/employee_assign/Equipment.js' %}",
             "{% static 'js/employee_assign/work_tests.js' %}",
-            "{% static 'js/employee_assign/choose_Equipment.js' %}",
+            // "{% static 'js/employee_assign/choose_Equipment.js' %}",
             "{% static 'js/employee_assign/signature_name.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
@@ -643,15 +632,9 @@
         } else {
             unlock_input();
         }
+        getdata = await GET_handleClick(event);
 
 
-        getdata = await GET_handleClick(event, true);
-     
-
-        get_value = Object.values(getdata["carry_equipments"]);
-        all_Equipment_checked = get_value;
-        syncall_Equipment_checkedRowsWithArray();
-        
         var choose_input = document.getElementById("project_job_assign_id");
         const change_event = new Event("change");
         choose_input.dispatchEvent(change_event);
@@ -666,8 +649,14 @@
         work_tests_ary=jsonArray;
         renderTestsList();
 
-
-
+        var carry_equipments_str_value_load = getdata["carry_equipments_str"];
+        console.log(carry_equipments_str_value_load)
+        // var carry_equipments_jsonArray =[]
+        // if(carry_equipments_str_value_load){
+        //     carry_equipments_jsonArray= JSON.parse(carry_equipments_str_value_load);        
+        // }
+        eq_json_ary=carry_equipments_str_value_load;
+        renderEqTable();
     }
 </script>
 

@@ -1,28 +1,27 @@
-// 初始化一个空的eq_json_ary数组
 var eq_json_ary = [];
+let carry_equipments_str = document.getElementById("carry_equipments_str");
 
-// 新增纪录仪器项目的按钮点击事件处理程序
 document.getElementById("Equipment_btn").addEventListener("click", function() {
     var equipment_select = document.getElementById("equipment_select");
     var eq_status = document.getElementById("eq_status");
 
-    var equipment_id = equipment_select.value;
-    var equipment_name = equipment_select.options[equipment_select.selectedIndex].text;
+    var id = equipment_select.value;
+    var equipment_data = equipment_select.options[equipment_select.selectedIndex].text
+    console.log(equipment_data);
+    equipment_data =equipment_data.split(" ");
     var status = eq_status.value;
 
-    // 创建一个新的对象，并将其添加到eq_json_ary数组中
     var newEquipment = {
-        equipment_id: equipment_id,
-        equipment_name: equipment_name,
+        id: id,
+        equipment_id: equipment_data[0],
+        equipment_name: equipment_data[1],
         status: status
     };
     eq_json_ary.push(newEquipment);
 
-    // 重新渲染eq_table
     renderEqTable();
 });
 
-// 重新渲染eq_table的函数
 function renderEqTable() {
     var eq_table = document.getElementById("eq_table");
     eq_table.innerHTML = '';
@@ -49,6 +48,11 @@ function renderEqTable() {
             };
         })(i));
         cell4.appendChild(deleteBtn);
+    }
+
+    var eq_json_ary_str = JSON.stringify(eq_json_ary);
+    if(eq_json_ary_str){
+        carry_equipments_str.value = eq_json_ary_str;
     }
 }
 

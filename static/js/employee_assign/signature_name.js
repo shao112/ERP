@@ -2,17 +2,80 @@
 var canvas = document.getElementById('mycanvas')
 var ctx = canvas.getContext("2d")
 var settingid =""
+const fileListElement = $("#fileList");
+
 
 function setSettingId(id) {
   settingid = id; // 設定 settingid 變數的值
   console.log("Setting Id:", settingid);
+  LoadFileList();
+}
+
+function LoadFileList() {
+  $.ajax({
+    type: "GET",
+    url: "/restful/project_employee_assign",
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+    data: { id: settingid },
+    success: function (response) {
+      fileListElement.empty();
+      jsonData = response.data.uploaded_files;
+      jsonData.forEach((file) => {
+        const listItem = $("<li></li>");
+        listItem.addClass(
+          "list-group-item d-flex justify-content-between align-items-center"
+        );
+
+        const fileLink = $("<a></a>");
+        fileLink.attr("href", file.file);
+        fileLink.attr("target", "_blank");
+        fileLink.text(file.name || "未命名");
+
+        const deleteButton = $("<button></button>");
+        deleteButton.addClass("btn btn-danger btn-sm");
+        deleteButton.text("刪除");
+        deleteButton.click(function () {
+          $.ajax({
+            type: "DELETE",
+            url: `/restful/delete_uploaded_file/project_employee_assign/${settingid}/${file.id}`,
+            headers: {
+              "X-CSRFToken": csrftoken,
+            },
+            success: function (response) {
+              alert("刪除成功!");
+              LoadFileList();
+            },
+            error: function (error) {
+              alert("刪除失敗!");
+              console.log("Error:", error);
+            },
+          });
+        });
+
+        listItem.append(fileLink);
+        listItem.append(deleteButton);
+        fileListElement.append(listItem);
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      if (xhr.status === 400) {
+        var errorMessage = xhr.responseJSON.error;
+        console.log(errorMessage);
+        showSwal("操作失敗", errorMessage, "error", false);
+      } else {
+        alert("系統發生錯誤");
+        console.log(errorThrown);
+      }
+    },
+  });
 }
 
 
-// 抗鋸齒
-// ref: https://www.zhihu.com/question/37698502
-let width = canvas.width,
-  height = canvas.height;
+let width = canvas.width;
+let height = canvas.height;
+
 if (window.devicePixelRatio) {
   canvas.style.width = width + "px";
   canvas.style.height = height + "px";
@@ -105,33 +168,46 @@ document.getElementById('convertToImage').addEventListener('click', function () 
 
   console.log("convertToImage")
   var image = canvas.toDataURL("image/png");
+  // console.log(image)
 
-  $('#image').html("<img src='" + image + "' alt='from canvas'/>");
 
-  var form = $('#form');
+  var selectElement = document.getElementById('name_select_id'); 
+  var selectedValue = selectElement.value;
+  console.log(selectedValue)
+
   var formData = new FormData();
-  console.log(image)
-  formData.append("enterprise_signature", image);
+  formData.append("uploaded_files", image);
   formData.append("id", settingid);
+  formData.append("ManyToManyProcess", true);
+  formData.append("file_name", selectedValue);
+  formData.append("name", "uploaded_files");
+  formData.append("modal", "Project_Employee_Assign");
   console.log(formData)
 
   $.ajax({
     type: "POST",
-    url: "/restful/project_employee_assign_update_signature",
+    url: "/restful/formuploadfile",
     data: formData,
     processData: false,
     contentType: false,
     headers: {
-      'X-CSRFToken': csrftoken
+      "X-CSRFToken": csrftoken,
     },
     success: function (response) {
-      alert("電子檔案上傳成功")
-      console.log("上傳成功", response)
+      console.log("上傳成功", response);
+      LoadFileList()
     },
     error: function (xhr, status, error) {
-      alert("電子檔案上傳失敗")
-      console.log("上傳失敗", error)
-    }
-  })
-  // $('#image').html("<img src='" + image + "' alt='from canvas'/>");
-}, false);
+      console.log("上傳失敗", error);
+      if (xhr.status === 400) {
+        var errorMessage = xhr.responseJSON.error;
+        showSwal("操作失敗", errorMessage, "error", false);
+      } else if (xhr.status === 403) {
+        alert("無權操作，請聯絡管理員");
+      } else {
+        alert("系統發生錯誤" + xhr.responseJSON.error);
+        console.log(errorThrown);
+      }
+    }})
+});
+

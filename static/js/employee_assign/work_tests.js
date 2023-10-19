@@ -48,7 +48,6 @@ function renderTestsList() {
     worklist_tbody.appendChild(row);
   });
 
-  // 同步
   var work_ary_str = JSON.stringify(work_tests_ary);
   if(test_items_str){
     test_items_str.value = work_ary_str;

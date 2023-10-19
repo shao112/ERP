@@ -12,7 +12,7 @@ urlpatterns = [
     path('saveimg', views.IMGUploadView.as_view(), name='saveimg'),
     path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
     path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
-    path('project_employee_assign_update_signature', views.Employee_assign_update_signature.as_view(), name='formuploadfile'),
+
 #CRUD
     path('project_confirmation',  views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),
     path('equipment',  views.Equipment_View.as_view(), name="equipment_api"),
