@@ -210,20 +210,39 @@ class SalaryListView(UserPassesTestMixin,View):
         month = kwargs.get('month')
         user_id = kwargs.get('user_id')
 
+        errors=""
+
         if user_id:
             employee = Employee.objects.get(id=user_id)
-            create_salary(employee, year, month)
+            employee_location = employee.location_city
+            if employee_location =="":
+                errors+=f"{employee.full_name} 未輸入系統計算城市欄位資料，請通知管理部調整。<br>"
+            else:
+                try:
+                    create_salary(employee, year, month)
+                except Exception as e:
+                    errors+=f"{employee.full_name} 薪資處理有問題 {e}<br>"
+
         else:
             employees = Employee.objects.filter(user__is_active=True).exclude(user__username='admin')
             for employee in employees:
-                create_salary(employee, year, month)
+                employee_location = employee.location_city
+                if employee_location =="":
+                    errors+=f"{employee.full_name} 未輸入系統計算城市欄位資料，請通知管理部調整。<br>"
+                else:
+                    try:
+                        create_salary(employee, year, month)
+                    except Exception as e:
+                        errors+=f"{employee.full_name} 薪資處理有問題 {e}<br>"
 
             #刪除淘汰的員工
             del_employees = Employee.objects.filter(user__is_active=False)
             salaries_to_delete = Salary.objects.filter(user__in=del_employees)
             salaries_to_delete.delete()
-
-        return JsonResponse({"ok":"ok"},status=200)
+        if errors:
+            return JsonResponse({"error":errors+"<br>其餘員工計算完成。"},status=400)
+        else:
+            return JsonResponse({"ok":"ok"},status=200)
 
 class SysMessage_API(View):
     def post(self, request, *args, **kwargs):
