@@ -358,19 +358,19 @@ aria-hidden="true">
                         {{ item.project_name}}
                     </td>
                     <td>
-                        {{ item.client.client_name}}
+                        {% if item.client.client_name %}{{ item.client.client_name }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ item.requisition.client_name}}
+                        {% if item.requisition.client_name %}{{ item.requisition.client_name }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ item.business_assistant_user}}
+                        {% if tem.business_assistant_user %}{{ item.business_assistant_user }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ item.quote_validity_period}}
+                        {% if item.quote_validity_period %}{{ item.quote_validity_period }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ item.last_excel_link}}
+                        {% if item.last_excel_link %}{{ item.last_excel_link }}{% else %}{% endif %}
                     </td>
                     <td>
                         {{ item.created_date}}

@@ -73,7 +73,7 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
 
     def get(self,request):
         context ={}
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context["SalaryEmployeeForm"] =SalaryEmployeeForm 
      
         return render(request, 'Salary/Salary_Employees.html', context)
@@ -198,10 +198,13 @@ class SalaryListView(UserPassesTestMixin,ListView):
 class Director_Index(View):
     def get(self,request):
             current_employee = request.user.employee
-            other_employees = current_employee.departments.employees.filter(user__is_active=True).exclude(id=current_employee.id)
+            other_employees = current_employee.departments.employees.filter(user__is_active=True)
+            # .exclude(id=current_employee.id,user__username="admin")
+
             other_employees = convent_employee(other_employees)
             for employee in other_employees:
                 employee['clock_data'] = get_weekly_clock_data(employee['id'])
+                print(employee['clock_data'])
 
             # print(other_employees)
             # print(other_employees[0].get_weekly_clock_data())
@@ -311,7 +314,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
     context_object_name = 'job_assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
         context['project_job_assign_form'] = ProjectJobAssignForm()
 
@@ -330,7 +333,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     context_object_name = 'Project_Employee_Assign'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =  Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] =  Employee.active_users().values('id','full_name')
 
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
@@ -354,7 +357,6 @@ class Employee_list(UserPassesTestMixin,ListView):
         context['employee_form'] = EmployeeForm()
         error_objs = []
         objs = Employee.active_users()
-
         for obj in objs:
             if not obj.location_city:
                 error_objs.append({"employee": obj, "error_message": "出生地(系統計算)未填"})
@@ -386,7 +388,7 @@ class Equipment_ListView(UserPassesTestMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         return context
     def test_func(self):
         return Check_Permissions(self.request.user,"管理部")
@@ -409,7 +411,7 @@ class Employee_Permission_list(UserPassesTestMixin,ListView):
        
         Groups = Group.objects.all().order_by('name')
         context = super().get_context_data(**kwargs)
-        context["employees_list"] =  Employee.objects.filter(user__is_active=True).values('user__id','full_name') #用user_id 是要設計user的群組
+        context["employees_list"] =  Employee.active_users().values('user__id','full_name') #用user_id 是要設計user的群組
         context['groups'] = sorted_groups
         return context
     def test_func(self):
@@ -458,13 +460,12 @@ class Quotation_ListView(ListView):
         context['client'] = Client.objects.all()
         context['quotation'] = Quotation.objects.all().order_by("-id")
         from django.db.models import Case, When, Value
-        employees_sorted = Employee.objects.annotate(#以業務組優先排序
+        employees_sorted = Employee.active_users().annotate(#以業務組優先排序
             custom_order=Case(
                 When(departments__department_name='業務組', then=Value(0)),
                 default=Value(1)
             )
-        ).filter(user__is_active=True).order_by('custom_order')
-
+        ).order_by('custom_order')
         context['employees_sorted'] = employees_sorted
 
 
@@ -549,7 +550,7 @@ class Apply_List(View):
     @staticmethod
     def get_data():
         context = {
-                "employees_list": Employee.objects.filter(user__is_active=True).values('id', 'full_name'),
+                "employees_list": Employee.active_users().values('id', 'full_name'),
                 "all_project_job_assign": Project_Job_Assign.objects.all(),
                 "all_Equipment": Equipment.objects.all(),
                 "project_confirmation_list": Project_Confirmation.objects.all(),
@@ -644,7 +645,7 @@ class Approval_List_Watch(UserPassesTestMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
@@ -679,7 +680,7 @@ class Approval_List(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
@@ -717,7 +718,7 @@ class Approval_Process(ListView):
 
         context = super().get_context_data(**kwargs)
         context['Travel_ApplicationForm'] = Travel_ApplicationForm()
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['project_confirmation_list'] = Project_Confirmation.objects.all()
@@ -775,7 +776,7 @@ class Approval_Group(UserPassesTestMixin,ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees"] = Employee.objects.filter(user__is_active=True)
+        context["employees"] = Employee.active_users()
         return context
 
 
