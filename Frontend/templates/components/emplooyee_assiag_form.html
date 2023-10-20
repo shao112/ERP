@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="col-6 col-md-6">
-                            <label>交接/備註</label>
+                            <label>異常報告及聯絡事項</label>
                             <textarea name="remark"></textarea>
                         </div>
 
@@ -130,11 +130,17 @@
                         </div>
                         <div class="col-6 col-md-6">
                             <div id="employee_assign_show_msg" style="width: 100%;"> 
-                                使用車輛:
-                                <br/>
+
                                 帶班主管:
                                 <br/>
                                 檢測人員:                                                    
+                            </div>
+                            <label>最終派工單附件</label>
+                            <a href="#" id="last_excel">下載附件</a>
+                            <div class="custom-file" style="display: none;">
+                                <input type="file" class="custom-file-input" data-modal="employee_assign" name="last_excel"
+                                    id="reassignment_attachment_control">
+                                <label class="custom-file-label" for="last_excel">上傳最終版本</label>
                             </div>
                         </div>
                     </div>
@@ -145,22 +151,25 @@
                 </div>
 
 
-                <div class="form-row">
-                    <div class="col-12 col-md-12">
-                        <div class="form-group">
-                            <label for="carry_equipments">攜帶資產選擇</label>
+            </div>
 
-                            <select multiple id="carry_equipments_select2" name="carry_equipments" class="select2">
-                                {% for e in all_Equipment %}
-                                <option value="{{ e.pk }}">
-                                    {{e.equipment_id}}-{{e.order_id}}-{{e.equipment_name}}</option>
-                                {% endfor %}
-                            </select>
+            <div class="form-row">
+                <hr>
+                <table class="table">
+                    <thead class="thead-light" style="font-size: 14px;">
+                        <tr class="text-nowrap">
+                            <th data-filter-control="input" data-field="es_equipment_id"
+                                data-sortable="true">資產標籤</th>
+                            <th data-filter-control="input" data-field="es_equipment_name"
+                                data-sortable="true">品名</th>
+                                <th data-filter-control="input" data-field="eq_state"
+                                data-sortable="true">狀態</th>
+                                <th>刪除</th>
+                        </tr>
+                    </thead style="font-size: 14px;">
+                    <tbody id="eq_table">
 
-
-                        </div>
-                    </div>
-                </div>
+                    </tbody>
             </div>
 
             <div class="form-row">

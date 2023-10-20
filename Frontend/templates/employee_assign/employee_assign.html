@@ -582,7 +582,10 @@
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>{% if p.project_job_assign.project_confirmation.quotation.client %}{{p.project_job_assign.project_confirmation.quotation.client }}{% endif %}</td>
                     <td>{% for employees_list in p.inspector.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
-                    <td>{% if p.project_job_assign.vehicle %}{{ p.project_job_assign.vehicle.all }}{% else %}{% endif %}
+                    <td>
+                        {% for vehicle in p.project_job_assign.vehicle.all %}
+                            {{ vehicle.vehicle_id }} 
+                            {% endfor %}
                     </td>
                     <td>{{ p.last_excel_link}}</td>
                     <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date|date:"Y/m/d" }}{% endif %}</td>
@@ -665,7 +668,7 @@
         renderTestsList();
 
         var carry_equipments_str_value_load = getdata["carry_equipments_str"];
-        console.log(carry_equipments_str_value_load)
+        // console.log(carry_equipments_str_value_load)
         // var carry_equipments_jsonArray =[]
         // if(carry_equipments_str_value_load){
         //     carry_equipments_jsonArray= JSON.parse(carry_equipments_str_value_load);        

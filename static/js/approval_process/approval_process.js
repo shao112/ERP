@@ -53,21 +53,23 @@ $("#myModal").on("show.bs.modal", function (event) {
         // console.log("key " + key + " 帶資料:" + get_value);
       } else {
         // 處理不存在input的額外特例欄位
+        if (key == "carry_equipments_str") {
+          eq_json_ary=get_value;
+          renderEqTable();
+          continue;
+        }
         if (key == "test_items_str") {
-          console.log("xxx")
-          console.log(get_value);
           if(get_value){
 
             var jsonArray = JSON.parse(get_value);  
             work_tests_ary=jsonArray;
             renderTestsList();
           }else{
-            worklist_tbody.innerHTML="無資料"
-            
-          }
-
+            worklist_tbody.innerHTML="無資料"            
+          }        
           continue;
         }
+
       }
     }
 

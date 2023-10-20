@@ -304,8 +304,17 @@ class Salary(ModifiedModel):
 
     def calculate_adjustment_deduction(self):
         details = self.details.filter(deduction=True)
+        adjustment_item = details.filter(name="*勞退公提(6%免扣)").first()
+        adjustment = 0
+        print("adddd")
+        print(adjustment_item)
+        print(details)
+        if adjustment_item:
+            adjustment = adjustment_item.adjustment_amount
+
+
         total_adjustment_deduction = details.aggregate(total=Sum(F('adjustment_amount')))['total'] or 0
-        return total_adjustment_deduction
+        return total_adjustment_deduction-adjustment
 
 
     def calculate_total_amount(self, use_system_amount=True):
@@ -853,7 +862,7 @@ class Project_Job_Assign(ModifiedModel):
         ordering = ['-id']
 
     def get_show_id(self):
-        return f"派任-{str(self.id).zfill(5)}"
+        return f"工派-{str(self.id).zfill(5)}"
 
 
     @classmethod
