@@ -292,7 +292,7 @@ class Project_Confirmation_ListView(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
-        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        context["employees_list"] = Employee.active_users().values('id','full_name')
         context['client_list'] = Client.objects.all()
         context['project_confirmation_form'] = ProjectConfirmationForm()
         context['quotation_list'] = Quotation.objects.all()
