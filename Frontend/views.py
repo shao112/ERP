@@ -331,6 +331,7 @@ class Employee_Assign_ListView(UserPassesTestMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["employees_list"] =  Employee.objects.filter(user__is_active=True).values('id','full_name')
+
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
         context["all_Equipment"] = Equipment.objects.all()
         context['vehicle'] = Vehicle.objects.all()
@@ -351,6 +352,15 @@ class Employee_list(UserPassesTestMixin,ListView):
         context = super().get_context_data(**kwargs)
         context["department_list"] = Department.objects.values('id','department_name')
         context['employee_form'] = EmployeeForm()
+        error_objs = []
+        objs = Employee.active_users()
+
+        for obj in objs:
+            if not obj.location_city:
+                error_objs.append({"employee": obj, "error_message": "出生地(系統計算)未填"})
+            if not obj.start_work_date:
+                error_objs.append({"employee": obj, "error_message": "到職日未填"})
+        context["error_objs"] =error_objs
         return context
     def test_func(self):
         return Check_Permissions(self.request.user,"管理部")

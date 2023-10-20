@@ -320,6 +320,15 @@
             data-show-columns-toggle-all="true" data-pagination="true" data-page-size="25" data-page-list="[25, All]"
             data-filter-control="true">
             <div id="toolbar">
+                
+                {% if error_objs %}
+                <p>錯誤清單：</p>
+                <ul>
+                  {% for error_obj in error_objs %}
+                    <li>{{ error_obj.employee.full_name }} - {{ error_obj.error_message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
                 <div class="employee-header container-fluid">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增員工
@@ -353,6 +362,8 @@
                     <th data-field="employee_id" data-sortable="true">員工編號</th>
                     <th data-field="full_name" data-sortable="true">員工姓名</th>
                     <th data-field="departments" data-sortable="true">部門</th>
+                    <th data-field="location_" data-sortable="true">出生地(系統計算)</th>
+                    <th data-field="start_work_date" data-sortable="true">到職日</th>
                     <th data-field="position" data-sortable="true">職稱</th>
                     <th data-field="phone_number" data-sortable="true">手機號碼</th>
                     <th data-field="contact_number" data-sortable="true">聯絡電話</th>
@@ -380,6 +391,10 @@
                     <td>{{ p.employee_id }} </td>
                     <td>{{ p.full_name }}</td>
                     <td>{{ p.departments.department_name }}</td>
+                    <td>
+                        {% if p.location_city %}{{ p.location_city }}{% else %}<p style="color:red">異常!</p>{% endif %}
+                    </td>
+                    <td>{{ p.start_work_date |date:"Y/m/d" }}</td>
                     <td>{{ p.position }}</td>
                     <td>{% if p.phone_number %}{{ p.phone_number }}{% else %}{% endif %}</td>
                     <td>{% if p.contact_number %}{{ p.contact_number }}{% else %}{% endif %}</td>
