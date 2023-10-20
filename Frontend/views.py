@@ -243,7 +243,7 @@ class Index(View):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             # calculate_annual_leave()
 
-            news = News.objects.all()
+            news = News.objects.all().order_by("-id")
             employeeid = request.user.employee
             clock_inout = get_weekly_clock_data(employeeid)
             related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(    work_employee__in=[employeeid]        )

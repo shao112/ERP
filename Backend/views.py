@@ -692,6 +692,7 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
         data["uploaded_files"] = uploaded_files_dict_list
         data["location"] = location
         data["vehicle"] = vehicle_id_list
+        data['last_excel'] = data['last_excel'].url if data['last_excel']  else None
 
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
@@ -877,6 +878,7 @@ class Quotation_View(UserPassesTestMixin,View):
         data = model_to_dict(data)
         print("dict_data")
         print(data)
+        data['last_excel'] = data['last_excel'].url if data['last_excel']  else None
         data["uploaded_files"]=uploaded_files_dict_list
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id

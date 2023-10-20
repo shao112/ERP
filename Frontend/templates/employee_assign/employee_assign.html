@@ -309,7 +309,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+                                        <div class="form-row">
+                                            <div class="col-8">
+                                                <label>最終派工單附件</label>
+                                                <a href="#" id="last_excel">下載附件</a>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" data-modal="employee_assign" name="last_excel"
+                                                        id="reassignment_attachment_control">
+                                                    <label class="custom-file-label" for="last_excel">上傳最終版本</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
 
                                 </div>
@@ -331,8 +343,8 @@
                                                 <div class="form-group">
                                                     <label for="">狀態</label>
                                                     <select name="eq_status" id="eq_status">
-                                                        <option value="帶入">帶入</option>
-                                                        <option value="歸還">歸還</option>
+                                                        <option value="進廠">進廠</option>
+                                                        <option value="出廠">出廠</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -502,6 +514,7 @@
                     <th data-field="client" data-sortable="true">客戶名稱</th>
                     <th data-field="inspector" data-sortable="true">檢測人員</th>
                     <th data-field="vehicle" data-sortable="true">使用車輛</th>
+                    <th data-field="last_excel_link" data-sortable="true">最終派工單</th>
                     <th data-field="manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
 
                 </tr>
@@ -569,8 +582,9 @@
                     <td>{% if p.is_completed %}是{% else %}否{% endif %}</td>
                     <td>{% if p.project_job_assign.project_confirmation.quotation.client %}{{p.project_job_assign.project_confirmation.quotation.client }}{% endif %}</td>
                     <td>{% for employees_list in p.inspector.all %}{{ employees_list.full_name }}<br>{% endfor %}</td>
-                    <td>{% if p.project_job_assign.vehicle %}{{ p.project_job_assign.vehicle }}{% else %}{% endif %}
+                    <td>{% if p.project_job_assign.vehicle %}{{ p.project_job_assign.vehicle.all }}{% else %}{% endif %}
                     </td>
+                    <td>{{ p.last_excel_link}}</td>
                     <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date|date:"Y/m/d" }}{% endif %}</td>
 
 

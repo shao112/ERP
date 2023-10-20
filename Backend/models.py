@@ -774,6 +774,15 @@ class Quotation(ModifiedModel):
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
+    last_excel = models.FileField(upload_to="last_file", null=True, blank=True, verbose_name="最終版報價單")
+
+    def last_excel_link(self):
+        if self.last_excel:
+            download_link = "<a href='{}' download>下載</a>".format(self.last_excel.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+
 
     def get_show_id(self):
         return self.quotation_id
@@ -977,6 +986,15 @@ class Project_Employee_Assign(ModifiedModel):
     remark = models.TextField( verbose_name="異常報告及聯絡事項",null="",blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="employy_assign_files")
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
+    last_excel = models.FileField(upload_to="last_file", null=True, blank=True, verbose_name="最終版報價單")
+
+    def last_excel_link(self):
+        if self.last_excel:
+            download_link = "<a href='{}' download>下載</a>".format(self.last_excel.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+
 
     def test_items_ary(self):
         try:

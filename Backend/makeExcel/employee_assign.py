@@ -47,15 +47,12 @@ def employeeAssignFile(employee_assign_obj):
     workbook = load_workbook(filename=file_path)
     sheet = workbook.active
 
-    print("xx")
 
     try:
         for i, row in enumerate(sheet.iter_rows(values_only=True), start=1):
-            print(i)
             if i >=55:
                 break
             for index, cell_value in enumerate(row, start=1):
-                print(cell_value)
                 if cell_value == "CLIENT":
                     sheet.cell(row=i, column=index, value=str(client))
                 elif cell_value == "QUOTATION_ID":
@@ -138,6 +135,7 @@ def employeeAssignFile(employee_assign_obj):
                         sheet.cell(row=i+next_index, column=index+6, value= item["test_items"])
                         sheet.cell(row=i+next_index, column=12, value= item["format_and_voltage"])
                         sheet.cell(row=i+next_index, column=20, value= item["level"])
+                        sheet.cell(row=i+next_index, column=24, value= item["number"])
                         
 
                         

@@ -241,9 +241,23 @@ aria-hidden="true">
                                                 </textarea>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="form-row">
+                                        <div class="col-6">
+                                            <label>最終報價單附件</label>
+                                            <a href="#" id="last_excel">下載附件</a>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" data-modal="Quotation" name="last_excel"
+                                                    id="reassignment_attachment_control">
+                                                <label class="custom-file-label" for="last_excel">上傳最終版本</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
                                         <div class="col-12">
+                                            <br>
                                             <input type="button" value="增加工項" onclick="work_click()"
                                                 id="insert_work_item_row">
 
@@ -308,6 +322,7 @@ aria-hidden="true">
                     <th data-field="requisition" data-sortable="true">業主名稱</th>
                     <th data-field="business_assistant" data-sortable="true">助理</th>
                     <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
+                    <th data-field="last_excel_link" data-sortable="true">最後報價單</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
@@ -353,6 +368,9 @@ aria-hidden="true">
                     </td>
                     <td>
                         {{ item.quote_validity_period}}
+                    </td>
+                    <td>
+                        {{ item.last_excel_link}}
                     </td>
                     <td>
                         {{ item.created_date}}

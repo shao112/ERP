@@ -206,7 +206,7 @@
                 <div class="news container">
                     {% for n in news %}
                     <a href="" data-toggle="modal" data-target="#news-modal"
-                        data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}">
+                        data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}|{{ n.attachment }}">
                         <div class="row">
                             <div class="col-6" style="overflow-x: hidden;">
                                 [{{ n.get_category_display }}][{{ n.get_type_display }}]
@@ -236,6 +236,7 @@
                                 <span class="type-badge badge badge-dark"></span>
                                 <span class="level-badge badge badge-dark"></span>
                                 <span class="created-date-badge"></span>
+                                <span class="created-date-download badge badge-dark"></span>
                             </h5>
                             <div class="content">
                             </div>
@@ -287,12 +288,23 @@
             modalBadgeRow.find('.type-badge').html(`
                  ${dataArr[2]}
             `);
+
             modalBadgeRow.find('.level-badge').html(`
                 重要度： ${dataArr[3]}
             `);
+            
             modalBadgeRow.find('.created-date-badge').html(`
                  ${dataArr[4]}
             `);
+            var url = dataArr[6];
+            console.log(url)
+            var downloadLink = '';
+            if (url) {
+                downloadLink = `<a href="${url}" download>下載</a>`;
+            }
+
+            modalBadgeRow.find('.created-date-download').html(downloadLink);
+            
             var modalContent = $(this).find('.modal-body');
             modalContent.find('.content').html(`
                 ${dataArr[5]}
