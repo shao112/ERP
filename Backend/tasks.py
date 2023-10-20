@@ -2,6 +2,9 @@ from Backend.models import AnnualLeave,Employee
 from datetime import timedelta
 from datetime import datetime
 import math
+from background_task import background
+
+
 
 def calculate_annual_leave(employee):
     start_work_date = employee.start_work_date
@@ -50,10 +53,12 @@ def calculate_annual_leave(employee):
     return f"年資:{years}、給假{give_day}"
 
 
-def calculate_annual_leave_for_all_employees():
-    print("go task")
-    employees = Employee.objects.all()
-    for employee in employees:
-        msg = calculate_annual_leave(employee)
-        print(employee.full_name)
-        print(msg)
+
+# @background(schedule=3)
+# def calculate_annual_leave_for_all_employees():
+#     print("go task")
+#     employees = Employee.objects.all()
+#     for employee in employees:
+#         msg = calculate_annual_leave(employee)
+#         print(employee.full_name)
+#         print(msg)

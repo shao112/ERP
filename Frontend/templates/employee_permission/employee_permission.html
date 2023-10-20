@@ -43,8 +43,8 @@
                                             <div class="form-group">
                                                 <label>選擇人員(按住ctrl多選)</label>
                                                 <select class="form-control" name="user_set" id="user_set_select2" size="10" multiple>
-                                                    {% for employee in employees %}
-                                                    <option value="{{ employee.user_id }}">{{ employee.full_name }}</option>
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.user__id }}">{{ employee.full_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -89,7 +89,7 @@
                     <tr>
                         <td>
                             <a type="button" data-url="group" data-id="{{ g.id }}"
-                                class=" btn btn-sm btn-warning" data-toggle="modal"
+                                class=" btn btn-sm btn-warning" data-toggle="modal"  onclick="LoadData(event)"
                                 data-target="#employee-permission-modal"><i class="fas fa-edit"></i></a>
                           
                         </td>
@@ -153,7 +153,10 @@
             document.body.appendChild(script);
         });
     });
-
+    async function LoadData(event) {
+        console.log("load")
+        getdata = await GET_handleClick(event);
+    }
 </script>
 
 

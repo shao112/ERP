@@ -133,6 +133,13 @@ class AnnualLeave(ModifiedModel):
     class Meta:
         verbose_name = "特休紀錄表"
         verbose_name_plural = "特休紀錄表"
+    def __str__(self):
+        user =self.AnnualLeave_user.all()
+        if user:
+            user=user[0]
+        else:
+            user =""
+        return f"{user} - {self.days}"
 
 
 

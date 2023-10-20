@@ -1,3 +1,4 @@
+import math
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseNotAllowed,HttpResponseRedirect,HttpResponse,Http404
 import json,datetime
@@ -6,7 +7,7 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 from Backend.models import LOCATION_CHOICES
-from Backend.models import  ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.models import  AnnualLeave,ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
 from Backend.forms import ReferenceTableForm,VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
@@ -935,18 +936,20 @@ class Work_Item_View(UserPassesTestMixin,View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Work_Item, id=id)
-
         #找尋使用過的報價單
         work_item_number = Work_Item_Number.objects.filter(work_item=data)
 
         quotations_info=[]
         for wn in work_item_number:
+            user_name=""
+            if wn.quotation.business_assistant_user:
+                user_name = wn.quotation.business_assistant_user.full_name
             quotation_info = {
                 "quotation_id": wn.quotation.quotation_id,
                 "requisition": wn.quotation.requisition.client_name,
                 "project_name": wn.quotation.project_name,
                 "quote_date": wn.quotation.quote_date,
-                "business_assistant": wn.quotation.business_assistant,
+                "business_assistant": user_name,
                 "number": wn.number,
             }
             quotations_info.append(quotation_info)
@@ -1327,13 +1330,14 @@ class Groups_View(UserPassesTestMixin,View):
         group.user_set.set(users)
         return JsonResponse({'data': "修改成功"},status=200)
 
+
     def get(self, request):
         id = request.GET.get('id')
         data = get_object_or_404(Group, id=id)
         groups_employee = data.user_set.all()
         users = [user.id for user in groups_employee]
         data={"user_set":users,"id":data.id,"group_name":data.name}
-
+        
         return JsonResponse({"data": data}, status=200)
 
 class Approval_Groups_View(UserPassesTestMixin,View):
@@ -2211,3 +2215,71 @@ class DeleteUploadedFileView(View):
             return JsonResponse({"message": "檔案已刪除。"}, status=200)
         else:
             return JsonResponse({"message": "檔案不存在或不屬於此員工。"}, status=400)
+        
+
+
+
+#啟動SERVER 同時 開另一個CMD  除錯:python manage.py process_tasks
+#改下面的code，runserver 可能要重啟
+from background_task import background
+from datetime import timedelta
+def calculate_annual_leave(employee):
+    from datetime import datetime
+
+    start_work_date = employee.start_work_date
+    if not start_work_date:
+        return
+    
+    years = employee.seniority()
+    today = datetime.today().date()
+
+    #計算入職的前一天的明年時間
+    end_date = employee.start_work_date - timedelta(days=1)
+    end_date = end_date.replace(year=today.year + 1)
+    if years == "人資單位未填寫入值日" :
+        return "人資單位未填寫入值日"
+
+    if years <0.6 :
+        return "小於0.6"
+    
+    if years < 1:
+        has_three_days_leave = employee.annualleaves.filter(days=3).exists()
+        if not has_three_days_leave:
+            annual_leave = AnnualLeave.objects.create(days=3, end_date=end_date, remark="")
+            employee.annualleaves.add(annual_leave)
+        return "0.6"
+    
+    #今天=入職 才執行給假
+    if  not (today.month == start_work_date.month and today.day == start_work_date.day):
+        return "不執行"
+    
+    give_day = 0
+    if years >= 1 and years < 2:
+        give_day= 7
+    elif years >= 2 and years < 3:
+        give_day= 10
+    elif years >= 3 and years < 5:
+        give_day= 14
+    elif years >= 5 and years < 10:
+        give_day= 15
+    elif years == 10:
+        give_day= 16
+    else:
+        give_day= min(30, math.floor(years))
+
+    annual_leave = AnnualLeave.objects.create(days=give_day, end_date=end_date, remark="")
+    employee.annualleaves.add(annual_leave)
+    return f"年資:{years}、給假{give_day}"
+
+#一天86400 
+@background(schedule=600)
+def calculate_annual_leave_for_all_employees():
+    print("go task")
+    employees = Employee.objects.all()
+    for employee in employees:
+        msg = calculate_annual_leave(employee)
+        print(employee.full_name)
+        print(msg)
+    print("end")
+#啟動
+calculate_annual_leave_for_all_employees()

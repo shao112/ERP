@@ -50,14 +50,14 @@ INSTALLED_APPS = [
     'Backend',
     # 套件
     'django_cleanup',
-    'django_crontab',
-
+    'background_task',
 ]
+BACKGROUND_TASK_RUN_ASYNC = True
 
-#定期執行任務
-CRONJOBS = [
-    ('*/1 * * * *', 'Backend.cron.calculate_annual_leave_for_all_employees >> /logfile.log 2>&1')
 
+
+DJANGO_TASKS = [
+    'Backend.cron.CalculateAnnualLeaveTask',
 ]
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
