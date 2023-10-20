@@ -221,25 +221,19 @@ aria-hidden="true">
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="business_assistant">業務助理</label>
-                                                <select name="business_assistant" id="business_assistant"
+                                                <label for="business_assistant_user">業務助理</label>
+                                                <select name="business_assistant_user" id="business_assistant"
                                                     class="select2">
                                                     <option value="-1">選擇助理</option>
                                                     {% for employee in employees_sorted %}
-                                                    <option value="{{ employee.full_name }}">{{ employee.full_name }}
+                                                    <option value="{{ employee.id }}">{{ employee.full_name }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-12 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="business_tel">業務電話</label>
-                                                <input class="form-control form-control-sm" name="business_tel"
-                                                    id="business_tel">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
+
+                                        <div class="col-12 col-lg-8">
                                             <div class="form-group">
                                                 <label for="internal_content">對內紀錄</label>
                                                 <textarea class="form-control form-control-sm" name="internal_content"
@@ -307,7 +301,7 @@ aria-hidden="true">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="file" data-sortable="true">檔案上傳</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
-                        列印/下載pdf</th>
+                        輸出</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
                     <th data-field="client" data-sortable="true">客戶名稱</th>
@@ -355,7 +349,7 @@ aria-hidden="true">
                         {{ item.requisition.client_name}}
                     </td>
                     <td>
-                        {{ item.business_assistant}}
+                        {{ item.business_assistant_user}}
                     </td>
                     <td>
                         {{ item.quote_validity_period}}

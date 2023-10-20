@@ -194,6 +194,7 @@ document.getElementById('convertToImage').addEventListener('click', function () 
       "X-CSRFToken": csrftoken,
     },
     success: function (response) {
+      Swal.fire("送出成功", "")
       console.log("上傳成功", response);
       LoadFileList()
     },

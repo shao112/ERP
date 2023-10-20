@@ -58,6 +58,7 @@ class EmployeeAssignileView(View):
         else:
             print("error 找不到相應的ID obj")
             return JsonResponse({"error": "找不到相應的ID obj"}, status=400)
+
 class Work_ItemFileView(View):
 
     def get(self, request, *args, **kwargs):
@@ -620,7 +621,7 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
             else:
                 get_Project_Employee_Assign.test_items = ""
 
-
+            print(dict_data["remark"])
 
             get_Project_Employee_Assign.update_fields_and_save(**dict_data)
 
@@ -794,9 +795,13 @@ class Quotation_View(UserPassesTestMixin,View):
 
             if "client" in dict_data:
                 get_obj = Client.objects.get(pk=int(dict_data["client"]))
-                print(get_obj)
                 getQuotation.client = get_obj
                 del dict_data["client"]
+
+            if "business_assistant_user" in dict_data:
+                get_obj = Employee.objects.get(pk=int(dict_data["business_assistant_user"]))
+                getQuotation.business_assistant_user = get_obj
+                del dict_data["business_assistant_user"]
 
             if "requisition" in dict_data:
                 get_obj = Client.objects.get(pk=int(dict_data["requisition"]))
@@ -814,7 +819,7 @@ class Quotation_View(UserPassesTestMixin,View):
         try:
             dict_data = convent_dict(request.body)
             quotation_obj = Quotation.objects.get(id=dict_data['id']) 
-            if quotation_obj.work_item is not None:
+            if hasattr(quotation_obj,"work_item") and quotation_obj.work_item is not None:
                 print("存在")
                 print("quotation_obj.work_item: ", quotation_obj.work_item.all())
                 for i in quotation_obj.work_item.all():

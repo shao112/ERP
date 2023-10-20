@@ -168,7 +168,7 @@ class Employee(ModifiedModel):
     departments = models.ForeignKey('Department', on_delete=models.SET_NULL, blank=True, null=True, related_name='employees', verbose_name='部門名稱')# 你可以通过department.employees.all()访问一个部门的所有员工。
     position = models.CharField(max_length=30, null=True, blank=True, verbose_name='職稱')
     phone_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='手機號碼')
-    contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話')
+    contact_number = models.CharField(max_length=20, null=True, blank=True,verbose_name='聯絡電話(報價單顯示)')
     start_work_date = models.DateField(null=True, blank=True, verbose_name='到職日期')
     id_number = models.CharField(max_length=20, null=True, blank=True, verbose_name='身份證字號')
     birthday = models.DateField(null=True, blank=True, verbose_name='出生日期')
@@ -182,7 +182,7 @@ class Employee(ModifiedModel):
     current_address = models.CharField(max_length=50, null=True, blank=True, verbose_name='現居地址')
     location = models.CharField(max_length=50, null=True, blank=True, verbose_name='所在地')
     company_email = models.EmailField(null=True, blank=True, verbose_name='公司E_Mail')
-    personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail')
+    personal_email = models.EmailField(null=True, blank=True, verbose_name='個人E_Mail(報價單顯示)')
     emergency_contact = models.CharField(max_length=50, null=True, blank=True, verbose_name='緊急聯絡人1')
     emergency_contact_relations = models.CharField(max_length=50, null=True, blank=True, verbose_name='關係1')
     emergency_contact_phone = models.CharField(max_length=20, null=True, blank=True, verbose_name='聯絡人電話1')
@@ -233,6 +233,9 @@ class Employee(ModifiedModel):
     
     def __str__(self):
         return f"{self.full_name}"
+
+    def info(self):
+        return self.full_name,self.company_email or "",self.contact_number or ""
 
     def seniority(self):
         start_work_date= self.start_work_date
@@ -748,7 +751,7 @@ class Work_Item(ModifiedModel):
 
     def get_display_text(self):
         pn_id =self.get_show_id()
-        return f"{pn_id} | {self.item_name}  | {self.contract_id }| { self.money() } (計算價格) | {self.unit} "
+        return f"{pn_id} | {self.item_name}  | {self.contract_id }| { self.last_money_year() } (計算價格) | {self.unit} "
 
     def get_show_id(self):
         return self.item_id
@@ -763,12 +766,11 @@ class Work_Item(ModifiedModel):
 class Quotation(ModifiedModel):
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='報價單編號')
     client = models.ForeignKey("Client",related_name="Quotation", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='客戶名稱')
-    requisition = models.ForeignKey("Client",related_name="Quotation_buy", on_delete=models.CASCADE, null=True, blank=True, verbose_name='請購單位')
+    requisition = models.ForeignKey("Client",related_name="Quotation_buy", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='請購單位')
     project_name = models.CharField(max_length=100, verbose_name="專案名稱",blank=True, null=True)
     quote_date = models.DateField(null=True, blank=True, verbose_name="報價日期")
     quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
-    business_tel = models.CharField(max_length=20, verbose_name="業務電話",blank=True, null=True)
-    business_assistant = models.CharField(max_length=50, verbose_name="業務助理",blank=True, null=True)
+    business_assistant_user = models.ForeignKey(Employee,related_name="quotaion_process", null=True ,on_delete=models.SET_NULL, verbose_name="業務助理")
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
@@ -972,8 +974,7 @@ class Project_Employee_Assign(ModifiedModel):
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Project_Employee_Assign_Approval')
     test_items_str = models.TextField( verbose_name="檢查項目字串", blank=True)
     carry_equipments_str = models.TextField( verbose_name="紀錄資產字串",null="",blank=True)
-    remark = models.TextField( verbose_name="交接/備註",null="",blank=True)
-    remark_two = models.TextField( verbose_name="異常報告及聯絡事項",null="",blank=True)
+    remark = models.TextField( verbose_name="異常報告及聯絡事項",null="",blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="employy_assign_files")
     created_by = models.ForeignKey("Employee",related_name="Project_Employee_Assign_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
 
@@ -986,7 +987,6 @@ class Project_Employee_Assign(ModifiedModel):
     def carry_equipments_ary(self):
         try:
             eq_data = json.loads(self.carry_equipments_str)
-            print(eq_data)
             new_eq_data=[] #更新資料
             for eq_info in eq_data:
                 equipment_id = eq_info['id']
@@ -1001,18 +1001,10 @@ class Project_Employee_Assign(ModifiedModel):
                     })
                 except Equipment.DoesNotExist:
                     pass
-            print(new_eq_data)
             return new_eq_data
         except json.JSONDecodeError:
             return []
 
-
-    def enterprise_signature_link(self):
-        if self.enterprise_signature:
-            download_link = "<a href='{}' download>下載</a>".format(self.enterprise_signature.url)
-            return mark_safe(download_link)
-        else:
-            return "未提供"        
 
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
@@ -1043,7 +1035,6 @@ class ExtraWorkDay(ModifiedModel):
 
     def get_show_id(self):
         return f"調假-{str(self.id).zfill(5)}"
-
 
     def __str__(self):
         return f"{self.date} - {self.get_date_type_display()}"

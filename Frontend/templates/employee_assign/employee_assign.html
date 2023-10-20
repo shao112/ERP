@@ -28,6 +28,7 @@
             </div>
             <div class="modal-body">
                 <label>簽名</label>
+
                 <select id="name_select_id">
                     <option value="總經理">總經理</option>
                     <option value="經理">經理</option>
@@ -40,6 +41,8 @@
                     <option value="被交接人1">被交接人1</option>
                     <option value="被交接人2">被交接人2</option>                
                 </select>
+                <button type="button" class="btn btn-danger" id="clear">清除</button>
+                <button type="button" class="btn btn-primary" id="convertToImage">保存簽名</button>
                 <canvas id="mycanvas" width="750" height="400"></canvas>
                 <div id="image"></div>
                 <hr>
@@ -48,9 +51,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="clear">清除</button>
+
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                <button type="button" class="btn btn-primary" id="convertToImage">保存簽名</button>
             </div>
         </div>
     </div>
@@ -288,8 +290,7 @@
                                                 </div>
                                                  <div class="col-12 col-lg-8">
                                                     <div id="employee_assign_show_msg" style="width: 100%;"> 
-                                                        使用車輛:
-                                                        <br/>
+
                                                         帶班主管:
                                                         <br/>
                                                         檢測人員:                                                    
@@ -302,7 +303,7 @@
                                             <div class="form-row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="remark_control" class="col-form-label-sm">交接/備註</label>
+                                                        <label for="remark_control" class="col-form-label-sm">異常報告及聯絡事項</label>
                                                         <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
                                                     </div>
                                                 </div>
@@ -315,7 +316,7 @@
                                 <div class="tab-pane fade" id="equipment_tab">
                                     <div class="project-confirmation-table container-fluid shadow-sm table-responsive"
                                         style="min-height: 400px;">
-                                                                        
+                                                <p>最多顯示38筆列印資料</p>
                                         <div class="form-row">
                                             <div class="col-6">
                                                 <div class="form-group">
@@ -488,7 +489,7 @@
                     </th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="naelete">簽名</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
-                        列印/下載pdf</th>
+                        輸出</th>
 
                     <th data-field="id" data-sortable="true">派工單</th>
                     <th data-field="job" data-sortable="true">工程派任計畫單</th>
@@ -502,7 +503,7 @@
                     <th data-field="inspector" data-sortable="true">檢測人員</th>
                     <th data-field="vehicle" data-sortable="true">使用車輛</th>
                     <th data-field="manuscript_return_date" data-sortable="true">手稿預計回傳日</th>
-                    <th data-field="enterprise_signature" data-sortable="true">電子簽名</th>
+
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -572,7 +573,7 @@
                     </td>
                     <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date|date:"Y/m/d" }}{% endif %}</td>
 
-                    <td>{{ p.enterprise_signature_link }}</td>
+
                 </tr>
                 {% empty %}
 

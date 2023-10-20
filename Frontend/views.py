@@ -436,20 +436,22 @@ class Quotation_ListView(ListView):
     template_name = 'quotation/quotation.html'
     context_object_name = 'quotation'
     def get_context_data(self, **kwargs):
+        x = Employee.objects.get(id=49)
+        print(x.info())
         context = super().get_context_data(**kwargs)
         context["workitems"]= Work_Item.objects.all()
         context['client'] = Client.objects.all()
         context['quotation'] = Quotation.objects.all().order_by("-id")
-        from django.db.models import Case, When, Value, CharField
+        from django.db.models import Case, When, Value
         employees_sorted = Employee.objects.annotate(#以業務組優先排序
             custom_order=Case(
                 When(departments__department_name='業務組', then=Value(0)),
                 default=Value(1)
             )
-        ).order_by('custom_order')
+        ).filter(user__is_active=True).order_by('custom_order')
 
         context['employees_sorted'] = employees_sorted
-        print(employees_sorted  )
+
 
         return context
     

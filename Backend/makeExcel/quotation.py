@@ -18,14 +18,20 @@ from openpyxl.styles import PatternFill
 
 
 def quotationFile(quotation_obj,see,five):
-
     quotation_id = "" if quotation_obj.quotation_id is None else quotation_obj.quotation_id
     hide_client = "" if quotation_obj.client.client_name is None else quotation_obj.client.client_name
     requisition = "" if quotation_obj.requisition.client_name is None else quotation_obj.requisition.client_name
     project_name = "" if quotation_obj.project_name is None else quotation_obj.project_name
     tax_id =  quotation_obj.requisition.tax_id  or ""
     contact_person = quotation_obj.requisition.contact_person or ""
-    business_assistant = quotation_obj.business_assistant or ""
+
+    get_business_assistant = quotation_obj.business_assistant_user 
+    business_assistant_user_name=""
+    business_assistant_user_mail=""
+    business_tel =""
+    if get_business_assistant :
+        business_assistant_user_name,business_assistant_user_mail, business_tel=  get_business_assistant.info()
+
     address = quotation_obj.requisition.address or ""  
     tel = quotation_obj.requisition.tel or ""
     mobile = quotation_obj.requisition.mobile or ""
@@ -33,13 +39,12 @@ def quotationFile(quotation_obj,see,five):
     email = quotation_obj.requisition.email or ""
     quote_validity_period = quotation_obj.quote_validity_period or ""
     quote_date = quotation_obj.quote_date or ""
-    business_tel = quotation_obj.business_tel or ""
+    
 
     if quote_validity_period:
         quote_validity_period=str(quote_validity_period) + "天"
 
     item_list = quotation_obj.Quotation_Work_Item_Number.all()
-    print(item_list)
 
     if five:
         file_path = r'media/system_files/quotation_template_other.xlsx' # 維景 還沒放
@@ -97,7 +102,9 @@ def quotationFile(quotation_obj,see,five):
                 elif cell_value == "CONTACT_PERSON":
                     sheet.cell(row=i, column=index, value=contact_person)
                 elif cell_value == "BUSINESS_ASSISTANT":
-                    sheet.cell(row=i, column=index, value=business_assistant)
+                    sheet.cell(row=i, column=index, value=business_assistant_user_name)
+                elif cell_value == "BUSINESS_ASSISTANT_mail":
+                    sheet.cell(row=i, column=index, value=business_assistant_user_mail)
                 elif cell_value == "PROJECT_NAME":
                     sheet.cell(row=i, column=index, value=project_name)
                 elif cell_value == "TEL":
