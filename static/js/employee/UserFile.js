@@ -96,7 +96,7 @@ function handleAPI() {
   formData.append("id", employee_id);
   formData.append("ManyToManyProcess", true);
   formData.append("modal", modal);
-  formData.append("file_name", "fileNameValue");
+  formData.append("file_name", fileNameValue);
   for (var pair of formData.entries()) {
     console.log(pair[0] + ": " + pair[1]);
   }

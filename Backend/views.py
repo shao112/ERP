@@ -2267,12 +2267,16 @@ def calculate_annual_leave(employee):
     else:
         give_day= min(30, math.floor(years))
 
-    annual_leave = AnnualLeave.objects.create(days=give_day, end_date=end_date, remark="")
-    employee.annualleaves.add(annual_leave)
-    return f"年資:{years}、給假{give_day}"
+    matching_leaves = AnnualLeave.objects.filter(end_date=end_date)
+
+    if not matching_leaves.exists():#不存在才給
+        annual_leave = AnnualLeave.objects.create(days=give_day, end_date=end_date, remark="")
+        employee.annualleaves.add(annual_leave)
+    
+    return f"年資:{years}、給假{give_day} 給過?{matching_leaves}"
 
 #一天86400 
-@background(schedule=600)
+@background(schedule=86400)
 def calculate_annual_leave_for_all_employees():
     print("go task")
     employees = Employee.objects.all()

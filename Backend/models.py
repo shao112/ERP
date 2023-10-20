@@ -1441,7 +1441,7 @@ class Leave_Param(ModifiedModel):
             
             remaining_time= f"{remaining_hours}時{remaining_minutes}分"
 
-            pass_str=["公假","補修"]
+            pass_str=["公假","補休"]
             if  leave_param.leave_name in pass_str:
                 remaining_time="無"
 
