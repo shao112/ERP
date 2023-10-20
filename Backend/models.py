@@ -203,6 +203,9 @@ class Employee(ModifiedModel):
     def get_hour_salary(self):
         return round(self.default_salary / 240, 4)
 
+    @classmethod
+    def active_users(cls):
+        return cls.objects.filter(user__is_active=True).exclude(full_name="管理員帳號")
 
     def day_status(self, date): #當天還要上幾小時
 

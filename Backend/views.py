@@ -1738,6 +1738,15 @@ class Employee_View(UserPassesTestMixin,View):
             else:
                 getObject.departments = None
 
+            employee_id = dict_data["employee_id"]
+            if getObject.user.username !=employee_id:
+                if  User.objects.filter(username=employee_id).exists():
+                    return JsonResponse({"error":"員工ID已存在或是曾被刪除過，請使用別的ID。"},status=400)
+
+                getObject.user.username = employee_id
+                getObject.user.save()
+
+
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
         else:
@@ -1765,7 +1774,7 @@ class Employee_View(UserPassesTestMixin,View):
             username = form.cleaned_data['employee_id']
             password = form.cleaned_data['id_number']
             if  User.objects.filter(username=username).exists():
-                return JsonResponse({"error":"員工編號已存在或是曾被刪除過。"},status=400)
+                return JsonResponse({"error":"員工編號已存在或是曾被刪除過,請使用別的ID。"},status=400)
 
             user = User.objects.create_user(username=username, password=password)
             employee = form.save(commit=False)

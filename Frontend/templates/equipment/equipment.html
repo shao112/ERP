@@ -16,7 +16,7 @@
 {% block main %}
 <div class="main">
     <div id="error-message"></div>
-    <div class="equipment modal fade" id="equipment-modal" tabindex="-1" aria-labelledby="equipment" aria-hidden="true">
+    <div class="equipment modal fade" id="equipment-modal"  aria-labelledby="equipment" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -118,25 +118,41 @@
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
-                                                <label for="buyer_control">採購人</label>
-                                                <input class="form-control form-control-sm" name="buyer"
-                                                    id="buyer_control">
+                                                <label for="completion_report_select2">採購人</label>
+                                                <select class="" data-placeholder="選擇採購人" name="buyer"
+                                                    id="34" >
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.full_name }}">{{ employee.full_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
-                                                <label for="user_control">使用人</label>
-                                                <input class="form-control form-control-sm" name="user"
-                                                    id="user_control">
+                                                <label for="completion_report_select2">使用人</label>
+                                                <select class="" data-placeholder="選擇使用人" name="user"
+                                                    id="user_select2" >
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.full_name }}">{{ employee.full_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                        
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
-                                                <label for="custodian_control">保管人</label>
-                                                <input class="form-control form-control-sm" name="custodian"
-                                                    id="custodian_control">
+                                                <label for="completion_report_select2">保管人</label>
+                                                <select class="" data-placeholder="選擇保管人" name="custodian"
+                                                    id="custodian_select2" >
+                                                    {% for employee in employees_list %}
+                                                    <option value="{{ employee.full_name }}">{{ employee.full_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -160,9 +176,12 @@
                                     <div class="form-row">
                                         <div class="col-12 col-md-4">
                                             <div class="form-group">
-                                                <label for="normal_or_abnormal_control">正常/異常</label>
-                                                <input class="form-control form-control-sm" name="normal_or_abnormal"
-                                                    id="normal_or_abnormal_control">
+                                                <label for="completion_report_select2">正常/異常</label>
+                                                <select class="" data-placeholder="正常/異常" name="normal_or_abnormal"
+                                                    id="normal_or_abnormal"  >
+                                                    <option value="0">異常</option>
+                                                    <option value="1" selected >正常</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-8">
@@ -382,12 +401,17 @@
                     <th data-force-hide="true" data-switchable="false" data-field="epm_edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-field="epm_delete">刪除</th>
                     <th data-field="equipment_id" data-sortable="true">資產標籤</th>
-                    <th data-field="order_id" data-sortable="true">序號</th>
                     <th data-field="equipment_category" data-sortable="true">資產種類別</th>
                     <th data-field="equipment_type" data-sortable="true">中類</th>
                     <th data-field="equipment_name" data-sortable="true">品名</th>
                     <th data-field="product_model" data-sortable="true">廠牌/型號</th>
                     <th data-field="manufacturing_numbe" data-sortable="true">製造序號</th>
+                    <th data-field="supplier" data-sortable="true">供應商</th>
+                    <th data-field="date_of_purchase" data-sortable="true">購入日期</th>
+                    <th data-field="5" data-sortable="true">使用人</th>
+                    <th data-field="4" data-sortable="true">保管人</th>
+                    <th data-field="3" data-sortable="true">庫存地點</th>
+                    <th data-field="12" data-sortable="true">正常/異常</th>
                 </tr>
             </thead>
             <tbody>
@@ -405,12 +429,23 @@
                             class="sys_del btn btn-sm btn-danger"><i class="far fa-trash-alt"></i></a>
                     </td>
                     <td> {{ e.equipment_id}} </td>
-                    <td>{{e.order_id}}</td>
                     <td>{{ e.equipment_category}}</td>
                     <td>{{ e.equipment_type}}</td>
                     <td>{{ e.equipment_name}}</td>
                     <td>{{ e.product_model}}</td>
                     <td>{{ e.manufacturing_numbe}}</td>
+                    <td>{{ e.supplier}}</td>
+                    <td>{{ e.date_of_purchase}}</td>
+                    <td>{{ e.user}}</td>
+                    <td>{{ e.custodian}}</td>
+                    <td>{{ e.storage_location}}</td>
+                    <td>
+                        {% if e.normal_or_abnormal == "0" %}
+                        異常
+                        {% else %}
+                        正常
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

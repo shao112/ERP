@@ -373,6 +373,11 @@ class Equipment_ListView(UserPassesTestMixin,ListView):
     model = Equipment
     template_name = 'equipment/equipment.html'
     context_object_name = 'equipment'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["employees_list"] = Employee.objects.filter(user__is_active=True).values('id','full_name')
+        return context
     def test_func(self):
         return Check_Permissions(self.request.user,"管理部")
     
@@ -460,6 +465,8 @@ class Work_Item_ListView(ListView):
     model = Work_Item
     template_name = 'work_item/work_item.html'
     context_object_name = 'work_item'
+    ordering = ['-id']
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
