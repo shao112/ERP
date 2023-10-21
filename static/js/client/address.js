@@ -1,4 +1,4 @@
-var address_del_show = false; //在HTML 設定此變數開關
+var address_del_show = true; //在HTML 設定此變數開關
 
 var address_btn = document.getElementById("address_form_btn");
 if (address_btn) {
@@ -31,9 +31,10 @@ function renderAddressList() {
   if(address_del_show){
 
     var deleteButton = document.createElement("button");
+    deleteButton.type = "button";
     deleteButton.textContent = "刪除";
     deleteButton.onclick = function() {
-      deleteItem(index);
+      deleteAddress(index);
     };
     var deleteCell = document.createElement("td");
     deleteCell.appendChild(deleteButton);
@@ -50,7 +51,7 @@ if(address_str){
 }
 }
 
-function deleteItem(index) {
+function deleteAddress(index) {
   address_ary.splice(index, 1);
   renderAddressList();
 }

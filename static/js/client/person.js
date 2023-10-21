@@ -1,4 +1,4 @@
-var person_del_show = false; //在HTML 設定此變數開關
+var person_del_show = true; //在HTML 設定此變數開關
 
 var person_btn = document.getElementById("person_form_btn");
 if (person_btn) {
@@ -37,8 +37,9 @@ function renderPersonsList() {
 
     var deleteButton = document.createElement("button");
     deleteButton.textContent = "刪除";
+    deleteButton.type = "button";
     deleteButton.onclick = function() {
-      deleteItem(index);
+      deletePerson(index);
     };
     var deleteCell = document.createElement("td");
     deleteCell.appendChild(deleteButton);
@@ -55,7 +56,7 @@ if(person_str){
 }
 }
 
-function deleteItem(index) {
+function deletePerson(index) {
   person_ary.splice(index, 1);
   renderPersonsList();
 }
