@@ -616,14 +616,6 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
                 get_Project_Employee_Assign.project_job_assign = project_job_assign_instance
                 del dict_data["project_job_assign"]
 
-            if "test_items" in dict_data:
-                get_Project_Employee_Assign.test_items = ','.join(map(str, dict_data["test_items"]))
-                del dict_data["test_items"]
-            else:
-                get_Project_Employee_Assign.test_items = ""
-
-            print(dict_data["remark"])
-
             get_Project_Employee_Assign.update_fields_and_save(**dict_data)
 
             return JsonResponse({'data': "修改成功"},status=200)
@@ -648,12 +640,10 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
 
     def post(self,request):
         print(request.POST)
-        get_test_items = request.POST.getlist("test_items")
         form = Project_Employee_AssignForm(request.POST)
 
         if form.is_valid():
             newobj =form.save()
-            newobj.test_items = ','.join(map(str, get_test_items))
             related_project_job_assign = newobj.project_job_assign
             vehicle = request.POST.getlist("vehicle")
        
