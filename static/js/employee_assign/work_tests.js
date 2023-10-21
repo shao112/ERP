@@ -1,4 +1,3 @@
-var work_tests_del_show = false; //在HTML 設定此變數開關
 
 var tests_btn = document.getElementById("test_items_form_btn");
 if (tests_btn) {

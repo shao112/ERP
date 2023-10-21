@@ -279,6 +279,7 @@
                                             <tr>
                                                 <th>地址</th>
                                                 <th>備註</th>
+                                                <th>刪除</th>
                                             </tr>
                                         </thead>
                                         <tbody id="address_tbody">
@@ -372,6 +373,7 @@
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
             "{% static 'js/client/person.js' %}",
+            "{% static 'js/client/address.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
@@ -403,10 +405,10 @@
 
 
         person_ary = personJsonArray;
-        // address_ary = addressJsonArray;
+        address_ary = addressJsonArray;
 
         renderPersonsList();
-        // renderAddressList();
+        renderAddressList();
 
     }
 </script>

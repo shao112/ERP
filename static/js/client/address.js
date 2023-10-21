@@ -11,7 +11,7 @@ let address_str = document.getElementById("address_str");
 
 let address_ary = [];
 
-function renderPersonsList() {
+function renderAddressList() {
   address_tbody.innerHTML = ""; // 清空 tbody 的内容
 
   address_ary.forEach(function (formData, index) {
@@ -52,14 +52,14 @@ if(address_str){
 
 function deleteItem(index) {
   address_ary.splice(index, 1);
-  renderPersonsList();
+  renderAddressList();
 }
 
 function AddProcess() {
   var formData = {
     contact_address: document.getElementById("contact_address").value,
-    contact_address: document.getElementById("contact_address").value,
+    address_remark: document.getElementById("address_remark").value,
   };
   address_ary.push(formData);
-  renderPersonsList();
+  renderAddressList();
 }
