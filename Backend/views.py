@@ -2122,15 +2122,33 @@ class Calendar_View(View):
                work_method_str = "派工"
 
 
+            vehicle = project.vehicle.all().values_list('vehicle_id', flat=True)
+            merged_vehicle_id = ', '.join(vehicle)
+
+            project_id = f"工派-{str(project.id).zfill(5)}"
+            print("project_id",project_id)
+            # client = project.project_confirmation.quotation.client.client_name
+
+
+            quotation_obj = project.project_confirmation.quotation
+            client = "" if quotation_obj.client is None else quotation_obj.client.client_name
+            requisition = "" if quotation_obj.requisition is None else quotation_obj.requisition.client_name
+            # requisition = project.project_confirmation.quotation.requisition.client_name
+
             data.append({
                 'title': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,
                 'work_method': work_method_str,
                 'location': project.location,
                 'lead_employee': merged_names,
-                'work_employee': work_employee_merged_names
-                # 'start': project.attendance_date.strftime('%Y-%m-%d'),
+                'work_employee': work_employee_merged_names,
+                'employee_assign_id': project_id,
+                'vehicle': merged_vehicle_id,
+                'remark': project.remark,
+                'client': client,
+                'requisition': requisition
             })
+            print(data)
         return JsonResponse(data, status=200,safe = False)
 
 class Vehicle_View(View):

@@ -21,12 +21,17 @@
             </div>
             <div class="col-12 col-md-4 border p-4 p-md-2">
                 <h5 class="font-weight-bold">點擊行程 顯示詳細內容</h5>
+                <div id="employee_assign_id"></div>
                 <div id="calendar-title"></div>
                 <div id="calendar-date"></div>
+                <div id="work_method"></div>
                 <div id="calendar-location"></div>
                 <div id="work_emp"></div>
                 <div id="tests_emp"></div>
-                <div id="work_method"></div>
+                <div id="vehicle"></div>
+                <div id="remark"></div>
+                <div id="client"></div>
+                <div id="requisition"></div>
             </div>
         </div>
     </div>
@@ -77,15 +82,26 @@
                 var title = info.event.title
 
                 var date = moment(info.event.start).format('YYYY-MM-DD')
-                var location = info.event.extendedProps.location
+                var location = info.event.extendedProps.location;
                 var work_method = info.event.extendedProps.work_method;
-                var lead_employee = info.event.extendedProps.lead_employee
-                var work_employee = info.event.extendedProps.work_employee
+                var lead_employee = info.event.extendedProps.lead_employee;
+                var work_employee = info.event.extendedProps.work_employee;
+                var employee_assign_id = info.event.extendedProps.employee_assign_id;
+                var vehicle = info.event.extendedProps.vehicle;
+                var remark = info.event.extendedProps.remark;
+                var client = info.event.extendedProps.client;
+                var requisition = info.event.extendedProps.requisition;
+                console.log(info.event.extendedProps)
                 document.getElementById('calendar-title').innerHTML = "專案名稱: " + title;
                 document.getElementById('calendar-date').innerHTML = "日期: " + date;
                 document.getElementById('calendar-location').innerHTML = "地點: " + location;
                 document.getElementById('work_emp').innerHTML = "帶班主管: " + lead_employee;
                 document.getElementById('work_method').innerHTML = "方式: " + work_method;
+                document.getElementById('employee_assign_id').innerHTML = "工派單編號: " + employee_assign_id;
+                document.getElementById('vehicle').innerHTML = "車輛: " + vehicle;
+                document.getElementById('remark').innerHTML = "備註: " + remark;
+                document.getElementById('client').innerHTML = "客戶: " + client;
+                document.getElementById('requisition').innerHTML = "業主名稱: " + requisition;
             },
         });
         calendar.render();
