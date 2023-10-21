@@ -1838,22 +1838,30 @@ class Vehicle(ModifiedModel):
 # 客戶
 class Client(ModifiedModel):
     client_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶簡稱")
+    client_english_name = models.CharField(max_length=150, blank=True, null=True, verbose_name="客戶英文名稱")
+    client_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶編號")
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)
+    established = models.DateField(blank=True, null=True, verbose_name="成立時間")
+    contact_principal = models.CharField(max_length=50, verbose_name="公司負責人",blank=True, null=True)
+    pay_days = models.CharField(max_length=50, verbose_name="付款天數",blank=True, null=True)
+    pay_method = models.CharField(max_length=50, verbose_name="付款方式",blank=True, null=True)
+    address = models.CharField(max_length=100,verbose_name="公司地址",blank=True, null=True)
+    remark = models.TextField( null=True, blank=True, verbose_name='備註')
+    #紀錄字串
+    contact_str=models.TextField( null=True, blank=True, verbose_name='聯絡人字串')
+    address_str=models.TextField( null=True, blank=True, verbose_name='地址字串')
+    # 顯示報價單的人
     contact_person = models.CharField(max_length=50, verbose_name="聯絡人",blank=True, null=True)
-    address = models.CharField(max_length=100,verbose_name="地址",blank=True, null=True)
     tel = models.CharField(max_length=20, verbose_name="電話",blank=True, null=True)
     mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
     fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
     email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
     class Meta:
-        verbose_name = "客戶簡稱"
+        verbose_name = "客戶管理"
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.client_name  
     
-
-
-
 
 #勞健保參照
 class LaborHealthInfo(ModifiedModel):
@@ -1864,7 +1872,6 @@ class LaborHealthInfo(ModifiedModel):
     retirement_benefit = models.IntegerField(verbose_name="勞退公提")
     health_insurance_personal = models.IntegerField(verbose_name="健保個人自付")
     health_insurance_employer = models.IntegerField(verbose_name="健保單位負擔")
-
 
     def __str__(self):
         return f"{self.salary_low} ~ {self.salary_high}"
@@ -1913,6 +1920,12 @@ class News(ModifiedModel):
         verbose_name = "最新消息"
         verbose_name_plural = verbose_name
     
+    def attachment_url(self):
+        file = self.attachment
+        if file:
+            return file.url
+        return ""
+
     def save(self, *args, **kwargs):
         # Call the save method of the parent class (ModifiedModel) using super()
         super().save(*args, **kwargs)

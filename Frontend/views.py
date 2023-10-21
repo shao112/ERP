@@ -453,6 +453,8 @@ class Quotation_ListView(ListView):
     template_name = 'quotation/quotation.html'
     context_object_name = 'quotation'
     def get_context_data(self, **kwargs):
+        x = Employee.objects.get(id=49)
+        print(x.info())
         context = super().get_context_data(**kwargs)
         context["workitems"]= Work_Item.objects.all()
         context['client'] = Client.objects.all()

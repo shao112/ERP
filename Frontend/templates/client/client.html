@@ -37,80 +37,167 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="client-label">客戶管理</h5>
+                    <h5 class="modal-title" id="client-label">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" data-target="#none_equipment_tab">客戶管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-target="#person_tab">人員記錄</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" data-target="#address_tab">地址紀錄</a>
+                            </li>
+
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+
                 <div class="modal-body">
                     <div class="container shadow-sm">
                         <form action="/restful/client" id="form" method="POST" class="pb-4" data-method="post">
                             {% csrf_token %}
-                            <input name="id" hidden />
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="none_equipment_tab">
+                                    <input name="id" hidden />
 
-                            <div class="form-row">
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="client_name">客戶簡稱</label>
-                                        <input class="form-control form-control-sm" name="client_name" id="client_name"
-                                            required></input>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
-                                    <label for="tax_id">統一編號</label>
-                                    <input class="form-control form-control-sm" name="tax_id" id="tax_id">
-                                </div>
-                                
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="client_name">客戶簡稱</label>
+                                                <input class="form-control form-control-sm" name="client_name"
+                                                    id="client_name" required></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <label for="tax_id">統一編號</label>
+                                            <input class="form-control form-control-sm" name="tax_id" id="tax_id">
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="address">公司地址</label>
+                                                <input class="form-control form-control-sm" name="address" id="address">
+                                            </div>
+                                        </div>
 
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="contact_person" >聯絡人</label>
-                                        <input class="form-control form-control-sm" name="contact_person"
-                                            id="contact_person" >
                                     </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="tel">電話</label>
-                                        <input class="form-control form-control-sm" name="tel" id="tel">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="mobile">手機</label>
-                                        <input class="form-control form-control-sm" name="mobile" id="mobile">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="email">電子郵件</label>
-                                        <input class="form-control form-control-sm" name="email" id="email">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="fax">傳真</label>
-                                        <input class="form-control form-control-sm" name="fax" id="fax">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4">
 
-                                    <div class="form-group">
-                                        <label for="address">地址</label>
-                                        <input class="form-control form-control-sm" name="address" id="address">
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="client_english_name">客戶英文簡稱</label>
+                                                <input class="form-control form-control-sm" name="client_english_name"
+                                                    id="client_english_name"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <label for="contact_principal">公司負責人</label>
+                                            <input class="form-control form-control-sm" name="contact_principal"
+                                                id="contact_principal">
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+
+                                            <div class="form-group">
+                                                <label for="address">公司成立日期</label>
+                                                <input class="form-control form-control-sm" type="date"
+                                                    name="established" id="established">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row">
+
+                                        <div class="col-12 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="client_id">客戶編號</label>
+                                                <input class="form-control form-control-sm" name="client_id"
+                                                    id="client_id">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-lg-2">
+                                            <label for="pay_days">付款天數</label>
+                                            <input class="form-control form-control-sm" name="pay_days"
+                                                id="pay_days"></input>
+                                        </div>
+
+                                        <div class="col-12 col-lg-3">
+                                            <div class="form-group">
+                                                <label for="pay_method">付款方式</label>
+                                                <select class="form-control form-control-sm" name="pay_method">
+                                                    <option value="匯款">匯款</option>
+                                                    <option value="票付">票付</option>
+                                                    <option value="現金">現金</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="remark">備註</label>
+                                                <textarea class="form-control form-control-sm" name="remark"
+                                                    id="remark_control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <h4>報價單主要聯絡人員資料</h4>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="contact_person">聯絡人</label>
+                                                <input class="form-control form-control-sm" name="contact_person"
+                                                    id="contact_person">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="tel">電話</label>
+                                                <input class="form-control form-control-sm" name="tel" id="tel">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="mobile">手機</label>
+                                                <input class="form-control form-control-sm" name="mobile" id="mobile">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="email">電子郵件</label>
+                                                <input class="form-control form-control-sm" name="email" id="email">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-4">
+                                            <div class="form-group">
+                                                <label for="fax">傳真</label>
+                                                <input class="form-control form-control-sm" name="fax" id="fax">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                            style="color: #fff;background: #1E3050;">送出</button>
+                                        <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                            style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
                                     </div>
                                 </div>
 
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
-                                    style="color: #fff;background: #1E3050;">送出</button>
-                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
-                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
+                                <div class="tab-pane fade" id="person_tab">
+                                    人
+                                </div>
+                                <div class="tab-pane fade" id="address_tab">
+                                    地址
+                                </div>
+
                             </div>
                         </form>
 

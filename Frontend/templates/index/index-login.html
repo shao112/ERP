@@ -206,7 +206,7 @@
                 <div class="news container">
                     {% for n in news %}
                     <a href="" data-toggle="modal" data-target="#news-modal"
-                        data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}|{{ n.attachment }}">
+                        data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}|{{  n.attachment_url}}" >
                         <div class="row">
                             <div class="col-6" style="overflow-x: hidden;">
                                 [{{ n.get_category_display }}][{{ n.get_type_display }}]

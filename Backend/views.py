@@ -2276,8 +2276,7 @@ def calculate_annual_leave(employee):
     return f"年資:{years}、給假{give_day} 給過?{matching_leaves}"
 
 #一天86400 
-# @background(schedule=86400)
-@background(schedule=60)
+@background(schedule=86400)
 def calculate_annual_leave_for_all_employees():
     print("go task")
     employees = Employee.objects.all()
@@ -2286,7 +2285,5 @@ def calculate_annual_leave_for_all_employees():
         print(employee.full_name)
         print(msg)
     print("end")
-#啟動後要刪除
-# calculate_annual_leave_for_all_employees()
-# import subprocess
-# subprocess.Popen(['python', 'manage.py', 'process_tasks'])
+#啟動
+calculate_annual_leave_for_all_employees()
