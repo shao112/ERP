@@ -62,6 +62,8 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="none_equipment_tab">
                                     <input name="id" hidden />
+                                    <input name="address_str" id="address_str"  hidden />
+                                    <input name="contact_str" id="contact_str"  hidden />
 
                                     <div class="form-row">
                                         <div class="col-12 col-lg-4">
@@ -183,21 +185,113 @@
 
 
                                     </div>
-                                    <div class="d-flex justify-content-between">
-                                        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
-                                            style="color: #fff;background: #1E3050;">送出</button>
-                                        <button type="button" class="btn border border-dark rounded w-50 mx-4"
-                                            style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="tab-pane fade" id="person_tab">
-                                    人
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="name">姓名</label>
+                                                <input type="text" class="form-control form-control-sm" name="name"
+                                                    id="name"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="position">職稱</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="position" id="position"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="telOrExt">電話/分機</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="telOrExt" id="telOrExt"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="person_fax">傳真</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="person_fax" id="person_fax"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="phone">行動電話</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="phone" id="phone"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="mail">mail</label>
+                                                <input type="email" class="form-control form-control-sm"
+                                                    name="mail" id="mail"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="person_remark">備註</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="person_remark" id="person_remark"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        
+                                    <button type="button" id="person_form_btn"class="btn border border-dark rounded" style="color: #fff;background: #1E3050;">新增聯絡人員</button>
+                                    <table class="table" id="person" style="border:3px #cccccc solid;">
+                                        <thead>
+                                            <tr>
+                                                <th>姓名</th>
+                                                <th>職稱</th>
+                                                <th>電話/分機</th>
+                                                <th>傳真</th>
+                                                <th>行動電話</th>
+                                                <th>mail</th>
+                                                <th>備註</th>
+                                                <th>刪除</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="person_tbody">
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="tab-pane fade" id="address_tab">
-                                    地址
+                                    <div class="form-row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="contact_address">地址</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="contact_address" id="contact_address"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="address_remark">備註</label>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    name="address_remark" id="address_remark"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="address_form_btn"class="btn border border-dark rounded"
+                                                style="color: #fff;background: #1E3050;">新增聯絡地址</button>
+                                    <table class="table" id="worklist" style="border:3px #cccccc solid;">
+                                        <thead>
+                                            <tr>
+                                                <th>地址</th>
+                                                <th>備註</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="address_tbody">
+                                        </tbody>
+                                    </table>
                                 </div>
 
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;">送出</button>
+                                <button type="button" class="btn border border-dark rounded w-50 mx-4"
+                                    style="color: #fff;background: #1E3050;" data-dismiss="modal">關閉</button>
                             </div>
                         </form>
 
@@ -277,6 +371,7 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/client/person.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",
             "{% static 'js/bootstrap-table/exportAllOptionToExcel.js' %}",
             "{% static 'js/bootstrap-table/exportSelectedOptionToExcel.js' %}",
@@ -292,6 +387,26 @@
     async function LoadData(event) {
         console.log("load")
         getdata = await GET_handleClick(event);
+        
+        person_del_show = true;
+        var person_str_value_load = getdata["contact_str"];
+        var address_str_value_load = getdata["address_str"];
+        
+        var personJsonArray =[]
+        if(person_str_value_load){
+            personJsonArray= JSON.parse(person_str_value_load);
+        }
+        var addressJsonArray =[]
+        if(address_str_value_load){
+            addressJsonArray= JSON.parse(address_str_value_load);
+        }
+
+
+        person_ary = personJsonArray;
+        // address_ary = addressJsonArray;
+
+        renderPersonsList();
+        // renderAddressList();
 
     }
 </script>

@@ -1861,6 +1861,17 @@ class Client(ModifiedModel):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.client_name  
+    def contact_ary(self):
+        try:
+            return json.loads(self.contact_str)
+        except json.JSONDecodeError:
+            return []
+    
+    def address_ary(self):
+        try:
+            return json.loads(self.address_str)
+        except json.JSONDecodeError:
+            return []
     
 
 #勞健保參照

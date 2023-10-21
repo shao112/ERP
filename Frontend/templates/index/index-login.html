@@ -236,7 +236,7 @@
                                 <span class="type-badge badge badge-dark"></span>
                                 <span class="level-badge badge badge-dark"></span>
                                 <span class="created-date-badge"></span>
-                                <span class="created-date-download badge badge-dark"></span>
+                                <span class="download"></span>
                             </h5>
                             <div class="content">
                             </div>
@@ -300,10 +300,10 @@
             console.log(url)
             var downloadLink = '';
             if (url) {
-                downloadLink = `<a href="${url}" download>下載</a>`;
+                downloadLink = `<a href="${url}" download>附件</a>`;
             }
 
-            modalBadgeRow.find('.created-date-download').html(downloadLink);
+            modalBadgeRow.find('.download').html(downloadLink);
             
             var modalContent = $(this).find('.modal-body');
             modalContent.find('.content').html(`

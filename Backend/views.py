@@ -970,6 +970,7 @@ class Client_View(UserPassesTestMixin,View):
     
     def put(self,request):
         dict_data = convent_dict(request.body)
+        print(dict_data)
         form = ClientForm(dict_data)
         if form.is_valid():
             Client.objects.get(id=dict_data['id']).update_fields_and_save(**dict_data)
@@ -989,6 +990,9 @@ class Client_View(UserPassesTestMixin,View):
             return JsonResponse({"error":str(e)},status=500)
 
     def post(self,request):
+        get_person = request.POST.getlist("person")
+        # get_address = request.POST.getlist("address")
+
         form = ClientForm(request.POST)
         if form.is_valid():
             newobj = form.save()
