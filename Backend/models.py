@@ -874,6 +874,19 @@ class Project_Job_Assign(ModifiedModel):
     def get_show_id(self):
         return f"工派-{str(self.id).zfill(5)}"
 
+    def lead_employee_str(self):
+        lead_employee_names = self.lead_employee.all().values_list('full_name', flat=True)
+        lead_employee_names = ', '.join(lead_employee_names)
+        return lead_employee_names
+    def work_employee_str(self):
+        work_employee_names = self.work_employee.all().values_list('full_name', flat=True)
+        work_employee_names = ', '.join(work_employee_names)
+        return work_employee_names
+    def vehicle_str(self):
+        vehicle_names = self.vehicle.all().values_list('vehicle_id', flat=True)
+        vehicle_names = ', '.join(vehicle_names)
+        return vehicle_names
+    
 
     @classmethod
     def get_assignments(cls):
