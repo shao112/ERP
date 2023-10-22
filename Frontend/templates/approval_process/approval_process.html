@@ -100,7 +100,6 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in related_records %}
                 <tr>
-                    <!-- 應該可以顯示對display捨的 顯示中文 -->
                     <td>{{ object.target_approval.get_name_display }}</td>
                     <td>{{ object.get_show_id }}</td>
                     <td>

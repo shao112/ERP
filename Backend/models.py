@@ -367,6 +367,7 @@ class Approval_Target(models.Model):
         ('Work_Overtime_Application', '加班單'), #這個value會對應下面的value
         ('Clock_Correction_Application', '補卡單'),
         ('Travel_Application', '車程津貼單'),
+        ('Miss_Food_Application', '誤餐費單'),
     ]
     name =models.CharField(max_length=30,verbose_name="表單名稱",choices=STATUS_CHOICES)
     approval_order = models.JSONField(null=True, verbose_name="員工簽核順序")#儲存員工ID、各自主管(X)
@@ -401,6 +402,7 @@ class ApprovalModel(models.Model):
         'Work_Overtime_Application':"Work_Overtime_Application_Approval",
         'Clock_Correction_Application':"Clock_Correction_Application_Approval",
         'Travel_Application':"Travel_Application_Approval",
+        'Miss_Food_Application':"Food_Application_Approval",
     }
 
     #對應的model api 網址，會帶入data-model
@@ -410,6 +412,7 @@ class ApprovalModel(models.Model):
         'Work_Overtime_Application': 'work_overtime_application',
         'Clock_Correction_Application': 'clock_correction_application',
         'Travel_Application': 'Travel_Application',
+        'Miss_Food_Application': 'miss_food',
     }
 
 

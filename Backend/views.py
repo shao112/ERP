@@ -326,6 +326,7 @@ class Approval_View_Process(View):
                 'Leave_Application': 'Leave_Application',
                 'Clock_Correction_Application': 'Clock_Correction_Application',
                 'Travel_Application': 'Travel_Application',
+                'Miss_Food_Application': 'Miss_Food_Application',
             }
 
             try:
@@ -411,7 +412,7 @@ class Approval_Process_Log(View):
         status = request.POST.get('status')
         feedback = request.POST.get('feedback')
         approval_id = request.POST.get('Approval_id')
-
+        print("approval_id: ",approval_id)
         if status not in ["approved", "rejected"]:
             return JsonResponse({"error":"請選擇簽核狀態"},status=400)
         

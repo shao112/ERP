@@ -88,6 +88,9 @@ $("#myModal").on("show.bs.modal", function (event) {
     } else if (modalModel === "Travel_Application") {
       console.log("xxxx");
       $("#tab5").tab("show");
+    } else if (modalModel === "miss_food") {
+      console.log("xxxx");
+      $("#tab6").tab("show");
     } else {
       alert("沒對應的TAB");
     }
