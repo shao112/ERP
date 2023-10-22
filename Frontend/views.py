@@ -106,6 +106,19 @@ class TravelApplicationView_Watch(UserPassesTestMixin,ListView):
         return context
     def test_func(self):
         return Check_Permissions(self.request.user,"管理部")
+    
+class MissFoodApplicationView_Watch(UserPassesTestMixin,ListView):
+    model = Miss_Food_Application
+    template_name = 'miss_food_application/miss_food_application_watch.html'
+    context_object_name = 'Miss_Food_Applications'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["miss_food_application_list"] = Miss_Food_Application.objects.all()
+        context['Miss_Food_ApplicationForm'] = Miss_Food_ApplicationForm()
+        context["all_project_job_assign"] = Project_Job_Assign.objects.all()
+        return context
+    def test_func(self):
+        return Check_Permissions(self.request.user,"管理部")
 
     
 

@@ -99,6 +99,7 @@ class Travel_ApplicationForm(BaseModelForm):
 
         return cleaned_data
 
+
 class ExtraWorkDayForm(BaseModelForm):
     class Meta:
         model = ExtraWorkDay

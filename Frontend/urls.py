@@ -65,6 +65,7 @@ urlpatterns = [
     path('leave_application_watch', login_required(views.Leave_Application_Watch_List.as_view()), name="Leave_Application_all"),
     path('work_overtime_application_watch',login_required( views.Work_Overtime_Application_Watch_List.as_view()), name="Work_Overtime_Application_watch"),
     path('TravelApplicationView_watch/', login_required(views.TravelApplicationView_Watch.as_view()), name='TravelApplicationView_watch'),
+    path('miss_food_application_watch/', login_required(views.MissFoodApplicationView_Watch.as_view()), name='Miss_Food_Application_watch'),
     path('approval_list_watch', login_required(views.Approval_List_Watch.as_view()), name="approval_list_Watch"),
 ]
 
