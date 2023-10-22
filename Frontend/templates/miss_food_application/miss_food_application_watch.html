@@ -158,6 +158,9 @@
 
         console.log("load")
         getdata = await GET_handleClick(event);
+        var choose_input = document.getElementById("fod_project_job_assign_id");
+        const change_event = new Event("change");
+        choose_input.dispatchEvent(change_event);
 
     }
 
