@@ -79,7 +79,7 @@ class ModifiedModel(models.Model):
                 current_status = self.Approval.current_status
                 if current_status == 'completed' or current_status == 'in_process':
                     raise PermissionDenied("簽核中或簽核完成禁止刪除")
-                else: #順便刪除簽核
+                else: #刪除簽核
                     self.Approval.delete()
 
 
@@ -1059,8 +1059,12 @@ class Miss_Food_Application(ModifiedModel):
         max_up = 300#最大值
         h_list=[]#紀錄
         money=0#總誤餐費
-        for obj in cls.objects.filter(created_by=employee):
-            print(obj.date)
+        objs =cls.objects.filter(created_by=employee
+                                #  ,  Approval__current_status="completed"
+                                 )
+        for obj in objs:
+
+
             year = obj.date.year
             month = obj.date.month
             day = obj.date.day
