@@ -1514,8 +1514,7 @@ class Leave_Application_View(View):
             getObject =Leave_Application.objects.get(id=int(dict_data['id']))
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
-            if getObject.Approval:
-                getObject.Approval.delete()
+
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -1578,8 +1577,7 @@ class Clock_Correction_Application_View(View):
             getObject=Clock_Correction_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
-            if getObject.Approval:
-                getObject.Approval.delete()
+
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -1596,8 +1594,7 @@ class Work_Overtime_Application_View(View):
             getObject = Work_Overtime_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
-            if getObject.Approval:
-                getObject.Approval.delete()
+
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -2035,8 +2032,7 @@ class Miss_Food_View(View):
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
 
-            if getObject.Approval:
-                getObject.Approval.delete()
+
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:
@@ -2047,13 +2043,8 @@ class Miss_Food_View(View):
 
     def post(self,request):
         form = Miss_Food_ApplicationForm(request.POST)
-        print("xxx")
-        print("xxx")
-        print(request.POST)
         if form.is_valid():
-            print("xxx")
             newobj = form.save()
-            print(newobj)
             return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -2097,8 +2088,7 @@ class Travel_Application_View(View):
             getObject=Travel_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
-            if getObject.Approval:
-                getObject.Approval.delete()
+
             getObject.delete()
             return HttpResponse("成功刪除",status=200)
         except ObjectDoesNotExist:

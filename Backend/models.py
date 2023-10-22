@@ -79,6 +79,9 @@ class ModifiedModel(models.Model):
                 current_status = self.Approval.current_status
                 if current_status == 'completed' or current_status == 'in_process':
                     raise PermissionDenied("簽核中或簽核完成禁止刪除")
+                else: #順便刪除簽核
+                    self.Approval.delete()
+
 
         super().delete(*args, **kwargs)
 
