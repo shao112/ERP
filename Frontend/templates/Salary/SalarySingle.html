@@ -51,6 +51,10 @@
                         <a class="nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4"
                             aria-selected="false">車程津貼 </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab6-tab" data-toggle="tab" href="#tab6" role="tab" aria-controls="tab6"
+                            aria-selected="false">誤餐費 </a>
+                    </li>
                 </ul>
                 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -277,6 +281,33 @@
 
                     </div>
 
+                    <div class="tab-pane fade" id="tab6" role="tabpanel" aria-labelledby="tab6-tab">
+                        誤餐費{{miss_food_list.0}} 
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>申請日期</th>
+                                    <th>誤餐單號</th>
+                                    <th>工派單號</th>
+                                    <th>工程地點</th>
+                                    <th>費用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for detail in miss_food_list.1 %}
+                                <tr>
+                                    <td>{{ detail.date|date:"Y/m/d" }}</td>
+                                    <td>{{ detail.id }}</td>
+                                    <td>{{ detail.project_job_assign }}</td>
+                                    <td>{{ detail.location |safe }}</td>
+                                    <td>{{ detail.money }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -351,8 +382,6 @@
                             </div>
 
                         </div>
-
-
 
                         <button onclick="reset_salary()">重新計算薪水</button>
                         <button type="button" data-toggle="modal" data-target="#myModal">

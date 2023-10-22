@@ -43,6 +43,7 @@
             </div>
         </div>
     </div>
+    <h4>員工居住: {{user.employee.location_city}}</h4>
     <div class="clock-correction-application-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
@@ -69,6 +70,7 @@
                     <th data-field="id" data-sortable="true">編號</th>
                     <th data-field="date" data-sortable="true">申請時間</th>
                     <th data-field="go_id" data-sortable="true">工派單</th>
+                    <th data-field="go_location" data-sortable="true">工派單地點</th>
                     <th data-field="clock_reason" data-sortable="true">對應金額</th>
                 </tr>
             </thead>
@@ -126,9 +128,12 @@
                     <td>
                         {{ obj.project_job_assign.get_show_id }}
                     </td>
+                    <td>
+                        {{ obj.project_job_assign.location }}
+                    </td>
 
                     <td>
-                        {{ obj.project_job_assign.location|Travel_show:user.employee.location_city }}
+                        {{ obj.cal_money }}
                     </td>
                 </tr>
                 {% endfor %}

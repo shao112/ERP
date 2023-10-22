@@ -145,6 +145,7 @@
             cancelButtonText: '刪除'
         }).then((result) => {
             if (result.isConfirmed) {
+                swal.fire({title: '生成中'})
                 $.ajax({
                     type: "post",
                     url: "{% url 'salary_api' year month %}",

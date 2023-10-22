@@ -89,8 +89,10 @@ class Miss_Food_ListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["Miss_Food_Application_list"] = Miss_Food_Application.objects.filter(created_by=self.request.user.employee).order_by("-id")
-
         context["all_project_job_assign"] = Project_Job_Assign.objects.all()
+
+        print(Miss_Food_Application.cal_months(self.request.user.employee,2023,10))
+
         return context
 
 class TravelApplicationView_Watch(UserPassesTestMixin,ListView):
@@ -141,6 +143,7 @@ class SalaryDetailView(UserPassesTestMixin,ListView):
         context["user_id"] = self.kwargs.get('user')
         user_obj = Employee.objects.get(id=user)
         context["salary"] = Salary.objects.get(user=user, year=year, month=month)
+        context["miss_food_list"] = Miss_Food_Application.cal_months(employee= user_obj, year=year, month=month)
         context["work_list"] = Clock.get_hour_for_month(user_obj,year,int(month))
         context["leave_details"] =Leave_Param.get_leave_param_all_details(user= user_obj,year=year,month=month)
         context["leave_cost_details"] =Leave_Param.get_year_total_cost_list(user= user_obj,year=year,month=month)

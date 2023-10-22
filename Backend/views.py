@@ -120,7 +120,7 @@ class SalaryFileView(View):
             title = "激勵性獎金"
         
         if user==0:#全員
-            getEm = Employee.objects.filter(user__is_active=True)
+            getEm = Employee.active_users()
             error_msg=""
             file_paths=[]
             for employee in getEm:
@@ -269,7 +269,7 @@ class SalaryListView(UserPassesTestMixin,View):
                     errors+=f"{employee.full_name} 薪資處理有問題 {e}<br>"
 
         else:
-            employees = Employee.objects.filter(user__is_active=True).exclude(user__username='admin')
+            employees = Employee.active_users()
             for employee in employees:
                 employee_location = employee.location_city
                 if employee_location =="":

@@ -212,7 +212,7 @@ class Employee(ModifiedModel):
 
     @classmethod
     def active_users(cls):
-        return cls.objects.filter(user__is_active=True).exclude(user__username="admin")
+        return cls.objects.filter(user__is_active=True) #.exclude(user__username="admin")
 
     def day_status(self, date): #當天還要上幾小時
 
@@ -884,11 +884,14 @@ class Project_Job_Assign(ModifiedModel):
         return employee_assign_ids
 
     @classmethod
-    def get_data(cls, employee,year,month):#公派當月天數
+    def get_data(cls, employee,year,month,days=None):#公派當月天數
         conditions = Q(work_employee=employee) | Q(lead_employee=employee)
         assignments = cls.objects.filter(conditions, 
                                          attendance_date__year=year, 
                                          attendance_date__month=month).distinct()
+        if days:
+            assignments = assignments.filter(attendance_date__day=days)
+
         return assignments
 
     @classmethod
@@ -978,10 +981,20 @@ class Project_Job_Assign(ModifiedModel):
         #回傳伙食津貼/出差津貼/明細
         return total_money,total_food_money, allowance_list
 
+    @classmethod
+    def get_day_list_day(cls, employee,year,month,days):#公派當月天數
+
+        employee_location = employee.location_city
+        if employee_location =="":
+            return 0,0,{"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
+
+        assignments =cls.get_data(employee,year,month,days)  
+
+        return cls.cal_data_byassignments(assignments,employee_location)
+
 
     @classmethod
     def get_month_list_day(cls, employee,year,month):#公派當月天數
-        from collections import defaultdict
 
         employee_location = employee.location_city
         if employee_location =="":
@@ -1002,17 +1015,70 @@ class Miss_Food_Application(ModifiedModel):
     Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Food_Application_Approval')
     attachment = models.FileField(upload_to="Miss_Food_Attachment", null=True, blank=True, verbose_name="誤餐費附件")
     created_by = models.ForeignKey("Employee",related_name="Miss_Food_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
+
+    def reassignment_attachment_link(self):
+        if self.attachment:
+            download_link = "<a href='{}' download>下載</a>".format(self.attachment.url)
+            return mark_safe(download_link)
+        else:
+            return "未提供"
+        
     def get_show_id(self):
         return f"誤餐-{str(self.id).zfill(5)}"
 
     def cal_money(self):
         employee = self.created_by
         employee_location = employee.location_city
-        if employee_location =="":
+        if employee_location =="" :
             return f"{employee.full_name} 沒有選擇居住城市，無法計算"
-
+        if self.project_job_assign.location==""  :
+            return f"派工單沒有選擇工作地點，無法計算"
         
+        name="派工-誤餐費"
+        if  self.project_job_assign.work_method=="非派工":
+            name="非派工-誤餐費"
 
+        try:
+            reference_entry = ReferenceTable.objects.get(
+                location_city_residence=employee_location,
+                location_city_business_trip=self.project_job_assign.location,
+                name=name
+            )
+            return reference_entry.amount
+        except ReferenceTable.DoesNotExist:
+            return f"找不到{employee_location}對{self.project_job_assign.location}的{name}參照表 "
+
+    @classmethod
+    def cal_months(cls,employee,year,month):
+        max_up = 300#最大值
+        h_list=[]#紀錄
+        money=0#總誤餐費
+        for obj in cls.objects.filter(created_by=employee):
+            print(obj.date)
+            year = obj.date.year
+            month = obj.date.month
+            day = obj.date.day
+            _,food_money,_ = Project_Job_Assign.get_day_list_day(employee,year=year,month=month,days=day)
+
+            use_json={
+                "id":obj.get_show_id(),
+                "date":obj.date,
+                "project_job_assign":obj.project_job_assign.get_show_id(),
+                "location":obj.project_job_assign.location,
+                "money":"備註/元",
+            }
+
+            if food_money < max_up:
+                get_money=obj.cal_money()
+                if not isinstance(get_money, str):
+                    money+= get_money
+                use_json["money"] = get_money               
+            else:
+                use_json["money"] = f"當天已達到{max_up}"
+            
+
+            h_list.append(use_json)
+        return money,h_list
 
 # 派工單
 class Project_Employee_Assign(ModifiedModel):
@@ -1165,8 +1231,8 @@ class Travel_Application(ModifiedModel):
     def get_hour(self):        
         try:
             reference_entry = ReferenceTable.objects.get(
-                location_city_business_trip=self.location_city_go,
-                location_city_residence=self.location_city_end,
+                location_city_business_trip=self.location_city_end,
+                location_city_residence=self.location_city_go,
                 name="車程津貼"
             )
             return True,float(reference_entry.amount)
