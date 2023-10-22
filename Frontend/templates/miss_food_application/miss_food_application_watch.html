@@ -87,7 +87,6 @@
                     <th data-field="3" data-sortable="true">附件</th>
                     <th data-filter-control="input" data-field="date" data-sortable="true">申請日期</th>
                     <th data-filter-control="input" data-field="project_job_assign" data-sortable="true">工作派任計畫</th>
-                    <th data-filter-control="input" data-field="attachment" data-sortable="true">誤餐費附件</th>
                 </tr>
             </thead>
             <tbody class="text-nowrap" style="font-size: 14px;">
@@ -126,7 +125,6 @@
                     <td>
                         {% if miss_food_application.project_job_assign %}{{ miss_food_application.project_job_assign }}{% else %}{% endif %}
                     </td>
-                    <td></td>
 
                 </tr>
                 {% endfor %}

@@ -91,6 +91,9 @@ $("#myModal").on("show.bs.modal", function (event) {
     } else if (modalModel === "miss_food") {
       console.log("xxxx");
       $("#tab6").tab("show");
+      var choose_input = document.getElementById("fod_project_job_assign_id");
+      choose_input.dispatchEvent(change_event);
+
     } else {
       alert("沒對應的TAB");
     }
