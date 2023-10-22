@@ -1,0 +1,58 @@
+<form action="/restful/miss_food" name="miss_food" id="form" method="POST" class="pb-4" data-method="post">
+    {% csrf_token %}
+    <input name="id" hidden>
+    <div class="form-row my-2">
+        <div class="col-12">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="show_data_id">誤餐費申請編號(系統產生)</label>
+                        <input class="readonly form-control form-control-sm" name="show_data_id" id="" readonly></input>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="show_data_id">申請日期</label>
+                        <input required class=" form-control form-control-sm" type="date" name="date" id=""></input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <select class="form-control form-control-sm select2" name="project_job_assign"
+                            id="fod_project_job_assign_id">
+                            <option value="-1">請選擇工作派任計畫</option>
+                            {% for job_assign in all_project_job_assign %}
+                            <option value="{{ job_assign.id }}">
+                                {{job_assign.attendance_date|date:"Y/m/d"}} -
+                                地點 {{job_assign.location }}-
+                                {{job_assign.project_confirmation.quotation.project_name }}-{{ job_assign.get_show_id}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-12">
+                    <label>誤餐附件</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" data-modal="miss_food" name="attachment">
+                        <label class="custom-file-label" for="attachment">Choose file</label>
+                    </div>
+                    <a href="#" id="attachment">下載附件</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if showbtn %}
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn border border-dark rounded w-50 mx-4"
+            style="color: #fff;background: #1E3050;">送出</button>
+        <button type="button" class="btn border border-dark rounded w-50 mx-4" style="color: #fff;background: #1E3050;"
+            data-dismiss="modal">關閉</button>
+    </div>
+    {% endif %}
+</form>

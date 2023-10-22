@@ -313,9 +313,6 @@ class Salary(ModifiedModel):
         details = self.details.filter(deduction=True)
         adjustment_item = details.filter(name="*勞退公提(6%免扣)").first()
         adjustment = 0
-        print("adddd")
-        print(adjustment_item)
-        print(details)
         if adjustment_item:
             adjustment = adjustment_item.adjustment_amount
 
@@ -886,22 +883,17 @@ class Project_Job_Assign(ModifiedModel):
                 
         return employee_assign_ids
 
-
     @classmethod
-    def get_month_list_day(cls, employee,year,month):#公派當月天數
-        from collections import defaultdict
-
-        employee_location = employee.location_city
-        if employee_location =="":
-            return 0,0,{"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
+    def get_data(cls, employee,year,month):#公派當月天數
         conditions = Q(work_employee=employee) | Q(lead_employee=employee)
         assignments = cls.objects.filter(conditions, 
                                          attendance_date__year=year, 
                                          attendance_date__month=month).distinct()
+        return assignments
 
-        # print(assignments)
-        # print(employee_location)
-
+    @classmethod
+    def cal_data_byassignments(cls,assignments,employee_location):
+        from collections import defaultdict
         allowance_dict = defaultdict(lambda: {"id":"","location": "","project_name":"","q_id":"", "date": "", "money": 0,"food":0,"error":"","food_error":""})
 
         use_id=[]
@@ -911,7 +903,7 @@ class Project_Job_Assign(ModifiedModel):
                 continue
 
             assignment_date = assignment.attendance_date
-            day_assignments =  assignments.filter(attendance_date=assignment_date) 
+            day_assignments =  assignments.filter(attendance_date=assignment_date)
             show_date = assignment_date.strftime('%Y-%m-%d')
             show_id=""
             project_name=""
@@ -985,9 +977,41 @@ class Project_Job_Assign(ModifiedModel):
 
         #回傳伙食津貼/出差津貼/明細
         return total_money,total_food_money, allowance_list
-    
+
+
+    @classmethod
+    def get_month_list_day(cls, employee,year,month):#公派當月天數
+        from collections import defaultdict
+
+        employee_location = employee.location_city
+        if employee_location =="":
+            return 0,0,{"error":f"{employee.full_name} 沒有選擇居住城市，無法計算"}
+
+        assignments =cls.get_data(employee,year,month)  
+
+        return cls.cal_data_byassignments(assignments,employee_location)
+
     def __str__(self) :
         return   str(self.pk).zfill(5)
+
+
+#誤餐費申請
+class Miss_Food_Application(ModifiedModel):
+    date = models.DateField(verbose_name="申請日期",blank=True, null=True) 
+    project_job_assign= models.ForeignKey(Project_Job_Assign,on_delete=models.CASCADE,related_name='project_employee_assign_food',null=True, blank=True, verbose_name="工作派任計畫")
+    Approval =  models.ForeignKey(ApprovalModel, null=True, blank=True, on_delete=models.SET_NULL , related_name='Food_Application_Approval')
+    attachment = models.FileField(upload_to="Miss_Food_Attachment", null=True, blank=True, verbose_name="誤餐費附件")
+    created_by = models.ForeignKey("Employee",related_name="Miss_Food_author", on_delete=models.CASCADE, null=True, blank=True, verbose_name='建立人')
+    def get_show_id(self):
+        return f"誤餐-{str(self.id).zfill(5)}"
+
+    def cal_money(self):
+        employee = self.created_by
+        employee_location = employee.location_city
+        if employee_location =="":
+            return f"{employee.full_name} 沒有選擇居住城市，無法計算"
+
+        
 
 
 # 派工單
@@ -1045,6 +1069,41 @@ class Project_Employee_Assign(ModifiedModel):
 
     def get_show_id(self):
         return f"派工-{str(self.id).zfill(5)}"
+    
+
+    def info(self):
+        lead_employee_names = self.lead_employee.all().values_list('full_name', flat=True)
+        merged_names = ', '.join(lead_employee_names)
+        
+        work_employee_names = self.work_employee.all().values_list('full_name', flat=True)
+        work_employee_merged_names = ', '.join(work_employee_names)
+
+        work_method_str = "非派工"
+        if self.work_method:
+            work_method_str = "派工"
+
+        vehicle = self.vehicle.all().values_list('vehicle_id', flat=True)
+        merged_vehicle_id = ', '.join(vehicle)
+
+        project_id = self.get_show_id()
+
+        quotation_obj = self.project_confirmation.quotation
+        client = "" if quotation_obj.client is None else quotation_obj.client.client_name
+        requisition = "" if quotation_obj.requisition is None else quotation_obj.requisition.client_name
+
+        return {
+            'title': self.project_confirmation.quotation.project_name,
+            'start': self.attendance_date,
+            'work_method': work_method_str,
+            'location': self.location,
+            'lead_employee': merged_names,
+            'work_employee': work_employee_merged_names,
+            'employee_assign_id': project_id,
+            'vehicle': merged_vehicle_id,
+            'remark': self.remark,
+            'client': client,
+            'requisition': requisition
+        }
 
     class Meta:
         verbose_name = "派工單"   # 單數

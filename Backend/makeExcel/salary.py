@@ -21,7 +21,7 @@ def salaryFile(get_salary,get_type):
     if get_type:
         title = "薪資條"
     else:
-        title = "激勵性獎金"
+        title = "變動薪資"
 
     get_details = get_salary.details.all()
     file_path = r'media/system_files/salary_template.xlsx'

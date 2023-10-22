@@ -31,6 +31,7 @@ urlpatterns = [
     path('work_overtime_application', views.Work_Overtime_Application_View.as_view(), name="work_overtime_application_api"),
     path('project_employee_assign', views.Project_Employee_Assign_View.as_view(), name='project_employee_assign_api'),
     path('Travel_Application', views.Travel_Application_View.as_view(), name='Travel_Application_api'),
+    path('miss_food', views.Miss_Food_View.as_view(), name='miss_food_api'),
     path('profile', views.Profile_View.as_view(), name="profile_view_api"),
     path('news', views.New_View.as_view(), name="news_view_api"),
     path('calendar', views.Calendar_View.as_view(), name="calendar_api"),

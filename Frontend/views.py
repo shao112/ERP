@@ -8,8 +8,8 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-from Backend.forms import  ReferenceTableForm, VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
+from Backend.forms import  Miss_Food_ApplicationForm,ReferenceTableForm, VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
+from Backend.models import Miss_Food_Application,LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -82,6 +82,16 @@ class Salary_Employees_ListView(UserPassesTestMixin,View):
         return Check_Permissions(self.request.user,"薪水管理")
     
 
+class Miss_Food_ListView(ListView):
+    model = Miss_Food_Application
+    template_name = 'miss_food_application/miss_food.html'
+    context_object_name = 'Miss_Food_Application'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["Miss_Food_Application_list"] = Miss_Food_Application.objects.filter(created_by=self.request.user.employee).order_by("-id")
+
+        context["all_project_job_assign"] = Project_Job_Assign.objects.all()
+        return context
 
 class TravelApplicationView_Watch(UserPassesTestMixin,ListView):
     model = Travel_Application
@@ -324,6 +334,7 @@ class Job_Assign_ListView(UserPassesTestMixin,ListView):
 
     def test_func(self):
         return Check_Permissions(self.request.user,"工程派任計畫")
+
 
 
 # 派工單

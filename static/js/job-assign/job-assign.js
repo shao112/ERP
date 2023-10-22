@@ -41,8 +41,17 @@ function LoadProjectConfirmation () {
                 var client = form.querySelectorAll('[name="client"]')[0];
                 projectName.value = jsonData["project_name"];
                 // c_a.value = jsonData["c_a"];
-                console.log(jsonData)
-                console.log(jsonData["requisition_name"])
+                var attachment = jsonData["attachment"];
+                console.log("url",attachment)
+                var downloadLink = document.getElementById("super_attendance");
+                
+                if (attachment) {
+                    downloadLink.textContent = "下載";
+                    downloadLink.href = attachment; // 將下載連結設定為附件的URL
+                } else {
+                    downloadLink.textContent = "未提供";
+                    downloadLink.href = "#"; // 將下載連結設定為錨點
+                }
                 requisition.value = jsonData["requisition_name"];
                 client.value = jsonData["client_name"];
 

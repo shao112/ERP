@@ -7,8 +7,8 @@ import base64
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 from Backend.models import LOCATION_CHOICES
-from Backend.models import  AnnualLeave,ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
-from Backend.forms import ReferenceTableForm,VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
+from Backend.models import  Miss_Food_Application, AnnualLeave,ReferenceTable, Vehicle,Work_Item_Number,Travel_Application, ExtraWorkDay,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail, Client,Leave_Application,Leave_Param,SysMessage,Approval_Target, Equipment, UploadedFile,Department,Quotation,ApprovalLog,Work_Item,ApprovalModel, Project_Confirmation, Employee, Project_Job_Assign,News,Clock,Project_Employee_Assign
+from Backend.forms import ReferenceTableForm,Miss_Food_ApplicationForm,VehicleForm,Travel_ApplicationForm,ExtraWorkDayForm, ClientForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveParamModelForm,LeaveApplicationForm,ProjectConfirmationForm,EquipmentForm,QuotationForm,DepartmentForm,Work_ItemForm,  EmployeeForm, ProjectJobAssignForm,NewsForm,Project_Employee_AssignForm
 from django.contrib.auth.models import User,Group
 from django.contrib.auth.forms import PasswordChangeForm
 from urllib.parse import parse_qs
@@ -1275,6 +1275,8 @@ class FormUploadFileView(View):
             match getmodal:
                 case "project_confirmation":
                     model=Project_Confirmation.objects.get(id=getid)
+                case "miss_food":
+                    model=Miss_Food_Application.objects.get(id=getid)
                 case "job_assign":
                     model=Project_Job_Assign.objects.get(id=getid)
                 case "employee_assign":
@@ -2001,6 +2003,75 @@ class Job_Assign_View(UserPassesTestMixin,View):
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
+
+class Miss_Food_View(View):
+
+    def put(self,request):
+        dict_data = convent_dict(request.body)
+        form = Miss_Food_ApplicationForm(dict_data)
+        if form.is_valid():
+            getObject = Miss_Food_Application.objects.get(id=int(dict_data['id']))
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能更改"},status=400)
+
+            if "project_job_assign" in dict_data:
+                project_job_assign_instance = Project_Job_Assign.objects.get(pk=int(dict_data["project_job_assign"]))
+                getObject.project_job_assign = project_job_assign_instance
+                del dict_data["project_job_assign"]
+
+
+            getObject.update_fields_and_save(**dict_data)
+
+            return JsonResponse({'data': "完成修改"},status=200)
+        else:
+            return JsonResponse({"error":form.errors},status=400)
+
+
+    def delete(self,request):
+        try:
+            dict_data = convent_dict(request.body)
+            getObject=Miss_Food_Application.objects.get(id=dict_data['id'])
+            if getObject.created_by !=request.user.employee:
+                return JsonResponse({"error":"此單本人才能刪除"},status=400)
+            if getObject.Approval:
+                getObject.Approval.delete()
+            getObject.delete()
+            return HttpResponse("成功刪除",status=200)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error":"資料不存在"},status=400)
+        except  Exception as e:
+            print(e)
+            return JsonResponse({"error":str(e)},status=500)
+
+    def post(self,request):
+        form = Miss_Food_ApplicationForm(request.POST)
+        print("xxx")
+        print("xxx")
+        print(request.POST)
+        if form.is_valid():
+            print("xxx")
+            newobj = form.save()
+            print(newobj)
+            return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
+        else:
+            error_messages = form.get_error_messages()
+            print("error_messages: ",error_messages)
+            return JsonResponse({"error":error_messages},status=400)
+
+    def get(self,request):
+        id = request.GET.get('id')
+        data = get_object_or_404(Miss_Food_Application, id=id)
+        show_data_id= data.get_show_id()
+        data = model_to_dict(data)
+        data["show_data_id"]=show_data_id
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
+
+        return JsonResponse({"data":data}, status=200,safe = False)
+
+
+
+
+
 class Travel_Application_View(View):
 
     def put(self,request):
@@ -2039,6 +2110,7 @@ class Travel_Application_View(View):
 
         if form.is_valid():
             newobj =form.save()
+            newobj.save()
             return JsonResponse({'data':"完成新增","id":newobj.id},status=200)
         else:
             error_messages = form.get_error_messages()
@@ -2125,7 +2197,7 @@ class Calendar_View(View):
             vehicle = project.vehicle.all().values_list('vehicle_id', flat=True)
             merged_vehicle_id = ', '.join(vehicle)
 
-            project_id = f"工派-{str(project.id).zfill(5)}"
+            project_id = project.get_show_id()
             print("project_id",project_id)
             # client = project.project_confirmation.quotation.client.client_name
 

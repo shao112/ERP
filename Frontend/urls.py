@@ -58,6 +58,7 @@ urlpatterns = [
     path('ReferenceTable/<str:name>', login_required(views.ReferenceTable_ListView.as_view()), name="ReferenceTable"),
     path('news/', login_required(views.News_ListView.as_view()), name='news'),
     path('TravelApplicationView/', login_required(views.TravelApplicationView.as_view()), name='TravelApplicationView'),
+    path('Miss_Food/', login_required(views.Miss_Food_ListView.as_view()), name='Miss_Food'),
     path('accounts/logout/', views.signout, name='logout'),
     #查看單號
     path('clock_correction_application_watch', login_required(views.Clock_Correction_Application_Watch_List.as_view()), name="clock_correction_application_watch"),

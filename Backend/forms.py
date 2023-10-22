@@ -1,5 +1,5 @@
 from django import forms
-from .models import ReferenceTable,ExtraWorkDay,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
+from .models import ReferenceTable,Miss_Food_Application,ExtraWorkDay,Client,Travel_Application,Clock_Correction_Application,Leave_Application, Work_Overtime_Application, Leave_Application,Leave_Param,Approval_Target,Quotation,Work_Item,Project_Job_Assign,Department,Equipment,Project_Confirmation,Employee,News,Project_Employee_Assign,Vehicle,ApprovalModel
 
 from django.contrib.auth.models import Group
 
@@ -210,6 +210,7 @@ class ProjectJobAssignForm(BaseModelForm):
 class DepartmentForm(BaseModelForm):
     def clean(self):
         cleaned_data = super().clean()
+        return cleaned_data
 #            raise forms.ValidationError("上層部門不能與自己相同。")
     class Meta:
         model = Department
@@ -218,6 +219,13 @@ class DepartmentForm(BaseModelForm):
             'belong_to_company': forms.Select(attrs={'class': 'form-control form-control-sm', 'id':'belong_to_company_control'}),
         }
         
+class Miss_Food_ApplicationForm(BaseModelForm):
+    class Meta:
+        model = Miss_Food_Application
+        fields = '__all__'
+        
+
+
 # 員工
 class EmployeeForm(BaseModelForm):
 
