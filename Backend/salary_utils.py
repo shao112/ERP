@@ -1,11 +1,9 @@
 from datetime import date, timedelta
-from .models import LaborHealthInfo,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from .models import Miss_Food_Application,LaborHealthInfo,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 
 import math
-
-
 
 
 def create_salary(employee,year,month):
@@ -51,6 +49,19 @@ def create_salary(employee,year,month):
         deduction=False,
         five=True,
     )
+
+    #誤餐費
+    miss_food_money ,_=Miss_Food_Application.cal_months(employee= employee, year=year, month=month)
+
+    SalaryDetail.objects.create(
+        salary=salary,
+        name='誤餐費',
+        system_amount=miss_food_money,
+        adjustment_amount=miss_food_money,
+        deduction=False,
+        five=True,
+    )
+
 
     #勞建保
     labor_insurance_personal = LaborHealthInfo.get_salary_range(employee.labor_protection,"labor_insurance_personal")

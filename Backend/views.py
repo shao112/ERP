@@ -2034,6 +2034,7 @@ class Miss_Food_View(View):
             getObject=Miss_Food_Application.objects.get(id=dict_data['id'])
             if getObject.created_by !=request.user.employee:
                 return JsonResponse({"error":"此單本人才能刪除"},status=400)
+
             if getObject.Approval:
                 getObject.Approval.delete()
             getObject.delete()
