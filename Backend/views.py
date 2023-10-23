@@ -2372,11 +2372,10 @@ def calculate_annual_leave_for_all_employees():
     employees = Employee.objects.all()
     for employee in employees:
         msg = calculate_annual_leave(employee)
-        print(employee.full_name)
-        print(msg)
+        print(employee.id)
+        # print(msg)
     print("end")
+
 #啟動，之後去admin設定參數 改每天
 # calculate_annual_leave_for_all_employees()    
-#以下指令執行後 會觸發
-#python manage.py process_tasks
 
