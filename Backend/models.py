@@ -786,6 +786,11 @@ class Work_Item(ModifiedModel):
 
 #報價單
 class Quotation(ModifiedModel):
+    pay_method_CHOICES = [
+        ('1', '(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款。(用於新客戶)'),
+        ('2', '(2)付款方式:完工請款100%.發票開立後期票30天。(較常使用)'),
+        ('3','(3)付款方式:與業主額外議定(此部分開放自行填寫,利配合部分廠商付款特殊要求)'),
+    ]
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='報價單編號')
     client = models.ForeignKey("Client",related_name="Quotation", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='客戶名稱')
     requisition = models.ForeignKey("Client",related_name="Quotation_buy", on_delete=models.SET_NULL, null=True, blank=True, verbose_name='請購單位')
@@ -793,6 +798,7 @@ class Quotation(ModifiedModel):
     quote_date = models.DateField(null=True, blank=True, verbose_name="報價日期")
     quote_validity_period = models.IntegerField(verbose_name="報價單有效期",blank=True, null=True)
     business_assistant_user = models.ForeignKey(Employee,related_name="quotaion_process", null=True ,on_delete=models.SET_NULL, verbose_name="業務助理")
+    pay_method = models.CharField(max_length=1, choices=pay_method_CHOICES, null=True, blank=True, verbose_name='付款方式')
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")

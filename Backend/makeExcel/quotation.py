@@ -29,6 +29,10 @@ def quotationFile(quotation_obj,see,five):
     business_assistant_user_name=""
     business_assistant_user_mail=""
     business_tel =""
+    pay_method= "※"+quotation_obj.get_pay_method_display()
+    print("pay_method")
+    print("pay_method")
+    print(pay_method)
     if get_business_assistant :
         business_assistant_user_name,business_assistant_user_mail, business_tel=  get_business_assistant.info()
 
@@ -119,6 +123,8 @@ def quotationFile(quotation_obj,see,five):
                     sheet.cell(row=i, column=index, value=quote_validity_period)
                 elif cell_value == "BUSINESS_TEL":
                     sheet.cell(row=i, column=index, value=business_tel)
+                elif cell_value == "pay_method":
+                    sheet.cell(row=i, column=index, value=pay_method)
                 elif cell_value == "ITEM_LIST":
                     if  len(item_list)==0:
                         sheet.cell(row=i, column=index, value="")
