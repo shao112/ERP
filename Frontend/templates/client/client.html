@@ -30,6 +30,43 @@
 </style>
 
 
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="fileUploadModalLabel">客戶檔案上傳</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="fileUploadForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fileNameInput">檔案名稱</label>
+                            <input type="text" class="form-control" id="fileNameInput">
+                        </div>
+                        <div class="form-group col-md-6">
+
+                            <label>選擇檔案</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control-file" id="fileInput">
+                                <label class="custom-file-label" for="fileInput">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded"
+                        style="color: #fff;background: #1E3050;">上傳</button>
+                </form>
+                <hr>
+                <h4>檔案列表</h4>
+                <ul id="fileList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="main px-3">
     <div id="error-message"></div>
@@ -324,6 +361,7 @@
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true"data-field="client_file_upload">檔案上傳</th>
                     <th data-field="client_name" data-sortable="true">客戶簡稱</th>
                     <th data-field="client_user" data-sortable="true">聯絡人</th>
                     <th data-field="tel" data-sortable="true">電話</th>
@@ -347,7 +385,10 @@
                             <i class="far fa-sm fa-trash-alt"></i>
                         </a>
                     </td>
-
+                    <td>
+                        <a href="" onclick="setClientId({{client.pk}})" data-toggle="modal"
+                            data-target="#fileUploadModal">點擊</a>
+                    </td>
                     <td>
                         {{ client.client_name }}
                     </td>
@@ -372,6 +413,7 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/client/client_files.js' %}",
             "{% static 'js/client/person.js' %}",
             "{% static 'js/client/address.js' %}",
             "{% static 'js/bootstrap-table/checked_row.js' %}",

@@ -996,7 +996,17 @@ class Client_View(UserPassesTestMixin,View):
     def get(self,request):
         id = request.GET.get('id')
         data = get_object_or_404(Client, id=id)
+
+        uploaded_files = data.uploaded_files.all() 
+        uploaded_files_dict_list = []
+        for file in uploaded_files:
+            file_dict = model_to_dict(file)
+            file_dict["file"] = file.file.url
+            uploaded_files_dict_list.append(file_dict)
+
         data = model_to_dict(data)
+        data["uploaded_files"]=uploaded_files_dict_list
+        
         return JsonResponse({"data":data}, status=200,safe = False)
     
 class ExtraWorkDay_View(UserPassesTestMixin,View):
@@ -1300,6 +1310,8 @@ class FormUploadFileView(View):
                     model=Work_Overtime_Application.objects.get(id=getid)
                 case "Clock_Correction_Application":
                     model=Clock_Correction_Application.objects.get(id=getid)
+                case "client":
+                    model=Client.objects.get(id=getid)
                 case _:
                     return JsonResponse({"data":"no the modal"}, status=400,safe=False)
 
@@ -2282,6 +2294,8 @@ class DeleteUploadedFileView(View):
                 model=Quotation.objects.get(id=obj_id)
             case "project_employee_assign":
                 model=Project_Employee_Assign.objects.get(id=obj_id)
+            case "client":
+                model=Client.objects.get(id=obj_id)
 
         uploaded_file = get_object_or_404(UploadedFile, id=file_id)
         if uploaded_file in model.uploaded_files.all():

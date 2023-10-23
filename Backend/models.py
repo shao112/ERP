@@ -2010,6 +2010,8 @@ class Client(ModifiedModel):
     mobile = models.CharField(max_length=20, verbose_name="手機",blank=True, null=True)
     fax = models.CharField(max_length=20, verbose_name="傳真",blank=True, null=True)
     email = models.EmailField(verbose_name="電子郵件",blank=True, null=True)
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="clientfile")
+
     class Meta:
         verbose_name = "客戶管理"
         verbose_name_plural = verbose_name
