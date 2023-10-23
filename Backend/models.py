@@ -215,7 +215,7 @@ class Employee(ModifiedModel):
 
     @classmethod
     def active_users(cls):
-        return cls.objects.filter(user__is_active=True) #.exclude(user__username="admin")
+        return cls.objects.filter(user__is_active=True) .exclude(user__username="admin")
 
     def day_status(self, date): #當天還要上幾小時
 
