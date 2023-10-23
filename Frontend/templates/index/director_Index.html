@@ -19,11 +19,9 @@
             <thead>
                 <tr class="text-nowrap">
                     <th>我的員工</th>
-                    {% for e in other_employees %}
-                        {% for date in e.clock_data %}
+                        {% for date in show_data %}
                             <th>{{ date.day }}</th>
                         {% endfor %}
-                    {% endfor %}
                 </tr>
             </thead>
             <tbody>

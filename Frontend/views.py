@@ -213,6 +213,14 @@ class SalaryListView(UserPassesTestMixin,ListView):
         context["next_month"] = next_month
         context["prev_year"] = prev_year
         context["prev_month"] = prev_month
+        error_objs = []
+        objs = Employee.active_users()
+        for obj in objs:
+            if not obj.location_city:
+                error_objs.append({"employee": obj, "error_message": "出生地(系統計算)未填"})
+            if not obj.start_work_date:
+                error_objs.append({"employee": obj, "error_message": "到職日未填"})
+        context["error_objs"] =error_objs
 
         return context    
     def test_func(self):
@@ -223,19 +231,23 @@ class SalaryListView(UserPassesTestMixin,ListView):
 # 主管管理
 class Director_Index(View):
     def get(self,request):
-            current_employee = request.user.employee
-            other_employees = current_employee.departments.employees.filter(user__is_active=True)
-            # .exclude(id=current_employee.id,user__username="admin")
+        current_employee = request.user.employee
+        other_employees = current_employee.departments.employees.filter(user__is_active=True)
+        # .exclude(id=current_employee.id,user__username="admin")
 
-            other_employees = convent_employee(other_employees)
-            for employee in other_employees:
-                employee['clock_data'] = get_weekly_clock_data(employee['id'])
-                print(employee['clock_data'])
+        other_employees = convent_employee(other_employees)
+        show_data=[]
 
-            # print(other_employees)
-            # print(other_employees[0].get_weekly_clock_data())
-            context= {"other_employees":other_employees}
-            return render(request, 'index/director_Index.html',context)    
+        for employee in other_employees:
+            employee['clock_data'] = get_weekly_clock_data(employee['id'])
+            if show_data==[]:
+                for date in  employee['clock_data'] :
+                    show_data.append(date)
+
+        print(other_employees)
+        # print(other_employees[0].get_weekly_clock_data())
+        context= {"other_employees":other_employees,"show_data":show_data}
+        return render(request, 'index/director_Index.html',context)    
 
 class Index(View):
 

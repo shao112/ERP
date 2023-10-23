@@ -41,6 +41,15 @@
         </a>
     </div>
 
+    {% if error_objs %}
+    <p>錯誤清單：</p>
+    <ul>
+      {% for error_obj in error_objs %}
+        <li>{{ error_obj.employee.full_name }} - {{ error_obj.error_message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
     <div class="salary-table container-fluid shadow-sm table-responsive-lg">
         <table class="table table-sm table-hover text-center" id="table" data-toggle="table" data-sortable="true"
             data-toolbar="#toolbar" data-search="true" data-show-columns="true" data-filter-strict-search="true"
