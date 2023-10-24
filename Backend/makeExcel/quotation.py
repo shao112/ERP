@@ -30,9 +30,7 @@ def quotationFile(quotation_obj,see,five):
     business_assistant_user_mail=""
     business_tel =""
     pay_method= "※"+quotation_obj.get_pay_method_display()
-    print("pay_method")
-    print("pay_method")
-    print(pay_method)
+
     if get_business_assistant :
         business_assistant_user_name,business_assistant_user_mail, business_tel=  get_business_assistant.info()
 
