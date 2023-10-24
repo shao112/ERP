@@ -1339,7 +1339,7 @@ class Leave_Application(ModifiedModel):
     def __str__(self):
         return self.get_show_id()
     
-    def hour_day(self,day):#回傳這天請了多久，並附上詳細資訊
+    def hour_day(self,day):#回傳這筆請了多久，並附上詳細資訊，顯示用
         total_days =  int((self.end_date_of_leave - self.start_date_of_leave).days)
 
         if total_days == 0: #只請一天
@@ -1464,7 +1464,7 @@ class Leave_Param(ModifiedModel):
         return self.leave_name
 
     #統一回傳leave_quantity，主要處理特休計算 才建立這個fuc
-    def leave_hours(self,user):
+    def leave_hours(self,user):#回傳這假別總共有多久小時
 
         if self.id ==1: #特休id是1
             #以目前日期，撈取截止日期最大的        
@@ -1498,7 +1498,7 @@ class Leave_Param(ModifiedModel):
 
     
 
-    #傳入YM，計算範圍內的Leave_Application使用幾小時
+    #傳入YM，計算時間內的Leave_Application使用幾小時
     def calculate_leave_duration_by_YM_or_Total(self, user,Approval_status=None,year=None,month=None):
         total_hours = 0
         total_minutes = 0
