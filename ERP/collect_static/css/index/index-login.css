@@ -1,6 +1,26 @@
 /* index-login.css 包含 sidebar.html 跟 header.html 的修改 */
+.main{
+    width: calc(100vw - var(--sidebar-width) - 20px);
+    position: relative;
+    left: var(--sidebar-width);
+    top: 100px;
+}
+header{
+    width: calc(100vw - var(--sidebar-width));
+    /* width: calc(100vw - 240px); */
+    height: 100px;
+    background: var(--theme-white);
+    position: fixed;
+    left: var(--sidebar-width);
+    z-index: 1;
+}
+header button{
+    width: 90px;
+    height: 35px;
+    font-size: 0.9rem;
+}
 
-/* Vue.js transition */
+/* ---Vue.js transition--- */
 .modal-body .clock-in {
     animation: fade-in;
     animation-duration: 0.5s; 
@@ -25,16 +45,27 @@
         opacity: 1;
     }
 }
-/* Vue.js transition */
+/* ---Vue.js transition--- */
+.clock-inout .modal-footer a{
+    color: #fff;
+    background: #1E3050;
+}
+.clock-inout .modal-footer a:hover{
+    color: #fff;
+    background: #1d2c46;
+}
 
+.employee_full_name{
+    font-size: 0.9rem;
+}
 .news .row{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.modal-body a:hover{
-    color: #fff;
+.clock-inout .modal-body a:hover{
+    /* color: #fff; */
     background: #f0f0f0;
 }
 
@@ -45,6 +76,7 @@
     position: fixed;
     overflow: hidden;
     z-index: 2;
+    overflow-y: scroll;
 }
 .sidebar.collapsing {
     width: 0;
@@ -54,7 +86,7 @@
 }
 .sidebar a{
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 .sidebar .nav-link[data-toggle].collapsed:after {
     content: "\25BE";
@@ -68,35 +100,23 @@
     height: 100px;
 }
 
-.main{
-    width: calc(100vw - var(--sidebar-width) - 20px);
-    position: relative;
-    left: var(--sidebar-width);
-    top: 100px;
-}
-header{
-    width: calc(100vw - var(--sidebar-width));
-    /* width: calc(100vw - 240px); */
-    height: 100px;
-    background: var(--theme-white);
-    position: fixed;
-    left: var(--sidebar-width);
-    z-index: 1;
-}
-header button{
-    width: 105px;
-    height: 35px;
+.sidebar #message-count {
+    position: absolute;
+    right: 33px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    font-size: 4px;
 }
 
-.clock-inout .modal-footer a{
-    color: #fff;
-    background: #1E3050;
-}
-.clock-inout .modal-footer a:hover{
-    color: #fff;
-    background: #1d2c46;
-}
-@media(max-width:767px) {
+
+
+
+
+@media(max-width:851px) {
     .main{
         width: 100vw;
         margin-left: calc(-1 * var(--sidebar-width));
@@ -109,8 +129,9 @@ header button{
         display: inline-block;
     }
     header button {
-        font-size: 0.9rem;
-        width: 90px;
+        font-size: 0.8rem;
+        width: 100px;
         height: 30px;
     }
+    
 }

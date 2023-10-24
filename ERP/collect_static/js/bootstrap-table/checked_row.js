@@ -2,12 +2,12 @@
 let checked = []
 
 function updateCheckedArray(checkbox) {
-    console.log('觸發！');
-    console.log(checkbox)
+    // console.log('觸發！');
+    // console.log(checkbox)
 
     const value = checkbox.value;
     const index = checked.indexOf(value);
-    console.log(value)
+    // console.log(value)
 
 
     if (checkbox.checked && index === -1) {
@@ -32,7 +32,8 @@ function syncCheckedRowsWithArray() {
 }
 
 function getSelectedValues() {
-    console.log(checked);
+    // console.log(checked);
+    return checked;
 }
 $('#table').on('page-change.bs.table', function (e, number, size) {
     Promise.resolve().then(function () {

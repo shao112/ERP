@@ -1,18 +1,17 @@
 function showSwal(title, text, icon) {
     return Swal.fire({
         title: title,
-        text: text,
+        html: text,
         icon: icon,
         showCancelButton: true,
         confirmButtonText: '確定',
-        cancelButtonText: '取消',
     });
 }
 
 
 
 //匯入處理
-var fileInput = document.getElementById('fileInput');
+var fileInput = document.getElementById('fileInput_file');
 function importfile() {
 
     fileInput.click();
@@ -28,21 +27,25 @@ fileInput.addEventListener('change', async function () {
 
     const formData = new FormData(); // Create a new FormData object
     formData.append('fileInput', fileInput.files[0]); // Add the selected file to the FormData
-    console.log("ee"); // Handle the success response from Django
     console.log(formData); // Handle the success response from Django
+    model = fileInput.getAttribute('data-model');
 
+    console.log("fileInput: ")
+    console.log(fileInput)
+    console.log("model: "+model)
+    Swal.fire("發送中", "請勿重整網頁")
     $.ajax({
         type: 'POST',
-        url: '/restful/project-confirmation/file', // Replace this with your actual Django endpoint URL
+        url: "/restful/" + model + "/file", // Replace this with your actual Django endpoint URL
         headers: {
-            'X-CSRFToken': getcsrftoken()
+            'X-CSRFToken': csrftoken
         },
         data: formData,
         processData: false,
         contentType: false,
         success: function (response) {
             console.log(response); // Handle the success response from Django
-            Swal.fire("操作成功", "完成").then(() => {
+            Swal.fire("操作成功", "全部匯入正常").then(() => {
                 location.reload();
               });
         },
@@ -51,7 +54,9 @@ fileInput.addEventListener('change', async function () {
             if (xhr.status == 400 || xhr.status == 404) {
               var errorMessage = xhr.responseJSON.error;
               console.log(errorMessage);
-              showSwal("操作失敗", errorMessage, "error", false);
+              showSwal("操作失敗", errorMessage, "error", false).then(() => {
+                location.reload();
+              });
             } else if (xhr.status === 403) {
               alert("無權獲得該頁詳細，請聯絡管理員");
             } else {

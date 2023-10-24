@@ -1,289 +1,372 @@
+let api_method ="post";
 function showSwal(title, text, icon, showCancelButton) {
-    setting_dict = {
-        title: title,
-        html: text,
-        icon: icon,
-    }
-    console.log(showCancelButton)
-    if (showCancelButton) {
-        setting_dict.showCloseButton = true;
-        setting_dict.showCancelButton = true;
-        setting_dict.confirmButtonText = "確認";
-        setting_dict.cancelButtonText = "取消";
-    }
-    console.log(setting_dict)
-    return Swal.fire(setting_dict);
+  setting_dict = {
+    title: title,
+    html: text,
+    icon: icon,
+  };
+  // console.log(showCancelButton)
+  if (showCancelButton) {
+    setting_dict.showCloseButton = true;
+    setting_dict.showCancelButton = true;
+    setting_dict.confirmButtonText = "確認";
+    setting_dict.cancelButtonText = "取消";
+  }
+  console.log(setting_dict);
+  return Swal.fire(setting_dict);
 }
 
+function get_all_input() {
+  const allElements = document.querySelectorAll("input, select, textarea");
+  return allElements;
+}
+
+function unlock_input() {
+  const get_input = get_all_input();
+  // console.log(get_input);
+  get_input.forEach((input) => {
+    if (!input.classList.contains("readonly")) {
+      input.removeAttribute("readonly");
+      input.disabled = false;
+    }
+  });
+}
+
+function lock_input() {
+  const get_input = get_all_input();
+  
+  get_input.forEach((input) => {
+    let input_className = input.className;
+    if (!input_className.includes("bootstrap-table-filter-control-") && !input_className.includes("search-input")  ) {
+      input.setAttribute("readonly", "readonly");
+      input.disabled = true;
+    }
+  });
+}
 
 function cleanform() {
-    $("[id*='_select2']").each(function () {
-        var id = $(this).attr("id");
-        if (id.endsWith("_select2")) {
-            $('#' + id).val(null).trigger('change');
-        }
-    });
-    $("#form")[0].reset();
-    $("#form").attr("data-method", "POST");
+  $("[id*='_select2']").each(function () {
+    var id = $(this).attr("id");
+    if (id.endsWith("_select2")) {
+      $("#" + id)
+        .val(null)
+        .trigger("change");
+    }
+    // $("form .modal table tbody").html()
+  });
+
+  var inputElements = document.querySelectorAll('form input[type="file"]');
+
+  for (var i = 0; i < inputElements.length; i++) {
+    var inputElement = inputElements[i];
+    var name = inputElement.name;
+    var linkElement = document.getElementById(name);
+    if (linkElement) {
+      linkElement.href = "#";
+      linkElement.target = "_self";
+      linkElement.textContent = "未上傳資料";
+    }
+  }
+
+  $("#form")[0].reset();
+  $("#form").attr("data-method", "POST");
+  api_method="post";
 }
 
 // 新增表單時使用post
 $("#sys_new").on("click", function () {
-    cleanform()
+  cleanform();
+  unlock_input();
 });
-
-
 
 //  獲取資料並帶入
 
-document.querySelectorAll('.sys_get').forEach(element => {
-    // console.log("ee")
-    element.addEventListener('click', GET_handleClick.bind(element));
+document.querySelectorAll(".sys_get").forEach((element) => {
+  // console.log("ee")
+  element.addEventListener("click", GET_handleClick.bind(element));
 });
 
-function GET_handleClick(event) {
-    cleanform()
-    const clickedElement = event.target.closest('[data-id]');
-    const url = "/restful/" + clickedElement.getAttribute('data-url');
-    const id = clickedElement.getAttribute('data-id');
+/**
+ * 說明
+ * @param {event} param1 - 點擊的btn event
+ * @param {bringdata} param2 - true由該事件帶入表單，false 不由GET_handleClick處理(目前沒使用到，但保留彈性)
+ * @returns {type} 會回傳取得的data
+ */
+async function GET_handleClick(event, bringdata = true) {
+  cleanform();
+  api_method="put";
+  try {
+    var clickedElement = event.target.closest("[data-id]");
+    var url = "/restful/" + clickedElement.getAttribute("data-url");
+    var id = clickedElement.getAttribute("data-id");
+  } catch (error) {
+    // console.error("An error occurred:", error);
+    var modalType = event.getAttribute("data-modal");
+    var id = event.getAttribute("data-id");
+    var url = "/restful/" + event.getAttribute("data-url");
+  }
 
-    console.log(`URL: ${url}, ID: ${id}`);
+  $("#form").attr("data-method", "put");
+  $("#form").attr("data-id", id);
+  // console.log(`URL: ${url}, ID: ${id}`);
 
-    formData = { id: id, };
-
+  formData = { id: id };
+  return new Promise((resolve, reject) => {
     $.ajax({
-        type: "GET",
-        url: url,
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        data: formData,
-        success: function (response) {
+      type: "GET",
+      url: url,
+      headers: {
+        "X-CSRFToken": csrftoken,
+      },
+      data: formData,
+      success: function (response) {
+        jsonData = response.data;
+        delete jsonData.created_date;
+        delete jsonData.update_date;
+        delete jsonData.modified_by;
+        delete jsonData.author;
 
-            jsonData = response.data
-            for (var key in jsonData) {
-                var input = document.getElementsByName(key)[0];
-                if (input) {
-                    let get_value = jsonData[key];
-
-                    if (key == "attendance_date") {
-                        if (jsonData[key] == null) {
-                            continue;
-                        }
-                        for (var i = 0; i < get_value.length; i++) {
-                            var dateStr = get_value[i];
-                            var option = new Option(dateStr, dateStr, true, true);
-                            input.appendChild(option);
-                        }
-                        $('#attendance_date_select2').select2();
-                        continue;
-                    }
-
-
-                    if (typeof (jsonData[key]) == "object" && get_value != null) {
-                        // 如果是陣列，先取得對應的options，以及select2的欄位
-                        const options = input.options;
-                        selectname = `#${key}_select2`
-                        console.log("GET_" + key + "=> " + selectname);
-                        console.log(get_value)
-                        get_value = Object.values(get_value);
-                        console.log(get_value)
-                        for (let i = 0; i < options.length; i++) {
-                            const option = options[i];
-                            const option_id = option.value;
-
-                            var containsValue = false;
-                            // = get_value.find(item => item == option_id);
-                            console.log(typeof (get_value[0]))
-                            if (typeof (get_value[0]) == "object") {
-
-                                containsValue = get_value.find(item => item.id == option_id);
-                            } else {
-                                containsValue = get_value.find(item => item == option_id);
-                            }
-                            console.log(get_value)
-                            console.log(option_id)
-                            console.log(containsValue)
-                            if (containsValue) {
-                                option.selected = true;
-                            }
-                        }
-                        $(selectname).trigger('change');
-                    } else {
-                        input.value = jsonData[key];
-                        // console.log("帶資料:" + input.value);
-                    }
-
-                    if (key == "editor_content") { //觸發change事件
-                        editor.setData(jsonData[key]);
-                    }
-
-                    const select2_change_key = ["project_confirmation", "project_job_assign", "vehicle"];
-
-
-                    if (select2_change_key.includes(key)) { //觸發change事件
-                        const event = new Event("change");
-                        input.dispatchEvent(event);
-                    }
-
-                } else {
-                    console.log("Input not found for key:", key);
-                }
-            }
-
-            $("#form").attr("data-method", "put");
-            $("#form").attr("data-id", id);
-
-
-
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                console.log(errorMessage)
-                showSwal('操作失敗', errorMessage, 'error', false)
-            } else {
-                alert("系統發生錯誤");
-                console.log(errorThrown)
-            }
+        resolve(jsonData);
+        if (bringdata == false) {
+          return; //設定回傳資料
         }
-    });
 
+        for (var key in jsonData) {
+          var input = document.getElementsByName(key)[0];
+          if (input) {
+            let get_value = jsonData[key];
+            if (input.type == "file" ) {
+              var element = document.getElementById(key);
+
+              // console.log(get_value);
+              console.log(key);
+              console.log(typeof jsonData[key]);
+              // console.log(element);
+              if(get_value != null){
+                element.href = get_value;
+                element.target = "_blank";
+                element.textContent = "下載";
+              }else{
+                element.href = "#";
+                element.target = "";
+                element.textContent = "未上傳";
+                
+              }
+              continue;
+            }
+
+            if (typeof jsonData[key] == "object" && get_value != null) {
+              //判斷是不是陣列
+              console.log(key);
+              SetSelect2(input, key, get_value);
+              continue;
+            }
+
+            input.value = get_value;
+            // console.log("key " + key + " 帶資料:" + get_value);
+          } else {
+            // console.log("Input not found for key:", key);
+          }
+        }
+      },
+      error: function (xhr, textStatus, errorThrown) {
+        console.log(xhr.status);
+        if (xhr.status == 400 || xhr.status == 404) {
+          var errorMessage = xhr.responseJSON.error;
+          console.log(errorMessage);
+          showSwal("操作失敗", errorMessage, "error", false);
+        } else if (xhr.status === 403) {
+          alert("無權獲得該頁詳細或操作，請聯絡管理員");
+        } else {
+          alert("系統發生錯誤");
+          console.log(errorThrown);
+        }
+      },
+    });
+  });
 }
 
 $("form").on("submit", function (event) {
-    console.log("新增 or 修改")
-    event.preventDefault();
+  var form = $(this);
+  if (form.attr("id") === "nouse") {
+    return
+  }
 
-    var form = $(this);
-    var url = form.attr("action");
-    var formData = form.serialize();
-    console.log("add form");
+  console.log("新增 or 修改");
+  event.preventDefault();
 
-    form.find(":input").each(function () {
-        var inputElement = $(this);
-        var inputType = inputElement.attr("type");
-        var inputName = inputElement.attr("name");
-        // inputType === "file"，inputName === "attachment"
-        if ( (inputType === "file") && (inputElement[0] != undefined)) {
-            var fileInput = inputElement[0];
-            console.log(fileInput)
-            var modal = inputElement.data("modal");
-            var idValue = form.find('input[name="id"]').val()
-            var formData = new FormData();
-            formData.append("uploaded_file", fileInput.files[0]);
-            formData.append("name", inputName);
-            formData.append("id", idValue);
-            formData.append("modal", modal);
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
-            $.ajax({
-                type: "POST",
-                url: "/restful/formuploadfile",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                success: function(response){
-                    console.log("上傳成功",response)
-                },
-                error: function(xhr, status, error){
-                    console.log("上傳失敗",error)
-                }
-            })
+  var url = form.attr("action");
+  var formData = form.serialize();
+  var method =  api_method;//form.data("method");
+
+  console.log("form data");
+  console.log(formData);
+  console.log(method);
+
+  var idValue = form.find('input[name="id"]').val();
+
+  if(formData==[]){
+    alert("簽核完成或是簽核中，請勿修改。")
+    return
+  }
+
+  $.ajax({
+    type: method,
+    url: url,
+    data: formData,
+    async: false,
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+    success: function (response) {
+      jsonData = response.data;
+
+      if (method == "post") {
+        idValue = response.id;
+      }
+        Swal.fire("操作成功", "完成").then(() => {
+        location.reload();
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      if (xhr.status === 400) {
+        var errorMessage = xhr.responseJSON.error;
+        console.log(errorMessage);
+
+        var errorMessageHTML = "<ul>";
+
+        if (typeof errorMessage == "string") {
+          errorMessageHTML += "<li>" + errorMessage + "</li>";
+        } else {
+          Object.entries(errorMessage).map(([key, errors]) => {
+            errors.forEach((error) => {
+              errorMessageHTML += "<li>" + error + "</li>";
+            });
+          });
         }
-    });
 
-    var method = form.data("method");
+        errorMessageHTML += "</ul>";
+        console.log(errorMessageHTML);
 
+        Swal.fire({
+          title: '操作失敗',
+          html: errorMessageHTML,
+          icon: 'error',
+          confirmButtonText: '確定'
+        });
 
-    $.ajax({
-        type: method,
-        url: url,
+      } else if (xhr.status === 403) {
+        alert("無權獲得該頁詳細或操作，請聯絡管理員");
+      } else {
+        alert("系統發生錯誤");
+        console.log(errorThrown);
+      }
+    },
+  });
+
+  form.find(":input").each(function () {
+    var inputElement = $(this);
+    var inputType = inputElement.attr("type");
+    var inputName = inputElement.attr("name");
+    // inputType === "file"，inputName === "attachment"
+    if (inputType === "file" && inputElement[0] != undefined) {
+      var fileInput = inputElement[0];
+      var file = fileInput.files[0];
+      if (!file) {
+        return;
+      }
+
+      console.log(fileInput);
+      var modal = inputElement.data("modal");
+      console.log("idValue: " + idValue);
+      var formData = new FormData();
+      formData.append(inputName, file);
+      formData.append("name", inputName);
+      formData.append("id", idValue);
+      formData.append("modal", modal);
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+      $.ajax({
+        type: "POST",
+        url: "/restful/formuploadfile",
         data: formData,
+        processData: false,
+        contentType: false,
         headers: {
-            'X-CSRFToken': csrftoken
+          "X-CSRFToken": csrftoken,
         },
         success: function (response) {
-            jsonData = response.data
-
-            showSwal('操作說明', jsonData, 'success', false).then(() => {
-                // location.reload();
-            })
+          console.log("上傳成功", response);
         },
-        error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                console.log(errorMessage)
-                var errorMessageHTML = "<ul>";
-                Object.entries(errorMessage).map(([key, errors]) => {
-                    errors.forEach(error => {
-                        errorMessageHTML += "<li>" + error + "</li>";
-                    });
-                });
-                errorMessageHTML += "</ul>";
-                console.log(errorMessageHTML)
-
-
-                showSwal('操作失敗', errorMessageHTML, 'error', false)
-            } else {
-                alert("系統發生錯誤");
-                console.log(errorThrown)
-            }
-        }
-    });
-
+        error: function (xhr, status, error) {
+          console.log("上傳失敗", error);
+        },
+      });
+    }
+  });
 });
 
 // 刪除
 
-document.querySelectorAll('.sys_del').forEach(element => {
-    element.addEventListener('click', DELETE_handleClick.bind(element));
+document.querySelectorAll(".sys_del").forEach((element) => {
+  element.addEventListener("click", DELETE_handleClick.bind(element));
 });
 
-
-
 async function DELETE_handleClick(event) {
-    const result = await showSwal('確認刪除', '你確定要刪除該項目嗎？', 'warning', true);
+  const result = await showSwal(
+    "確認刪除",
+    "你確定要刪除該項目嗎？",
+    "warning",
+    true
+  );
 
-    if (!result.isConfirmed) {
-        return;
-    }
+  if (!result.isConfirmed) {
+    return;
+  }
 
-    const clickedElement = event.target.closest('[data-id]'); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
-    // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
-    const url = "/restful/" + clickedElement.getAttribute('data-url');
-    const id = clickedElement.getAttribute('data-id');
+  const clickedElement = event.target.closest("[data-id]"); // 有時候會失敗抓不到data-id，懷疑是冒泡事件
+  // const clickedElement = event.target; // 誰觸發這個 event -> 刪除 btn
+  const url = "/restful/" + clickedElement.getAttribute("data-url");
+  const id = clickedElement.getAttribute("data-id");
+  const approvalStatus = clickedElement.getAttribute("data-approval");
 
-    console.log(`URL: ${url}, ID: ${id}`);
+  // console.log(`URL: ${url}, ID: ${id}`);
+  // console.log(`URL:${approvalStatus}`);
 
-    formData = { id: id, };
+  if (approvalStatus == "in_process" || approvalStatus == "completed") {
+    return showSwal(
+      "刪除異常",
+      "此單正在簽核中或是已完成，請先收回。如果已完成請通知主管處理。",
+      "error",
+      false
+    );
+  }
 
-    $.ajax({
-        type: "DELETE",
-        url: url,
-        headers: {
-            'X-CSRFToken': csrftoken  // 在請求標頭中包含 CSRF token
-        },
-        data: formData,
-        success: function (response) {
-            showSwal('操作說明', "成功刪除", 'success', false)
-            location.reload();
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            if (xhr.status === 400) {
-                var errorMessage = xhr.responseJSON.error;
-                showSwal('操作失敗', errorMessage, 'error', false)
-            } else {
-                alert("系統發生錯誤" + xhr.responseJSON.error);
-                console.log(errorThrown)
-            }
-        }
-    });
+  formData = { id: id };
 
-
-
+  $.ajax({
+    type: "DELETE",
+    url: url,
+    headers: {
+      "X-CSRFToken": csrftoken, // 在請求標頭中包含 CSRF token
+    },
+    data: formData,
+    success: function (response) {
+      Swal.fire("操作成功", "").then(() => {
+        location.reload();
+      });
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      if (xhr.status === 400) {
+        var errorMessage = xhr.responseJSON.error;
+        showSwal("操作失敗", errorMessage, "error", false);
+      } else if (xhr.status === 403) {
+        alert("無權操作，請聯絡管理員");
+      } else {
+        alert("系統發生錯誤" + xhr.responseJSON.error);
+        console.log(errorThrown);
+      }
+    },
+  });
 }

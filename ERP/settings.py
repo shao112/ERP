@@ -38,6 +38,8 @@ ALLOWED_HOSTS = ["*"]
 # 指令 python manage.py collectstatic 會把這裡使用到的靜態檔案放在底下 STATIC_ROOT 路徑
 
 INSTALLED_APPS = [
+    #託管
+    "daphne",
     'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
