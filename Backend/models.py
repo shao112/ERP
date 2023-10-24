@@ -222,7 +222,7 @@ class Employee(ModifiedModel):
         leave_applications = self.leave_list.filter(
             start_date_of_leave__lte=date,
             end_date_of_leave__gte=date,
-            # Approval__current_status="completed"
+            Approval__current_status="completed"
         )
         total_hour = 8
         total_minutes = 0
@@ -1079,7 +1079,7 @@ class Miss_Food_Application(ModifiedModel):
         h_list=[]#紀錄
         money=0#總誤餐費
         objs =cls.objects.filter(created_by=employee
-                                #  ,  Approval__current_status="completed"
+                                 ,  Approval__current_status="completed"
                                  )
         for obj in objs:
 
@@ -1278,7 +1278,7 @@ class Travel_Application(ModifiedModel):
             created_by=user,
             date__year=year,
             date__month=month,
-            # Approval__current_status="completed"
+            Approval__current_status="completed"
         )
 
         for app in travel_apps:
@@ -1492,8 +1492,8 @@ class Leave_Param(ModifiedModel):
         if month:
             applications = applications.annotate(month=ExtractMonth('start_date_of_leave')).filter(month=month)
 
-        # if Approval_status:
-        #     applications = applications.filter(Approval__current_status="completed")
+        if Approval_status:
+            applications = applications.filter(Approval__current_status="completed")
         return applications
 
     
@@ -1709,7 +1709,7 @@ class Work_Overtime_Application(ModifiedModel):
             created_by=user,
             date_of_overtime__year=year,
             date_of_overtime__month=month,
-            # Approval__current_status="completed"
+            Approval__current_status="completed"
         ).order_by("date_of_overtime")
 
         use_id = []
@@ -1758,7 +1758,7 @@ class Work_Overtime_Application(ModifiedModel):
                 week_time=0 #計算六日累計時數
                 applications = cls.objects.filter(
                     Q(Q(created_by=user) & Q(date_of_overtime=date)) 
-                    # &  Q(Approval__current_status="completed")
+                    &  Q(Approval__current_status="completed")
                 )
 
                 date_next= date
