@@ -56,6 +56,8 @@ INSTALLED_APPS = [
 ]
 BACKGROUND_TASK_RUN_ASYNC = True
 
+ASGI_APPLICATION = 'ERP.asgi.application'
+
 
 
 DJANGO_TASKS = [
