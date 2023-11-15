@@ -1897,7 +1897,10 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
 
     def get(self,request):
         id = request.GET.get('id')
-        data = get_object_or_404(Project_Confirmation, id=id)
+        try:
+            data = get_object_or_404(Project_Confirmation, id=id)
+        except Http404:
+            return JsonResponse({"error": "查無此資料"}, status=404, safe = False)
         get_id=data.get_show_id()
         project_name=data.quotation.project_name if data.quotation else None
         client_name=data.quotation.client.client_name if data.quotation.client else None
@@ -1910,7 +1913,6 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
         data['requisition_name'] = requisition_name
         data["completion_report_employee"] = convent_employee(data["completion_report_employee"])
         data['attachment'] = data['attachment'].url if data['attachment']  else None
-        print(data)
         return JsonResponse({"data":data}, status=200,safe = False)
 
 # 派任單
