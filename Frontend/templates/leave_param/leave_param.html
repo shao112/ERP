@@ -29,7 +29,7 @@
                         <th>假別代碼</th>
                         <th>假別名稱</th>
                         <th>項目類別</th>
-                        <th>給假數</th>
+                        <th>給假數(小時)</th>
                         <th>最低請假數(為0就不卡控)</th>
                         <th>最小請假單位(為0就不卡控)</th>
                         <th>單位</th>
@@ -72,7 +72,7 @@
                         <td>{{ l.leave_type }}</td>
                         <td>
                             <input type="text" name="leave_quantity" class="form-control form-control-sm"
-                                value="{{ l.leave_quantity }}">
+                                value="{{ l.hours }}">
                         </td>
                         <td>
                             <input type="text" name="minimum_leave_number" class="form-control form-control-sm"

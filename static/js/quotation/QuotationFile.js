@@ -1,7 +1,15 @@
-document.getElementById("fileUploadBtn").onclick = handleAPI;
-
+document.getElementByClass(".fileUploadBtn").onclick = handleAPI;
 let employee_id = "";
-const fileListElement = $("#fileList");
+
+$(".fileForm").on("submit", function (event) {
+  var form = $(this);
+  if (form.attr("id") === "fileUploadModal") {
+      const fileListElement = $("#fileList");
+    }else if(form.attr("id") === "LastExcelFileUploadModal"){
+      const fileListElement = $("#lastExcelFileList");
+  }
+})
+
 
 function LoadFileList() {
   $.ajax({

@@ -28,7 +28,7 @@
 
 {% block main %}
 
-<!-- 檔案上傳 -->
+<!-- 內部記錄檔案上傳 -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -40,7 +40,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="fileUploadForm">
+                <form id="fileUploadForm" class="fileForm">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="fileNameInput">檔案名稱</label>
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded"
+                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded fileUploadBtn"
                         style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
@@ -66,6 +66,45 @@
         </div>
     </div>
 </div>
+
+
+<!-- 最終報價單附件上傳 -->
+<div class="modal fade" id="LastExcelFileUploadModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="fileUploadModalLabel">最終報價單附件上傳</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="lastExcelFileUploadForm" class="fileForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fileNameInput">檔案名稱</label>
+                            <input type="text" class="form-control" id="fileNameInput">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>選擇檔案</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control-file" id="fileInput">
+                                <label class="custom-file-label" for="fileInput">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded fileUploadBtn"
+                        style="color: #fff;background: #1E3050;">上傳</button>
+                </form>
+                <hr>
+                <h4>檔案列表</h4>
+                <ul id="lastExcelFileList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- 工項選擇 -->
 <div class="modal fade"  style="z-index: 2000;" id="work_listid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -182,10 +221,10 @@ aria-hidden="true">
                                         </div>
                                         <div class="col-12 col-lg-4">
                                             <div class="form-group">
-                                                <label for="client">業主名稱</label>
+                                                <label for="client">業主名稱(報價客戶)</label>
                                                 <select class="form-control form-control-sm" name="requisition"
                                                     id="requisition" required>
-                                                    <option value="">選擇業主名稱</option>
+                                                    <option value="">選擇業主名稱(報價客戶)</option>
                                                     {% for client in clients %}
                                                     <option value="{{ client.id }}">{{ client.client_name }}
                                                     </option>
@@ -256,13 +295,20 @@ aria-hidden="true">
                                         <div class="col-6">
                                             <label>付款方式</label>
                                             <select class="form-control form-control-sm" name="pay_method">
-                                                <option value="1">(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款。(用於新客戶)</option>
-                                                <option value="2">(2)付款方式:完工請款100%.發票開立後期票30天。(較常使用)</option>
+                                                <option value="1">(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款，用於新客戶</option>
+                                                <option value="2">(2)付款方式:完工請款100%.發票開立後期票30天，較常使用</option>
                                                 <option value="3">(3)付款方式:與業主額外議定(此部分開放自行填寫,利配合部分廠商付款特殊要求)</option>
                                             </select>
                                         </div>
                                     </div>
-
+                                    <div class="form-row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="remark">備註</label>
+                                                <textarea class="form-control form-control-sm" name="remark" id="remark_control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-row">
                                         <div class="col-12">
                                             <br>
@@ -301,10 +347,10 @@ aria-hidden="true">
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#employee-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增報價單
                     </a>
-                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('員工.xlsx')"
+                    <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('報價單.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
-                        onclick="exportSelectedOptionToExcel('員工.xlsx')">匯出已選資料</button>
+                        onclick="exportSelectedOptionToExcel('報價單.xlsx')">匯出已選資料</button>
                     <div class="form-check form-check-inline">
                         <label for="for" class="form-check-label">對內</label>
                         <input type="checkbox" name="" class="form-check-input" id="for" checked>
@@ -321,16 +367,16 @@ aria-hidden="true">
                         class="d-none d-md-table-cell">匯出</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
-                    <th data-field="file" data-sortable="true">檔案上傳</th>
+                    <th data-field="internal_content_file" data-sortable="false">內部記錄檔案</th>
+                    <th data-field="last_excel_file" data-sortable="false">最終報價單附件</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
                         輸出</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
                     <th data-field="project_name" data-sortable="true">專案名稱</th>
                     <th data-field="client" data-sortable="true">客戶名稱</th>
-                    <th data-field="requisition" data-sortable="true">業主名稱</th>
+                    <th data-field="requisition" data-sortable="true">業主名稱(報價客戶)</th>
                     <th data-field="business_assistant" data-sortable="true">助理</th>
                     <th data-field="quote_validity_period" data-sortable="true">報價單有效期</th>
-                    <th data-field="last_excel_link" data-sortable="true">最後報價單</th>
                     <th data-field="created_date" data-sortable="true">建立日期</th>
                 </tr>
             </thead>
@@ -356,7 +402,10 @@ aria-hidden="true">
                         <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal"
                             data-target="#fileUploadModal">點擊</a>
                     </td>
-
+                    <td>
+                        <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal"
+                            data-target="#LastExcelFileUploadModal">點擊</a>
+                    </td>
                     <td><a href="#" onclick="openNewWindow({{item.pk}})">點擊</a></td>
 
                     <td>
@@ -376,9 +425,6 @@ aria-hidden="true">
                     </td>
                     <td>
                         {% if item.quote_validity_period %}{{ item.quote_validity_period }}{% else %}{% endif %}
-                    </td>
-                    <td>
-                        {% if item.last_excel_link %}{{ item.last_excel_link }}{% else %}{% endif %}
                     </td>
                     <td>
                         {{ item.created_date}}

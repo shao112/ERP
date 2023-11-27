@@ -787,8 +787,8 @@ class Work_Item(ModifiedModel):
 #報價單
 class Quotation(ModifiedModel):
     pay_method_CHOICES = [
-        ('1', '(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款。(用於新客戶)'),
-        ('2', '(2)付款方式:完工請款100%.發票開立後期票30天。(較常使用)'),
+        ('1', '(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款，用於新客戶'),
+        ('2', '(2)付款方式:完工請款100%.發票開立後期票30天，較常使用'),
         ('3','(3)付款方式:與業主額外議定(此部分開放自行填寫,利配合部分廠商付款特殊要求)'),
     ]
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='報價單編號')
@@ -802,7 +802,9 @@ class Quotation(ModifiedModel):
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
     uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
-    last_excel = models.FileField(upload_to="last_file", null=True, blank=True, verbose_name="最終版報價單")
+    last_excel = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationLastExcelFile", verbose_name="最終版報價單")
+    # last_excel = models.ManyToManyField(upload_to="last_file", null=True, blank=True, verbose_name="最終版報價單")
+    remark = models.TextField(null=True, blank=True, verbose_name="備註")
 
     def last_excel_link(self):
         if self.last_excel:
@@ -1442,7 +1444,7 @@ class Leave_Param(ModifiedModel):
     )
     leave_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別名稱")
     leave_type = models.CharField(max_length=5, choices=LEAVE_TYPE,blank=True, null=True, verbose_name="項目類別")
-    leave_quantity = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
+    hours = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
     minimum_leave_number = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最低請假數(為0就不卡控)")
     minimum_leave_unit = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最小請假單位(為0就不卡控)")
     unit = models.CharField(max_length=5, choices=UNIT_TYPE,blank=True, null=True,verbose_name="單位")
@@ -1463,7 +1465,7 @@ class Leave_Param(ModifiedModel):
     def __str__(self):
         return self.leave_name
 
-    #統一回傳leave_quantity，主要處理特休計算 才建立這個fuc
+    #統一回傳 hours，主要處理特休計算 才建立這個fuc
     def leave_hours(self,user):#回傳這假別總共有多久小時
 
         if self.id ==1: #特休id是1
@@ -1476,12 +1478,13 @@ class Leave_Param(ModifiedModel):
 
             if len(nearest_annual_leave):
                 nearest_annual_leave = nearest_annual_leave.first()
-                get_hours = nearest_annual_leave.days * 24
+                
+                get_hours = nearest_annual_leave.days * 8
                 return get_hours
             else:
                 return 0
 
-        return self.leave_quantity
+        return self.hours
     
 
     #根據YMD與user、核准狀況的參數 回傳Leave_Application arrays

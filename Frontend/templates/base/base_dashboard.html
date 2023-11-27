@@ -159,34 +159,6 @@
 <!-- moment.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js"></script>
 <script>
-    /*
-    * 控制 sidebarCollapse（側邊面板） 跟 hamburgerMenu（漢堡icon）在 767px 上下的顯示跟隱藏。
-    * 解決當螢幕小於 767px 展開側邊面板時，resize 尺寸會一直彈開 sidebarCollapse。
-    */
-    function checkScreenSize() {
-        if (window.innerWidth <= 851) {
-            const sidebarCollapse = document.querySelector('#sidebarCollapse');
-            const hamburgerMenu = document.querySelector('#hamburgerMenu');
-
-            // 如果 hamburgerMenu 已經 display:inline-block，不要移除show
-            if (hamburgerMenu.style.display != "inline-block") {
-                sidebarCollapse.classList.remove('show');
-            }
-            hamburgerMenu.style.display = "inline-block";
-        } else {
-            const sidebarCollapse = document.querySelector('#sidebarCollapse');
-            sidebarCollapse.classList.add('show');
-
-            const hamburgerMenu = document.querySelector('#hamburgerMenu');
-            hamburgerMenu.style.display = "none";
-        }
-    }
-    // 在頁面載入完成時和視窗尺寸變化時觸發 checkScreenSize 檢查螢幕尺寸的函式
-    window.addEventListener('load', checkScreenSize);
-    // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
-    window.addEventListener('resize', checkScreenSize);
-</script>
-<script>
     // 更美化 file input
     $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();

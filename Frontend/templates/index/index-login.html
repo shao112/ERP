@@ -114,69 +114,13 @@
 
 
 <div class="main">
-    <div class="container shadow-sm">
-      
-        <div class="row text-center">
-            <div class="col-2">
-                <img src="{% static 'img/logo/logo_removebg.png' %}" width="120" class="img-fluid" alt="艾力克電機">
-            </div>
-            <div class="clock-inout-record border-right col-6">
-                
-                <div class="clock-inout-record-title font-weight-bold">未打卡紀錄</div>
-                <div class="clock-inout-record-content my-3">
-                    {% if work_list.error_time == 0 %}
-                    無異常
-                    {% else %}
-                    異常天數:{{work_list.error_time }}
-                    <a href="" data-toggle="modal" data-target="#myModal">明細</a>
-                    {% endif %}
-                </div>
-            </div>
-            {% if False %}
-            <div class="clock-inout-record border-right col-4">
-                
-                <div class="clock-inout-record-title font-weight-bold">派任計畫異常</div>
-                <div class="clock-inout-record-content my-3">
-                    {% for item in employee_assign_ids %}
-                    {{ item }}
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
-
-        </div>
-    </div>
-    <div class="container shadow-sm mt-4">
-        <div class="row text-center">
-            <div class="col-12" style="min-height: 150px;">
-                <div class="container table-responsive">
-                    <table class="table table-sm table-hover">
-                        <thead>
-                            <tr class="text-nowrap">
-                                <th>日期</th>
-                                <th>簽到</th>
-                                <th>簽退</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for e in clock_inout %}
-                            <tr>
-                                <td>{{ e.day }}</td>
-                                <td>{{ e.checkin }}</td>
-                                <td>{{ e.checkout }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container shadow-sm mt-4">
-        <div class="row">
-            <div class="col-12 col-md-6  border-right" style="height: 230px;overflow: scroll;">
+    <div class="container-fluid shadow-sm">
+        <div class="row text-center" style="height: 250px;">
+            <div class="col-6 border-right" style="overflow: scroll;">
                 <div class="font-weight-bold mb-2 text-center"
-                    style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">行程安排</div>
+                    style="position: sticky; top: 0;background: #f4f4f3;font-size: 1.2rem;">
+                    <span class="badge badge-dark px-3 py-2">工作安排</span>
+                </div>
                 <div class="schedule container">
                     {% for date, projects in grouped_projects.items %}
                     <div class="row">
@@ -196,18 +140,78 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class=" col-12 col-md-6" style="height: 230px;overflow: scroll;">
+            <div class="col-6 border-right" style="overflow: scroll;">
                 <div class="font-weight-bold mb-2 text-center"
-                    style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">公司最新資訊</div>
+                    style="position: sticky; top: 0;background: #f4f4f3;font-size: 1.2rem;">
+                    <span class="badge badge-dark px-3 py-2">完工提醒</span></div>
+            </div>
+            {% if False %}
+            <div class="clock-inout-record border-right col-4">
+                
+                <div class="clock-inout-record-title font-weight-bold">派任計畫異常</div>
+                <div class="clock-inout-record-content my-3">
+                    {% for item in employee_assign_ids %}
+                    {{ item }}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="container-fluid shadow-sm mt-4">
+        <div class="row" style="min-height: 200px;">
+            <div class="col-12 col-md-6 text-center">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th>
+                                <span class="badge badge-dark px-3 py-2" style="font-size: 1rem;">日期</span>
+                            </th>
+                            <th>
+                                <span class="badge badge-dark px-3 py-2" style="font-size: 1rem;">簽到</span>
+                            </th>
+                            <th>
+                                <span class="badge badge-dark px-3 py-2" style="font-size: 1rem;">簽退</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in clock_inout %}
+                        <tr>
+                            <td>{{ e.day }}</td>
+                            <td>{{ e.checkin }}</td>
+                            <td>{{ e.checkout }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="font-weight-bold">
+                            <td>
+                                <span class="badge badge-dark px-3 py-2" style="font-size: 1rem;">未打卡紀錄</span>
+                            </td>
+                            {% if work_list.error_time == 0 %}
+                                <td>無異常</td>
+                            {% else %}
+                                <td>異常天數:{{work_list.error_time }}</td>
+                                <td><a href="" data-toggle="modal" data-target="#myModal">明細</a></td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="font-weight-bold mb-2 text-center"
+                    style="position: sticky; top: 0;background: #f4f4f3;z-index: 1;">
+                    <span class="badge badge-dark px-3 py-2" style="font-size: 1rem;">公司最新資訊</span>
+                </div>
                 <div class="news container">
                     {% for n in news %}
-                    <a href="" data-toggle="modal" data-target="#news-modal"
+                    <a href="" class="anchor-no-underline" data-toggle="modal" data-target="#news-modal"
                         data-content="{{ n.title }}|{{ n.get_category_display }}|{{ n.get_type_display }}|{{ n.get_level_display }}|{{ n.created_date }}|{{ n.editor_content }}|{{  n.attachment_url}}" >
                         <div class="row">
-                            <div class="col-6" style="overflow-x: hidden;">
+                            <div class="col-4 anchor-default-color" style="overflow-x: hidden;">
                                 [{{ n.get_category_display }}][{{ n.get_type_display }}]
                             </div>
-                            <div class="col-6" style="overflow-x: hidden;">
+                            <div class="col-8" style="overflow-x: hidden;">
                                 {{ n.title }}
                             </div>
                         </div>
@@ -215,26 +219,26 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
-        <div class="news-modal modal fade" id="news-modal" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="department-label"></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <h5 id="badge-row">
-                                <span class="category-badge badge badge-dark"></span>
-                                <span class="type-badge badge badge-dark"></span>
-                                <span class="level-badge badge badge-dark"></span>
-                                <span class="created-date-badge"></span>
-                                <span class="download"></span>
-                            </h5>
-                            <div class="content">
+            <div class="news-modal modal fade" id="news-modal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="department-label"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <h5 id="badge-row">
+                                    <span class="category-badge badge badge-dark"></span>
+                                    <span class="type-badge badge badge-dark"></span>
+                                    <span class="level-badge badge badge-dark"></span>
+                                    <span class="created-date-badge"></span>
+                                    <span class="download"></span>
+                                </h5>
+                                <div class="content">
+                                </div>
                             </div>
                         </div>
                     </div>

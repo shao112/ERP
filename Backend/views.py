@@ -2204,7 +2204,6 @@ class Calendar_View(View):
             merged_vehicle_id = ', '.join(vehicle)
 
             project_id = project.get_show_id()
-            print("project_id",project_id)
             # client = project.project_confirmation.quotation.client.client_name
 
 
@@ -2214,7 +2213,8 @@ class Calendar_View(View):
             # requisition = project.project_confirmation.quotation.requisition.client_name
 
             data.append({
-                'title': project.project_confirmation.quotation.project_name,
+                'title': quotation_obj.get_show_id() + "-" + project.remark,
+                'project_name': project.project_confirmation.quotation.project_name,
                 'start': project.attendance_date,
                 'work_method': work_method_str,
                 'location': project.location,
@@ -2358,7 +2358,7 @@ def calculate_annual_leave(employee):
         give_day= 16
     else:
         give_day= min(30, math.floor(years))
-
+    print("give_day", give_day)
     matching_leaves = AnnualLeave.objects.filter(end_date=end_date)
 
     if not matching_leaves.exists():#不存在才給

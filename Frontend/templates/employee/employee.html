@@ -379,8 +379,10 @@
                             data-toggle="modal" onclick="LoadData(event)"  data-target="#employee-modal"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        <a data-url="employee" data-id="{{p.pk}}" type="button" class="sys_del btn btn-sm btn-danger"><i
-                                class="far fa-trash-alt"></i></a>
+                        <a data-url="employee" data-id="{{p.pk}}" type="button"
+                            class="sys_del btn btn-sm btn-danger" onclick="DELETE_handleClick(event)">
+                            <i class="far fa-trash-alt"></i>
+                        </a>
                     </td>
                     <td>
                         <a href="" onclick="setEmployeeId({{p.pk}})" data-toggle="modal"

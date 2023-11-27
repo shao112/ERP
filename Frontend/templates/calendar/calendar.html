@@ -80,9 +80,9 @@
             },
             eventClick: function (info) {
                 // fullcalendar 主要傳送 start、end、title，若有其他資料傳送，這裡要用 .extendedProps 抓額外資料
-                var title = info.event.title
-
+                var title = info.event.title // 報價單號 + 備註
                 var date = moment(info.event.start).format('YYYY-MM-DD')
+                var project_name = info.event.extendedProps.project_name;
                 var location = info.event.extendedProps.location;
                 var work_method = info.event.extendedProps.work_method;
                 var lead_employee = info.event.extendedProps.lead_employee;
@@ -92,8 +92,8 @@
                 var remark = info.event.extendedProps.remark;
                 var client = info.event.extendedProps.client;
                 var requisition = info.event.extendedProps.requisition;
-                console.log(info.event.extendedProps)
-                document.getElementById('calendar-title').innerHTML = "專案名稱: " + title;
+                // console.log(info.event.extendedProps)
+                document.getElementById('calendar-title').innerHTML = "專案名稱: " + project_name;
                 document.getElementById('calendar-date').innerHTML = "日期: " + date;
                 document.getElementById('calendar-location').innerHTML = "地點: " + location;
                 document.getElementById('work_emp').innerHTML = "帶班主管: " + lead_employee;

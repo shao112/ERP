@@ -5,13 +5,27 @@
 
 {% load static%}
 <div class="sidebar pl-2 collapse width show" id="sidebarCollapse">
-    <div class="sidebar-logo">
-        <!-- <img src="{% static 'img/logo/logo_compress.jpg' %}" class="img-fluid mx-auto d-block" alt="艾力克電機"> -->
+    
+    <div class="sidebar-img w-50 mx-auto pt-4">
+        <img src="{{ request.user.employee.profile_image.url }}" class="img-fluid" style="object-fit: cover;" >
     </div>
-    <ul class="nav flex-column">
+    <div>
+    <span class="dropdown-toggle d-block text-center" data-toggle="dropdown" style="color: #ffffff;font-size: 0.8rem;">
+        {{ request.user.employee.full_name }}
+    </span>
+    <button type="button" id="clock-inout-btn" class="border border-dark rounded d-block mx-auto mt-2" data-toggle="modal" data-target="#clock-inout" @click="catchDateTime">
+        簽到 / 簽退
+    </button>
+    
+    <div class="dropdown-menu" style="font-size: 0.85rem;">
+        <a class="dropdown-item" href="{% url 'profile'  %}">基本資料</a>
+        <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+    </div>
+        
+    </div>
+    <ul class="nav flex-column mt-4" id="sidebarMenu">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse"
-                aria-expanded="false" aria-controls="calendarCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#calendarCollapse" data-toggle="collapse">
                 <i class="fa-solid fa-user-pen" style="color: #ffffff;"></i> 個人管理
             </a>
             <div class="collapse" id="calendarCollapse">
@@ -23,8 +37,7 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-target="#applicationCollapse" data-toggle="collapse"
-                aria-expanded="false" aria-controls="applicationCollapse">
+            <a class="nav-link collapsed" href="#" data-target="#applicationCollapse" data-toggle="collapse">
                 <i class="fa-solid fa-clipboard" style="color: #ffffff;"></i> 申請管理
             </a>
             <div class="collapse" id="applicationCollapse">
@@ -343,3 +356,40 @@
         {% endif %}
     </ul>
 </div>
+<script>
+    // 確認 Bootstrap 的折疊插件已正確載入
+  $(document).ready(function () {
+        // 檢查視窗寬度並控制折疊元素的狀態
+        function checkWindowSize() {
+        if ($(window).width() < 851) {
+            // 視窗寬度小於851，關閉折疊元素
+            $('#sidebarCollapse').collapse('hide');
+        } else {
+            // 視窗寬度大於851，展開折疊元素
+            $('#sidebarCollapse').collapse('show');
+        }
+        }
+
+        // 初始檢查視窗寬度
+        checkWindowSize();
+
+        // 監聽視窗大小改變事件
+        $(window).resize(function() {
+        // 在視窗大小改變時再次檢查視窗寬度
+        checkWindowSize();
+        });
+    });
+    
+    // 首頁旁邊漢堡icon觸發關閉或開啟，決定要不要加上collapse-hidden
+    $('#sidebarCollapse').on('show.bs.collapse', function () {
+        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
+            $('.main, header').removeClass('collapse-hidden');
+        }
+    });
+  
+    $('#sidebarCollapse').on('hide.bs.collapse', function () {
+        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
+            $('.main, header').addClass('collapse-hidden');
+        }
+    });
+  </script>

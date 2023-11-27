@@ -19,6 +19,12 @@ header button{
     height: 35px;
     font-size: 0.9rem;
 }
+#clock-inout-btn{
+    width: 78px;
+    height: 30px;
+    font-size: 0.75rem;
+}
+
 
 /* ---Vue.js transition--- */
 .modal-body .clock-in {
@@ -84,7 +90,7 @@ header button{
     height: 100vh;
     white-space: nowrap;
 }
-.sidebar a{
+#sidebarMenu .nav-item a{
     color: #fff;
     font-size: 0.9rem;
 }
@@ -96,8 +102,8 @@ header button{
     content: "\25C2";
     /* content: " ◂"; */
 }
-.sidebar-logo{
-    height: 100px;
+.sidebar-img{
+    height: 144px;
 }
 
 .sidebar #message-count {
@@ -112,25 +118,37 @@ header button{
     font-size: 4px;
 }
 
+.collapse-hidden{
+    width: 98vw;
+    left:0;
+}
 
-
-
+.anchor-default-color{
+    color: black;
+}
+.anchor-no-underline:hover{
+    text-decoration: none;
+}
 
 @media(max-width:851px) {
     .main{
-        width: 100vw;
-        margin-left: calc(-1 * var(--sidebar-width));
+        width: 98vw;
+        left:0;
+        /* width: 100vw;
+        margin-left: calc(-1 * var(--sidebar-width)); */
     }
     header{
-        width: 100vw;
-        margin-left: calc(-1 * var(--sidebar-width));
+        width: 98vw;
+        left:0;
+        /* width: 100vw;
+        margin-left: calc(-1 * var(--sidebar-width)); */
     }
     header .navbar-toggler{
         display: inline-block;
     }
-    header button {
-        font-size: 0.8rem;
-        width: 100px;
+    .info-btn {
+        font-size: 0.75rem;
+        width: 90px;
         height: 30px;
     }
     
