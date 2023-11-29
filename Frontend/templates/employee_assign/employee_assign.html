@@ -255,8 +255,8 @@
                                                 <div class="col-4">
                                                     <div class="form-group">
                                                         <label for="equipment_name_control">完工日期</label>
-                                                        <input type="date" class="form-control form-control-sm" name="completion_date"
-                                                            id="completion_date"></input>
+                                                        <input type="date" class="form-control form-control-sm readonly" name="completion_date"
+                                                            id="completion_date" readonly></input>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -273,8 +273,8 @@
                                                         <label for="is_completed">是否完工</label>
                                                         <select class="form-control form-control-sm" name="is_completed"
                                                             id="is_completed" required>
-                                                            <option value="false">否</option>
                                                             <option value="true">是</option>
+                                                            <option value="false" selected>否</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -638,6 +638,19 @@
             toolbar: "#toolbar",
 
         });
+
+        $("#is_completed").change(function() {
+        // 檢查選中的值是否為true
+        if ($(this).val() === "true") {
+            // 如果是true，則移除id為completion_date的input元素的readonly屬性
+            $("#completion_date").removeAttr("readonly");
+            $("#completion_date").val("");
+        } else {
+            // 如果不是true，則將id為completion_date的input元素設為readonly
+            $("#completion_date").attr("readonly", "readonly");
+            $("#completion_date").val("");
+        }
+    });
 
     });
 

@@ -109,6 +109,7 @@
                         </th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_confirmation_id">工確單編號</th>
                         <th data-sortable="true" data-filter-control="input" data-field="job_assign_id">工派單編號</th>
+                        <th data-sortable="true" data-filter-control="input" data-field="quotation_id">報價單號</th>
                         <th data-sortable="true" data-field="project_name">工程名稱</th>
                         <th data-sortable="true" data-field="attendance_date">出勤日期</th>
                         <th data-sortable="true" data-field="lead_employee">帶班主管</th>
@@ -143,6 +144,9 @@
                         </td>
                         <td>
                             {{ j.get_show_id }}
+                        </td>
+                        <td>
+                            {{ j.project_confirmation.quotation.get_show_id }}
                         </td>
                         <td>{{ j.project_confirmation.quotation.project_name }}</td>
                         <td>

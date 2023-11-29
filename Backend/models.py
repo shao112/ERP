@@ -1995,6 +1995,7 @@ class Vehicle(ModifiedModel):
 # 客戶
 class Client(ModifiedModel):
     client_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶簡稱")
+    client_chinese_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶中文名稱")
     client_english_name = models.CharField(max_length=150, blank=True, null=True, verbose_name="客戶英文名稱")
     client_id = models.CharField(max_length=100, blank=True, null=True, verbose_name="客戶編號")
     tax_id = models.CharField(max_length=20, verbose_name="統一編號",blank=True, null=True)

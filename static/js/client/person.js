@@ -73,4 +73,5 @@ function AddProcess() {
   };
   person_ary.push(formData);
   renderPersonsList();
+  $("#person_tab input").val('');
 }

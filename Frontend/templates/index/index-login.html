@@ -130,7 +130,7 @@
                         <div class="col-6">
                             {% for project in projects %}
                             <li href=""
-                                onclick="showjobassign('工派單編號: {{ project.get_show_id }}|專案名稱: {{ project.project_confirmation.quotation.project_name }}|出勤日期: {{ project.attendance_date }}|上班方式:{% if project.get_work_method_display %} 派公 {% else %} 非派工 {% endif %}|地點: {{ project.location }}|帶班主管: {{ project.lead_employee_str }}|檢測人員: {{ project.work_employee_str }}|車輛: {{ project.vehicle_str }}|備註:{{ project.remark  }}|客戶:{{ project.project_confirmation.quotation.client.client_name  }}|業主:{{ project.project_confirmation.quotation.requisition.client_name  }} ')">
+                                onclick="showjobassign('工派單編號: {{ project.get_show_id }}|專案名稱: {{ project.project_confirmation.quotation.project_name }}|出勤日期: {{ project.attendance_date }}|上班方式:{% if project.work_method %} 派工 {% else %} 非派工 {% endif %}|地點: {{ project.location }}|帶班主管: {{ project.lead_employee_str }}|檢測人員: {{ project.work_employee_str }}|車輛: {{ project.vehicle_str }}|備註:{{ project.remark  }}|客戶:{{ project.project_confirmation.quotation.client.client_name  }}|業主:{{ project.project_confirmation.quotation.requisition.client_name  }} ')">
                                 {{ project.project_confirmation.quotation.project_name }}
                             </li>
                             <br>

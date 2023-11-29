@@ -81,7 +81,7 @@ class VehicleAdmin(admin.ModelAdmin):
     list_display = ('vehicle_id', 'vehicle_type', 'created_date', 'update_date')
 # 客戶
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('client_name', 'created_date', 'update_date')
+    list_display = ('client_name', 'client_chinese_name', 'created_date', 'update_date')
 #派工單
 class ProjectEmployeeAssignAdmin(ImportExportModelAdmin):
     list_display = ("id",'project_job_assign', 'modified_by')
