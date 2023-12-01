@@ -118,9 +118,15 @@ header button{
     font-size: 4px;
 }
 
+/* 電腦版 */
 .collapse-hidden{
     width: 98vw;
     left:0;
+}
+/* 手機板 */
+.mobile-collapse-hidden{
+    margin-left: var(--sidebar-width);
+    width: calc(100vw - var(--sidebar-width))!important;
 }
 
 .anchor-default-color{

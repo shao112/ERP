@@ -1,9 +1,9 @@
 <header class="d-flex justify-content-between align-items-center px-3">
     <div>
         <!-- <div class="hamburgerMenu_icon"> -->
-            <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse">
+            <!-- <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse">
                 <i class="fa-solid fa-bars fa-lg"></i>
-            </a>
+            </a> -->
         <!-- </div> -->
         <a href="{% url 'index' %}" style="color: #000; text-decoration: none;">
             <span class="font-weight-bold" style="font-size: clamp(1rem, 2vw, 1.2rem);">
@@ -11,12 +11,36 @@
             </span>
         </a>
     </div>
-    <a href="" type="button" class="btn btn-secondary info-btn">公司網站</a>
-    <a href="" type="button" class="btn btn-secondary info-btn">公司信箱</a>
-    <a href="" type="button" class="btn btn-secondary info-btn">NAS文件</a>
-    <a href="https://www.wgi.tw:5557/m/" type="button" class="btn btn-secondary info-btn">紅外線巡檢</a>
+    
     <div>
-         
+        <button type="button" class="display-none border border-dark rounded mr-2" data-toggle="modal" data-target="#clock-inout" @click="catchDateTime">
+            簽到 / 簽退
+        </button>
+        <span class="display-none dropdown-toggle mr-2 employee_full_name" data-toggle="dropdown">
+            <i class="fa-solid fa-user"></i> {{ request.user.employee.full_name }}
+        </span>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'profile'  %}">基本資料</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+        </div>
+        <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse" role="button"
+            aria-expanded="true" style="display: none;">
+            <i class="fa-solid fa-bars"></i>
+        </a>
+        <!-- <span class="dropdown-toggle d-block text-center" data-toggle="dropdown" style="font-size: 0.8rem;">
+            {{ request.user.employee.full_name }}
+        </span>
+        <button type="button" id="clock-inout-btn" class="border border-dark rounded d-block mx-auto mt-2" data-toggle="modal" data-target="#clock-inout" @click="catchDateTime">
+            簽到 / 簽退
+        </button>
+        
+        <div class="dropdown-menu" style="font-size: 0.85rem;">
+            <a class="dropdown-item" href="{% url 'profile'  %}">基本資料</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
+        </div>
+        <a id="hamburgerMenu" type="button" data-toggle="collapse" data-target="#sidebarCollapse">
+            <i class="fa-solid fa-bars fa-lg"></i>
+        </a> -->
     </div>
 </header>
 <div class="clock-inout modal fade" id="clock-inout" tabindex="-1" aria-labelledby="clock-inout" aria-hidden="true">
@@ -59,7 +83,71 @@
 </div>
 {% load static %}
 <script src="{% static 'js/fuc/check.js' %}"></script>
+<script>
+    /*
+    * 控制 sidebarCollapse（側邊面板） 跟 hamburgerMenu（漢堡icon）在 767px 上下的顯示跟隱藏。
+    * 解決當螢幕小於 767px 展開側邊面板時，resize 尺寸會一直彈開 sidebarCollapse。
+    */
+    function checkScreenSize() {
+        if (window.innerWidth <= 851) {
+            const sidebarCollapse = document.querySelector('#sidebarCollapse');
+            const hamburgerMenu = document.querySelector('#hamburgerMenu');
+            // 如果 hamburgerMenu 已經 display:inline-block，不要移除show
+            if (hamburgerMenu.style.display != "inline-block") {
+                sidebarCollapse.classList.remove('show');
+            }
+            hamburgerMenu.style.display = "inline-block";
+        } else {
+            const sidebarCollapse = document.querySelector('#sidebarCollapse');
+            sidebarCollapse.classList.add('show');
+            const hamburgerMenu = document.querySelector('#hamburgerMenu');
+            hamburgerMenu.style.display = "none";
+        }
+    }
+    // 在頁面載入完成時和視窗尺寸變化時觸發 checkScreenSize 檢查螢幕尺寸的函式
+    window.addEventListener('load', checkScreenSize);
+    // 瀏覽器內建尺寸變化事件，使用 resize 通常不會造成網頁負擔
+    window.addEventListener('resize', checkScreenSize);
+//     // 確認 Bootstrap 的折疊插件已正確載入
+//   $(document).ready(function () {
+//         // 檢查視窗寬度並控制折疊元素的狀態
+//         function checkWindowSize() {
+//         if ($(window).width() < 851) {
+//             // 視窗寬度小於851，關閉折疊元素
+//             $('#sidebarCollapse').collapse('hide');
+//         } else {
+//             // 視窗寬度大於851，展開折疊元素
+//             $('#sidebarCollapse').collapse('show');
+//         }
+//         }
 
+//         // 初始檢查視窗寬度
+//         checkWindowSize();
+
+//         // 監聽視窗大小改變事件
+//         $(window).resize(function() {
+//         // 在視窗大小改變時再次檢查視窗寬度
+//         checkWindowSize();
+//         });
+//     });
+    
+    // 首頁旁邊漢堡icon觸發關閉或開啟，決定要不要加上collapse-hidden
+    $('#sidebarCollapse').on('show.bs.collapse', function () {
+        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
+            // $('.main, header').removeClass('collapse-hidden');
+            $('.main, header').addClass('mobile-collapse-hidden');
+            $('.display-none').css('display','none');
+        }
+    });
+  
+    $('#sidebarCollapse').on('hide.bs.collapse', function () {
+        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
+            // $('.main, header').addClass('collapse-hidden');
+            $('.main, header').removeClass('mobile-collapse-hidden');
+            $('.display-none').css('display','inline-block');
+        }
+    });
+  </script>
 <script>
     var csrftoken = '{{ csrf_token }}';
     

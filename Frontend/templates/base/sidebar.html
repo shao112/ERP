@@ -10,17 +10,7 @@
         <img src="{{ request.user.employee.profile_image.url }}" class="img-fluid" style="object-fit: cover;" >
     </div>
     <div>
-    <span class="dropdown-toggle d-block text-center" data-toggle="dropdown" style="color: #ffffff;font-size: 0.8rem;">
-        {{ request.user.employee.full_name }}
-    </span>
-    <button type="button" id="clock-inout-btn" class="border border-dark rounded d-block mx-auto mt-2" data-toggle="modal" data-target="#clock-inout" @click="catchDateTime">
-        簽到 / 簽退
-    </button>
     
-    <div class="dropdown-menu" style="font-size: 0.85rem;">
-        <a class="dropdown-item" href="{% url 'profile'  %}">基本資料</a>
-        <a class="dropdown-item" href="{% url 'logout' %}">登出</a>
-    </div>
         
     </div>
     <ul class="nav flex-column mt-4" id="sidebarMenu">
@@ -354,42 +344,22 @@
             </div>
         </li>
         {% endif %}
+        <li class="nav-item" style="margin-top: 50%;">
+            <ul class="nav flex-column ml-4">
+                <li>
+                    <a href="https://web.hocom.tw/h/index?key=aqurz" type="button" style="text-decoration: underline;">公司網站</a>
+                </li>
+                <li>
+                    <a href="http://211.75.230.86/webmail-cgi/XwebMail?_task=login&_remove=1" type="button" style="text-decoration: underline;">公司信箱</a>
+                </li>
+                <li>
+                    <a href="https://211.75.230.87:5001/#/signin" type="button" style="text-decoration: underline;">NAS文件</a>
+                </li>
+                <li>
+                    <a href="https://www.wgi.tw:5557/logout" type="button" style="text-decoration: underline;">紅外線巡檢</a>
+                </li>
+            </ul>
+
+        </li>
     </ul>
 </div>
-<script>
-    // 確認 Bootstrap 的折疊插件已正確載入
-  $(document).ready(function () {
-        // 檢查視窗寬度並控制折疊元素的狀態
-        function checkWindowSize() {
-        if ($(window).width() < 851) {
-            // 視窗寬度小於851，關閉折疊元素
-            $('#sidebarCollapse').collapse('hide');
-        } else {
-            // 視窗寬度大於851，展開折疊元素
-            $('#sidebarCollapse').collapse('show');
-        }
-        }
-
-        // 初始檢查視窗寬度
-        checkWindowSize();
-
-        // 監聽視窗大小改變事件
-        $(window).resize(function() {
-        // 在視窗大小改變時再次檢查視窗寬度
-        checkWindowSize();
-        });
-    });
-    
-    // 首頁旁邊漢堡icon觸發關閉或開啟，決定要不要加上collapse-hidden
-    $('#sidebarCollapse').on('show.bs.collapse', function () {
-        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
-            $('.main, header').removeClass('collapse-hidden');
-        }
-    });
-  
-    $('#sidebarCollapse').on('hide.bs.collapse', function () {
-        if (!$(event.target.nodeName).is('#hamburgerMenu')) {
-            $('.main, header').addClass('collapse-hidden');
-        }
-    });
-  </script>
