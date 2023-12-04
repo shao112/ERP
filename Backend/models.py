@@ -1444,7 +1444,7 @@ class Leave_Param(ModifiedModel):
     )
     leave_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="假別名稱")
     leave_type = models.CharField(max_length=5, choices=LEAVE_TYPE,blank=True, null=True, verbose_name="項目類別")
-    hours = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
+    leave_quantity = models.IntegerField(blank=True, null=True, default=0, verbose_name="給假數(小時)")
     minimum_leave_number = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最低請假數(為0就不卡控)")
     minimum_leave_unit = models.DecimalField(max_digits=5, decimal_places=3,default=0, blank=True, null=True, verbose_name="最小請假單位(為0就不卡控)")
     unit = models.CharField(max_length=5, choices=UNIT_TYPE,blank=True, null=True,verbose_name="單位")
@@ -1465,7 +1465,7 @@ class Leave_Param(ModifiedModel):
     def __str__(self):
         return self.leave_name
 
-    #統一回傳 hours，主要處理特休計算 才建立這個fuc
+    #統一回傳 leave_quantity，主要處理特休計算 才建立這個fuc
     def leave_hours(self,user):#回傳這假別總共有多久小時
 
         if self.id ==1: #特休id是1
@@ -1484,7 +1484,7 @@ class Leave_Param(ModifiedModel):
             else:
                 return 0
 
-        return self.hours
+        return self.leave_quantity
     
 
     #根據YMD與user、核准狀況的參數 回傳Leave_Application arrays

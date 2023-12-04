@@ -30,7 +30,7 @@ class LeaveApplicationAdmin(admin.ModelAdmin):
     # resource_class = DepartmentResource
 # 請假參數
 class LeaveParamAdmin(admin.ModelAdmin):
-    list_display = ('leave_name', 'leave_type', 'hours', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
+    list_display = ('leave_name', 'leave_type', 'leave_quantity', 'minimum_leave_number', 'minimum_leave_unit', 'unit', 'is_audit', 'is_attachment', 'deduct_percentage','control','gender', 'leave_rules', 'created_date', 'update_date')
 # 加班申請
 class WorkOvertimeApplicationAdmin(admin.ModelAdmin):
     list_display = ('date_of_overtime',  'start_hours_of_overtime', 'start_mins_of_overtime', 'end_hours_of_overtime','end_mins_of_overtime','overtime_hours', 'overtime_mins','carry_over', 'overtime_reason', 'created_date', 'update_date')

@@ -1757,7 +1757,7 @@ class Employee_View(UserPassesTestMixin,View):
             else:
                 getObject.departments = None
 
-            employee_id = dict_data["employee_id"]
+            employee_id = dict_data["id"]
             if getObject.user.username !=employee_id:
                 if  User.objects.filter(username=employee_id).exists():
                     return JsonResponse({"error":"員工ID已存在或是曾被刪除過，請使用別的ID。"},status=400)
