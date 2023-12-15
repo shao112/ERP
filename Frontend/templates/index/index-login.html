@@ -115,13 +115,13 @@
 
 <div class="main">
     <div class="container-fluid shadow-sm">
-        <div class="row text-center" style="">
-            <div class="col-6 border-right" style="overflow: scroll;height: 270px;">
+        <div class="row text-center">
+            <div class="col-6 border-right">
                 <div class="font-weight-bold mb-2 text-center"
-                    style="position: sticky; top: 0;background: #f4f4f3;font-size: 1.1rem;z-index: 1;">
+                    style="font-size: 1.1rem;">
                     <span class="badge badge-dark px-3 py-2">工作安排</span>
                 </div>
-                <div class="schedule container">
+                <div class="schedule container" style="overflow: scroll;height: 230px;">
                     {% for date, projects in grouped_projects.items %}
                     <div class="row">
                         <div class="col-6">
@@ -145,7 +145,7 @@
                     style="font-size: 1.1rem;">
                     <span class="badge badge-dark px-3 py-2">完工提醒</span></div>
                     <div class="completed container" style="overflow: scroll;height: 230px;">
-                    </div>
+                </div>
             </div>
             {% if False %}
             <div class="clock-inout-record border-right col-4">

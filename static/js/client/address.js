@@ -63,4 +63,5 @@ function AddProcess() {
   };
   address_ary.push(formData);
   renderAddressList();
+  $("#person_tab input").val('');
 }

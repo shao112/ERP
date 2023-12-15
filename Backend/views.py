@@ -1756,15 +1756,19 @@ class Employee_View(UserPassesTestMixin,View):
                 del dict_data["departments"]
             else:
                 getObject.departments = None
-
+            print(getObject)
+            print(getObject.user.username)
             employee_id = dict_data["id"]
             if getObject.user.username !=employee_id:
                 if  User.objects.filter(username=employee_id).exists():
                     return JsonResponse({"error":"員工ID已存在或是曾被刪除過，請使用別的ID。"},status=400)
 
-                getObject.user.username = employee_id
-                getObject.user.save()
+                # getObject.user.username = employee_id
+                # getObject.user.save()
 
+
+            # getObject.user.username = "090001"
+            getObject.user.save()
 
             getObject.update_fields_and_save(**dict_data)
             return JsonResponse({'data': "完成修改"},status=200)
@@ -1999,6 +2003,7 @@ class Job_Assign_View(UserPassesTestMixin,View):
         if data.project_confirmation.quotation.requisition:
             requisition_name =data.project_confirmation.quotation.requisition.client_name
         project_confirmation_dict = model_to_dict(data.project_confirmation, fields=selected_fields)
+        print(project_confirmation_dict)
         
         quotation_dict = model_to_dict(data.project_confirmation.quotation,fields=quotation_selected_fields)
         q_id= data.project_confirmation.quotation.get_show_id()

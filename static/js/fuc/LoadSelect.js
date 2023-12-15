@@ -23,27 +23,33 @@ function SetSelect2(input, key, get_value) {
   var option_len = 0;
   try {
     option_len = Object.keys(options).length;
+    console.log("option_len: " + option_len)
   } catch (error) {}
 
   if (get_value.length != 0) {
+    console.log("get_value.length: " + get_value.length)
     for (let i = 0; i < option_len; i++) {
       const option = options[i];
       const option_id = option.value;
 
       var containsValue = false;
       // console.log(typeof (get_value[0]))
+      console.log("option_id: " + option_id)
       if (typeof get_value[0] == "object") {
         containsValue = get_value.find((item) => item.id == option_id);
       } else {
         containsValue = get_value.find((item) => item == option_id);
       }
       if (containsValue) {
-        // console.log(option)
+        console.log("選中: " + option.value)
         option.selected = true;
+        console.log("containsValue: " + containsValue)
+        break;
       }
     }
   }
   $(`[name="${key}"]`).each(function () {
+    console.log("[name=" + key + "]")
     $(this).trigger("change");
   });
   // $(selectname).trigger('change');

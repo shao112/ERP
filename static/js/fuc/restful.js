@@ -108,7 +108,7 @@ async function GET_handleClick(event, bringdata = true) {
 
   $("#form").attr("data-method", "put");
   $("#form").attr("data-id", id);
-  // console.log(`URL: ${url}, ID: ${id}`);
+  console.log(`URL: ${url}, ID: ${id}`);
 
   formData = { id: id };
   return new Promise((resolve, reject) => {

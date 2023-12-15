@@ -7,7 +7,7 @@
 <div class="sidebar pl-2 collapse width show" id="sidebarCollapse">
     
     <div class="sidebar-img w-50 mx-auto pt-4">
-        <img src="{{ request.user.employee.profile_image.url }}" class="rounded-circle img-fluid" style="object-fit: cover;" >
+        <img src="{{ request.user.employee.profile_image.url }}" class="img-fluid" style="border-radius: 50%;object-fit: cover;" >
     </div>
     <div>
     
@@ -119,7 +119,7 @@
 
 
 
-        {% if user|in_group_T_or_F:"簽核流程管理" or user|in_group_T_or_F:"管理部" or pass_test_func %}
+        {% if user|in_group_T_or_F:"簽核流程管理" or user|in_group_T_or_F:"管理部" or user|in_group_T_or_F:"員工出勤" or pass_test_func %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-target="#personnelCollapse" data-toggle="collapse"
@@ -168,10 +168,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_list' %}">員工管理</a>
                     </li>
+                    {% endif %}
+
+                    {% if user|in_group_T_or_F:"員工出勤" or user|in_group_T_or_F:"管理部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employee_attendance' %}">員工出勤</a>
                     </li>
-
+                    {% endif %}
+                    
+                    {% if user|in_group_T_or_F:"管理部" or pass_test_func %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'equipment' %}">固定資產管理</a>
                     </li>

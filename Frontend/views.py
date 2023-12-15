@@ -255,10 +255,14 @@ class Index(View):
         if request.method == "POST":
             username = request.POST.get('username', '')
             password = request.POST.get('password', '')
+            print(username)
+            print(password)
             auto_login = request.POST.get('auto-login') == 'on'
             user = authenticate(username=username, password=password)
+            print(user)
             if user is not None and user.is_active:
                 login(request, user)
+                print("登入")
                 if auto_login:
                     # Create a long-term session for auto-login
                     session = SessionStore()
