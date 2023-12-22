@@ -1,7 +1,24 @@
-document.getElementByClass(".fileUploadBtn").onclick = handleAPI;
+document.getElementsByClassName(".fileUploadBtn").onclick = handleAPI;
 let employee_id = "";
 
+var type =''
+
+function setQuotationId(id, fileType) {
+  type = fileType
+
+  employee_id = id;
+  let fileListElement =''
+  if(fileType == 'file'){
+    fileListElement = $("#fileList");
+  }else if(fileType == 'lastExcelFile'){
+    fileListElement = $("#lastExcelFileList");
+  }
+  LoadFileList(fileListElement);
+}
+
+
 $(".fileForm").on("submit", function (event) {
+  console.log("檔案送出")
   var form = $(this);
   if (form.attr("id") === "fileUploadModal") {
       const fileListElement = $("#fileList");
@@ -11,7 +28,7 @@ $(".fileForm").on("submit", function (event) {
 })
 
 
-function LoadFileList() {
+function LoadFileList(fileListElement) {
   $.ajax({
     type: "GET",
     url: "/restful/quotation",
@@ -76,16 +93,19 @@ function LoadFileList() {
   });
 }
 
-function setQuotationId(id) {
-  employee_id = id;
-  LoadFileList();
-}
+
 
 function handleAPI() {
-  const fileNameInput = document.getElementById("fileNameInput");
+  if(type == 'file'){
+    const fileNameInput = document.getElementById("fileNameInput");
+    const fileInput = document.getElementById("fileInput");
+  }else if(type == 'lastExcel'){
+    const fileNameInput = document.getElementById("lastExcelFileNameInput");
+    const fileInput = document.getElementById("lastExcelFileInput");
+  }
+  
   const fileNameValue = fileNameInput.value;
 
-  const fileInput = document.getElementById("fileInput");
   var inputName = "uploaded_files";
 
   var file = fileInput.files[0];

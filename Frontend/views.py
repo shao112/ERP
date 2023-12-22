@@ -249,6 +249,7 @@ class Director_Index(View):
         context= {"other_employees":other_employees,"show_data":show_data}
         return render(request, 'index/director_Index.html',context)    
 
+# 首頁
 class Index(View):
 
     def post(self,request):
@@ -288,14 +289,20 @@ class Index(View):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             # calculate_annual_leave()
 
+
             news = News.objects.all().order_by("-id")
             employeeid = request.user.employee
+            
             clock_inout = get_weekly_clock_data(employeeid)
             related_projects = Project_Job_Assign.objects.filter(lead_employee__in=[employeeid])|Project_Job_Assign.objects.filter(    work_employee__in=[employeeid]        )
             related_projects = related_projects.distinct()
             employee_assign_ids = Project_Job_Assign.get_assignments()
 
-
+            # 完工提醒
+            project_employee_assign = Project_Employee_Assign.objects.filter(project_job_assign__work_employee=employeeid)|Project_Employee_Assign.objects.filter(project_job_assign__lead_employee=employeeid).exclude(Q(completion_date__isnull=True))
+            # project_employee_assign = Project_Employee_Assign.objects.filter(created_by__in=[employeeid]).exclude(Q(completion_date__isnull=True))
+            
+            
             grouped_projects = {}
             for project in related_projects:
                 if project.attendance_date:
@@ -316,6 +323,7 @@ class Index(View):
                 'work_list':work_list,
                 "grouped_projects":sorted_grouped_projects,
                 "employee_assign_ids":employee_assign_ids,
+                "project_employee_assign_list": project_employee_assign,
             }
             return render(request, 'index/index-login.html', context)
         else:

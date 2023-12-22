@@ -1834,27 +1834,38 @@ class Employee_Attendance_View(View):
         clock_inout = request.GET.get('clock_inout')
         clock_time_date = request.GET.get('clock_time_date')
         # 篩選部門以及名稱有包含
-        employees = Employee.objects.filter(departments__in=[department]).filter(full_name__icontains=full_name)
-        # if clock_time_date:
-        #     print(clock_time_date)
-            # T是簽到F是簽退
-            # clock_time_date = employee.clock.filter(created_date__in=[clock_time_date])
+        if department == "":
+            employees = Employee.objects.filter(full_name__icontains=full_name)
+        else:
+            employees = Employee.objects.filter(departments__in=[department]).filter(full_name__icontains=full_name)
+
         data = []
         for employee in employees:
-            print(employee.full_name)
-            # 篩選簽到還是簽退以及有無包含過來的日期
-            for clock in employee.clock.filter(clock_in_or_out__in=[clock_inout]).filter(created_date__icontains=clock_time_date):
-                data.append({
-                    'clock_date':clock.clock_date,
-                    'department': employee.departments.department_name,
-                    'employee_id': employee.employee_id,
-                    'full_name': employee.full_name,
-                    'clock_inout': clock_inout,
-                    'clock_out': clock.clock_time,
-                    'clock_GPS': clock.clock_GPS,
-                })
-        
-
+            # print(employee.full_name)
+            if clock_inout == "":
+                for clock in employee.clock.filter(created_date__icontains=clock_time_date):
+                    # print(employee.departments)
+                    data.append({
+                        'clock_date':clock.clock_date,
+                        'department': employee.departments.department_name,
+                        'employee_id': employee.employee_id,
+                        'full_name': employee.full_name,
+                        'clock_inout': clock.clock_in_or_out,
+                        'clock_out': clock.clock_time,
+                        'clock_GPS': clock.clock_GPS,
+                    })
+            else:
+                # 篩選簽到還是簽退以及有無包含過來的日期
+                for clock in employee.clock.filter(clock_in_or_out__in=[clock_inout]).filter(created_date__icontains=clock_time_date):
+                    data.append({
+                        'clock_date':clock.clock_date,
+                        'department': employee.departments.department_name,
+                        'employee_id': employee.employee_id,
+                        'full_name': employee.full_name,
+                        'clock_inout': clock_inout,
+                        'clock_out': clock.clock_time,
+                        'clock_GPS': clock.clock_GPS,
+                    })
         return JsonResponse({"data":data}, status=200,safe = False)
 
 

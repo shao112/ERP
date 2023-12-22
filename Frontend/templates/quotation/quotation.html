@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded fileUploadBtn"
+                    <button type="submit" id="fileUploadBtn" class="btn border border-dark rounded fileUploadBtn"
                         style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
@@ -82,18 +82,18 @@
                 <form id="lastExcelFileUploadForm" class="fileForm">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="fileNameInput">檔案名稱</label>
-                            <input type="text" class="form-control" id="fileNameInput">
+                            <label for="lastExcelFileNameInput">檔案名稱</label>
+                            <input type="text" class="form-control" id="lastExcelFileNameInput">
                         </div>
                         <div class="form-group col-md-6">
                             <label>選擇檔案</label>
                             <div class="custom-file">
-                                <input type="file" class="form-control-file" id="fileInput">
-                                <label class="custom-file-label" for="fileInput">Choose file</label>
+                                <input type="file" class="form-control-file" id="lastExcelFileInput">
+                                <label class="custom-file-label" for="lastExcelFileInput">Choose file</label>
                             </div>
                         </div>
                     </div>
-                    <button type="button" id="fileUploadBtn" class="btn border border-dark rounded fileUploadBtn"
+                    <button type="submit" id="" class="btn border border-dark rounded "
                         style="color: #fff;background: #1E3050;">上傳</button>
                 </form>
                 <hr>
@@ -295,8 +295,8 @@ aria-hidden="true">
                                         <div class="col-6">
                                             <label>付款方式</label>
                                             <select class="form-control form-control-sm" name="pay_method">
-                                                <option value="1">(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款，用於新客戶</option>
-                                                <option value="2">(2)付款方式:完工請款100%.發票開立後期票30天，較常使用</option>
+                                                <option value="1">(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款。</option>
+                                                <option value="2">(2)付款方式:完工請款100%.發票開立後期票30天。</option>
                                                 <option value="3">(3)付款方式:與業主額外議定(此部分開放自行填寫,利配合部分廠商付款特殊要求)</option>
                                             </select>
                                         </div>
@@ -399,11 +399,11 @@ aria-hidden="true">
                         </a>
                     </td>
                     <td>
-                        <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal"
+                        <a href="" onclick="setQuotationId({{item.pk}}, 'file' )" data-toggle="modal"
                             data-target="#fileUploadModal">點擊</a>
                     </td>
                     <td>
-                        <a href="" onclick="setQuotationId({{item.pk}})" data-toggle="modal"
+                        <a href="" onclick="setQuotationId({{item.pk}}, 'lastExcelFile' )" data-toggle="modal"
                             data-target="#LastExcelFileUploadModal">點擊</a>
                     </td>
                     <td><a href="#" onclick="openNewWindow({{item.pk}})">點擊</a></td>

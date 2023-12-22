@@ -117,8 +117,7 @@
     <div class="container-fluid shadow-sm">
         <div class="row text-center">
             <div class="col-6 border-right">
-                <div class="font-weight-bold mb-2 text-center"
-                    style="font-size: 1.1rem;">
+                <div class="font-weight-bold mb-2 text-center" style="font-size: 1.1rem;">
                     <span class="badge badge-dark px-3 py-2">工作安排</span>
                 </div>
                 <div class="schedule container" style="overflow: scroll;height: 230px;">
@@ -141,10 +140,20 @@
                 </div>
             </div>
             <div class="col-6 border-right">
-                <div class="font-weight-bold mb-2 text-center"
-                    style="font-size: 1.1rem;">
-                    <span class="badge badge-dark px-3 py-2">完工提醒</span></div>
-                    <div class="completed container" style="overflow: scroll;height: 230px;">
+                <div class="font-weight-bold mb-2 text-center" style="font-size: 1.1rem;">
+                    <span class="badge badge-dark px-3 py-2">完工提醒</span>
+                </div>
+                <div class="completed container" style="overflow: scroll;height: 230px;">
+                    {% for project_employee_assign in project_employee_assign_list %}
+                    <div class="row">
+                        <div class="col-6">
+                            {{ project_employee_assign.completion_date|date:"Y-m-d" }}
+                        </div>
+                        <div class="col-6">
+                            {{ project_employee_assign.project_job_assign.project_confirmation.quotation.project_name }}
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% if False %}

@@ -18,6 +18,7 @@
                 <div class="col-6 col-md-2">
                     <label for="department_control">部門</label>
                     <select class="form-control form-control-sm" name="department" id="department_control">
+                        <option value="">---</option>
                         {% for department in departments %}
                         <option value="{{ department.id }}">{{ department.department_name }}</option>
                         {% endfor %}
@@ -26,6 +27,7 @@
                 <div class="col-6 col-md-2">
                     <label for="clock_inout_control">類型</label>
                     <select class="form-control form-control-sm" name="clock_inout" id="clock_inout_control">
+                        <option value="">---</option>
                         <option value="True">簽到</option>
                         <option value="False">簽退</option>
                     </select>
@@ -81,6 +83,7 @@
             success: function (response) {
                 document.querySelector("tbody").innerHTML = ""; // 清除 tr，避免重疊新增資料
                 jsonData = response.data // jsonData 為陣列
+                console.log("資料長度: " + jsonData.length)
                 // 如果 jsonData 沒有值，就顯示<查無資料>
                 if(jsonData[0]){
                     // 第一個迴圈遍歷Employee建tr，第二個遍歷要的資料建td
@@ -102,8 +105,11 @@
                                 if(jsonData[i][key]==="True"){td.innerText="簽到"}else{td.innerText="簽退"}
                             }
                             else if(key === "clock_out"){
-                                var show_time= jsonData[i][key].replace(/\.\d+$/, '');
-                                console.log(show_time);
+                                var show_time = ''
+                                if(jsonData[i][key] != null){
+                                    show_time= jsonData[i][key].replace(/\.\d+$/, '');
+                                }
+                                // var show_time= jsonData[i][key]
                                 td.innerText = show_time;
                             }
                             else{

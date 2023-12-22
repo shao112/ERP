@@ -345,6 +345,7 @@
                                                     <select name="eq_status" id="eq_status">
                                                         <option value="進廠">進廠</option>
                                                         <option value="出廠">出廠</option>
+                                                        <option value="進/出廠">進/出廠</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -644,10 +645,12 @@
         if ($(this).val() === "true") {
             // 如果是true，則移除id為completion_date的input元素的readonly屬性
             $("#completion_date").removeAttr("readonly");
+            $("#completion_date").prop('required', true);
             $("#completion_date").val("");
         } else {
             // 如果不是true，則將id為completion_date的input元素設為readonly
             $("#completion_date").attr("readonly", "readonly");
+            $("#completion_date").prop('required', false);
             $("#completion_date").val("");
         }
     });

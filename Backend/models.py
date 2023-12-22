@@ -787,8 +787,8 @@ class Work_Item(ModifiedModel):
 #報價單
 class Quotation(ModifiedModel):
     pay_method_CHOICES = [
-        ('1', '(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款，用於新客戶'),
-        ('2', '(2)付款方式:完工請款100%.發票開立後期票30天，較常使用'),
+        ('1', '(1)付款方式:完工請款100%.初次交易,請配合開立即期票或匯款。'),
+        ('2', '(2)付款方式:完工請款100%.發票開立後期票30天。'),
         ('3','(3)付款方式:與業主額外議定(此部分開放自行填寫,利配合部分廠商付款特殊要求)'),
     ]
     quotation_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='報價單編號')
