@@ -150,7 +150,11 @@
                             {{ project_employee_assign.completion_date|date:"Y-m-d" }}
                         </div>
                         <div class="col-6">
-                            {{ project_employee_assign.project_job_assign.project_confirmation.quotation.project_name }}
+                            <li href=""
+                                onclick="showemployeeassign('派工單編號: {{ project_employee_assign.get_show_id }}|專案名稱: {{ project_employee_assign.project_job_assign.project_confirmation.quotation.project_name }}|施工日期: {{ project_employee_assign.construction_date|date:'Y/m/d' }}|完工日期:{{ project_employee_assign.completion_date|date:'Y/m/d' }} ')">
+                                {{ project_employee_assign.project_job_assign.project_confirmation.quotation.project_name }}
+                            </li>
+                            
                         </div>
                     </div>
                     {% endfor %}
@@ -262,6 +266,21 @@
 
     
 <script>
+
+    function showemployeeassign(content){
+        var dataArr = content.split('|');
+        console.log(dataArr)
+        var project_confirmation_id = dataArr[0];
+        var listHTML = "";
+        for (var i = 0; i < dataArr.length; i++) {
+            listHTML += "<li style='text-align: left;' >" + dataArr[i] + "</li>";
+        }
+        Swal.fire({
+            icon: 'info',
+            title: project_confirmation_id,
+            html: listHTML
+        })
+    }
 
     function showjobassign(content) {
         var dataArr = content.split('|');
