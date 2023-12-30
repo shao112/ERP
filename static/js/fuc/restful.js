@@ -313,6 +313,8 @@ document.querySelectorAll(".sys_del").forEach((element) => {
   element.addEventListener("click", DELETE_handleClick.bind(element));
 });
 
+
+
 async function DELETE_handleClick(event) {
   const result = await showSwal(
     "確認刪除",
