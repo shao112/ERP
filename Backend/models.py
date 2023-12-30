@@ -911,8 +911,8 @@ class Project_Job_Assign(ModifiedModel):
         return employee_assign_ids
 
     @classmethod
-    def get_data(cls, employee,year,month,days=None):#公派當月天數
-        conditions = Q(work_employee=employee) | Q(lead_employee=employee)
+    def get_data(cls, employee,year,month,days=None):#取得員工相關的當月派任計畫
+        conditions =  Q(work_employee=employee) # | Q(lead_employee=employee) 刪除，只選擇檢測人員
         assignments = cls.objects.filter(conditions, 
                                          attendance_date__year=year, 
                                          attendance_date__month=month).distinct()
@@ -922,7 +922,7 @@ class Project_Job_Assign(ModifiedModel):
         return assignments
 
     @classmethod
-    def cal_data_byassignments(cls,assignments,employee_location):
+    def cal_data_byassignments(cls,assignments,employee_location):#assignments是已經撈過的資料
         from collections import defaultdict
         allowance_dict = defaultdict(lambda: {"id":"","location": "","project_name":"","q_id":"", "date": "", "money": 0,"food":0,"error":"","food_error":""})
 
@@ -1008,7 +1008,7 @@ class Project_Job_Assign(ModifiedModel):
         #回傳伙食津貼/出差津貼/明細
         return total_money,total_food_money, allowance_list
 
-    @classmethod
+    @classmethod   
     def get_day_list_day(cls, employee,year,month,days):#公派當月天數
 
         employee_location = employee.location_city

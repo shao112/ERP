@@ -1965,7 +1965,7 @@ class Job_Assign_View(UserPassesTestMixin,View):
                 field = getattr(getObject, "lead_employee")
                 field.set([])
             
-            if not "lead_employee" in dict_data:
+            if not "work_employee" in dict_data:
                 field = getattr(getObject, "work_employee")
                 field.set([])
             
