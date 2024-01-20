@@ -358,6 +358,11 @@
                     <a href="" class="font-weight-bold" id="sys_new" data-toggle="modal" data-target="#client-modal">
                         <i class="fa-solid fa-plus fa-sm" style="color: #000000;"></i> 新增客戶
                     </a>
+                    <a class="upload-file font-weight-bold d-none d-md-inline-block" onclick="importfile()">
+                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #000000;"></i>
+                        <span id="importLink">匯入</span>
+                        <input type="file" id="fileInput_file" data-model="Client" style="display: none;" />
+                    </a>
                     <button class="d-none d-md-inline-block" onclick="exportAllOptionToExcel('客戶.xlsx')"
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
@@ -399,16 +404,16 @@
                             data-target="#fileUploadModal">點擊</a>
                     </td>
                     <td>
-                        {{ client.client_name }}
+                        {% if client.client_name %}{{ client.client_name }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ client.contact_person }}
+                        {% if client.contact_person %}{{ client.contact_person }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ client.tel }}
+                        {% if client.tel %}{{ client.tel }}{% else %}{% endif %}
                     </td>
                     <td>
-                        {{ client.mobile }}
+                        {% if client.mobile %}{{ client.mobile }}{% else %}{% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -422,6 +427,7 @@
         var scripts = [
             "{% static 'js/fuc/restful.js' %}",
             "{% static 'js/fuc/LoadSelect.js' %}",
+            "{% static 'js/fuc/fileimport.js' %}",
             "{% static 'js/client/client_files.js' %}",
             "{% static 'js/client/person.js' %}",
             "{% static 'js/client/address.js' %}",

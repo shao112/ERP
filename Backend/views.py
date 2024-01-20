@@ -1248,6 +1248,35 @@ class FileUploadView(View):
                             year_money= new_year_moeny_str# 更新 year_money
                         )
                         new_item.save()
+                elif get_model == Client:
+                    print("客戶處理")
+                    existing_client = Client.objects.filter(client_id=get_dict['client_id']).first()
+                    if existing_client:
+                        print("已存在客戶")
+                        print(existing_client)
+                        error_str+=f"客戶編號 {get_dict['client_id']} 已存在。<br>"
+                    else:
+                        established = str(get_dict['established'])
+                        try:
+                            established = datetime.strptime(established, '%Y-%m-%d').date()
+                        except ValueError:
+                            error_str += f"無法解析日期格式，請在網頁操作。<br>"
+                        try:
+                            new_client = Client(
+                                    client_name=get_dict['client_name'],
+                                    client_chinese_name=get_dict['client_chinese_name'],
+                                    client_english_name=get_dict['client_english_name'],
+                                    client_id=get_dict['client_id'],
+                                    tax_id=get_dict['tax_id'],
+                                    established=established,
+                                    contact_principal=get_dict['contact_principal'],
+                                    pay_days=get_dict['pay_days'],
+                                    pay_method=get_dict['pay_method'],
+                                )
+                            new_client.save()
+                        except Exception as e:
+                            error_str += f"第{i+1}欄資料:錯誤，<b>失敗</b>原因:{e}。<br>"
+                # elif get_model == Quotation:
 
 
             
@@ -1259,6 +1288,7 @@ class FileUploadView(View):
                 error_str+=f"第{i+1}欄資料 找不到對應的找不到工程確認單編號<br>"
             except Project_Job_Assign.DoesNotExist:
                 error_str+=f"第{i+1}欄資料 找不到對應的找不到關聯報價單編號找不到關派任計畫編號<br>"
+        print("error_str: " + error_str)
         if error_str=="":
             return JsonResponse({'message': '上傳成功'},status=200)
         else:

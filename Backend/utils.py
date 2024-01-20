@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from Backend.models import Miss_Food_Application,Work_Item,Employee,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
+from Backend.models import Client,Quotation,Miss_Food_Application,Work_Item,Employee,Travel_Application,Clock_Correction_Application, Work_Overtime_Application, Salary,SalaryDetail,Leave_Param,Leave_Application, Clock,Project_Confirmation,Project_Job_Assign,Project_Employee_Assign
 from urllib.parse import parse_qs
 from django.forms.models import model_to_dict
 from django.conf import settings
@@ -133,7 +133,7 @@ def convent_excel_dict(worksheet,model):
     template_dict={}
     convent_model= None
     print("model: ",model)
-    match  model:
+    match model:
         case "Employee":
             template_dict= {
                 "full_name":"",
@@ -184,6 +184,30 @@ def convent_excel_dict(worksheet,model):
                 "money":"",#額外欄位
             }
             convent_model=Work_Item
+        case "Client": # 客戶公司管理
+            template_dict= {
+                "client_name":"",
+                "client_chinese_name":"",
+                "client_english_name":"",
+                "client_id":"",
+                "tax_id":"",
+                "established":"",
+                "contact_principal":"",
+                "pay_days":"",
+                "pay_method":"",
+            }
+            convent_model=Client
+        case "Quotation": # 報價單
+            template_dict= {
+                "quotation_id":"",
+                "project_name":"",
+                "quote_date":"",
+                "quote_validity_period":"",
+                "pay_method":"",
+                "internal_content":"",
+                "remark":"",
+            }
+            convent_model=Quotation
         case _:
             return "error"
 
