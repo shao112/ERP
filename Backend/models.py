@@ -1296,7 +1296,7 @@ class Travel_Application(ModifiedModel):
             if status:
                 total_amount += detail
 
-        return total_amount ,math.ceil(total_amount* get_hour_salary*1.34  ), details
+        return total_amount ,math.ceil(total_amount* 100  ), details
         # if total_amount >17:
         #     total_amount =total_amount  - 16
         #     return total_amount ,math.ceil(total_amount* get_hour_salary*decimal.Decimal('1.34')  ), details
