@@ -1434,6 +1434,7 @@ class Approval_Groups_View(UserPassesTestMixin,View):
             if dict_data["is_checked"]:
                 print("勾選")
                 approval_order.insert(0,"x")
+                approval_order.insert(0,"x") #加兩關
                 approval_target.approval_order = approval_order
                 approval_target.save()
             else:

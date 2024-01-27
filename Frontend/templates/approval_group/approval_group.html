@@ -41,6 +41,7 @@
                                     <label for="new_stage">新增關卡</label>
                                     <select class="form-control form-control-sm" name="new_stage" id="new_stage">
                                         <option value="">請選擇員工</option>
+                                        <option value="x">主管簽核</option>
                                         {% for employee in employees %}
                                         <option value="{{ employee.id }}">{{ employee.full_name }}</option>
                                         {% endfor %}

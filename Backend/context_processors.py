@@ -16,7 +16,9 @@ def approval_count(request):
     related_records = []
 
     for Approval in ApprovalModel.objects.filter(current_status="in_process"):            
-        get_employee = Approval.get_approval_employee()
+        get_employee,x_time = Approval.get_approval_employee()
+        print(x_time)
+
         if get_employee !="x":
             if  get_employee ==current_employee :
                 related_records.append(Approval)
@@ -28,6 +30,8 @@ def approval_count(request):
                 get_createdby = Approval.get_created_by
                 if get_createdby:
                     department =get_createdby.departments
+                    for i in range(0, x_time):
+                        department = department.parent_department
                     #撈取主管權限的員工
                     supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
                     #判斷主管是不是在當前user
