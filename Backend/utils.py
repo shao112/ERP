@@ -36,6 +36,8 @@ def get_weekdays(to_week):
     for _ in range(7):
         weekdays.append(current_date)
         current_date += timedelta(days=1)
+        print("current_date: ")
+        print(current_date)
 
 
     return weekdays 
@@ -80,7 +82,7 @@ def get_weekly_clock_data(userid):
 
       
         daily_data = {
-            'day': weekday.strftime('%m/%d'),
+            'day': weekday.strftime('%Y/%m/%d'),
             'checkin': check_in,
             'checkout': check_out
         }
