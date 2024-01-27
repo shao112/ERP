@@ -1,41 +1,23 @@
-document.getElementsByClassName(".fileUploadBtn").onclick = handleAPI;
-let employee_id = "";
+document.getElementById("fileUploadBtn").onclick= handleAPI;
+let qu_id = "";
+const fileListElement = $("#fileList");
 
-var type =''
+function setQuotationId(id) {
 
-function setQuotationId(id, fileType) {
-  type = fileType
-
-  employee_id = id;
-  let fileListElement =''
-  if(fileType == 'file'){
-    fileListElement = $("#fileList");
-  }else if(fileType == 'lastExcelFile'){
-    fileListElement = $("#lastExcelFileList");
-  }
-  LoadFileList(fileListElement);
+  qu_id = id; 
+  console.log("xxx")
+  LoadFileList();
 }
 
 
-$(".fileForm").on("submit", function (event) {
-  console.log("檔案送出")
-  var form = $(this);
-  if (form.attr("id") === "fileUploadModal") {
-      const fileListElement = $("#fileList");
-    }else if(form.attr("id") === "LastExcelFileUploadModal"){
-      const fileListElement = $("#lastExcelFileList");
-  }
-})
-
-
-function LoadFileList(fileListElement) {
+function LoadFileList() {
   $.ajax({
     type: "GET",
     url: "/restful/quotation",
     headers: {
       "X-CSRFToken": csrftoken,
     },
-    data: { id: employee_id },
+    data: { id: qu_id },
     success: function (response) {
       fileListElement.empty();
       jsonData = response.data.uploaded_files;
@@ -60,7 +42,7 @@ function LoadFileList(fileListElement) {
         deleteButton.click(function () {
           $.ajax({
             type: "DELETE",
-            url: `/restful/delete_uploaded_file/${"Quotation"}/${employee_id}/${file.id}`,
+            url: `/restful/delete_uploaded_file/${"Quotation"}/${qu_id}/${file.id}`,
             headers: {
               "X-CSRFToken": csrftoken,
             },
@@ -96,15 +78,10 @@ function LoadFileList(fileListElement) {
 
 
 function handleAPI() {
-  if(type == 'file'){
-    const fileNameInput = document.getElementById("fileNameInput");
-    const fileInput = document.getElementById("fileInput");
-  }else if(type == 'lastExcel'){
-    const fileNameInput = document.getElementById("lastExcelFileNameInput");
-    const fileInput = document.getElementById("lastExcelFileInput");
-  }
-  
+  const fileNameInput = document.getElementById("fileNameInput");
   const fileNameValue = fileNameInput.value;
+
+  const fileInput = document.getElementById("fileInput");
 
   var inputName = "uploaded_files";
 
@@ -113,16 +90,16 @@ function handleAPI() {
   if (!file) {
     return;
   }
+
   var newFileName = "Quotation_" + file.name;
 
   file = new File([file], newFileName, { type: file.type });
-
 
   var modal = "Quotation";
   var formData = new FormData();
   formData.append(inputName, file);
   formData.append("name", inputName);
-  formData.append("id", employee_id);
+  formData.append("id", qu_id);
   formData.append("ManyToManyProcess", true);
   formData.append("modal", modal);
   formData.append("file_name", fileNameValue);

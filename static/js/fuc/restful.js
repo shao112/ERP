@@ -205,7 +205,8 @@ $("form").on("submit", function (event) {
 
   var idValue = form.find('input[name="id"]').val();
 
-  if(formData==[]){
+
+  if(formData==[] ){
     alert("簽核完成或是簽核中，請勿修改。")
     return
   }

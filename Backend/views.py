@@ -853,7 +853,7 @@ class Quotation_View(UserPassesTestMixin,View):
         data = get_object_or_404(Quotation, id=id)
         get_id = data.get_show_id()
 
-        uploaded_files = data.last_excel.all() 
+        uploaded_files = data.uploaded_files.all() 
         uploaded_files_dict_list = []
 
         last_excel_files = data.last_excel.all() 
@@ -880,6 +880,8 @@ class Quotation_View(UserPassesTestMixin,View):
         print(data)
         # data['last_excel'] = data['last_excel'].url if data['last_excel']  else None
         data["uploaded_files"]=uploaded_files_dict_list
+        print("xx")
+        print(uploaded_files)
         data["last_excel"]=last_excel_files_dict_list
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
@@ -2070,7 +2072,7 @@ class Job_Assign_View(UserPassesTestMixin,View):
         data["vehicle"]=car_id
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])        
-       
+        print(data["lead_employee"])
 
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict

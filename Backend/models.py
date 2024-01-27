@@ -55,6 +55,7 @@ class SysMessage(models.Model):
 class UploadedFile(models.Model):
     name = models.CharField(max_length=100)
     file = models.FileField(upload_to='UploadedFile/')
+    created_date = models.DateField(default=timezone.now,verbose_name='建立日期')
 
     class Meta:
         verbose_name = '檔案上傳管理'
@@ -813,7 +814,7 @@ class Quotation(ModifiedModel):
     pay_method = models.CharField(max_length=1, choices=pay_method_CHOICES, null=True, blank=True, verbose_name='付款方式')
     internal_content = models.TextField(blank=True, null=True, verbose_name='紀錄(對內)')
     created_by = models.ForeignKey("Employee",related_name="quotation_author", on_delete=models.SET_NULL, null=True, blank=True)
-    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile")
+    uploaded_files = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationfile",verbose_name="內部記錄檔案")
     last_excel = models.ManyToManyField(UploadedFile,blank=True,  related_name="quotationLastExcelFile", verbose_name="最終版報價單")
     # last_excel = models.ManyToManyField(upload_to="last_file", null=True, blank=True, verbose_name="最終版報價單")
     remark = models.TextField(null=True, blank=True, verbose_name="備註")

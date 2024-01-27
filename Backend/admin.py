@@ -75,6 +75,9 @@ class ClockAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'modified_by')
 
+class UploadedFileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_date')
+
 
 # 車輛
 class VehicleAdmin(admin.ModelAdmin):
@@ -122,7 +125,7 @@ admin.site.register(ApprovalModel)
 admin.site.register(ApprovalLog)
 admin.site.register(News)
 admin.site.register(Equipment)
-admin.site.register(UploadedFile)
+admin.site.register(UploadedFile,UploadedFileAdmin)
 admin.site.register(Work_Item_Number)
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(Employee)
