@@ -454,7 +454,6 @@ class ApprovalModel(models.Model):
 
             for employee_id in self.order:
                 if employee_id == "x":
-
                     if now_department!=None: #防止遇到最上層部門
                         department_employees = now_department.employees.filter(user__groups__name='主管')
                         senders.update(department_employees)
