@@ -32,13 +32,16 @@ def get_weekdays(to_week):
     weekdays = []
     today = date.today()
     current_date = today - timedelta(days=today.weekday())
-    while current_date.weekday() < to_week:
+    
+    for _ in range(7):
         weekdays.append(current_date)
         current_date += timedelta(days=1)
+
+
     return weekdays 
 
 def get_weekly_clock_data(userid):
-    weekdays = get_weekdays(5)
+    weekdays = get_weekdays(7)
     weekly_clock_data = []
 
     for weekday in weekdays:        

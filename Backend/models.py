@@ -729,6 +729,18 @@ class Department(ModifiedModel):
     department_name = models.CharField(max_length=30, null=True, blank=True,verbose_name='部門名稱')
     department_id = models.CharField(max_length=20, null=True, blank=True,verbose_name='部門編號')
 
+    def get_all_subdepartments(self):
+        subdepartments = []
+        for subdepartment in Department.objects.filter(parent_department=self):
+            subdepartments.append(subdepartment)
+            subdepartments.extend(subdepartment.get_all_subdepartments())
+        return subdepartments
+
+    def get_all_employees(self):
+        subdepartments = self.get_all_subdepartments()
+        employees = Employee.objects.filter(departments__in=subdepartments, user__is_active=True)
+        return employees
+
     class Meta:
         verbose_name = "部門"   # 單數
         verbose_name_plural = verbose_name   #複數

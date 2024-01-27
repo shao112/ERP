@@ -231,11 +231,11 @@ class SalaryListView(UserPassesTestMixin,ListView):
 # 主管管理
 class Director_Index(View):
     def get(self,request):
-        current_employee = request.user.employee
-        other_employees = current_employee.departments.employees.filter(user__is_active=True)
-        # .exclude(id=current_employee.id,user__username="admin")
 
-        other_employees = convent_employee(other_employees)
+        current_employee = request.user.employee
+        current_department = current_employee.departments
+
+        other_employees = convent_employee(current_department.get_all_employees())
         show_data=[]
 
         for employee in other_employees:
@@ -244,8 +244,7 @@ class Director_Index(View):
                 for date in  employee['clock_data'] :
                     show_data.append(date)
 
-        print(other_employees)
-        # print(other_employees[0].get_weekly_clock_data())
+        # print(other_employees)
         context= {"other_employees":other_employees,"show_data":show_data}
         return render(request, 'index/director_Index.html',context)    
 
