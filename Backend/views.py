@@ -1297,6 +1297,44 @@ class FileUploadView(View):
             return JsonResponse({'error': "<h4>異常欄位:</h4>\n"+error_str+"<br>其餘上傳成功，再次上傳請小心已經上傳過的資料。"}, status=400)
 
 
+class ClonePost(View):
+   def post(self, request):
+        print("con")
+        data = json.loads(request.body.decode('utf-8'))
+
+        selectedValues = data.get("selectedValues")
+        getmodal = data.get("modelname")
+
+        print("getid:", selectedValues)
+        print("modelname:", getmodal)
+
+        if not getmodal:
+            return JsonResponse({"data": "No model specified"}, status=400, safe=False)
+
+        model = None
+
+        match getmodal:
+            case "project_confirmation":
+                model = Project_Confirmation
+            case "job_assign":
+                model = Project_Job_Assign
+            case "employee_assign":
+                model = Project_Employee_Assign
+            case _:
+                return JsonResponse({"data": "Invalid model"}, status=400, safe=False)
+        
+        for selected_id in selectedValues:
+            print(selected_id)
+            try:
+                model_instance = model.objects.get(id=int(selected_id))
+                model_instance.pk = None
+                model_instance.save()
+            except model.DoesNotExist:
+                return JsonResponse({"data": f"Record with id {selected_id} not found"}, status=404, safe=False)
+
+        return JsonResponse({'status': 'success'},status=200)
+
+
 
 
 class FormUploadFileView(View):
