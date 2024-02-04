@@ -14,7 +14,8 @@ urlpatterns = [
     path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
 
 #複製api
-path('ClonePost',  views.ClonePost.as_view(), name="ClonePost_api"),
+    path('ClonePost',  views.ClonePost.as_view(), name="ClonePost_api"),
+    path('Approval_Process_Pass',  views.Approval_Process_Pass.as_view(), name="Approval_Process_Pass_api"),
 
 #CRUD
     path('project_confirmation',  views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),

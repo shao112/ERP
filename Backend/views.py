@@ -407,6 +407,37 @@ class Approval_View_Process(View):
  
 
 
+class Approval_Process_Pass(View):
+    def post(self,request):
+        print("xx")
+        data = json.loads(request.body.decode('utf-8'))
+
+        status = data.get("status")
+        feedback = data.get("feedback")
+        selectedValues = data.get("selectedValues")
+        if status not in ["approved", "rejected"]:
+            return JsonResponse({"error":"請選擇簽核狀態"},status=400)
+        if selectedValues ==None: 
+            return JsonResponse({"error":"請選擇approval"},status=400)
+        
+        for approval_id in selectedValues:
+            try:
+                approval_instance = get_object_or_404(ApprovalModel, id=approval_id)
+            except Http404:
+                return JsonResponse({"error": f"找不到相應的ApprovalModel (ID: {approval_id})"}, status=400)
+
+            ApprovalLog.objects.create(
+                approval=approval_instance,
+                user=request.user.employee,
+                content=feedback,
+            )
+            approval_instance.update_department_status(status)
+
+        
+        if status:
+            return JsonResponse({"data":"ok"},status=200)
+
+
 class Approval_Process_Log(View):
     def post(self,request):
         status = request.POST.get('status')
@@ -1299,14 +1330,14 @@ class FileUploadView(View):
 
 class ClonePost(View):
    def post(self, request):
-        print("con")
+
         data = json.loads(request.body.decode('utf-8'))
 
         selectedValues = data.get("selectedValues")
         getmodal = data.get("modelname")
 
-        print("getid:", selectedValues)
-        print("modelname:", getmodal)
+        # print("getid:", selectedValues)
+        # print("modelname:", getmodal)
 
         if not getmodal:
             return JsonResponse({"data": "No model specified"}, status=400, safe=False)
