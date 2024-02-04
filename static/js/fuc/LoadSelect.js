@@ -44,7 +44,6 @@ function SetSelect2(input, key, get_value) {
         console.log("選中: " + option.value)
         option.selected = true;
         console.log("containsValue: " + containsValue)
-        break;
       }
     }
   }
