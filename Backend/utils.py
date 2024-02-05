@@ -38,8 +38,7 @@ def get_weekdays(to_week):
         current_date += timedelta(days=1)
         print("current_date: ")
         print(current_date)
-
-
+        
     return weekdays 
 
 def get_weekly_clock_data(userid):
@@ -133,7 +132,7 @@ def convent_dict(data):
     print(new_dict_data)
     return new_dict_data
 
-
+# 對應各個 Excel 範本檔所提供的欄位
 def convent_excel_dict(worksheet,model):
     template_dict={}
     convent_model= None

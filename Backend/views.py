@@ -1278,7 +1278,32 @@ class FileUploadView(View):
                             new_client.save()
                         except Exception as e:
                             error_str += f"第{i+1}欄資料:錯誤，<b>失敗</b>原因:{e}。<br>"
-                # elif get_model == Quotation:
+                elif get_model == Quotation:
+                    print("報價單")
+                    existing_quotation = Quotation.objects.filter(quotation_id=get_dict['quotation_id']).first()
+                    if existing_quotation:
+                        print("已存在報價單")
+                        print(existing_client)
+                        error_str+=f"報價單編號 {get_dict['quotation_id']} 已存在。<br>"
+                    else:
+                        quote_date = str(get_dict['quote_date'])
+                        try:
+                            quote_date = datetime.strptime(quote_date, '%Y-%m-%d').date()
+                        except ValueError:
+                            error_str += f"無法解析日期格式，請在網頁操作。<br>"
+                        try:
+                            new_quotation = Quotation(
+                                    quotation_id=get_dict['quotation_id'], # 報價單編號
+                                    project_name=get_dict['project_name'], # 專案名稱
+                                    quote_date=quote_date, # 報價日期
+                                    quote_validity_period=get_dict['quote_validity_period'], # 報價單有效期
+                                    pay_method=get_dict['pay_method'], # 付款方式
+                                    internal_content=get_dict['internal_content'], # 紀錄(對內)
+                                    remark=get_dict['remark'], # 備註
+                                )
+                            new_quotation.save()
+                        except Exception as e:
+                            error_str += f"第{i+1}欄資料:錯誤，<b>失敗</b>原因:{e}。<br>"
 
 
             
