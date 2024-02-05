@@ -407,6 +407,37 @@ class Approval_View_Process(View):
  
 
 
+class Approval_Process_Pass(View):
+    def post(self,request):
+        print("xx")
+        data = json.loads(request.body.decode('utf-8'))
+
+        status = data.get("status")
+        feedback = data.get("feedback")
+        selectedValues = data.get("selectedValues")
+        if status not in ["approved", "rejected"]:
+            return JsonResponse({"error":"請選擇簽核狀態"},status=400)
+        if selectedValues ==None: 
+            return JsonResponse({"error":"請選擇approval"},status=400)
+        
+        for approval_id in selectedValues:
+            try:
+                approval_instance = get_object_or_404(ApprovalModel, id=approval_id)
+            except Http404:
+                return JsonResponse({"error": f"找不到相應的ApprovalModel (ID: {approval_id})"}, status=400)
+
+            ApprovalLog.objects.create(
+                approval=approval_instance,
+                user=request.user.employee,
+                content=feedback,
+            )
+            approval_instance.update_department_status(status)
+
+        
+        if status:
+            return JsonResponse({"data":"ok"},status=200)
+
+
 class Approval_Process_Log(View):
     def post(self,request):
         status = request.POST.get('status')
@@ -1322,6 +1353,44 @@ class FileUploadView(View):
             return JsonResponse({'error': "<h4>異常欄位:</h4>\n"+error_str+"<br>其餘上傳成功，再次上傳請小心已經上傳過的資料。"}, status=400)
 
 
+class ClonePost(View):
+   def post(self, request):
+
+        data = json.loads(request.body.decode('utf-8'))
+
+        selectedValues = data.get("selectedValues")
+        getmodal = data.get("modelname")
+
+        # print("getid:", selectedValues)
+        # print("modelname:", getmodal)
+
+        if not getmodal:
+            return JsonResponse({"data": "No model specified"}, status=400, safe=False)
+
+        model = None
+
+        match getmodal:
+            case "project_confirmation":
+                model = Project_Confirmation
+            case "job_assign":
+                model = Project_Job_Assign
+            case "employee_assign":
+                model = Project_Employee_Assign
+            case _:
+                return JsonResponse({"data": "Invalid model"}, status=400, safe=False)
+        
+        for selected_id in selectedValues:
+            print(selected_id)
+            try:
+                model_instance = model.objects.get(id=int(selected_id))
+                model_instance.pk = None
+                model_instance.save()
+            except model.DoesNotExist:
+                return JsonResponse({"data": f"Record with id {selected_id} not found"}, status=404, safe=False)
+
+        return JsonResponse({'status': 'success'},status=200)
+
+
 
 
 class FormUploadFileView(View):
@@ -1459,6 +1528,7 @@ class Approval_Groups_View(UserPassesTestMixin,View):
             if dict_data["is_checked"]:
                 print("勾選")
                 approval_order.insert(0,"x")
+                approval_order.insert(0,"x") #加兩關
                 approval_target.approval_order = approval_order
                 approval_target.save()
             else:

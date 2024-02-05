@@ -88,11 +88,14 @@
                 {% endif %}
             
                 <h3>簽核處理</h3>
-
+                <button class="d-none d-md-inline-block"
+                onclick="ApprovalPass('')">一鍵處理</button>
 
             </div>
             <thead class="thead-light" style="font-size: 14px;">
                 <tr class="text-nowrap">
+                    <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="checkbox"
+                    class="d-none d-md-table-cell">匯出</th>
                     <th data-sortable="true" data-field="type">類型</th>
                     <th data-sortable="true"  data-field="id">編號</th>
                     <th data-sortable="true" data-field="content">內容</th>
@@ -104,6 +107,8 @@
             <tbody class="" style="font-size: 14px;">
                 {% for object in related_records %}
                 <tr>
+                    <td><input type="checkbox" name="importcheckd" onclick="updateCheckedArray(this)"
+                        value="{{ object.id }}"></td>
                     <td>{{ object.target_approval.get_name_display }}</td>
                     <td>{{ object.get_show_id }}</td>
                     <td>
@@ -162,6 +167,7 @@
             "{% static 'js/employee_assign/Equipment.js' %}",
             "{% static 'js/employee_assign/work_tests.js' %}",
             "{% static 'js/fuc/restful.js' %}",
+            "{% static 'js/bootstrap-table/checked_row_api.js' %}",
             "{% static 'js/work-overtime-application/work-overtime-application.js' %}",
         ];
 

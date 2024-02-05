@@ -778,17 +778,22 @@ class Approval_Process(ListView):
         error_related_records = []        
         get_objs = ApprovalModel.objects.filter(current_status="in_process").order_by("-id")
         for Approval in get_objs:            
+                    # now_department = self.get_created_by.departments
             try:
-                get_employee = Approval.get_approval_employee() #看跟自己有沒有關係
+                get_employee,x_time = Approval.get_approval_employee() #看跟自己有沒有關係,x_time如果是0為自己部門，1以上則是往上找上一個部門
                 if get_employee !="x":
                     if  get_employee == current_employee :
                         related_records.append(Approval)
                 else:
                     # 取得作者部門
-                    get_createdby = Approval.get_created_by
+                    get_createdby = Approval.get_created_by                    
                     print(Approval)
                     print(get_createdby)
+                    #尋找x部門
                     department =get_createdby.departments
+                    for i in range(0, x_time):
+                        department = department.parent_department
+
                     #撈取主管權限的員工
                     supervisor_employees = department.employees.filter(user__groups__name='主管').values_list('id', flat=True)
                     #判斷主管是不是在當前user

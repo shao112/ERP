@@ -449,10 +449,15 @@ class ApprovalModel(models.Model):
     def send_message_to_related_users(self, content):
             senders = {self.get_created_by}
 
+            #紀錄上層部門，遇到x時
+            now_department = self.get_created_by.departments
+
             for employee_id in self.order:
                 if employee_id == "x":
-                    department_employees = self.get_created_by.departments.employees.filter(user__groups__name='主管')
-                    senders.update(department_employees)
+                    if now_department!=None: #防止遇到最上層部門
+                        department_employees = now_department.employees.filter(user__groups__name='主管')
+                        senders.update(department_employees)
+                        now_department = now_department.parent_department#換下一個上層部門
                 else:
                     try:
                         employee = Employee.objects.get(id=employee_id)
@@ -488,10 +493,16 @@ class ApprovalModel(models.Model):
         current_index= self.current_index
         approval_order = self.order
         if approval_order==None or  current_index > len(approval_order)-1 :
-            return "clean"
+            return "clean",0
         if approval_order[current_index] !="x":
-            return Employee.objects.get(id=approval_order[current_index])
-        return "x"
+            return Employee.objects.get(id=approval_order[current_index]),0
+        #如果是x
+        x_count = 0
+        for index in range(self.current_index):
+            value = self.order[index]
+            if value == "x":
+                x_count += 1
+        return "x",x_count
 
     def update_department_status(self, new_status):
         if new_status == 'approved':
@@ -503,7 +514,7 @@ class ApprovalModel(models.Model):
     def find_and_update_parent_department(self):
         current_index = self.current_index
         approval_order = self.order
-        
+        now_department = self.get_created_by.departments
         #判斷是不是最後一個
         if current_index ==len(approval_order)-1 :
             self.update_department_status("completed")
@@ -511,12 +522,29 @@ class ApprovalModel(models.Model):
             employee = self.get_created_by
             SysMessage.objects.create(Target_user=employee,content=f"您的 {self.target_approval.get_name_display()} 簽核完畢")
         else:
-            current_index+=1            
+            current_index+=1
             employee_id = approval_order[current_index]
-            if employee_id =="x":
-                senders = self.get_created_by.departments.employees.filter(user__groups__name='主管')
-                for sender in senders:
-                    SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {self.target_approval.get_name_display()} 單需要簽核")
+            if employee_id =="x":#下一關是x
+                for index in range(current_index):
+                    value = self.order[index]
+                    if value == "x": #換上層部門
+                        now_department = now_department.parent_department#換下一個上層部門
+                        
+
+                if now_department!=None: #防止遇到最上層部門
+                    senders = now_department.employees.filter(user__groups__name='主管')
+                    for sender in senders:
+                        SysMessage.objects.create(Target_user=sender,content=f"您有一筆 {self.target_approval.get_name_display()} 單需要簽核")
+                else:
+                    current_index+=1#在加1
+                    self.current_index = current_index
+                    self.save() 
+                    #判斷
+                    if current_index ==len(approval_order):
+                        self.update_department_status("completed")
+                        employee_id = self.target_approval
+                        SysMessage.objects.create(Target_user=employee,content=f"您的 {self.target_approval.get_name_display()} 簽核完畢")
+
             else:
                 employee = Employee.objects.get(id=employee_id)
                 SysMessage.objects.create(Target_user=employee,content=f"您有一筆 {self.target_approval.get_name_display()} 需要簽核")
@@ -541,17 +569,31 @@ class ApprovalModel(models.Model):
                 "status": "pass"
             })
 
-
         #當到最大數量且 已完成
         if current_index == len(approval_order)-1 and self.current_status == "completed":
             return show_list
 
-        for  employee_id in approval_order[current_index:]:
+
+        now_department = self.get_created_by.departments
+
+
+        for index,employee_id in enumerate(approval_order):
+            # print(index,employee_id)
+            if index < current_index:#讀取之前有沒有遇到x
+                if employee_id == "x":
+                    if now_department!=None: #防止遇到最上層部門
+                        now_department = now_department.parent_department#換下一個上層部門
+                continue
+
             show_name= ""
             if employee_id == "x":
-                    get_department_name = self.get_created_by.departments.department_name
+                if now_department!=None: #防止遇到最上層部門
+                    get_department_name = now_department.department_name
                     show_name = get_department_name+"(主管待簽)"
-            else:
+                    now_department = now_department.parent_department#換下一個上層部門
+                else:
+                    continue
+            else:   
                 get_Employee = Employee.objects.get(id=employee_id)
                 show_name = get_Employee.full_name
 

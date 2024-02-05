@@ -13,11 +13,16 @@ urlpatterns = [
     path('formuploadfile', views.FormUploadFileView.as_view(), name='formuploadfile'),
     path('excel_export', views.ExcelExportView.as_view(), name='excel_export'),
 
+#複製api
+    path('ClonePost',  views.ClonePost.as_view(), name="ClonePost_api"),
+    path('Approval_Process_Pass',  views.Approval_Process_Pass.as_view(), name="Approval_Process_Pass_api"),
+
 #CRUD
     path('project_confirmation',  views.Project_Confirmation_View.as_view(), name="project_confirmation_api"),
     path('equipment',  views.Equipment_View.as_view(), name="equipment_api"),
     path('department',  views.Department_View.as_view(), name="department_api"),
     path('job_assign', views.Job_Assign_View.as_view(), name="job_assign_api"),
+    
 
     path('employee', views.Employee_View.as_view(), name="project_employee_api"),
     path('employee_password', views.Employee_Pasword_View.as_view(), name="employee_password"),
