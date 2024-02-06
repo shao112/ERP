@@ -1361,18 +1361,20 @@ class ClonePost(View):
         selectedValues = data.get("selectedValues")
         getmodal = data.get("modelname")
 
-        # print("getid:", selectedValues)
-        # print("modelname:", getmodal)
 
         if not getmodal:
             return JsonResponse({"data": "No model specified"}, status=400, safe=False)
 
         model = None
+        
+        ManyToManyField_ARY=[]
 
         match getmodal:
             case "project_confirmation":
                 model = Project_Confirmation
+                ManyToManyField_ARY=["completion_report_employee"]
             case "job_assign":
+                ManyToManyField_ARY=["work_employee","lead_employee","vehicle"]
                 model = Project_Job_Assign
             case "employee_assign":
                 model = Project_Employee_Assign
@@ -1385,6 +1387,12 @@ class ClonePost(View):
                 model_instance = model.objects.get(id=int(selected_id))
                 model_instance.pk = None
                 model_instance.save()
+                original_obj =  model.objects.get(id=int(selected_id))
+                for field_name in ManyToManyField_ARY:
+                # 取得ManyToManyField對應的屬性對象
+                    many_to_many_field = getattr(original_obj, field_name)
+                    getattr(model_instance, field_name).set(many_to_many_field.all())
+
             except model.DoesNotExist:
                 return JsonResponse({"data": f"Record with id {selected_id} not found"}, status=404, safe=False)
 
