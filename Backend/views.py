@@ -1397,7 +1397,7 @@ class ClonePost(View):
                     getattr(model_instance, field_name).set(many_to_many_field.all())
 
                 #工確單 FileField處理
-                if model_instance.attachment and "project_confirmation"==getmodal :
+                if  "project_confirmation"==getmodal and "attachment" in model_instance :
                     unique_code = str(random.randint(100, 999))
                     old_file_path = model_instance.attachment.path
                     _, file_extension = os.path.splitext(old_file_path)
