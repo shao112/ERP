@@ -312,11 +312,11 @@
                                         <div class="form-row">
                                             <div class="col-8">
                                                 <label>最終派工單附件</label>
-                                                <a href="#" id="last_excel">下載附件</a>
+                                                <a href="#" id="attachment">下載附件</a>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" data-modal="employee_assign" name="last_excel"
+                                                    <input type="file" class="custom-file-input" data-modal="employee_assign" name="attachment"
                                                         id="reassignment_attachment_control">
-                                                    <label class="custom-file-label" for="last_excel">上傳最終版本</label>
+                                                    <label class="custom-file-label" for="attachment">上傳最終版本</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -591,7 +591,7 @@
                             {{ vehicle.vehicle_id }} 
                             {% endfor %}
                     </td>
-                    <td>{{ p.last_excel_link}}</td>
+                    <td>{{ p.attachment_link}}</td>
                     <td>{% if p.manuscript_return_date %}{{ p.manuscript_return_date|date:"Y/m/d" }}{% endif %}</td>
 
 

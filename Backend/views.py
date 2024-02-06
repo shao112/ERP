@@ -715,7 +715,7 @@ class Project_Employee_Assign_View(UserPassesTestMixin,View):
         data["uploaded_files"] = uploaded_files_dict_list
         data["location"] = location
         data["vehicle"] = vehicle_id_list
-        data['last_excel'] = data['last_excel'].url if data['last_excel']  else None
+        data['attachment'] = data['attachment'].url if data['attachment']  else None
 
         if  data['enterprise_signature']:
             data['enterprise_signature'] = data['enterprise_signature'].url
@@ -1397,23 +1397,24 @@ class ClonePost(View):
                     getattr(model_instance, field_name).set(many_to_many_field.all())
 
                 #工確單 FileField處理
-                if  "project_confirmation"==getmodal and "attachment" in model_instance :
-                    unique_code = str(random.randint(100, 999))
-                    old_file_path = model_instance.attachment.path
-                    _, file_extension = os.path.splitext(old_file_path)
-                    directory = os.path.dirname(old_file_path)
-                    new_file_name = f"{unique_code}_{model_instance.id}{file_extension}"
-                    new_file_path = os.path.join(directory, new_file_name)
-                    original_file_path = os.path.join(directory, new_file_name)
-                    # 使用 shutil 複製文件
-                    #將原本的obj案跟新obj 都給予新檔案
-                    shutil.copyfile(old_file_path, new_file_path)
-                    shutil.copyfile(old_file_path, original_file_path)
-                    # 設置新文件路徑到新實例的 FileField
-                    with open(new_file_path, 'rb') as file:
-                        model_instance.attachment.save(os.path.basename(new_file_path), File(file), save=True)
-                    with open(original_file_path, 'rb') as file:
-                        original_obj.attachment.save(os.path.basename(original_file_path), File(file), save=True)
+                if "employee_assign" ==getmodal or "project_confirmation"==getmodal :
+                    if  model_instance.attachment!=None :
+                        unique_code = str(random.randint(100, 999))
+                        old_file_path = model_instance.attachment.path
+                        _, file_extension = os.path.splitext(old_file_path)
+                        directory = os.path.dirname(old_file_path)
+                        new_file_name = f"{unique_code}_clone_{model_instance.id}{file_extension}"
+                        new_file_path = os.path.join(directory, new_file_name)
+                        original_file_path = os.path.join(directory, new_file_name)
+                        # 使用 shutil 複製文件
+                        #將原本的obj案跟新obj 都給予新檔案
+                        shutil.copyfile(old_file_path, new_file_path)
+                        shutil.copyfile(old_file_path, original_file_path)
+                        # 設置新文件路徑到新實例的 FileField
+                        with open(new_file_path, 'rb') as file:
+                            model_instance.attachment.save(os.path.basename(new_file_path), File(file), save=True)
+                        with open(original_file_path, 'rb') as file:
+                            original_obj.attachment.save(os.path.basename(original_file_path), File(file), save=True)
 
             except model.DoesNotExist:
                 return JsonResponse({"data": f"Record with id {selected_id} not found"}, status=404, safe=False)
