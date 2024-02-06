@@ -2480,6 +2480,8 @@ class DeleteUploadedFileView(View):
 #改下面的code，runserver 可能要重啟
 from background_task import background
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+
 def calculate_annual_leave(employee):
     from datetime import datetime
 
@@ -2489,10 +2491,11 @@ def calculate_annual_leave(employee):
     
     years = employee.seniority()
     today = datetime.today().date()
+    print("start_work_date",start_work_date)
 
     #計算入職的前一天的明年時間
     end_date = employee.start_work_date - timedelta(days=1)
-    end_date = end_date.replace(year=today.year + 1)
+    
     if years == "人資單位未填寫入值日" :
         return "人資單位未填寫入值日"
 
@@ -2502,6 +2505,9 @@ def calculate_annual_leave(employee):
     if years < 1:
         has_three_days_leave = employee.annualleaves.filter(days=3).exists()
         if not has_three_days_leave:
+            end_date = end_date + relativedelta(months=+6)  # 追加六個月
+            print("end_date six",end_date) 
+
             annual_leave = AnnualLeave.objects.create(days=3, end_date=end_date, remark="")
             employee.annualleaves.add(annual_leave)
         return "0.6"
@@ -2527,6 +2533,10 @@ def calculate_annual_leave(employee):
     matching_leaves = AnnualLeave.objects.filter(end_date=end_date)
 
     if not matching_leaves.exists():#不存在才給
+        add_year = relativedelta(today, start_work_date).years
+        end_date = start_work_date - timedelta(days=1)
+        end_date = end_date + relativedelta(years=add_year)
+        print("end_date year",end_date)
         annual_leave = AnnualLeave.objects.create(days=give_day, end_date=end_date, remark="")
         employee.annualleaves.add(annual_leave)
     
