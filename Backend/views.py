@@ -1352,7 +1352,8 @@ class FileUploadView(View):
         else:
             return JsonResponse({'error': "<h4>異常欄位:</h4>\n"+error_str+"<br>其餘上傳成功，再次上傳請小心已經上傳過的資料。"}, status=400)
 
-
+import shutil
+from django.core.files import File
 class ClonePost(View):
    def post(self, request):
 
@@ -1386,12 +1387,33 @@ class ClonePost(View):
             try:
                 model_instance = model.objects.get(id=int(selected_id))
                 model_instance.pk = None
+                #簽核連接清除
+                model_instance.Approval = None
                 model_instance.save()
                 original_obj =  model.objects.get(id=int(selected_id))
                 for field_name in ManyToManyField_ARY:
                 # 取得ManyToManyField對應的屬性對象
                     many_to_many_field = getattr(original_obj, field_name)
                     getattr(model_instance, field_name).set(many_to_many_field.all())
+
+                #工確單 FileField處理
+                if model_instance.attachment and "project_confirmation"==getmodal :
+                    unique_code = str(random.randint(100, 999))
+                    old_file_path = model_instance.attachment.path
+                    _, file_extension = os.path.splitext(old_file_path)
+                    directory = os.path.dirname(old_file_path)
+                    new_file_name = f"{unique_code}_{model_instance.id}{file_extension}"
+                    new_file_path = os.path.join(directory, new_file_name)
+                    original_file_path = os.path.join(directory, new_file_name)
+                    # 使用 shutil 複製文件
+                    #將原本的obj案跟新obj 都給予新檔案
+                    shutil.copyfile(old_file_path, new_file_path)
+                    shutil.copyfile(old_file_path, original_file_path)
+                    # 設置新文件路徑到新實例的 FileField
+                    with open(new_file_path, 'rb') as file:
+                        model_instance.attachment.save(os.path.basename(new_file_path), File(file), save=True)
+                    with open(original_file_path, 'rb') as file:
+                        original_obj.attachment.save(os.path.basename(original_file_path), File(file), save=True)
 
             except model.DoesNotExist:
                 return JsonResponse({"data": f"Record with id {selected_id} not found"}, status=404, safe=False)
