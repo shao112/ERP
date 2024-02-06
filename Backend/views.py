@@ -887,18 +887,18 @@ class Quotation_View(UserPassesTestMixin,View):
         uploaded_files = data.uploaded_files.all() 
         uploaded_files_dict_list = []
 
-        last_excel_files = data.last_excel.all() 
-        last_excel_files_dict_list = []
+        # last_excel_files = data.last_excel.all() 
+        # last_excel_files_dict_list = []
 
         for file in uploaded_files:
             file_dict = model_to_dict(file)
             file_dict["file"] = file.file.url
             uploaded_files_dict_list.append(file_dict)
             
-        for file in last_excel_files:
-            file_dict = model_to_dict(file)
-            file_dict["file"] = file.file.url
-            last_excel_files_dict_list.append(file_dict)
+        # for file in last_excel_files:
+        #     file_dict = model_to_dict(file)
+        #     file_dict["file"] = file.file.url
+        #     last_excel_files_dict_list.append(file_dict)
 
         work_item_list = []
         for item in data.Quotation_Work_Item_Number.all():
@@ -913,7 +913,7 @@ class Quotation_View(UserPassesTestMixin,View):
         data["uploaded_files"]=uploaded_files_dict_list
         print("xx")
         print(uploaded_files)
-        data["last_excel"]=last_excel_files_dict_list
+        # data["last_excel"]=last_excel_files_dict_list
         data['work_item'] = work_item_list
         data['quotation_id'] = get_id
         data['client_name'] = client_name

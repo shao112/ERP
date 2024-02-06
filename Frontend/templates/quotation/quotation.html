@@ -373,7 +373,7 @@ aria-hidden="true">
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="edit">編輯</th>
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="delete">刪除</th>
                     <th data-field="internal_content_file" data-sortable="false">內部記錄檔案</th>
-                    <th data-field="last_excel_file" data-sortable="false">最終報價單附件</th>
+                    <!-- <th data-field="last_excel_file" data-sortable="false">最終報價單附件</th> -->
                     <th data-force-hide="true" data-switchable="false" data-no-print="true" data-field="process">
                         輸出</th>
                     <th data-field="quotation_id" data-sortable="true">報價單編號</th>
@@ -407,10 +407,10 @@ aria-hidden="true">
                         <a href="" onclick="setQuotationId({{item.pk}}, 'file' )" data-toggle="modal"
                             data-target="#fileUploadModal">點擊</a>
                     </td>
-                    <td>
+                    <!-- <td>
                         <a href="" onclick="setQuotationId({{item.pk}}, 'lastExcelFile' )" data-toggle="modal"
                             data-target="#LastExcelFileUploadModal">點擊</a>
-                    </td>
+                    </td> -->
                     <td><a href="#" onclick="openNewWindow({{item.pk}})">點擊</a></td>
 
                     <td>
