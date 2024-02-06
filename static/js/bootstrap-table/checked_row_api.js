@@ -1,5 +1,22 @@
 let checked = [];
 
+function checkpage() {
+  const checkboxes = document.getElementsByName("importcheckd");
+
+  for (let i = 0; i < checkboxes.length; i++) {
+    const checkboxValue = checkboxes[i].value;
+    const index = checked.indexOf(checkboxValue);
+    if (index === -1) {
+      checked.push(checkboxValue);
+    } else if (index !== -1) {
+      checked.splice(index, 1);
+    }
+  }
+
+  console.log(checked);
+  syncCheckedRowsWithArray();
+}
+
 function updateCheckedArray(checkbox) {
   const value = checkbox.value;
   const index = checked.indexOf(value);
@@ -115,7 +132,7 @@ function ApprovalPass() {
     preConfirm: () => {
       const status = document.getElementById("approvalStatusAPI").value;
       const feedback = document.getElementById("feedbackApi").value;
-      console.log(status, feedback)
+      console.log(status, feedback);
       return $.ajax({
         url: "/restful/Approval_Process_Pass",
         type: "POST",
@@ -126,7 +143,7 @@ function ApprovalPass() {
         data: JSON.stringify({
           selectedValues: selectedValues,
           status: status,
-          feedback:feedback
+          feedback: feedback,
         }),
         success: function (data) {
           console.log(data);
@@ -138,9 +155,9 @@ function ApprovalPass() {
           if (xhr.status === 400) {
             var errorMessage = xhr.responseJSON.error;
             console.log(errorMessage);
-    
+
             var errorMessageHTML = "<ul>";
-    
+
             if (typeof errorMessage == "string") {
               errorMessageHTML += "<li>" + errorMessage + "</li>";
             } else {
@@ -150,10 +167,10 @@ function ApprovalPass() {
                 });
               });
             }
-    
+
             errorMessageHTML += "</ul>";
             console.log(errorMessageHTML);
-    
+
             Swal.fire({
               title: "操作失敗",
               html: errorMessageHTML,
@@ -166,8 +183,8 @@ function ApprovalPass() {
             alert("系統發生錯誤");
             console.log(errorThrown);
           }
-        }
-      }) }});
-
-
+        },
+      });
+    },
+  });
 }

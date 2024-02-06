@@ -97,7 +97,9 @@
                         data-export-url="{% url 'excel_export' %}">匯出全部資料</button>
                     <button class="d-none d-md-inline-block"
                         onclick="exportSelectedOptionToExcel('工作派任計畫.xlsx')">匯出已選資料</button>
-                        <button class="d-none d-md-inline-block"
+                        <button type="button" class="" onclick="checkpage()">選取/移除當頁資料</button>
+
+                    <button class="d-none d-md-inline-block"
                         onclick="Cloneapi('job_assign')">複製勾選資料</button>
                 </div>
                 <thead class="thead-light" style="font-size: 14px;">
