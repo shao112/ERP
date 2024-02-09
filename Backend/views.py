@@ -2027,7 +2027,7 @@ class Employee_Attendance_View(View):
         return JsonResponse({"data":data}, status=200,safe = False)
 
 
-
+# 工程確認單
 class Project_Confirmation_View(UserPassesTestMixin,View):
     def test_func(self):        
         return Check_Permissions(self.request.user,"工程確認單管理",self.request.method,"工程確認單查看") 
@@ -2097,7 +2097,7 @@ class Project_Confirmation_View(UserPassesTestMixin,View):
         data['attachment'] = data['attachment'].url if data['attachment']  else None
         return JsonResponse({"data":data}, status=200,safe = False)
 
-# 派任單
+# 工作派任計畫
 class Job_Assign_View(UserPassesTestMixin,View):
     def test_func(self):        
         return Check_Permissions(self.request.user,"工程派任計畫管理",self.request.method,"工程派任計畫查看")  or  Check_Permissions(self.request.user,"工程確認單管理",self.request.method,"工程確認單查看") 
@@ -2199,6 +2199,7 @@ class Job_Assign_View(UserPassesTestMixin,View):
         data["lead_employee"] = convent_employee(data["lead_employee"])
         data["work_employee"] = convent_employee(data["work_employee"])        
         print(data["lead_employee"])
+        print(data["work_employee"])
 
         #將外來鍵的關聯 加入dict
         data['project_confirmation'] = project_confirmation_dict
@@ -2511,7 +2512,7 @@ class DeleteUploadedFileView(View):
 #改下面的code，runserver 可能要重啟
 from background_task import background
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
+# from dateutil.relativedelta import relativedelta
 
 def calculate_annual_leave(employee):
     from datetime import datetime
