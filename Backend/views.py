@@ -2003,8 +2003,25 @@ class Employee_Attendance_View(View):
             if clock_inout == "":
                 for clock in employee.clock.filter(created_date__icontains=clock_time_date):
                     # print(employee.departments)
+                    # 篩選該員工在該打卡日的派任計畫（檢測人員、帶班主管）
+                    project_job_assign_work = employee.projects_work_employee.filter(attendance_date=clock.created_date).first()
+
+                    project_job_assign_id = ""
+                    project_job_assign_location = ""
+                    
+                    if project_job_assign_work is not None:
+                        project_job_assign_id = project_job_assign_work.get_show_id()
+                        project_job_assign_location = project_job_assign_work.location
+
+                    project_job_assign_lead = employee.projects_lead_employee.filter(attendance_date=clock.created_date).first()
+                    if project_job_assign_lead is not None:
+                        project_job_assign_id = project_job_assign_lead.get_show_id()
+                        project_job_assign_location = project_job_assign_lead.location
+
                     data.append({
                         'clock_date':clock.clock_date,
+                        'project_job_assign_id':project_job_assign_id,
+                        'project_job_assign_location':project_job_assign_location,
                         'department': employee.departments.department_name,
                         'employee_id': employee.employee_id,
                         'full_name': employee.full_name,

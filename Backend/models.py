@@ -625,7 +625,7 @@ class ApprovalModel(models.Model):
             return f"{self.id},{self.target_approval.name},erorr: {e}"        
 
 
-
+# 打卡
 class Clock(models.Model):
     CLOCK_TYPE= (
         ('1', '正常打卡'),
