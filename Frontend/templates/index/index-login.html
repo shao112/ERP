@@ -142,6 +142,7 @@
             <div class="col-6 border-right">
                 <div class="font-weight-bold mb-2 text-center" style="font-size: 1.1rem;">
                     <span class="badge badge-dark px-3 py-2">完工提醒</span>
+                    <button onclick="clearAllSysMsg()">清除簽核通知</button>
                 </div> 
                 <div class="completed container" style="overflow: scroll;height: 230px;">
                     {# 簽核通知訊息 #}
@@ -277,7 +278,35 @@
 
     
 <script>
-
+    // 觸發清除所有簽核通知
+    function clearAllSysMsg(){
+        $.ajax({
+            url: '/restful/sysmessage',
+            type: 'delete',
+            dataType: 'json',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (response) {
+                // 前端移除簽核通知訊息的所有元素
+                $(".sys-message").remove();
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                if (xhr.status == 400 || xhr.status == 404) {
+                    var errorMessage = xhr.responseJSON.error;
+                    console.log(errorMessage);
+                    showSwal("操作失敗", errorMessage, "error", false);
+                    alert("操作失敗"+errorMessage);
+                } else if (xhr.status === 403) {
+                    alert("只能刪除自身的訊息");
+                } else {
+                    alert("系統發生錯誤");
+                    console.log(errorThrown);
+                }
+            }
+        });
+    }
     function showemployeeassign(content){
         var dataArr = content.split('|');
         console.log(dataArr)
@@ -395,7 +424,12 @@
                 });
             });
         });
+
+        
     });
+    
+    
+    
 </script>
 
 {% endblock %}

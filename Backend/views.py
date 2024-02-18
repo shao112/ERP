@@ -299,6 +299,12 @@ class SysMessage_API(View):
          
         getobj.delete()
         return HttpResponse(200)
+    
+    # 清除該使用者的全部簽核通知
+    def delete(self, request, *args, **kwargs):
+        get_sys_messages = SysMessage.objects.filter(Target_user=request.user.employee,watch=False)
+        get_sys_messages.delete()
+        return JsonResponse({"ok":"ok"},status=200)
 
 
 class Approval_View_Process(View):
