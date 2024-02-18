@@ -50,21 +50,6 @@
 
 </head>
 
-
-<style>
-    .sys-message-popup {
-        position: fixed;
-        bottom: 70px;
-        right: 20px;
-        background-color: #f0f0f0;
-        padding: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        transition: bottom 1.5s ease;
-        z-index: 2147483647;
-    }
-</style>
-
 <body>
     {% include 'base/sidebar.html' %}
     {% include 'base/header.html' %}
@@ -74,62 +59,6 @@
     {% block main %}
 
     {% endblock %}
-
-    <!-- 浮動視窗 -->
-
-
-    {% for sys_message in sys_messages %}
-    <div class="sys-message-popup" data-message-id="{{ sys_message.id }}" style="bottom: {{ sys_message.bottom }}px;">
-        <span id="sys-message-content">{{ sys_message.content }}</span>
-        <button class="sys-close-button">X</button>
-    </div>
-    {% endfor %}
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            var closeButtons = document.querySelectorAll(".sys-close-button");
-
-            closeButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    var messagePopup = button.closest(".sys-message-popup");
-                    if (messagePopup) {
-                        messagePopup.style.display = "none";
-                    }
-                    var messageId = messagePopup.dataset.messageId;
-                    console.log(messageId);
-
-                    $.ajax({
-                        url: '/restful/sysmessage',
-                        type: 'POST',
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRFToken': csrftoken
-                        },
-                        data: { id: messageId },
-                        success: function (response) {
-                        },
-                        error: function (error) {
-                            console.error('Error:', error);
-                            if (xhr.status == 400 || xhr.status == 404) {
-                                var errorMessage = xhr.responseJSON.error;
-                                console.log(errorMessage);
-                                showSwal("操作失敗", errorMessage, "error", false);
-                                alert("操作失敗"+errorMessage);
-                            } else if (xhr.status === 403) {
-                                alert("只能刪除自身的訊息");
-                            } else {
-                                alert("系統發生錯誤");
-                                console.log(errorThrown);
-                            }
-                        }
-                    });
-
-
-                });
-            });
-        });
-    </script>
 
 
 </body>

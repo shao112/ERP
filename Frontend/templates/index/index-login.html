@@ -142,8 +142,19 @@
             <div class="col-6 border-right">
                 <div class="font-weight-bold mb-2 text-center" style="font-size: 1.1rem;">
                     <span class="badge badge-dark px-3 py-2">完工提醒</span>
-                </div>
+                </div> 
                 <div class="completed container" style="overflow: scroll;height: 230px;">
+                    {# 簽核通知訊息 #}
+                    {% for sys_message in sys_messages %}
+                        <div class="row sys-message" data-message-id="{{ sys_message.id }}">
+                            <div class="col-12 text-left">
+                                <button class="sys-close-button">X</button>
+                                <span id="sys-message-content">{{ sys_message.content }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {# 完工提醒 #}
                     {% for project_employee_assign in project_employee_assign_list %}
                     <div class="row">
                         <div class="col-6">
@@ -341,6 +352,48 @@
             modalContent.find('.content').html(`
                 ${dataArr[5]}
             `);
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var closeButtons = document.querySelectorAll(".sys-close-button");
+
+        closeButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var messagePopup = button.closest(".sys-message");
+                if (messagePopup) {
+                    messagePopup.style.display = "none";
+                }
+                console.log("messagePopup");
+                console.log(messagePopup);
+                var messageId = messagePopup.dataset.messageId;
+                console.log(messageId);
+
+                $.ajax({
+                    url: '/restful/sysmessage',
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    data: { id: messageId },
+                    success: function (response) {
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                        if (xhr.status == 400 || xhr.status == 404) {
+                            var errorMessage = xhr.responseJSON.error;
+                            console.log(errorMessage);
+                            showSwal("操作失敗", errorMessage, "error", false);
+                            alert("操作失敗"+errorMessage);
+                        } else if (xhr.status === 403) {
+                            alert("只能刪除自身的訊息");
+                        } else {
+                            alert("系統發生錯誤");
+                            console.log(errorThrown);
+                        }
+                    }
+                });
+            });
         });
     });
 </script>

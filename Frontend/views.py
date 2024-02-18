@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
 from Backend.forms import  Miss_Food_ApplicationForm,ReferenceTableForm, VehicleForm, SalaryEmployeeForm, Travel_ApplicationForm,ProjectJobAssignForm, ClockCorrectionApplicationForm, WorkOvertimeApplicationForm, LeaveApplicationForm, ProjectConfirmationForm, EmployeeForm, NewsForm, ApprovalModelForm, DepartmentForm
-from Backend.models import Miss_Food_Application,LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
+from Backend.models import SysMessage,Miss_Food_Application,LaborHealthInfo  ,ExtraWorkDay,ReferenceTable,Travel_Application, Clock,Clock_Correction_Application,Work_Overtime_Application,Leave_Application,Salary,SalaryDetail,Leave_Param, Leave_Param, Approval_Target, Quotation, Work_Item,ApprovalModel,User, Department, Project_Job_Assign, Project_Confirmation,Project_Employee_Assign,Employee, News, Equipment, Vehicle, Client
 from django.views.generic import ListView, DeleteView,DetailView
 from django.conf import settings
 
@@ -281,14 +281,10 @@ class Index(View):
         
 
     def get(self,request):
-      
-
 
         if not isinstance(request.user, AnonymousUser):
             # 使用者不是 AnonymousUser，代表是已登入的使用者
             # calculate_annual_leave()
-
-
             news = News.objects.all().order_by("-id")
             employeeid = request.user.employee
             
@@ -315,6 +311,14 @@ class Index(View):
 
             work_list= Clock.get_hour_for_month(employeeid,date.today().year,date.today().month)
 
+            # 簽核通知訊息
+            get_sys_messages = SysMessage.objects.filter(Target_user=request.user.employee,watch=False)
+            sys_messages_data = []
+            for msg in get_sys_messages:
+                    sys_messages_data.append({
+                        'id': msg.id,
+                        'content': msg.content,
+                    })
             
             context = {
                 'clock_inout':clock_inout,
@@ -323,6 +327,7 @@ class Index(View):
                 "grouped_projects":sorted_grouped_projects,
                 "employee_assign_ids":employee_assign_ids,
                 "project_employee_assign_list": project_employee_assign,
+                "sys_messages": sys_messages_data,
             }
             return render(request, 'index/index-login.html', context)
         else:
