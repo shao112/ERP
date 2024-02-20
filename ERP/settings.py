@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     # 套件
     'django_cleanup',
     'background_task',
+    #
+    "django_extensions",
 ]
 BACKGROUND_TASK_RUN_ASYNC = True
 
